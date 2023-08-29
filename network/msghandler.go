@@ -8,7 +8,6 @@ import (
 	"github.com/451008604/socketServerFrame/iface"
 	"github.com/451008604/socketServerFrame/logs"
 	pb "github.com/451008604/socketServerFrame/proto/bin"
-	"google.golang.org/protobuf/proto"
 )
 
 type MsgHandler struct {
@@ -34,12 +33,17 @@ func (m *MsgHandler) DoMsgHandler(request iface.IRequest) {
 	}
 
 	// 对应的逻辑处理方法
-	api.ByteToProtocol(request.GetData(), router.GetMsg())
-	router.RunHandler(request)
+	msgData := router.GetNewMsg()
+	err := api.ByteToProtocol(request.GetData(), msgData)
+	if err != nil {
+		logs.PrintLogInfo(fmt.Sprintf("api msgID %v parsing error", request.GetMsgID()))
+		return
+	}
+	router.RunHandler(request, msgData)
 }
 
 // 添加路由，绑定处理函数
-func (m *MsgHandler) AddRouter(msgId pb.MessageID, msg proto.Message, handler iface.IReceiveMsgHandler) {
+func (m *MsgHandler) AddRouter(msgId pb.MessageID, msg iface.INewMsgStructTemplate, handler iface.IReceiveMsgHandler) {
 	if _, ok := m.Apis[msgId]; ok {
 		logs.PrintLogPanic(errors.New("消息ID重复绑定Handler"))
 	}

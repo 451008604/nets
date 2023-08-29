@@ -3,7 +3,6 @@ package network
 import (
 	"fmt"
 	pb "github.com/451008604/socketServerFrame/proto/bin"
-	"google.golang.org/protobuf/proto"
 	"net"
 
 	"github.com/451008604/socketServerFrame/config"
@@ -99,7 +98,7 @@ func (s *Server) Listen() {
 	select {}
 }
 
-func (s *Server) AddRouter(msgId pb.MessageID, msgStruct proto.Message, handler func(con iface.IConnection, message proto.Message)) {
+func (s *Server) AddRouter(msgId pb.MessageID, msgStruct iface.INewMsgStructTemplate, handler iface.IReceiveMsgHandler) {
 	s.msgHandler.AddRouter(msgId, msgStruct, handler)
 }
 

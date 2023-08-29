@@ -24,7 +24,7 @@ func ProtocolToByte(str proto.Message) []byte {
 	return marshal
 }
 
-func ByteToProtocol(byte []byte, target proto.Message) {
+func ByteToProtocol(byte []byte, target proto.Message) error {
 	var err error
 
 	if config.GetGlobalObject().ProtocolIsJson {
@@ -35,6 +35,7 @@ func ByteToProtocol(byte []byte, target proto.Message) {
 
 	if err != nil {
 		logs.PrintLogErr(err)
-		return
+		return err
 	}
+	return nil
 }
