@@ -16,10 +16,10 @@ type GlobalObj struct {
 	TcpPort          string // 当前服务端口
 	Name             string // 当前服务名称
 	Version          string // 当前服务版本号
-	MaxPackSize      uint32 // 传输数据包最大值
+	MaxPackSize      int    // 传输数据包最大值
 	MaxConn          int    // 当前服务允许的最大连接数
-	WorkerPoolSize   uint32 // work池大小
-	WorkerTaskMaxLen uint32 // work对应的执行队列内任务数量的上限
+	WorkerPoolSize   int    // work池大小
+	WorkerTaskMaxLen int    // work对应的执行队列内任务数量的上限
 	MaxMsgChanLen    int    // 读写消息的通道最大缓冲数
 	ProtocolIsJson   bool   // 是否采用Json协议
 }

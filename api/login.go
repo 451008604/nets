@@ -8,7 +8,7 @@ import (
 
 func LoginHandler(con iface.IConnection, message proto.Message) {
 	login := message.(*pb.ReqLogin)
-	login.GetUserName()
-	login.GetPassWord()
 	println(login.String())
+
+	con.SendMsg(pb.MessageID_Login, []byte("登录成功 "+login.GetUserName()+" "+login.GetPassWord()))
 }

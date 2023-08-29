@@ -7,7 +7,7 @@ type IConnManager interface {
 	// 删除连接
 	Remove(conn IConnection)
 	// 根据ConnID获取连接
-	Get(connID uint32) (IConnection, error)
+	Get(connID int) (IConnection, error)
 	// 获取当前连接数量
 	Len() int
 	// 删除并停止所有连接

@@ -11,7 +11,6 @@ import (
 	"github.com/451008604/socketServerFrame/logs"
 	"github.com/451008604/socketServerFrame/network"
 	pb "github.com/451008604/socketServerFrame/proto/bin"
-	"google.golang.org/protobuf/proto"
 )
 
 // CustomConnect 自定义连接
@@ -19,7 +18,7 @@ type CustomConnect struct {
 	net.Conn
 	address   string // 服务地址
 	port      string // 服务端口
-	bufferLen uint32 // 消息缓冲区长度
+	bufferLen int    // 消息缓冲区长度
 	wg        *sync.WaitGroup
 }
 
@@ -69,10 +68,11 @@ func (c *CustomConnect) NewConnection(address, port string) {
 				return
 			}
 
-			resData := &pb.Ping{}
-			_ = proto.Unmarshal(receiveData, resData)
 			// 服务器返回的消息
-			fmt.Printf("与服务器延迟：%v 微秒\n", resData.GetTimeStamp())
+			fmt.Printf("服务器：%v\n", string(receiveData))
+			// resData := &pb.Ping{}
+			// _ = proto.Unmarshal(receiveData, resData)
+			// fmt.Printf("与服务器延迟：%v 微秒\n", resData.GetTimeStamp())
 		}
 	}(c)
 	c.wg.Wait()
@@ -107,7 +107,7 @@ func (c *CustomConnect) SendMsg(msgId pb.MessageID, msgData []byte) {
 	}
 }
 
-// receiveMsg 接收服务器消息
+// 接收服务器消息
 func (c *CustomConnect) receiveMsg() []byte {
 	if c == nil {
 		return nil

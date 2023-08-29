@@ -11,8 +11,8 @@ import (
 
 type DataPack struct{}
 
-func (d *DataPack) GetHeadLen() uint32 {
-	// id uint32(4字节) + dataLen uint32(4字节)
+func (d *DataPack) GetHeadLen() int {
+	// id int(4字节) + dataLen int(4字节)
 	return 8
 }
 
@@ -54,7 +54,7 @@ func (d *DataPack) Unpack(binaryData []byte) iface.IMessage {
 		return nil
 	}
 	// 检查数据长度是否超出限制
-	if config.GetGlobalObject().MaxPackSize > 0 && msgData.GetDataLen() > config.GetGlobalObject().MaxPackSize {
+	if config.GetGlobalObject().MaxPackSize > 0 && int(msgData.GetDataLen()) > config.GetGlobalObject().MaxPackSize {
 		logs.PrintLogInfo("接收数据长度超限")
 		return nil
 	}

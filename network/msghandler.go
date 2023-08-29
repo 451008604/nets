@@ -12,7 +12,7 @@ import (
 
 type MsgHandler struct {
 	Apis           map[pb.MessageID]iface.IRouter // 存放每个MsgId所对应处理方法的map属性
-	WorkerPoolSize uint32                         // 业务工作Work池的数量
+	WorkerPoolSize int                            // 业务工作Work池的数量
 	TaskQueue      []chan iface.IRequest          // Worker负责取任务的消息队列
 }
 
@@ -36,7 +36,7 @@ func (m *MsgHandler) DoMsgHandler(request iface.IRequest) {
 	msgData := router.GetNewMsg()
 	err := api.ByteToProtocol(request.GetData(), msgData)
 	if err != nil {
-		logs.PrintLogInfo(fmt.Sprintf("api msgID %v parsing error", request.GetMsgID()))
+		logs.PrintLogInfo(fmt.Sprintf("api msgID %v parsing error: %v\nmsgData:%v", request.GetMsgID(), err.Error(), request.GetData()))
 		return
 	}
 	router.RunHandler(request, msgData)

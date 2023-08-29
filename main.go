@@ -8,10 +8,14 @@ import (
 	"github.com/451008604/socketServerFrame/logs"
 	_ "github.com/gogf/gf/contrib/drivers/mysql/v2"
 	"runtime"
+	"sync"
 	"time"
 )
 
 func main() {
+	wait := &sync.WaitGroup{}
+	wait.Add(1)
+
 	// 捕获异常
 	defer func() {
 		if err := recover(); err != nil {
@@ -23,8 +27,6 @@ func main() {
 
 	// 注册模块
 	logic.RegisterModule()
-	// 注册路由
-	api.RegisterRouter(logic.Module.Server())
 
 	// 连接建立时
 	logic.Module.Server().SetOnConnStart(func(conn iface.IConnection) {
@@ -34,13 +36,21 @@ func main() {
 	logic.Module.Server().SetOnConnStop(func(conn iface.IConnection) {
 		logs.PrintLogInfo(fmt.Sprintf("客户端%v下线", conn.GetProperty("Client")))
 	})
+	// 注册路由
+	api.RegisterRouter(logic.Module.Server())
 
 	go func(s iface.IServer) {
+		goroutineNum := 0
 		for range time.Tick(time.Second * 3) {
-			logs.PrintLogInfo(fmt.Sprint("当前线程数：", runtime.NumGoroutine(), "\t当前连接数量：", s.GetConnMgr().Len()))
+			if temp := runtime.NumGoroutine(); temp != goroutineNum {
+				goroutineNum = temp
+				logs.PrintLogInfo(fmt.Sprint("当前线程数：", goroutineNum, "\t当前连接数量：", s.GetConnMgr().Len()))
+			}
 		}
 	}(logic.Module.Server())
 
 	// 开始监听服务
-	logic.Module.Server().Listen()
+	go logic.Module.Server().Listen()
+
+	wait.Wait()
 }

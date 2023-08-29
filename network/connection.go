@@ -14,15 +14,14 @@ import (
 )
 
 type Connection struct {
-	TcpServer    iface.IServer     // 当前Conn所属的Server
-	Conn         *net.TCPConn      // 当前连接的SocketTCP套接字
-	ConnID       uint32            // 当前连接的ID（SessionID）
-	isClosed     bool              // 当前连接是否已关闭
-	MsgHandler   iface.IMsgHandler // 消息管理MsgId和对应处理函数的消息管理模块
-	ExitBuffChan chan bool         // 通知该连接已经退出的channel
-	msgChan      chan []byte       // 用于读、写两个goroutine之间的消息通信（无缓冲）
-	msgBuffChan  chan []byte       // 用于读、写两个goroutine之间的消息通信（有缓冲）
-
+	TcpServer    iface.IServer          // 当前Conn所属的Server
+	Conn         *net.TCPConn           // 当前连接的SocketTCP套接字
+	ConnID       int                    // 当前连接的ID（SessionID）
+	isClosed     bool                   // 当前连接是否已关闭
+	MsgHandler   iface.IMsgHandler      // 消息管理MsgId和对应处理函数的消息管理模块
+	ExitBuffChan chan bool              // 通知该连接已经退出的channel
+	msgChan      chan []byte            // 用于读、写两个goroutine之间的消息通信（无缓冲）
+	msgBuffChan  chan []byte            // 用于读、写两个goroutine之间的消息通信（有缓冲）
 	property     map[string]interface{} // 连接属性
 	propertyLock sync.RWMutex           // 连接属性读写锁
 }
@@ -56,7 +55,7 @@ func (c *Connection) RemoveProperty(key string) {
 }
 
 // 新建连接
-func NewConnection(server iface.IServer, conn *net.TCPConn, connID uint32, msgHandler iface.IMsgHandler) *Connection {
+func NewConnection(server iface.IServer, conn *net.TCPConn, connID int, msgHandler iface.IMsgHandler) *Connection {
 	c := &Connection{
 		TcpServer:    server,
 		Conn:         conn,
@@ -177,7 +176,7 @@ func (c *Connection) GetTCPConnection() *net.TCPConn {
 }
 
 // 获取当前连接ID
-func (c *Connection) GetConnID() uint32 {
+func (c *Connection) GetConnID() int {
 	return c.ConnID
 }
 

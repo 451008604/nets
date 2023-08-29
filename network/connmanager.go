@@ -7,13 +7,13 @@ import (
 )
 
 type ConnManager struct {
-	connections map[uint32]iface.IConnection // 管理的连接信息
-	connLock    sync.RWMutex                 // 连接的读写锁
+	connections map[int]iface.IConnection // 管理的连接信息
+	connLock    sync.RWMutex              // 连接的读写锁
 }
 
 func NewConnManager() *ConnManager {
 	return &ConnManager{
-		connections: make(map[uint32]iface.IConnection),
+		connections: make(map[int]iface.IConnection),
 	}
 }
 
@@ -34,7 +34,7 @@ func (c *ConnManager) Remove(conn iface.IConnection) {
 }
 
 // 根据ConnID获取连接
-func (c *ConnManager) Get(connID uint32) (iface.IConnection, error) {
+func (c *ConnManager) Get(connID int) (iface.IConnection, error) {
 	c.connLock.Lock()
 	defer c.connLock.Unlock()
 	if conn, ok := c.connections[connID]; ok {

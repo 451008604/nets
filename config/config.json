@@ -4,6 +4,6 @@
   "Host": "127.0.0.1",
   "TcpPort": "7777",
   "MaxConn": 1000,
-  "WorkerPoolSize": 3,
-  "ProtocolIsJson": false
+  "WorkerPoolSize": 1,
+  "ProtocolIsJson": true
 }

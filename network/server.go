@@ -4,6 +4,7 @@ import (
 	"fmt"
 	pb "github.com/451008604/socketServerFrame/proto/bin"
 	"net"
+	"sync/atomic"
 
 	"github.com/451008604/socketServerFrame/config"
 	"github.com/451008604/socketServerFrame/iface"
@@ -20,7 +21,7 @@ type Server struct {
 	connMgr     iface.IConnManager                 // 当前Server的连接管理器
 	onConnStart func(connection iface.IConnection) // 该Server连接创建时的Hook函数
 	onConnStop  func(connection iface.IConnection) // 该Server连接断开时的Hook函数
-	connID      uint32                             // 客户端连接自增ID
+	connID      int64                              // 客户端连接自增ID
 	dataPacket  iface.IDataPack                    // 数据拆包/封包工具
 }
 
@@ -74,12 +75,12 @@ func (s *Server) Start() {
 			}
 
 			// 自增connID
-			s.connID = uint32(s.GetConnMgr().Len() + 1)
+			atomic.AddInt64(&s.connID, 1)
 			// 建立连接成功
 			logs.PrintLogInfo(fmt.Sprintf("成功建立新的客户端连接 -> %v connID - %v", conn.RemoteAddr().String(), s.connID))
 
 			// 建立新的连接并监听客户端请求的消息
-			dealConn := NewConnection(s, conn, s.connID, s.msgHandler)
+			dealConn := NewConnection(s, conn, int(s.connID), s.msgHandler)
 			go dealConn.Start()
 		}
 	}()
