@@ -20,8 +20,7 @@ type Connection struct {
 	isClosed     bool                   // 当前连接是否已关闭
 	MsgHandler   iface.IMsgHandler      // 消息管理MsgId和对应处理函数的消息管理模块
 	ExitBuffChan chan bool              // 通知该连接已经退出的channel
-	msgChan      chan []byte            // 用于读、写两个goroutine之间的消息通信（无缓冲）
-	msgBuffChan  chan []byte            // 用于读、写两个goroutine之间的消息通信（有缓冲）
+	msgBuffChan  chan []byte            // 用于读、写两个goroutine之间的消息通信
 	property     map[string]interface{} // 连接属性
 	propertyLock sync.RWMutex           // 连接属性读写锁
 }
@@ -63,7 +62,6 @@ func NewConnection(server iface.IServer, conn *net.TCPConn, connID int, msgHandl
 		isClosed:     false,
 		MsgHandler:   msgHandler,
 		ExitBuffChan: make(chan bool, 1),
-		msgChan:      make(chan []byte),
 		msgBuffChan:  make(chan []byte, config.GetGlobalObject().MaxMsgChanLen),
 		property:     make(map[string]interface{}),
 		propertyLock: sync.RWMutex{},
@@ -71,6 +69,9 @@ func NewConnection(server iface.IServer, conn *net.TCPConn, connID int, msgHandl
 
 	// 将新建的连接添加到所属Server的连接管理器内
 	c.TcpServer.GetConnMgr().Add(c)
+
+	// 建立连接成功
+	logs.PrintLogInfo(fmt.Sprintf("成功建立新的客户端连接 -> %v connID - %v", conn.RemoteAddr().String(), connID))
 	return c
 }
 
@@ -114,18 +115,13 @@ func (c *Connection) StartReader() {
 func (c *Connection) StartWriter() {
 	for {
 		select {
-		case data := <-c.msgChan: // 向客户端发送无缓冲通道数据
-			_, err := c.Conn.Write(data)
-			if logs.PrintLogErr(err) {
-				return
-			}
-		case data, ok := <-c.msgBuffChan: // 向客户端发送有缓冲通道数据
+		case data, ok := <-c.msgBuffChan: // 向客户端发送数据
 			if !ok {
 				break
 			}
 			_, err := c.Conn.Write(data)
-			if logs.PrintLogErr(err) {
-				return
+			if logs.PrintLogErr(err, string(data)) {
+				break
 			}
 		case <-c.ExitBuffChan:
 			return
@@ -166,7 +162,6 @@ func (c *Connection) Stop() {
 
 	// 关闭该连接管道
 	close(c.ExitBuffChan)
-	close(c.msgChan)
 	close(c.msgBuffChan)
 }
 
@@ -185,24 +180,8 @@ func (c *Connection) RemoteAddr() net.Addr {
 	return c.Conn.RemoteAddr()
 }
 
-// 发送消息给客户端（无缓冲）
+// 发送消息给客户端
 func (c *Connection) SendMsg(msgId pb.MessageID, data []byte) {
-	if c.isClosed {
-		logs.PrintLogInfo(fmt.Sprintf("连接已关闭导致消息发送失败 -> msgId:%v\tdata:%v", msgId, string(data)))
-		return
-	}
-
-	// 将消息数据封包
-	msg := c.TcpServer.DataPacket().Pack(NewMsgPackage(msgId, data))
-	if msg == nil {
-		return
-	}
-	// 写入传输通道发送给客户端
-	c.msgChan <- msg
-}
-
-// 发送消息给客户端（有缓冲）
-func (c *Connection) SendBuffMsg(msgId pb.MessageID, data []byte) {
 	if c.isClosed {
 		logs.PrintLogInfo(fmt.Sprintf("连接已关闭导致消息发送失败 -> msgId:%v\tdata:%v", msgId, string(data)))
 		return

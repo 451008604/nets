@@ -18,10 +18,8 @@ type IConnection interface {
 	// 获取客户端地址信息
 	RemoteAddr() net.Addr
 
-	// 发送消息给客户端（无缓冲）
+	// 发送消息给客户端
 	SendMsg(msgId pb.MessageID, data []byte)
-	// 发送消息给客户端（有缓冲）
-	SendBuffMsg(msgId pb.MessageID, data []byte)
 
 	// 设置连接属性
 	SetProperty(key string, value interface{})

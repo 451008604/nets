@@ -76,9 +76,6 @@ func (s *Server) Start() {
 
 			// 自增connID
 			atomic.AddInt64(&s.connID, 1)
-			// 建立连接成功
-			logs.PrintLogInfo(fmt.Sprintf("成功建立新的客户端连接 -> %v connID - %v", conn.RemoteAddr().String(), s.connID))
-
 			// 建立新的连接并监听客户端请求的消息
 			dealConn := NewConnection(s, conn, int(s.connID), s.msgHandler)
 			go dealConn.Start()
