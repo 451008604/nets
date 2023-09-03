@@ -22,12 +22,6 @@ type CustomConnect struct {
 	wg        *sync.WaitGroup
 }
 
-// 主线程锁
-// var wg *sync.WaitGroup
-
-// 主连接
-// var conn *CustomConnect
-
 // 尝试重连次数标识
 var restartConnectNum = 0
 

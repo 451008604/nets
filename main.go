@@ -12,10 +12,9 @@ import (
 	"time"
 )
 
-func main() {
-	wait := &sync.WaitGroup{}
-	wait.Add(1)
+var WaitFlag = &sync.WaitGroup{}
 
+func main() {
 	// 捕获异常
 	defer func() {
 		if err := recover(); err != nil {
@@ -29,11 +28,11 @@ func main() {
 	logic.RegisterModule()
 
 	// 连接建立时
-	logic.Module.Server().SetOnConnStart(func(conn iface.IConnection) {
+	logic.Module.Server().GetConnMgr().OnConnOpen(func(conn iface.IConnection) {
 		conn.SetProperty("Client", conn.RemoteAddr())
 	})
 	// 连接断开后
-	logic.Module.Server().SetOnConnStop(func(conn iface.IConnection) {
+	logic.Module.Server().GetConnMgr().OnConnClose(func(conn iface.IConnection) {
 		logs.PrintLogInfo(fmt.Sprintf("客户端%v下线", conn.GetProperty("Client")))
 	})
 	// 注册路由
@@ -50,7 +49,13 @@ func main() {
 	}(logic.Module.Server())
 
 	// 开始监听服务
-	go logic.Module.Server().Listen()
+	runServer()
 
-	wait.Wait()
+	WaitFlag.Wait()
+}
+
+func runServer() {
+	if logic.Module.Server().Listen() {
+		WaitFlag.Add(1)
+	}
 }

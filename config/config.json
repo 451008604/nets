@@ -1,8 +1,8 @@
 {
   "Debug": true,
   "Name": "socketServerFrame",
-  "Host": "127.0.0.1",
-  "TcpPort": "7777",
+  "HostTcp": "127.0.0.1",
+  "PortTcp": "7777",
   "MaxConn": 1000,
   "WorkerPoolSize": 1,
   "ProtocolIsJson": true

@@ -17,7 +17,7 @@ var Module *StaticModule
 
 func RegisterModule() {
 	Module = &StaticModule{}
-	Module.server = network.NewServer()
+	Module.server = network.NewServerTCP()
 	Module.notify = network.NewNotifyManager()
 	Module.sql = database.NewSqlDBModel()
 }

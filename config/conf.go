@@ -12,8 +12,6 @@ var configPath string // 配置的文件夹路径
 
 type GlobalObj struct {
 	Debug            bool   // 是否Debug模式
-	Host             string // 当前服务主机IP
-	TcpPort          string // 当前服务端口
 	Name             string // 当前服务名称
 	Version          string // 当前服务版本号
 	MaxPackSize      int    // 传输数据包最大值
@@ -22,6 +20,10 @@ type GlobalObj struct {
 	WorkerTaskMaxLen int    // work对应的执行队列内任务数量的上限
 	MaxMsgChanLen    int    // 读写消息的通道最大缓冲数
 	ProtocolIsJson   bool   // 是否采用Json协议
+	HostTCP          string // TCP服务地址
+	PortTCP          string // TCP服务端口
+	HostWS           string // WS服务地址
+	PortWS           string // WS服务端口
 }
 
 var globalObject *GlobalObj
@@ -29,8 +31,8 @@ var globalObject *GlobalObj
 func init() {
 	globalObject = &GlobalObj{
 		Debug:            false,
-		Host:             "127.0.0.1",
-		TcpPort:          "7777",
+		HostTCP:          "127.0.0.1",
+		PortTCP:          "7001",
 		Name:             "socketServerFrame",
 		Version:          "v0.1",
 		MaxPackSize:      4096,
