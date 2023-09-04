@@ -5,6 +5,7 @@ import (
 	"github.com/451008604/socketServerFrame/iface"
 	"github.com/451008604/socketServerFrame/logs"
 	"github.com/gorilla/websocket"
+	"io"
 	"sync"
 )
 
@@ -32,7 +33,10 @@ func (c *ConnectionWS) StartReader() {
 
 	for {
 		msgType, msgByte, err := c.conn.ReadMessage()
-		if logs.PrintLogErr(err) || msgType != websocket.BinaryMessage {
+		if err != nil || msgType != websocket.BinaryMessage {
+			if err.(*websocket.CloseError).Text != io.ErrUnexpectedEOF.Error() {
+				logs.PrintLogErr(err)
+			}
 			return
 		}
 

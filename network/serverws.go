@@ -44,6 +44,8 @@ func (s *ServerWS) Start() {
 		// 建立新连接并监听客户端请求的消息
 		msgConn := NewConnectionWS(s, conn, s.msgHandler)
 		go msgConn.Start()
+		// 建立连接成功
+		logs.PrintLogInfo(fmt.Sprintf("成功建立新的客户端连接 -> %v connID - %v", msgConn.RemoteAddrStr(), msgConn.GetConnID()))
 	})
 	logs.PrintLogErr(http.ListenAndServe(fmt.Sprintf("%s:%s", s.ip, s.port), nil))
 }
