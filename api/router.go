@@ -6,7 +6,7 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
-func RegisterRouter(server iface.IServer) {
-	server.AddRouter(pb.MessageID_PING, func() proto.Message { return new(pb.Ping) }, PingHandler)
-	server.AddRouter(pb.MessageID_Login, func() proto.Message { return new(pb.ReqLogin) }, LoginHandler)
+func RegisterRouter(msgHandler iface.IMsgHandler) {
+	msgHandler.AddRouter(pb.MessageID_PING, func() proto.Message { return new(pb.Ping) }, PingHandler)
+	msgHandler.AddRouter(pb.MessageID_Login, func() proto.Message { return new(pb.ReqLogin) }, LoginHandler)
 }

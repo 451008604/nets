@@ -31,8 +31,6 @@ var globalObject *GlobalObj
 func init() {
 	globalObject = &GlobalObj{
 		Debug:            false,
-		HostTCP:          "127.0.0.1",
-		PortTCP:          "7001",
 		Name:             "socketServerFrame",
 		Version:          "v0.1",
 		MaxPackSize:      4096,

@@ -16,10 +16,6 @@ type IConnManager interface {
 	ClearConn()
 	// 连接创建时的Hook函数
 	OnConnOpen(fun func(conn IConnection))
-	// 调用连接时的Hook函数
-	CallbackOnConnOpen(conn IConnection)
 	// 连接断开时的Hook函数
 	OnConnClose(fun func(conn IConnection))
-	// 调用连接断开时的Hook函数
-	CallbackOnConnClose(conn IConnection)
 }

@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"github.com/451008604/socketServerFrame/client/base"
 	"github.com/451008604/socketServerFrame/logs"
+	"github.com/451008604/socketServerFrame/network"
 	pb "github.com/451008604/socketServerFrame/proto/bin"
 	"github.com/gorilla/websocket"
 	"log"
@@ -19,7 +20,7 @@ func main() {
 
 func socketClient() {
 	conn := &base.CustomConnect{}
-	conn.NewConnection("127.0.0.1", "7777")
+	conn.NewConnection("127.0.0.1", "7001")
 	defer conn.SetBlocking()
 
 	// login
@@ -31,7 +32,7 @@ func socketClient() {
 }
 
 func WebSocketClient() {
-	u := url.URL{Scheme: "ws", Host: "localhost:8086", Path: "/"}
+	u := url.URL{Scheme: "ws", Host: "localhost:7002", Path: "/"}
 
 	c, _, err := websocket.DefaultDialer.Dial(u.String(), nil)
 	if err != nil {
@@ -45,7 +46,9 @@ func WebSocketClient() {
 		UserName: "guohaoqin",
 		PassWord: "1234567",
 	})
-	err = c.WriteMessage(websocket.TextMessage, login)
+	dp := network.NewDataPack()
+	msg := dp.Pack(network.NewMsgPackage(pb.MessageID_Login, login))
+	err = c.WriteMessage(websocket.BinaryMessage, msg)
 	if err != nil {
 		log.Fatalln("write:", err)
 	}

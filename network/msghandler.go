@@ -4,24 +4,32 @@ import (
 	"errors"
 	"fmt"
 	"github.com/451008604/socketServerFrame/api"
+
 	"github.com/451008604/socketServerFrame/config"
 	"github.com/451008604/socketServerFrame/iface"
 	"github.com/451008604/socketServerFrame/logs"
 	pb "github.com/451008604/socketServerFrame/proto/bin"
+	"sync"
 )
 
 type MsgHandler struct {
-	Apis           map[pb.MessageID]iface.IRouter // 存放每个MsgId所对应处理方法的map属性
 	WorkerPoolSize int                            // 业务工作Work池的数量
+	Apis           map[pb.MessageID]iface.IRouter // 存放每个MsgId所对应处理方法的map属性
 	TaskQueue      []chan iface.IRequest          // Worker负责取任务的消息队列
 }
 
-func NewMsgHandler() *MsgHandler {
-	return &MsgHandler{
-		Apis:           make(map[pb.MessageID]iface.IRouter),
-		WorkerPoolSize: config.GetGlobalObject().WorkerPoolSize,
-		TaskQueue:      make([]chan iface.IRequest, config.GetGlobalObject().WorkerPoolSize),
-	}
+var msgHandler *MsgHandler
+var msgHandlerOnce = sync.Once{}
+
+func GetInstanceMsgHandler() *MsgHandler {
+	msgHandlerOnce.Do(func() {
+		msgHandler = &MsgHandler{
+			WorkerPoolSize: config.GetGlobalObject().WorkerPoolSize,
+			Apis:           make(map[pb.MessageID]iface.IRouter),
+			TaskQueue:      make([]chan iface.IRequest, config.GetGlobalObject().WorkerPoolSize),
+		}
+	})
+	return msgHandler
 }
 
 // 执行路由绑定的处理函数
@@ -54,7 +62,7 @@ func (m *MsgHandler) AddRouter(msgId pb.MessageID, msg iface.INewMsgStructTempla
 
 // 启动工作池
 func (m *MsgHandler) StartWorkerPool() {
-	for i := 0; i < int(m.WorkerPoolSize); i++ {
+	for i := 0; i < m.WorkerPoolSize; i++ {
 		m.TaskQueue[i] = make(chan iface.IRequest, config.GetGlobalObject().WorkerTaskMaxLen)
 
 		go m.StartOneWorker(m.TaskQueue[i])

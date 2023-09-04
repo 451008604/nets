@@ -9,16 +9,23 @@ import (
 
 type ConnManager struct {
 	connID      int64                              // 客户端连接自增ID
-	connections map[int]iface.IConnection          // 管理的连接信息
 	connLock    sync.RWMutex                       // 连接的读写锁
+	connections map[int]iface.IConnection          // 管理的连接信息
 	onConnOpen  func(connection iface.IConnection) // 该Server连接创建时的Hook函数
 	onConnClose func(connection iface.IConnection) // 该Server连接断开时的Hook函数
 }
 
-func NewConnManager() *ConnManager {
-	return &ConnManager{
-		connections: make(map[int]iface.IConnection),
-	}
+var connManager *ConnManager
+var connManagerOnce = sync.Once{}
+
+func GetInstanceConnManager() *ConnManager {
+	connManagerOnce.Do(func() {
+		connManager = &ConnManager{
+			connections: map[int]iface.IConnection{},
+			connLock:    sync.RWMutex{},
+		}
+	})
+	return connManager
 }
 
 func (c *ConnManager) NewConnID() int64 {
@@ -32,6 +39,11 @@ func (c *ConnManager) Add(conn iface.IConnection) {
 	defer c.connLock.Unlock()
 
 	c.connections[conn.GetConnID()] = conn
+
+	// 调用打开连接hook函数
+	if c.onConnOpen != nil {
+		c.onConnOpen(conn)
+	}
 }
 
 // 删除连接
@@ -40,6 +52,11 @@ func (c *ConnManager) Remove(conn iface.IConnection) {
 	defer c.connLock.Unlock()
 
 	delete(c.connections, conn.GetConnID())
+
+	// 调用关闭连接hook函数
+	if c.onConnClose != nil {
+		c.onConnClose(conn)
+	}
 }
 
 // 根据ConnID获取连接
@@ -75,21 +92,7 @@ func (c *ConnManager) OnConnOpen(fun func(conn iface.IConnection)) {
 	c.onConnOpen = fun
 }
 
-// 调用连接时的Hook函数
-func (c *ConnManager) CallbackOnConnOpen(conn iface.IConnection) {
-	if c.onConnOpen != nil {
-		c.onConnOpen(conn)
-	}
-}
-
 // 连接断开时的Hook函数
 func (c *ConnManager) OnConnClose(fun func(conn iface.IConnection)) {
 	c.onConnClose = fun
-}
-
-// 调用连接断开时的Hook函数
-func (c *ConnManager) CallbackOnConnClose(conn iface.IConnection) {
-	if c.onConnClose != nil {
-		c.onConnClose(conn)
-	}
 }
