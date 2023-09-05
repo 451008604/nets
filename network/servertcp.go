@@ -69,7 +69,7 @@ func (s *ServerTCP) Start() {
 }
 
 func (s *ServerTCP) Listen() bool {
-	if config.GetGlobalObject().HostTCP != "" && config.GetGlobalObject().PortTCP != "" {
+	if config.GetGlobalObject().PortTCP != "" {
 		go s.Start()
 		return true
 	}

@@ -24,6 +24,8 @@ type GlobalObj struct {
 	PortTCP          string // TCP服务端口
 	HostWS           string // WS服务地址
 	PortWS           string // WS服务端口
+	TLSCertPath      string // TLS证书路径
+	TLSKeyPath       string // TLS密钥路径
 }
 
 var globalObject *GlobalObj

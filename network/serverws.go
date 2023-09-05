@@ -47,11 +47,16 @@ func (s *ServerWS) Start() {
 		// 建立连接成功
 		logs.PrintLogInfo(fmt.Sprintf("成功建立新的客户端连接 -> %v connID - %v", msgConn.RemoteAddrStr(), msgConn.GetConnID()))
 	})
-	logs.PrintLogErr(http.ListenAndServe(fmt.Sprintf("%s:%s", s.ip, s.port), nil))
+
+	if certPath, keyPath := config.GetGlobalObject().TLSCertPath, config.GetGlobalObject().TLSKeyPath; certPath != "" && keyPath != "" {
+		logs.PrintLogErr(http.ListenAndServeTLS(fmt.Sprintf("%s:%s", s.ip, s.port), certPath, keyPath, nil))
+	} else {
+		logs.PrintLogErr(http.ListenAndServe(fmt.Sprintf("%s:%s", s.ip, s.port), nil))
+	}
 }
 
 func (s *ServerWS) Listen() bool {
-	if config.GetGlobalObject().HostWS != "" && config.GetGlobalObject().PortWS != "" {
+	if config.GetGlobalObject().PortWS != "" {
 		go s.Start()
 		return true
 	}

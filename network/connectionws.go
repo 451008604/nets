@@ -1,6 +1,7 @@
 package network
 
 import (
+	"errors"
 	"github.com/451008604/socketServerFrame/config"
 	"github.com/451008604/socketServerFrame/iface"
 	"github.com/451008604/socketServerFrame/logs"
@@ -34,7 +35,7 @@ func (c *ConnectionWS) StartReader() {
 	for {
 		msgType, msgByte, err := c.conn.ReadMessage()
 		if err != nil || msgType != websocket.BinaryMessage {
-			if err.(*websocket.CloseError).Text != io.ErrUnexpectedEOF.Error() {
+			if !errors.As(err, &io.ErrUnexpectedEOF) {
 				logs.PrintLogErr(err)
 			}
 			return
