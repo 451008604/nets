@@ -24,17 +24,24 @@ func (c *Connection) StartReader() {
 }
 
 // 启动发送消息协程
-func (c *Connection) StartWriter() {
+func (c *Connection) StartWriter(_ []byte) {
 }
 
 // 启动连接
-func (c *Connection) Start() {
+func (c *Connection) Start(writerHandler func(data []byte)) {
 	// 将新建的连接添加到所属Server的连接管理器内
 	c.Server.GetConnMgr().Add(c)
 
-	// 在收到退出消息时释放进程
-	for range c.ExitBuffChan {
-		return
+	for {
+		select {
+		case data := <-c.msgBuffChan:
+			// 调用注册方法写消息给客户端
+			writerHandler(data)
+
+		case <-c.ExitBuffChan:
+			// 在收到退出消息时释放进程
+			return
+		}
 	}
 }
 

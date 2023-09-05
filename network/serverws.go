@@ -18,7 +18,6 @@ func NewServerWS() iface.IServer {
 	s.serverName = config.GetGlobalObject().Name + "_ws"
 	s.ip = config.GetGlobalObject().HostWS
 	s.port = config.GetGlobalObject().PortWS
-	s.msgHandler = GetInstanceMsgHandler()
 	s.connMgr = GetInstanceConnManager()
 	s.dataPacket = NewDataPack()
 	return s
@@ -26,8 +25,8 @@ func NewServerWS() iface.IServer {
 
 func (s *ServerWS) Start() {
 	var upgrade = websocket.Upgrader{
-		ReadBufferSize:  1024 * 64,
-		WriteBufferSize: 1024 * 64,
+		ReadBufferSize:  config.GetGlobalObject().MaxPackSize,
+		WriteBufferSize: config.GetGlobalObject().MaxPackSize,
 	}
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		conn, err := upgrade.Upgrade(w, r, nil)
@@ -42,8 +41,8 @@ func (s *ServerWS) Start() {
 		}
 
 		// 建立新连接并监听客户端请求的消息
-		msgConn := NewConnectionWS(s, conn, s.msgHandler)
-		go msgConn.Start()
+		msgConn := NewConnectionWS(s, conn)
+		go msgConn.Start(msgConn.StartWriter)
 		// 建立连接成功
 		logs.PrintLogInfo(fmt.Sprintf("成功建立新的客户端连接 -> %v connID - %v", msgConn.RemoteAddrStr(), msgConn.GetConnID()))
 	})

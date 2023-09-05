@@ -6,14 +6,14 @@ import (
 
 type IConnection interface {
 	// 启动连接
-	Start()
+	Start(writerHandler func(data []byte))
 	// 停止连接
 	Stop()
 
 	// 启动接收消息协程
 	StartReader()
 	// 启动发送消息协程
-	StartWriter()
+	StartWriter(data []byte)
 
 	// 获取当前连接ID
 	GetConnID() int

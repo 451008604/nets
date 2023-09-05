@@ -59,20 +59,16 @@ func (c *ConnectionWS) StartReader() {
 	}
 }
 
-func (c *ConnectionWS) StartWriter() {
-	for data := range c.msgBuffChan {
-		err := c.conn.WriteMessage(websocket.BinaryMessage, data)
-		logs.PrintLogErr(err, string(data))
-	}
+func (c *ConnectionWS) StartWriter(data []byte) {
+	err := c.conn.WriteMessage(websocket.BinaryMessage, data)
+	logs.PrintLogErr(err, string(data))
 }
 
-func (c *ConnectionWS) Start() {
+func (c *ConnectionWS) Start(writerHandler func(data []byte)) {
 	// 开启用于读的goroutine
 	go c.StartReader()
-	// 开启用于写的goroutine
-	go c.StartWriter()
-
-	c.Connection.Start()
+	// 注册用于写的writerHandler
+	c.Connection.Start(writerHandler)
 }
 
 func (c *ConnectionWS) Stop() {

@@ -17,7 +17,6 @@ func NewServerTCP() iface.IServer {
 	s.serverName = config.GetGlobalObject().Name + "_tcp"
 	s.ip = config.GetGlobalObject().HostTCP
 	s.port = config.GetGlobalObject().PortTCP
-	s.msgHandler = GetInstanceMsgHandler()
 	s.connMgr = GetInstanceConnManager()
 	s.dataPacket = NewDataPack()
 	return s
@@ -61,8 +60,8 @@ func (s *ServerTCP) Start() {
 		}
 
 		// 建立新连接并监听客户端请求的消息
-		msgConn := NewConnectionTCP(s, conn, s.msgHandler)
-		go msgConn.Start()
+		msgConn := NewConnectionTCP(s, conn)
+		go msgConn.Start(msgConn.StartWriter)
 		// 建立连接成功
 		logs.PrintLogInfo(fmt.Sprintf("成功建立新的客户端连接 -> %v connID - %v", msgConn.RemoteAddrStr(), msgConn.GetConnID()))
 	}

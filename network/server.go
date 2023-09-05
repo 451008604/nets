@@ -10,7 +10,6 @@ type Server struct {
 	serverName string             // 服务器名称
 	ip         string             // IP地址
 	port       string             // 服务端口
-	msgHandler iface.IMsgHandler  // 当前Server的消息管理模块，用来绑定MsgId和对应的处理函数
 	connMgr    iface.IConnManager // 当前Server的连接管理器
 	dataPacket iface.IDataPack    // 数据拆包/封包工具
 }

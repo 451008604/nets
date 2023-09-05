@@ -64,20 +64,16 @@ func (c *ConnectionTCP) StartReader() {
 	}
 }
 
-func (c *ConnectionTCP) StartWriter() {
-	for data := range c.msgBuffChan {
-		_, err := c.conn.Write(data)
-		logs.PrintLogErr(err, string(data))
-	}
+func (c *ConnectionTCP) StartWriter(data []byte) {
+	_, err := c.conn.Write(data)
+	logs.PrintLogErr(err, string(data))
 }
 
-func (c *ConnectionTCP) Start() {
+func (c *ConnectionTCP) Start(writerHandler func(data []byte)) {
 	// 开启用于读的goroutine
 	go c.StartReader()
-	// 开启用于写的goroutine
-	go c.StartWriter()
-
-	c.Connection.Start()
+	// 注册用于写的writerHandler
+	c.Connection.Start(writerHandler)
 }
 
 func (c *ConnectionTCP) Stop() {
