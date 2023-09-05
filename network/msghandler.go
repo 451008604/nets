@@ -4,12 +4,12 @@ import (
 	"errors"
 	"fmt"
 	"github.com/451008604/socketServerFrame/api"
+	"sync"
 
 	"github.com/451008604/socketServerFrame/config"
 	"github.com/451008604/socketServerFrame/iface"
 	"github.com/451008604/socketServerFrame/logs"
 	pb "github.com/451008604/socketServerFrame/proto/bin"
-	"sync"
 )
 
 type MsgHandler struct {
@@ -18,18 +18,18 @@ type MsgHandler struct {
 	TaskQueue      []chan iface.IRequest          // Worker负责取任务的消息队列
 }
 
-var msgHandler *MsgHandler
-var msgHandlerOnce = sync.Once{}
+var instanceMsgHandler *MsgHandler
+var instanceMsgHandlerOnce = sync.Once{}
 
 func GetInstanceMsgHandler() *MsgHandler {
-	msgHandlerOnce.Do(func() {
-		msgHandler = &MsgHandler{
+	instanceMsgHandlerOnce.Do(func() {
+		instanceMsgHandler = &MsgHandler{
 			WorkerPoolSize: config.GetGlobalObject().WorkerPoolSize,
 			Apis:           make(map[pb.MessageID]iface.IRouter),
 			TaskQueue:      make([]chan iface.IRequest, config.GetGlobalObject().WorkerPoolSize),
 		}
 	})
-	return msgHandler
+	return instanceMsgHandler
 }
 
 // 执行路由绑定的处理函数
@@ -64,7 +64,6 @@ func (m *MsgHandler) AddRouter(msgId pb.MessageID, msg iface.INewMsgStructTempla
 func (m *MsgHandler) StartWorkerPool() {
 	for i := 0; i < m.WorkerPoolSize; i++ {
 		m.TaskQueue[i] = make(chan iface.IRequest, config.GetGlobalObject().WorkerTaskMaxLen)
-
 		go m.StartOneWorker(m.TaskQueue[i])
 	}
 }

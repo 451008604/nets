@@ -23,9 +23,6 @@ func NewServerTCP() iface.IServer {
 }
 
 func (s *ServerTCP) Start() {
-	// 启动工作池等待接收请求数据
-	s.msgHandler.StartWorkerPool()
-
 	var (
 		addr *net.TCPAddr
 		tcp  *net.TCPListener

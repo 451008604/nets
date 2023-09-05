@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"github.com/451008604/socketServerFrame/api"
 	"github.com/451008604/socketServerFrame/logic"
 	"github.com/451008604/socketServerFrame/logs"
 	"github.com/451008604/socketServerFrame/network"
@@ -21,9 +20,6 @@ func main() {
 
 	// 注册模块
 	logic.RegisterModule()
-
-	// 注册路由
-	api.RegisterRouter(network.GetInstanceMsgHandler())
 
 	// 开始监听服务
 	runServer()

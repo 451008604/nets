@@ -15,17 +15,17 @@ type ConnManager struct {
 	onConnClose func(connection iface.IConnection) // 该Server连接断开时的Hook函数
 }
 
-var connManager *ConnManager
-var connManagerOnce = sync.Once{}
+var instanceConnManager *ConnManager
+var instanceConnManagerOnce = sync.Once{}
 
 func GetInstanceConnManager() *ConnManager {
-	connManagerOnce.Do(func() {
-		connManager = &ConnManager{
+	instanceConnManagerOnce.Do(func() {
+		instanceConnManager = &ConnManager{
 			connections: map[int]iface.IConnection{},
 			connLock:    sync.RWMutex{},
 		}
 	})
-	return connManager
+	return instanceConnManager
 }
 
 func (c *ConnManager) NewConnID() int64 {

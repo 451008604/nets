@@ -15,13 +15,13 @@ type ConnectionWS struct {
 	conn *websocket.Conn
 }
 
-func NewConnectionWS(server iface.IServer, conn *websocket.Conn, msgHandler iface.IMsgHandler) *ConnectionWS {
+func NewConnectionWS(server iface.IServer, conn *websocket.Conn) *ConnectionWS {
 	c := &ConnectionWS{}
 	c.Server = server
 	c.conn = conn
 	c.ConnID = int(server.GetConnMgr().NewConnID())
 	c.isClosed = false
-	c.MsgHandler = msgHandler
+	c.MsgHandler = GetInstanceMsgHandler()
 	c.ExitBuffChan = make(chan bool, 1)
 	c.msgBuffChan = make(chan []byte, config.GetGlobalObject().MaxMsgChanLen)
 	c.property = make(map[string]interface{})

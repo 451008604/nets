@@ -15,13 +15,13 @@ type ConnectionTCP struct {
 }
 
 // 新建连接
-func NewConnectionTCP(server iface.IServer, conn *net.TCPConn, msgHandler iface.IMsgHandler) *ConnectionTCP {
+func NewConnectionTCP(server iface.IServer, conn *net.TCPConn) *ConnectionTCP {
 	c := &ConnectionTCP{}
 	c.Server = server
 	c.conn = conn
 	c.ConnID = int(server.GetConnMgr().NewConnID())
 	c.isClosed = false
-	c.MsgHandler = msgHandler
+	c.MsgHandler = GetInstanceMsgHandler()
 	c.ExitBuffChan = make(chan bool, 1)
 	c.msgBuffChan = make(chan []byte, config.GetGlobalObject().MaxMsgChanLen)
 	c.property = make(map[string]interface{})

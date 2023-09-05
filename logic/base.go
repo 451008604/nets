@@ -2,6 +2,7 @@ package logic
 
 import (
 	"fmt"
+	"github.com/451008604/socketServerFrame/api"
 	"github.com/451008604/socketServerFrame/database"
 	"github.com/451008604/socketServerFrame/iface"
 	"github.com/451008604/socketServerFrame/logs"
@@ -26,6 +27,11 @@ func RegisterModule() {
 	Module.serverWS = network.NewServerWS()
 	Module.notify = network.NewNotifyManager()
 	Module.sql = database.NewSqlDBModel()
+
+	// 注册路由
+	api.RegisterRouter(network.GetInstanceMsgHandler())
+	// 启动工作池等待接收请求数据
+	network.GetInstanceMsgHandler().StartWorkerPool()
 
 	// 连接建立时
 	network.GetInstanceConnManager().OnConnOpen(onConnectionOpen)
