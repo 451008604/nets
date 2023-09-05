@@ -6,6 +6,6 @@
   "HostWS": "127.0.0.1",
   "PortWS": "7002",
   "MaxConn": 1000,
-  "WorkerPoolSize": 1,
+  "WorkerPoolSize": 1000,
   "ProtocolIsJson": true
 }

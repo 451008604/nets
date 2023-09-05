@@ -37,8 +37,8 @@ func init() {
 		Version:          "v0.1",
 		MaxPackSize:      4096,
 		MaxConn:          10,
-		WorkerPoolSize:   3,
-		WorkerTaskMaxLen: 1024,
+		WorkerPoolSize:   1000,
+		WorkerTaskMaxLen: 1000,
 		MaxMsgChanLen:    100,
 		ProtocolIsJson:   true,
 	}
