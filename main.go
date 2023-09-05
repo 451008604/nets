@@ -28,10 +28,6 @@ func main() {
 }
 
 func runServer() {
-	if logic.Module.ServerTCP().Listen() {
-		network.ServerWaitFlag.Add(1)
-	}
-	if logic.Module.ServerWS().Listen() {
-		network.ServerWaitFlag.Add(1)
-	}
+	logic.Module.ServerTCP().Listen()
+	logic.Module.ServerWS().Listen()
 }

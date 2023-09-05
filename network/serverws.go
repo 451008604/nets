@@ -24,6 +24,11 @@ func NewServerWS() iface.IServer {
 }
 
 func (s *ServerWS) Start() {
+	if s.isClose {
+		s.isClose = false
+		return
+	}
+
 	var upgrade = websocket.Upgrader{
 		ReadBufferSize:  config.GetGlobalObject().MaxPackSize,
 		WriteBufferSize: config.GetGlobalObject().MaxPackSize,
@@ -32,6 +37,12 @@ func (s *ServerWS) Start() {
 		conn, err := upgrade.Upgrade(w, r, nil)
 		if err != nil {
 			fmt.Println(err)
+			return
+		}
+
+		// 服务关闭状态
+		if s.isClose {
+			_ = conn.Close()
 			return
 		}
 
@@ -57,6 +68,7 @@ func (s *ServerWS) Start() {
 func (s *ServerWS) Listen() bool {
 	if config.GetGlobalObject().PortWS != "" {
 		go s.Start()
+		s.Server.Start()
 		return true
 	}
 	return false

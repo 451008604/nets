@@ -23,6 +23,11 @@ func NewServerTCP() iface.IServer {
 }
 
 func (s *ServerTCP) Start() {
+	if s.isClose {
+		s.isClose = false
+		return
+	}
+
 	var (
 		addr *net.TCPAddr
 		tcp  *net.TCPListener
@@ -50,6 +55,12 @@ func (s *ServerTCP) Start() {
 			continue
 		}
 
+		// 服务关闭状态
+		if s.isClose {
+			_ = conn.Close()
+			continue
+		}
+
 		// 连接数量超过限制后，关闭新建立的连接
 		if s.GetConnMgr().Len() >= config.GetGlobalObject().MaxConn {
 			_ = conn.Close()
@@ -67,6 +78,7 @@ func (s *ServerTCP) Start() {
 func (s *ServerTCP) Listen() bool {
 	if config.GetGlobalObject().PortTCP != "" {
 		go s.Start()
+		s.Server.Start()
 		return true
 	}
 	return false
