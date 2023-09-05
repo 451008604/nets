@@ -30,23 +30,21 @@ func RegisterModule() {
 
 	// 注册路由
 	api.RegisterRouter(network.GetInstanceMsgHandler())
-	// 启动工作池等待接收请求数据
-	network.GetInstanceMsgHandler().StartWorkerPool()
 
 	// 连接建立时
 	network.GetInstanceConnManager().OnConnOpen(onConnectionOpen)
 	// 连接断开后
 	network.GetInstanceConnManager().OnConnClose(onConnectionClose)
 
-	go func(s iface.IConnManager) {
+	go func() {
 		goroutineNum := 0
 		for range time.Tick(time.Second * 1) {
 			if temp := runtime.NumGoroutine(); temp != goroutineNum {
 				goroutineNum = temp
-				logs.PrintLogInfo(fmt.Sprintf("当前线程数：%v\t当前连接数量：%v", goroutineNum, s.Len()))
+				logs.PrintLogInfo(fmt.Sprintf("当前线程数：%v\t当前连接数量：%v", goroutineNum, network.GetInstanceConnManager().Len()))
 			}
 		}
-	}(network.GetInstanceConnManager())
+	}()
 }
 
 func (s *StaticModule) ServerTCP() iface.IServer {

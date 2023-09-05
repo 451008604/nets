@@ -13,9 +13,9 @@ import (
 )
 
 type MsgHandler struct {
-	WorkerPoolSize int                            // 业务工作Work池的数量
+	WorkerPoolSize int                            // 工作池的容量
+	WorkQueue      sync.Map                       // 工作池，每个工作队列中存放等待执行的任务
 	Apis           map[pb.MessageID]iface.IRouter // 存放每个MsgId所对应处理方法的map属性
-	TaskQueue      []chan iface.IRequest          // Worker负责取任务的消息队列
 }
 
 var instanceMsgHandler *MsgHandler
@@ -26,7 +26,7 @@ func GetInstanceMsgHandler() *MsgHandler {
 		instanceMsgHandler = &MsgHandler{
 			WorkerPoolSize: config.GetGlobalObject().WorkerPoolSize,
 			Apis:           make(map[pb.MessageID]iface.IRouter),
-			TaskQueue:      make([]chan iface.IRequest, config.GetGlobalObject().WorkerPoolSize),
+			WorkQueue:      sync.Map{},
 		}
 	})
 	return instanceMsgHandler
@@ -36,15 +36,14 @@ func GetInstanceMsgHandler() *MsgHandler {
 func (m *MsgHandler) DoMsgHandler(request iface.IRequest) {
 	router, ok := m.Apis[request.GetMsgID()]
 	if !ok {
-		logs.PrintLogInfo(fmt.Sprintf("api msgID %v is not fund", request.GetMsgID()))
+		logs.PrintLogErr(errors.New(fmt.Sprintf("api msgID %v is not fund", request.GetMsgID())))
 		return
 	}
 
 	// 对应的逻辑处理方法
 	msgData := router.GetNewMsg()
 	err := api.ByteToProtocol(request.GetData(), msgData)
-	if err != nil {
-		logs.PrintLogInfo(fmt.Sprintf("api msgID %v parsing error: %v\nmsgData:%v", request.GetMsgID(), err.Error(), request.GetData()))
+	if logs.PrintLogErr(err, fmt.Sprintf("api msgID %v parsing msgData:%v", request.GetMsgID(), request.GetData())) {
 		return
 	}
 	router.RunHandler(request, msgData)
@@ -60,25 +59,39 @@ func (m *MsgHandler) AddRouter(msgId pb.MessageID, msg iface.INewMsgStructTempla
 	m.Apis[msgId].SetHandler(handler)
 }
 
-// 启动工作池
-func (m *MsgHandler) StartWorkerPool() {
-	for i := 0; i < m.WorkerPoolSize; i++ {
-		m.TaskQueue[i] = make(chan iface.IRequest, config.GetGlobalObject().WorkerTaskMaxLen)
-		go m.StartOneWorker(m.TaskQueue[i])
-	}
-}
-
 // 将消息发送到任务队列
 func (m *MsgHandler) SendMsgToTaskQueue(request iface.IRequest) {
 	// 根据connID平均分配至对应worker
 	workerID := request.GetConnection().GetConnID() % m.WorkerPoolSize
+	freeWorkQueueID := m.checkFreeWorkQueue()
+	if _, ok := m.WorkQueue.Load(workerID); !ok && freeWorkQueueID != 0 {
+		workerID = freeWorkQueueID
+	}
+	// 对工作池进行扩容
+	actual, loaded := m.WorkQueue.LoadOrStore(workerID, make(chan iface.IRequest, config.GetGlobalObject().WorkerTaskMaxLen))
+	if !loaded {
+		go m.StartOneWorker(actual.(chan iface.IRequest))
+	}
+
 	// 将请求推入worker协程
-	m.TaskQueue[workerID] <- request
+	actual.(chan iface.IRequest) <- request
 }
 
 // 启动一个工作协程等待处理接收的请求
-func (m *MsgHandler) StartOneWorker(taskQueue chan iface.IRequest) {
-	for request := range taskQueue {
+func (m *MsgHandler) StartOneWorker(workQueue chan iface.IRequest) {
+	for request := range workQueue {
 		m.DoMsgHandler(request)
 	}
+}
+
+func (m *MsgHandler) checkFreeWorkQueue() int {
+	freeWorkID := 0
+	m.WorkQueue.Range(func(key, value any) bool {
+		if len(value.(chan iface.IRequest)) == 0 {
+			freeWorkID = key.(int)
+			return false
+		}
+		return true
+	})
+	return freeWorkID
 }

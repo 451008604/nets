@@ -12,7 +12,7 @@ func SetPrintMode(v bool) {
 	printMode = v
 }
 
-// PrintLogInfo 打印信息
+// 打印信息
 func PrintLogInfo(msg string) {
 	if msg == "" {
 		return
@@ -24,7 +24,7 @@ func PrintLogInfo(msg string) {
 	}
 }
 
-// PrintLogErr 打印错误
+// 打印错误
 func PrintLogErr(err error, tips ...string) bool {
 	if err == nil {
 		return false
@@ -36,7 +36,7 @@ func PrintLogErr(err error, tips ...string) bool {
 	}
 }
 
-// PrintLogPanic 打印Panic
+// 打印Panic
 func PrintLogPanic(err error) {
 	if err == nil {
 		return
