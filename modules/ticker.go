@@ -32,19 +32,22 @@ func StartTicker() {
 			ticker.perSecondCh <- t
 
 			// 每分钟执行
-			if s == 0 {
-				ticker.perMinuteCh <- t
+			if s != 0 {
+				continue
 			}
+			ticker.perMinuteCh <- t
 
 			// 每小时执行
-			if m == 0 {
-				ticker.perHourCh <- t
+			if m != 0 {
+				continue
 			}
+			ticker.perHourCh <- t
 
 			// 每天执行
-			if h == 0 {
-				ticker.perDayCh <- t
+			if h != 0 {
+				continue
 			}
+			ticker.perDayCh <- t
 
 			// 每周执行(周日=0,周六=6)
 			if w == 1 {
@@ -55,7 +58,6 @@ func StartTicker() {
 			if d == 1 {
 				ticker.perMonthCh <- t
 			}
-
 		}
 	}(ticker)
 
