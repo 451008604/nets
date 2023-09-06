@@ -6,6 +6,7 @@ import (
 	"github.com/451008604/socketServerFrame/database"
 	"github.com/451008604/socketServerFrame/iface"
 	"github.com/451008604/socketServerFrame/logs"
+	"github.com/451008604/socketServerFrame/modules"
 	"github.com/451008604/socketServerFrame/network"
 	"github.com/gogf/gf/v2/database/gdb"
 	"runtime"
@@ -45,6 +46,9 @@ func RegisterModule() {
 			}
 		}
 	}()
+
+	// 启动计时器
+	modules.StartTicker()
 }
 
 func (s *StaticModule) ServerTCP() iface.IServer {
