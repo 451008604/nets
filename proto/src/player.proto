@@ -27,7 +27,7 @@ message PlayerLoginReq {
     optional int32 LoginType = 1;       // 登录类型
     optional string Account = 2;        // 用户名
     optional string PassWord = 3;       // 密码
-    optional string ChannelType = 4;    // 渠道标识
+    optional int32 ChannelType = 4;     // 渠道标识
 }
 
 message PlayerLoginRes {
@@ -36,6 +36,6 @@ message PlayerLoginRes {
     optional int32 CreateTime = 3;      // 创建时间
     optional string Account = 4;        // 用户名
     optional string PassWord = 5;       // 密码
-    optional string ChannelType = 6;    // 渠道标识
+    optional int32 ChannelType = 6;     // 渠道标识
     optional int32 Register = 7;        // 是否新玩家
 }

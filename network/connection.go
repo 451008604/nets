@@ -2,9 +2,12 @@ package network
 
 import (
 	"fmt"
+	"github.com/451008604/socketServerFrame/api"
 	"github.com/451008604/socketServerFrame/iface"
+	"github.com/451008604/socketServerFrame/logic"
 	"github.com/451008604/socketServerFrame/logs"
 	pb "github.com/451008604/socketServerFrame/proto/bin"
+	"google.golang.org/protobuf/proto"
 	"sync"
 )
 
@@ -17,6 +20,8 @@ type Connection struct {
 	msgBuffChan  chan []byte            // 用于读、写两个goroutine之间的消息通信
 	property     map[string]interface{} // 连接属性
 	propertyLock sync.RWMutex           // 连接属性读写锁
+
+	Player *logic.Player
 }
 
 // 启动接收消息协程
@@ -72,14 +77,15 @@ func (c *Connection) RemoteAddrStr() string {
 }
 
 // 发送消息给客户端
-func (c *Connection) SendMsg(msgId pb.MsgID, data []byte) {
+func (c *Connection) SendMsg(msgId pb.MsgID, msgData proto.Message) {
+	msgByte := api.ProtocolToByte(msgData)
 	if c.isClosed {
-		logs.PrintLogInfo(fmt.Sprintf("连接已关闭导致消息发送失败 -> msgId:%v\tdata:%v", msgId, string(data)))
+		logs.PrintLogInfo(fmt.Sprintf("连接已关闭导致消息发送失败 -> msgId:%v\tdata:%s", msgId, msgByte))
 		return
 	}
 
 	// 将消息数据封包
-	msg := c.Server.DataPacket().Pack(NewMsgPackage(msgId, data))
+	msg := c.Server.DataPacket().Pack(NewMsgPackage(msgId, msgByte))
 	if msg == nil {
 		return
 	}
@@ -113,4 +119,12 @@ func (c *Connection) RemoveProperty(key string) {
 	defer c.propertyLock.Unlock()
 
 	delete(c.property, key)
+}
+
+func (c *Connection) SetPlayer(player iface.IPlayer) {
+	c.Player = player.(*logic.Player)
+}
+
+func (c *Connection) GetPlayer() iface.IPlayer {
+	return c.Player
 }

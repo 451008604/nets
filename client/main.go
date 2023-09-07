@@ -7,6 +7,7 @@ import (
 	"github.com/451008604/socketServerFrame/network"
 	pb "github.com/451008604/socketServerFrame/proto/bin"
 	"github.com/gorilla/websocket"
+	"google.golang.org/protobuf/proto"
 	"io"
 	"math/rand"
 	"net"
@@ -19,11 +20,13 @@ var waitGroup = sync.WaitGroup{}
 func main() {
 	logs.SetPrintMode(true)
 
-	login, _ := json.Marshal(&pb.ReqLogin{
-		UserName: "guohaoqin",
-		PassWord: "1234567",
+	login, _ := json.Marshal(&pb.PlayerLoginReq{
+		LoginType:   proto.Int32(1),
+		Account:     proto.String("eric"),
+		PassWord:    proto.String("123456789"),
+		ChannelType: proto.Int32(2),
 	})
-	msg := network.NewDataPack().Pack(network.NewMsgPackage(pb.MessageID_Login, login))
+	msg := network.NewDataPack().Pack(network.NewMsgPackage(pb.MsgID_PlayerLogin_Req, login))
 
 	for i := 0; i < 100; i++ {
 		waitGroup.Add(2)

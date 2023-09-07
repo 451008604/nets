@@ -46,6 +46,12 @@ func (m *MsgHandler) DoMsgHandler(request iface.IRequest) {
 	if logs.PrintLogErr(err, fmt.Sprintf("api msgID %v parsing msgData:%v", request.GetMsgID(), request.GetData())) {
 		return
 	}
+
+	// 未登录时不处理任何请求
+	if request.GetMsgID() != pb.MsgID_PlayerLogin_Req && request.GetConnection().GetProperty("UserID") == nil {
+		return
+	}
+
 	router.RunHandler(request, msgData)
 }
 

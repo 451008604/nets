@@ -2,6 +2,7 @@ package iface
 
 import (
 	pb "github.com/451008604/socketServerFrame/proto/bin"
+	"google.golang.org/protobuf/proto"
 )
 
 type IConnection interface {
@@ -21,7 +22,7 @@ type IConnection interface {
 	RemoteAddrStr() string
 
 	// 发送消息给客户端
-	SendMsg(msgId pb.MsgID, data []byte)
+	SendMsg(msgId pb.MsgID, msgData proto.Message)
 
 	// 设置连接属性
 	SetProperty(key string, value interface{})
@@ -29,4 +30,10 @@ type IConnection interface {
 	GetProperty(key string) (value interface{})
 	// 删除连接属性
 	RemoveProperty(key string)
+
+	GetPlayer() IPlayer
+	SetPlayer(IPlayer)
+}
+
+type IPlayer interface {
 }
