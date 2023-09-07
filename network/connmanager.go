@@ -1,6 +1,7 @@
 package network
 
 import (
+	"container/list"
 	"errors"
 	"github.com/451008604/socketServerFrame/iface"
 	"sync"
@@ -8,9 +9,10 @@ import (
 )
 
 type ConnManager struct {
-	connID      int64                              // 客户端连接自增ID
+	connID      int64                              // 用于客户端连接的自增ID
 	connLock    sync.RWMutex                       // 连接的读写锁
 	connections map[int]iface.IConnection          // 管理的连接信息
+	closeConnID list.List                          // 已关闭的连接ID集合
 	onConnOpen  func(connection iface.IConnection) // 该Server连接创建时的Hook函数
 	onConnClose func(connection iface.IConnection) // 该Server连接断开时的Hook函数
 }
@@ -23,12 +25,19 @@ func GetInstanceConnManager() *ConnManager {
 		instanceConnManager = &ConnManager{
 			connections: map[int]iface.IConnection{},
 			connLock:    sync.RWMutex{},
+			closeConnID: list.List{},
 		}
 	})
 	return instanceConnManager
 }
 
 func (c *ConnManager) NewConnID() int64 {
+	// 回收列表中存在则取出使用
+	if c.closeConnID.Len() > 0 {
+		connID := c.closeConnID.Remove(c.closeConnID.Front())
+		return connID.(int64)
+	}
+	// 回收列表为空时递增ID
 	atomic.AddInt64(&c.connID, 1)
 	return c.connID
 }
@@ -52,6 +61,8 @@ func (c *ConnManager) Remove(conn iface.IConnection) {
 	defer c.connLock.Unlock()
 
 	delete(c.connections, conn.GetConnID())
+	// 存入回收列表
+	c.closeConnID.PushBack(conn.GetConnID())
 
 	// 调用关闭连接hook函数
 	if c.onConnClose != nil {
