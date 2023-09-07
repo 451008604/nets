@@ -23,7 +23,7 @@ func (n *NotifyManager) DelNotifyGroupByID(notifyID string) {
 	delete(n.notifyList, notifyID)
 }
 
-func (n *NotifyManager) SendNotifyData(notifyID string, msgID pb.MessageID, data []byte) {
+func (n *NotifyManager) SendNotifyData(notifyID string, msgID pb.MsgID, data []byte) {
 	if notify, ok := n.notifyList[notifyID]; ok {
 		for _, conn := range notify.GetNotifyTargets() {
 			go conn.SendMsg(msgID, data)

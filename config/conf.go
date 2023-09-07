@@ -33,7 +33,7 @@ var globalObject *GlobalObj
 func init() {
 	globalObject = &GlobalObj{
 		Debug:            false,
-		Name:             "socketServerFrame",
+		Name:             "MyProject",
 		Version:          "v0.1",
 		MaxPackSize:      4096,
 		MaxConn:          10,

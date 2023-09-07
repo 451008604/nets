@@ -9,9 +9,9 @@ type IMessage interface {
 	SetDataLen(uint32)
 
 	// 获取消息ID
-	GetMsgId() pb.MessageID
+	GetMsgId() pb.MsgID
 	// 设置消息ID
-	SetMsgId(pb.MessageID)
+	SetMsgId(pb.MsgID)
 
 	// 获取消息内容
 	GetData() []byte

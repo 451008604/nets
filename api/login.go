@@ -7,8 +7,8 @@ import (
 )
 
 func LoginHandler(con iface.IConnection, message proto.Message) {
-	login := message.(*pb.ReqLogin)
+	login := message.(*pb.PlayerLoginReq)
 	// logs.PrintLogInfo(login.String())
 
-	con.SendMsg(pb.MessageID_Login, []byte("登录成功 "+login.GetUserName()+" "+login.GetPassWord()))
+	con.SendMsg(pb.MsgID_PlayerLogin_Res, []byte("登录成功 "+login.GetAccount()+" "+login.GetPassWord()))
 }

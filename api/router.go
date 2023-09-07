@@ -7,6 +7,6 @@ import (
 )
 
 func RegisterRouter(msgHandler iface.IMsgHandler) {
-	msgHandler.AddRouter(pb.MessageID_PING, func() proto.Message { return new(pb.Ping) }, PingHandler)
-	msgHandler.AddRouter(pb.MessageID_Login, func() proto.Message { return new(pb.ReqLogin) }, LoginHandler)
+	// msgHandler.AddRouter(pb.MessageID_PING, func() proto.Message { return new(pb.Ping) }, PingHandler)
+	msgHandler.AddRouter(pb.MsgID_PlayerLogin_Req, func() proto.Message { return new(pb.PlayerLoginReq) }, LoginHandler)
 }

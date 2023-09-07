@@ -13,9 +13,9 @@ import (
 )
 
 type MsgHandler struct {
-	WorkerPoolSize int                            // 工作池的容量
-	WorkQueue      sync.Map                       // 工作池，每个工作队列中存放等待执行的任务
-	Apis           map[pb.MessageID]iface.IRouter // 存放每个MsgId所对应处理方法的map属性
+	WorkerPoolSize int                        // 工作池的容量
+	WorkQueue      sync.Map                   // 工作池，每个工作队列中存放等待执行的任务
+	Apis           map[pb.MsgID]iface.IRouter // 存放每个MsgId所对应处理方法的map属性
 }
 
 var instanceMsgHandler *MsgHandler
@@ -25,7 +25,7 @@ func GetInstanceMsgHandler() *MsgHandler {
 	instanceMsgHandlerOnce.Do(func() {
 		instanceMsgHandler = &MsgHandler{
 			WorkerPoolSize: config.GetGlobalObject().WorkerPoolSize,
-			Apis:           make(map[pb.MessageID]iface.IRouter),
+			Apis:           make(map[pb.MsgID]iface.IRouter),
 			WorkQueue:      sync.Map{},
 		}
 	})
@@ -50,7 +50,7 @@ func (m *MsgHandler) DoMsgHandler(request iface.IRequest) {
 }
 
 // 添加路由，绑定处理函数
-func (m *MsgHandler) AddRouter(msgId pb.MessageID, msg iface.INewMsgStructTemplate, handler iface.IReceiveMsgHandler) {
+func (m *MsgHandler) AddRouter(msgId pb.MsgID, msg iface.INewMsgStructTemplate, handler iface.IReceiveMsgHandler) {
 	if _, ok := m.Apis[msgId]; ok {
 		logs.PrintLogPanic(errors.New("消息ID重复绑定Handler"))
 	}

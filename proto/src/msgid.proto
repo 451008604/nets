@@ -1,0 +1,8 @@
+syntax = "proto2";
+package pb;
+option go_package = "./;pb";
+
+enum MsgID {
+    PlayerLogin_Req = 1001;// PlayerLoginReq 玩家登录请求
+    PlayerLogin_Res = 1002;// PlayerLoginRes 玩家登录回应
+}

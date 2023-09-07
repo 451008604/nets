@@ -1,0 +1,41 @@
+syntax = "proto2";
+package pb;
+option go_package = "./;pb";
+
+message PBPlayerData {
+    optional PBAccountData AccountData = 1; // 帐户数据
+    optional PBCommonData CommonData = 2;   // 公共数据
+}
+
+message PBAccountData {
+    optional int32 UserID = 1;      // 用户ID
+    optional string Account = 2;    // 账号
+    optional string PassWord = 3;   // 密码
+    optional string NickName = 4;   // 昵称
+    optional string HeadImage = 5;  // 头像
+    optional int32 PlayerLevel = 6; // 等级
+}
+
+message PBCommonData {
+    optional int32 GoldCoin = 1;    // 金币
+    optional int32 Diamond = 2;     // 钻石
+    optional int32 Strength = 3;    // 体力
+    optional int32 Experience = 4;  // 经验
+}
+
+message PlayerLoginReq {
+    optional int32 LoginType = 1;       // 登录类型
+    optional string Account = 2;        // 用户名
+    optional string PassWord = 3;       // 密码
+    optional string ChannelType = 4;    // 渠道标识
+}
+
+message PlayerLoginRes {
+    optional int32 Result = 1;          // 错误码
+    optional int32 UserID = 2;          // 角色ID
+    optional int32 CreateTime = 3;      // 创建时间
+    optional string Account = 4;        // 用户名
+    optional string PassWord = 5;       // 密码
+    optional string ChannelType = 6;    // 渠道标识
+    optional int32 Register = 7;        // 是否新玩家
+}

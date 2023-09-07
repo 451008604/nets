@@ -3,13 +3,13 @@ package network
 import pb "github.com/451008604/socketServerFrame/proto/bin"
 
 type Message struct {
-	id      pb.MessageID // 消息ID
-	dataLen uint32       // 消息长度
-	data    []byte       // 消息内容
+	id      pb.MsgID // 消息ID
+	dataLen uint32   // 消息长度
+	data    []byte   // 消息内容
 }
 
 // 新建消息包
-func NewMsgPackage(id pb.MessageID, data []byte) *Message {
+func NewMsgPackage(id pb.MsgID, data []byte) *Message {
 	return &Message{
 		id:      id,
 		dataLen: uint32(len(data)),
@@ -25,11 +25,11 @@ func (m *Message) SetDataLen(u uint32) {
 	m.dataLen = u
 }
 
-func (m *Message) GetMsgId() pb.MessageID {
+func (m *Message) GetMsgId() pb.MsgID {
 	return m.id
 }
 
-func (m *Message) SetMsgId(u pb.MessageID) {
+func (m *Message) SetMsgId(u pb.MsgID) {
 	m.id = u
 }
 

@@ -72,7 +72,7 @@ func (c *Connection) RemoteAddrStr() string {
 }
 
 // 发送消息给客户端
-func (c *Connection) SendMsg(msgId pb.MessageID, data []byte) {
+func (c *Connection) SendMsg(msgId pb.MsgID, data []byte) {
 	if c.isClosed {
 		logs.PrintLogInfo(fmt.Sprintf("连接已关闭导致消息发送失败 -> msgId:%v\tdata:%v", msgId, string(data)))
 		return
