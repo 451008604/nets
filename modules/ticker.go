@@ -12,16 +12,16 @@ type tickerModule struct {
 	perMonthCh  chan time.Time // 每月
 }
 
-var ticker = &tickerModule{}
-
 func StartTicker() {
-	ticker.tick = time.Tick(time.Second)
-	ticker.perSecondCh = make(chan time.Time)
-	ticker.perMinuteCh = make(chan time.Time)
-	ticker.perHourCh = make(chan time.Time)
-	ticker.perDayCh = make(chan time.Time)
-	ticker.perWeekCh = make(chan time.Time)
-	ticker.perMonthCh = make(chan time.Time)
+	ticker := &tickerModule{
+		tick:        time.Tick(time.Second),
+		perSecondCh: make(chan time.Time),
+		perMinuteCh: make(chan time.Time),
+		perHourCh:   make(chan time.Time),
+		perDayCh:    make(chan time.Time),
+		perWeekCh:   make(chan time.Time),
+		perMonthCh:  make(chan time.Time),
+	}
 	go func(ticker *tickerModule) {
 		for t := range ticker.tick {
 			// 每整秒钟执行一次
@@ -61,10 +61,6 @@ func StartTicker() {
 		}
 	}(ticker)
 
-	onTicker()
-}
-
-func onTicker() {
 	for {
 		select {
 		case date := <-ticker.perSecondCh:
