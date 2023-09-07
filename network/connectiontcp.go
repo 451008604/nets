@@ -22,7 +22,7 @@ func NewConnectionTCP(server iface.IServer, conn *net.TCPConn) *ConnectionTCP {
 	c.ConnID = int(server.GetConnMgr().NewConnID())
 	c.isClosed = false
 	c.MsgHandler = GetInstanceMsgHandler()
-	c.ExitBuffChan = make(chan bool, 1)
+	c.exitBuffChan = make(chan bool, 1)
 	c.msgBuffChan = make(chan []byte, config.GetGlobalObject().MaxMsgChanLen)
 	c.property = make(map[string]interface{})
 	c.propertyLock = sync.RWMutex{}

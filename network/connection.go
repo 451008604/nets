@@ -13,7 +13,7 @@ type Connection struct {
 	ConnID       int                    // 当前连接的ID（SessionID）
 	isClosed     bool                   // 当前连接是否已关闭
 	MsgHandler   iface.IMsgHandler      // 消息管理MsgId和对应处理函数的消息管理模块
-	ExitBuffChan chan bool              // 通知该连接已经退出的channel
+	exitBuffChan chan bool              // 通知该连接已经退出的channel
 	msgBuffChan  chan []byte            // 用于读、写两个goroutine之间的消息通信
 	property     map[string]interface{} // 连接属性
 	propertyLock sync.RWMutex           // 连接属性读写锁
@@ -38,7 +38,7 @@ func (c *Connection) Start(writerHandler func(data []byte)) {
 			// 调用注册方法写消息给客户端
 			writerHandler(data)
 
-		case <-c.ExitBuffChan:
+		case <-c.exitBuffChan:
 			// 在收到退出消息时释放进程
 			return
 		}
@@ -52,13 +52,13 @@ func (c *Connection) Stop() {
 	}
 	c.isClosed = true
 	// 通知关闭该连接的监听
-	c.ExitBuffChan <- true
+	c.exitBuffChan <- true
 
 	// 将连接从连接管理器中删除
 	c.Server.GetConnMgr().Remove(c)
 
 	// 关闭该连接管道
-	close(c.ExitBuffChan)
+	close(c.exitBuffChan)
 	close(c.msgBuffChan)
 }
 
