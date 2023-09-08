@@ -1,7 +1,9 @@
 package modules
 
 const (
-	Success = iota
-
-	AccountLengthErr
+	ErrSuccess          = 0
+	ErrAccountLengthErr = iota + 1000
+	ErrLoginTypeIllegal
+	ErrRegisterFailed
+	ErrPlayerInfoFetchFailed
 )

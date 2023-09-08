@@ -1,10 +1,10 @@
 package network
 
 import (
+	"encoding/json"
 	"fmt"
-	"github.com/451008604/socketServerFrame/api"
+	"github.com/451008604/socketServerFrame/config"
 	"github.com/451008604/socketServerFrame/iface"
-	"github.com/451008604/socketServerFrame/logic"
 	"github.com/451008604/socketServerFrame/logs"
 	pb "github.com/451008604/socketServerFrame/proto/bin"
 	"google.golang.org/protobuf/proto"
@@ -20,8 +20,7 @@ type Connection struct {
 	msgBuffChan  chan []byte            // 用于读、写两个goroutine之间的消息通信
 	property     map[string]interface{} // 连接属性
 	propertyLock sync.RWMutex           // 连接属性读写锁
-
-	Player *logic.Player
+	player       interface{}            // 玩家数据
 }
 
 // 启动接收消息协程
@@ -78,7 +77,7 @@ func (c *Connection) RemoteAddrStr() string {
 
 // 发送消息给客户端
 func (c *Connection) SendMsg(msgId pb.MsgID, msgData proto.Message) {
-	msgByte := api.ProtocolToByte(msgData)
+	msgByte := c.ProtocolToByte(msgData)
 	if c.isClosed {
 		logs.PrintLogInfo(fmt.Sprintf("连接已关闭导致消息发送失败 -> msgId:%v\tdata:%s", msgId, msgByte))
 		return
@@ -121,10 +120,43 @@ func (c *Connection) RemoveProperty(key string) {
 	delete(c.property, key)
 }
 
-func (c *Connection) SetPlayer(player iface.IPlayer) {
-	c.Player = player.(*logic.Player)
+func (c *Connection) SetPlayer(player interface{}) {
+	c.player = player
 }
 
-func (c *Connection) GetPlayer() iface.IPlayer {
-	return c.Player
+func (c *Connection) GetPlayer() interface{} {
+	return c.player
+}
+
+func (c *Connection) ProtocolToByte(str proto.Message) []byte {
+	var err error
+	var marshal []byte
+
+	if config.GetGlobalObject().ProtocolIsJson {
+		marshal, err = json.Marshal(str)
+	} else {
+		marshal, err = proto.Marshal(str)
+	}
+
+	if err != nil {
+		logs.PrintLogErr(err)
+		return []byte{}
+	}
+	return marshal
+}
+
+func (c *Connection) ByteToProtocol(byte []byte, target proto.Message) error {
+	var err error
+
+	if config.GetGlobalObject().ProtocolIsJson {
+		err = json.Unmarshal(byte, target)
+	} else {
+		err = proto.Unmarshal(byte, target)
+	}
+
+	if err != nil {
+		logs.PrintLogErr(err)
+		return err
+	}
+	return nil
 }

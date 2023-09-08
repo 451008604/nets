@@ -3,7 +3,6 @@ package network
 import (
 	"errors"
 	"fmt"
-	"github.com/451008604/socketServerFrame/api"
 	"sync"
 
 	"github.com/451008604/socketServerFrame/config"
@@ -42,13 +41,13 @@ func (m *MsgHandler) DoMsgHandler(request iface.IRequest) {
 
 	// 对应的逻辑处理方法
 	msgData := router.GetNewMsg()
-	err := api.ByteToProtocol(request.GetData(), msgData)
+	err := request.GetConnection().ByteToProtocol(request.GetData(), msgData)
 	if logs.PrintLogErr(err, fmt.Sprintf("api msgID %v parsing msgData:%v", request.GetMsgID(), request.GetData())) {
 		return
 	}
 
 	// 未登录时不处理任何请求
-	if request.GetMsgID() != pb.MsgID_PlayerLogin_Req && request.GetConnection().GetProperty("UserID") == nil {
+	if request.GetMsgID() != pb.MsgID_PlayerLogin_Req && request.GetConnection().GetPlayer() == nil {
 		return
 	}
 

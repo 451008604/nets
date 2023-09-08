@@ -1,6 +1,8 @@
 package iface
 
-import pb "github.com/451008604/socketServerFrame/proto/bin"
+import (
+	pb "github.com/451008604/socketServerFrame/proto/bin"
+)
 
 /*
 	IRequest 接口：

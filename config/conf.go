@@ -26,6 +26,8 @@ type GlobalObj struct {
 	PortWS           string // WS服务端口
 	TLSCertPath      string // TLS证书路径
 	TLSKeyPath       string // TLS密钥路径
+	RedisAddress     string // Redis地址
+	RedisPassWord    string // Redis密码
 }
 
 var globalObject *GlobalObj

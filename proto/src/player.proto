@@ -8,12 +8,13 @@ message PBPlayerData {
 }
 
 message PBAccountData {
-    optional int32 UserID = 1;      // 用户ID
+    optional uint32 UserID = 1;     // 用户ID
     optional string Account = 2;    // 账号
     optional string PassWord = 3;   // 密码
     optional string NickName = 4;   // 昵称
     optional string HeadImage = 5;  // 头像
     optional int32 PlayerLevel = 6; // 等级
+    optional uint32 CreateTime = 7; // 注册时间
 }
 
 message PBCommonData {
@@ -23,19 +24,22 @@ message PBCommonData {
     optional int32 Experience = 4;  // 经验
 }
 
+// 玩家登录请求
 message PlayerLoginReq {
-    optional int32 LoginType = 1;       // 登录类型
-    optional string Account = 2;        // 用户名
-    optional string PassWord = 3;       // 密码
-    optional int32 ChannelType = 4;     // 渠道标识
+    optional string LoginType = 1;  // 登录类型
+    optional string Account = 2;    // 用户名
+    optional string PassWord = 3;   // 密码
+    optional int32 ChannelType = 4; // 渠道标识
 }
 
+// 玩家登录回应
 message PlayerLoginRes {
-    optional int32 Result = 1;          // 错误码
-    optional int32 UserID = 2;          // 角色ID
-    optional int32 CreateTime = 3;      // 创建时间
-    optional string Account = 4;        // 用户名
-    optional string PassWord = 5;       // 密码
-    optional int32 ChannelType = 6;     // 渠道标识
-    optional int32 Register = 7;        // 是否新玩家
+    optional int32 Result = 1;              // 错误码
+    optional PlayerLoginReq ReqData = 2;    // 请求数据
+    optional int32 Register = 3;            // 是否新玩家
+}
+
+// 玩家信息通知
+message PlayerInfoNotify {
+    optional PBPlayerData PlayerInfo = 1;   // 玩家信息
 }

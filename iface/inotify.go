@@ -1,6 +1,9 @@
 package iface
 
-import pb "github.com/451008604/socketServerFrame/proto/bin"
+import (
+	pb "github.com/451008604/socketServerFrame/proto/bin"
+	"google.golang.org/protobuf/proto"
+)
 
 // 通知管理器
 type INotifyManager interface {
@@ -9,7 +12,7 @@ type INotifyManager interface {
 	// 根据ID删除指定通知
 	DelNotifyGroupByID(notifyID string)
 	// 向通知列表内所有对象广播信息
-	SendNotifyData(notifyID string, msgID pb.MsgID, data []byte)
+	SendNotifyData(notifyID string, msgID pb.MsgID, data proto.Message)
 }
 
 // 通知

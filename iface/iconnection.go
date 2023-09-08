@@ -31,9 +31,11 @@ type IConnection interface {
 	// 删除连接属性
 	RemoveProperty(key string)
 
-	GetPlayer() IPlayer
-	SetPlayer(IPlayer)
-}
+	SetPlayer(player interface{})
+	GetPlayer() interface{}
 
-type IPlayer interface {
+	// 协议转字节
+	ProtocolToByte(str proto.Message) []byte
+	// 字节转协议
+	ByteToProtocol(byte []byte, target proto.Message) error
 }

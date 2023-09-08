@@ -1,10 +1,6 @@
 package modules
 
+// 登录类型
 const (
-	LoginTypeQuick = iota
-)
-
-const (
-	UsernameLenMin = 3
-	UsernameLenMax = 80
+	LoginTypeQuick = "quick"
 )

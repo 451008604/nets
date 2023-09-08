@@ -7,5 +7,7 @@
   "TLSKeyPath": "",
   "MaxConn": 1000,
   "WorkerPoolSize": 1000,
-  "ProtocolIsJson": true
+  "ProtocolIsJson": true,
+  "RedisAddress": "127.0.0.1:6380",
+  "RedisPassWord": "Abc123!@"
 }

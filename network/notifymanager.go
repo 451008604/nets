@@ -3,6 +3,7 @@ package network
 import (
 	"github.com/451008604/socketServerFrame/iface"
 	pb "github.com/451008604/socketServerFrame/proto/bin"
+	"google.golang.org/protobuf/proto"
 )
 
 type NotifyManager struct {
@@ -23,7 +24,7 @@ func (n *NotifyManager) DelNotifyGroupByID(notifyID string) {
 	delete(n.notifyList, notifyID)
 }
 
-func (n *NotifyManager) SendNotifyData(notifyID string, msgID pb.MsgID, data []byte) {
+func (n *NotifyManager) SendNotifyData(notifyID string, msgID pb.MsgID, data proto.Message) {
 	if notify, ok := n.notifyList[notifyID]; ok {
 		for _, conn := range notify.GetNotifyTargets() {
 			go conn.SendMsg(msgID, data)

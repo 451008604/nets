@@ -5,5 +5,5 @@ import (
 )
 
 type Player struct {
-	Data pb.PBPlayerData
+	pb.PBPlayerData
 }
