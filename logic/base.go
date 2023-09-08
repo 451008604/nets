@@ -1,9 +1,7 @@
 package logic
 
 import (
-	"fmt"
 	"github.com/451008604/socketServerFrame/iface"
-	"github.com/451008604/socketServerFrame/logs"
 	"github.com/451008604/socketServerFrame/modules"
 )
 
@@ -19,10 +17,10 @@ func GetPlayer(conn iface.IConnection) *Player {
 
 // 建立连接时
 func OnConnectionOpen(conn iface.IConnection) {
-	conn.SetPlayer(&Player{})
+	conn.SetPlayer(&Player{Conn: conn})
 }
 
 // 断开连接时
 func OnConnectionClose(conn iface.IConnection) {
-	logs.PrintLogInfo(fmt.Sprintf("客户端%v下线", conn.RemoteAddrStr()))
+	// logs.PrintLogInfo(fmt.Sprintf("客户端%v下线", conn.RemoteAddrStr()))
 }

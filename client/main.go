@@ -11,6 +11,7 @@ import (
 	"io"
 	"math/rand"
 	"net"
+	"strconv"
 	"sync"
 	"time"
 )
@@ -20,18 +21,19 @@ var waitGroup = sync.WaitGroup{}
 func main() {
 	logs.SetPrintMode(true)
 
-	login, _ := json.Marshal(&pb.PlayerLoginReq{
-		LoginType:   proto.Int32(1),
-		Account:     proto.String("eric"),
-		PassWord:    proto.String("123456789"),
-		ChannelType: proto.Int32(2),
-	})
-	msg := network.NewDataPack().Pack(network.NewMsgPackage(pb.MsgID_PlayerLogin_Req, login))
-
-	for i := 0; i < 100; i++ {
+	for i := 0; i < 10; i++ {
 		waitGroup.Add(2)
+
+		login, _ := json.Marshal(&pb.PlayerLoginReq{
+			LoginType:   proto.String("quick"),
+			Account:     proto.String("eric" + strconv.Itoa(i)),
+			PassWord:    proto.String("123456789"),
+			ChannelType: proto.Int32(2),
+		})
+		msg := network.NewDataPack().Pack(network.NewMsgPackage(pb.MsgID_PlayerLogin_Req, login))
+
 		go socketClient(msg)
-		go WebSocketClient(msg)
+		go webSocketClient(msg)
 	}
 
 	waitGroup.Wait()
@@ -46,7 +48,7 @@ func socketClient(msgByte []byte) {
 			// 获取消息头信息
 			headData := make([]byte, dp.GetHeadLen())
 			_, err = io.ReadFull(dial, headData)
-			if err != io.EOF {
+			if err == io.EOF {
 				break
 			}
 			// 获取消息body
@@ -75,12 +77,17 @@ func socketClient(msgByte []byte) {
 	waitGroup.Done()
 }
 
-func WebSocketClient(msgByte []byte) {
+func webSocketClient(msgByte []byte) {
 	conn, _, _ := websocket.DefaultDialer.Dial("ws://127.0.0.1:7002", nil)
 	go func(c *websocket.Conn) {
-		_, message, _ := c.ReadMessage()
-		if len(message) != 0 {
-			logs.PrintLogInfo(fmt.Sprintf("服务器：%v", string(message)))
+		for {
+			msgType, message, _ := c.ReadMessage()
+			if msgType == -1 {
+				break
+			}
+			if len(message) != 0 {
+				logs.PrintLogInfo(fmt.Sprintf("服务器：%v", string(message)))
+			}
 		}
 	}(conn)
 

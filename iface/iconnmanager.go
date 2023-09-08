@@ -3,7 +3,7 @@ package iface
 // 连接管理器
 type IConnManager interface {
 	// 生成一个新的连接ID
-	NewConnID() int64
+	NewConnID() int
 	// 添加连接
 	Add(conn IConnection)
 	// 删除连接

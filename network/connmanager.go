@@ -9,12 +9,13 @@ import (
 )
 
 type ConnManager struct {
-	connID      int64                              // 用于客户端连接的自增ID
-	connLock    sync.RWMutex                       // 连接的读写锁
-	connections map[int]iface.IConnection          // 管理的连接信息
-	closeConnID list.List                          // 已关闭的连接ID集合
-	onConnOpen  func(connection iface.IConnection) // 该Server连接创建时的Hook函数
-	onConnClose func(connection iface.IConnection) // 该Server连接断开时的Hook函数
+	connID          int64                              // 用于客户端连接的自增ID
+	connections     map[int]iface.IConnection          // 管理的连接信息
+	connectionsLock sync.RWMutex                       // 连接的读写锁
+	closeConnID     list.List                          // 已关闭的连接ID集合
+	closeConnIDLock sync.Mutex                         // 存储关闭连接的读写锁
+	onConnOpen      func(connection iface.IConnection) // 该Server连接创建时的Hook函数
+	onConnClose     func(connection iface.IConnection) // 该Server连接断开时的Hook函数
 }
 
 var instanceConnManager *ConnManager
@@ -23,29 +24,33 @@ var instanceConnManagerOnce = sync.Once{}
 func GetInstanceConnManager() *ConnManager {
 	instanceConnManagerOnce.Do(func() {
 		instanceConnManager = &ConnManager{
-			connections: map[int]iface.IConnection{},
-			connLock:    sync.RWMutex{},
-			closeConnID: list.List{},
+			connections:     map[int]iface.IConnection{},
+			connectionsLock: sync.RWMutex{},
+			closeConnID:     list.List{},
+			closeConnIDLock: sync.Mutex{},
 		}
 	})
 	return instanceConnManager
 }
 
-func (c *ConnManager) NewConnID() int64 {
+func (c *ConnManager) NewConnID() int {
+	c.closeConnIDLock.Lock()
+	defer c.closeConnIDLock.Unlock()
+
 	// 回收列表中存在则取出使用
 	if c.closeConnID.Len() > 0 {
 		connID := c.closeConnID.Remove(c.closeConnID.Front())
-		return connID.(int64)
+		return connID.(int)
 	}
 	// 回收列表为空时递增ID
 	atomic.AddInt64(&c.connID, 1)
-	return c.connID
+	return int(c.connID)
 }
 
 // 添加连接
 func (c *ConnManager) Add(conn iface.IConnection) {
-	c.connLock.Lock()
-	defer c.connLock.Unlock()
+	c.connectionsLock.Lock()
+	defer c.connectionsLock.Unlock()
 
 	c.connections[conn.GetConnID()] = conn
 
@@ -57,8 +62,8 @@ func (c *ConnManager) Add(conn iface.IConnection) {
 
 // 删除连接
 func (c *ConnManager) Remove(conn iface.IConnection) {
-	c.connLock.Lock()
-	defer c.connLock.Unlock()
+	c.connectionsLock.Lock()
+	defer c.connectionsLock.Unlock()
 
 	delete(c.connections, conn.GetConnID())
 	// 存入回收列表
@@ -72,8 +77,9 @@ func (c *ConnManager) Remove(conn iface.IConnection) {
 
 // 根据ConnID获取连接
 func (c *ConnManager) Get(connID int) (iface.IConnection, error) {
-	c.connLock.Lock()
-	defer c.connLock.Unlock()
+	c.connectionsLock.Lock()
+	defer c.connectionsLock.Unlock()
+
 	if conn, ok := c.connections[connID]; ok {
 		return conn, nil
 	} else {
@@ -88,8 +94,8 @@ func (c *ConnManager) Len() int {
 
 // 删除并停止所有连接
 func (c *ConnManager) ClearConn() {
-	c.connLock.Lock()
-	defer c.connLock.Unlock()
+	c.connectionsLock.Lock()
+	defer c.connectionsLock.Unlock()
 
 	// 清理全部的connections信息
 	for connID, conn := range c.connections {

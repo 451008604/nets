@@ -20,6 +20,7 @@ func NewRedisModel() *Module {
 	DB = &Module{
 		Ctx:     context.Background(),
 		account: NewAccountInfo(),
+		player:  NewPlayerInfo(),
 	}
 
 	DB.Client = redis.NewClient(&redis.Options{

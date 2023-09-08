@@ -2,6 +2,7 @@ package api
 
 import (
 	"github.com/451008604/socketServerFrame/iface"
+	"github.com/451008604/socketServerFrame/logic"
 	"github.com/451008604/socketServerFrame/modules"
 	pb "github.com/451008604/socketServerFrame/proto/bin"
 	"google.golang.org/protobuf/proto"
@@ -43,8 +44,9 @@ func LoginHandler(c iface.IConnection, message proto.Message) {
 		return
 	}
 
-	playerInfo := modules.Module.Redis().GetPlayerInfo(account.GetUserID())
-	if playerInfo == nil {
+	// 获取玩家存储数据
+	playerInfo, err := modules.Module.Redis().GetPlayerInfo(account.GetUserID(), logic.GetPlayer(c).Initialization())
+	if err != nil {
 		res.Result = proto.Int32(modules.ErrPlayerInfoFetchFailed)
 		c.SendMsg(pb.MsgID_PlayerLogin_Res, res)
 		return
@@ -52,7 +54,7 @@ func LoginHandler(c iface.IConnection, message proto.Message) {
 
 	c.SendMsg(pb.MsgID_PlayerLogin_Res, res)
 
-	// 推送玩家信息
 	playerInfo.AccountData = account
+	// 推送玩家信息
 	c.SendMsg(pb.MsgID_PlayerInfo_Notify, playerInfo)
 }

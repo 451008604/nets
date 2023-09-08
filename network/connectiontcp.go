@@ -19,7 +19,7 @@ func NewConnectionTCP(server iface.IServer, conn *net.TCPConn) *ConnectionTCP {
 	c := &ConnectionTCP{}
 	c.Server = server
 	c.conn = conn
-	c.ConnID = int(server.GetConnMgr().NewConnID())
+	c.ConnID = server.GetConnMgr().NewConnID()
 	c.isClosed = false
 	c.MsgHandler = GetInstanceMsgHandler()
 	c.exitBuffChan = make(chan bool, 1)

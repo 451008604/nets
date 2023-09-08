@@ -3,6 +3,7 @@ package network
 import (
 	"errors"
 	"fmt"
+	"github.com/451008604/socketServerFrame/logic"
 	"sync"
 
 	"github.com/451008604/socketServerFrame/config"
@@ -47,7 +48,7 @@ func (m *MsgHandler) DoMsgHandler(request iface.IRequest) {
 	}
 
 	// 未登录时不处理任何请求
-	if request.GetMsgID() != pb.MsgID_PlayerLogin_Req && request.GetConnection().GetPlayer() == nil {
+	if request.GetMsgID() != pb.MsgID_PlayerLogin_Req && logic.GetPlayer(request.GetConnection()).Data.GetAccountData() == nil {
 		return
 	}
 

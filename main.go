@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	_ "github.com/451008604/socketServerFrame/api"
 	"github.com/451008604/socketServerFrame/database/redis"
 	"github.com/451008604/socketServerFrame/database/sql"
 	"github.com/451008604/socketServerFrame/logic"

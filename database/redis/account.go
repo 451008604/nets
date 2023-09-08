@@ -1,12 +1,14 @@
 package redis
 
 import (
+	"crypto/md5"
 	"encoding/json"
 	"fmt"
 	pb "github.com/451008604/socketServerFrame/proto/bin"
 	"github.com/google/uuid"
 	"github.com/redis/go-redis/v9"
 	"google.golang.org/protobuf/proto"
+	"io"
 	"time"
 )
 
@@ -44,16 +46,18 @@ func (r *Module) CreateNewAccount(account, password string) (*pb.PBAccountData, 
 	if err != nil {
 		return accountData, err
 	}
+	encryption := md5.New()
+	_, _ = io.WriteString(encryption, password)
 	accountData.UserID = proto.Uint32(newID.ID())
 	accountData.Account = proto.String(account)
-	accountData.PassWord = proto.String(password)
+	accountData.PassWord = proto.String(fmt.Sprintf("%x", encryption.Sum(nil)))
 	accountData.NickName = proto.String(fmt.Sprintf("玩家_%v", newID.ID()))
 	accountData.HeadImage = proto.String("1")
 	accountData.PlayerLevel = proto.Int32(0)
 	accountData.CreateTime = proto.Uint32(uint32(time.Now().Unix()))
-	// 写入redis
-	accountByte, _ := json.Marshal(accountData)
-	_, err = r.Client.Set(r.Ctx, r.account.TableName+account, accountByte, redis.KeepTTL).Result()
+
+	marshal, _ := json.Marshal(accountData)
+	_, err = r.Client.Set(r.Ctx, r.account.TableName+account, marshal, redis.KeepTTL).Result()
 	if err != nil {
 		return accountData, err
 	}

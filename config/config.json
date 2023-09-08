@@ -9,5 +9,5 @@
   "WorkerPoolSize": 1000,
   "ProtocolIsJson": true,
   "RedisAddress": "127.0.0.1:6380",
-  "RedisPassWord": "Abc123!@"
+  "RedisPassWord": ""
 }
