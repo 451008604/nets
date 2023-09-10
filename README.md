@@ -6,17 +6,36 @@
 ✅ 使用 protobuf 且兼容 json 进行通讯，支持 grpc  
 ✅ 日志的收集可通过飞书机器人实现 webhook 推送  
 ✅ 广播消息功能，可1对1、1对多、服务端主动进行群广播  
+✅ 引入 [gorm](https://github.com/go-gorm/gorm) 用于数据库对增、删、改、查  
 📌 引入 [zap](https://github.com/uber-go/zap) 重新设计日志收集系统  
-📌 引入 [gorm](https://github.com/go-gorm/gorm) 用于数据库对增、删、改、查  
 📌 优化配置文件读取
 
-## 使用 gf 生成 mysql_model
+## 使用 gentool 生成 dao 文件
+```shell
+go install gorm.io/gen/tools/gentool@latest
+```
 
-在根目录创建一个 sh 脚本（generate_sqlModel.sh）内容如下，不同系统需自行修改 shell 下的二进制引用
+在根目录增加yml文件，内容如下
+
+```yaml
+version : "0.1"
+database:
+    dsn              : "root:userName:userPass@tcp(127.0.0.1:3306)/DBName?charset=utf8mb4&parseTime=true&loc=Local"
+    db               : "mysql"
+    withUnitTest     : false
+    fieldNullable    : false
+    fieldWithIndexTag: false
+    fieldWithTypeTag : true
+    modelPkgName     : "sqlmodel"
+#    outPath          : ""
+#    tables           : ""
+#    outFile          : ""
+```
+
+同级目录创建一个 sh 脚本（generate_sqlModel.sh）内容如下
 
 ```shell
-# windows
-./shell/gf_2.3.0_windows.exe gen dao -l "mysql:userName:userPass@tcp(127.0.0.1:3306)/DBName?charset=utf8mb4&parseTime=true&loc=Local" -p ./database/sql
+gentool -c "./gensql.yml" -outPath "./dao/sql"
 ```
 
 ## grpc 配置

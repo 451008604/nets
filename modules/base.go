@@ -1,8 +1,8 @@
 package modules
 
 import (
-	"github.com/451008604/socketServerFrame/database/redis"
-	"github.com/451008604/socketServerFrame/database/sql"
+	"github.com/451008604/socketServerFrame/dao/redis"
+	"github.com/451008604/socketServerFrame/dao/sql"
 	"github.com/451008604/socketServerFrame/iface"
 )
 
@@ -38,20 +38,4 @@ func (s *staticModule) Notify() iface.INotifyManager {
 
 func (s *staticModule) SetNotify(notify iface.INotifyManager) {
 	s.notify = notify
-}
-
-func (s *staticModule) Sql() *sql.Module {
-	return s.sql
-}
-
-func (s *staticModule) SetSql(sql *sql.Module) {
-	s.sql = sql
-}
-
-func (s *staticModule) Redis() *redis.Module {
-	return s.redis
-}
-
-func (s *staticModule) SetRedis(redis *redis.Module) {
-	s.redis = redis
 }

@@ -2,6 +2,7 @@ package redis
 
 import (
 	"encoding/json"
+	"github.com/451008604/socketServerFrame/logs"
 	pb "github.com/451008604/socketServerFrame/proto/bin"
 	"github.com/redis/go-redis/v9"
 	"strconv"
@@ -17,19 +18,24 @@ func NewPlayerInfo() *PlayerInfo {
 	}
 }
 
-func (p *PlayerInfo) GetPlayerData() *pb.PBPlayerData {
-	return &pb.PBPlayerData{}
-}
-
-func (r *Module) GetPlayerInfo(userID uint32, initPlayerData *pb.PBPlayerData) (*pb.PBPlayerData, error) {
+// 读取玩家数据
+func (r *Module) GetPlayerInfo(userID uint32, initPlayerData *pb.PBPlayerData) error {
 	bytes, _ := r.Client.Get(r.Ctx, r.player.TableName+strconv.Itoa(int(userID))).Bytes()
-	_ = json.Unmarshal(bytes, initPlayerData)
-	return initPlayerData, nil
+	if bytes != nil {
+		err := json.Unmarshal(bytes, initPlayerData)
+		logs.PrintLogErr(err)
+		return err
+	}
+	return nil
 }
 
+// 保存玩家数据
 func (r *Module) SetPlayerInfo(userID uint32, playerInfo *pb.PBPlayerData) error {
-	marshal, _ := json.Marshal(playerInfo)
-	_, err := r.Client.Set(r.Ctx, r.player.TableName+strconv.Itoa(int(userID)), marshal, redis.KeepTTL).Result()
+	marshal, err := json.Marshal(playerInfo)
+	if err != nil {
+		return err
+	}
+	_, err = r.Client.Set(r.Ctx, r.player.TableName+strconv.Itoa(int(userID)), marshal, redis.KeepTTL).Result()
 	if err != nil {
 		return err
 	}

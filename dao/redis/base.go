@@ -3,25 +3,25 @@ package redis
 import (
 	"context"
 	"github.com/451008604/socketServerFrame/config"
+	"github.com/451008604/socketServerFrame/dao/sql"
 	"github.com/451008604/socketServerFrame/logs"
 	"github.com/redis/go-redis/v9"
 )
 
 type Module struct {
 	*redis.Client
-	Ctx     context.Context
-	account *AccountInfo
-	player  *PlayerInfo
+	Ctx    context.Context
+	sql    *sql.Query
+	player *PlayerInfo
 }
 
-var DB *Module
+var Redis = newRedisModel()
 
-func NewRedisModel() *Module {
-	DB = &Module{
-		Ctx:     context.Background(),
-		account: NewAccountInfo(),
-		player:  NewPlayerInfo(),
-	}
+func newRedisModel() *Module {
+	DB := &Module{}
+	DB.Ctx = context.Background()
+	DB.sql = sql.GetSqlQuery()
+	DB.player = NewPlayerInfo()
 
 	DB.Client = redis.NewClient(&redis.Options{
 		Addr:     config.GetGlobalObject().RedisAddress,

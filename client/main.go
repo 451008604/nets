@@ -32,7 +32,7 @@ func main() {
 		})
 		msg := network.NewDataPack().Pack(network.NewMsgPackage(pb.MsgID_PlayerLogin_Req, login))
 
-		go socketClient(msg)
+		// go socketClient(msg)
 		go webSocketClient(msg)
 	}
 

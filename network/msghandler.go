@@ -48,7 +48,7 @@ func (m *MsgHandler) DoMsgHandler(request iface.IRequest) {
 	}
 
 	// 未登录时不处理任何请求
-	if request.GetMsgID() != pb.MsgID_PlayerLogin_Req && logic.GetPlayer(request.GetConnection()).Data.GetAccountData() == nil {
+	if request.GetMsgID() != pb.MsgID_PlayerLogin_Req && logic.GetPlayer(request.GetConnection()).Data == nil {
 		return
 	}
 

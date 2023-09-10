@@ -3,13 +3,10 @@ package main
 import (
 	"fmt"
 	_ "github.com/451008604/socketServerFrame/api"
-	"github.com/451008604/socketServerFrame/database/redis"
-	"github.com/451008604/socketServerFrame/database/sql"
 	"github.com/451008604/socketServerFrame/logic"
 	"github.com/451008604/socketServerFrame/logs"
 	"github.com/451008604/socketServerFrame/modules"
 	"github.com/451008604/socketServerFrame/network"
-	_ "github.com/gogf/gf/contrib/drivers/mysql/v2"
 	"runtime"
 	"time"
 )
@@ -29,8 +26,6 @@ func main() {
 	modules.Module.SetServerTCP(network.NewServerTCP())
 	modules.Module.SetServerWS(network.NewServerWS())
 	modules.Module.SetNotify(network.NewNotifyManager())
-	modules.Module.SetSql(sql.NewSqlDBModel())
-	modules.Module.SetRedis(redis.NewRedisModel())
 	// 注册hook函数
 	network.GetInstanceConnManager().OnConnOpen(logic.OnConnectionOpen)
 	network.GetInstanceConnManager().OnConnClose(logic.OnConnectionClose)

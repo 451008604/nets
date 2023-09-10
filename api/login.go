@@ -1,6 +1,9 @@
 package api
 
 import (
+	"github.com/451008604/socketServerFrame/dao/redis"
+	"github.com/451008604/socketServerFrame/dao/sql"
+	"github.com/451008604/socketServerFrame/dao/sqlmodel"
 	"github.com/451008604/socketServerFrame/iface"
 	"github.com/451008604/socketServerFrame/logic"
 	"github.com/451008604/socketServerFrame/modules"
@@ -16,7 +19,8 @@ func LoginHandler(c iface.IConnection, message proto.Message) {
 	}
 	var (
 		register = int32(0)
-		account  = &pb.PBAccountData{}
+		account  = &sqlmodel.HouseAccount{}
+		user     = &sqlmodel.HouseUser{}
 		err      error
 	)
 
@@ -30,9 +34,14 @@ func LoginHandler(c iface.IConnection, message proto.Message) {
 		if !strings.HasPrefix(res.ReqData.GetAccount(), res.ReqData.GetLoginType()) {
 			res.ReqData.Account = proto.String(res.ReqData.GetLoginType() + "-" + res.ReqData.GetAccount())
 		}
-		register, account, err = modules.Module.Redis().GetAccountInfo(res.ReqData.GetAccount(), res.ReqData.GetPassWord())
+		// 查询账号信息 or 注册新账号
+		register, account, user, err = sql.SQL.GetAccountInfo(res.ReqData.GetAccount(), res.ReqData.GetPassWord())
 		if err != nil {
-			res.Result = proto.Int32(modules.ErrRegisterFailed)
+			if register == 0 {
+				res.Result = proto.Int32(modules.ErrPlayerInfoFetchFailed)
+			} else {
+				res.Result = proto.Int32(modules.ErrRegisterFailed)
+			}
 			c.SendMsg(pb.MsgID_PlayerLogin_Res, res)
 			return
 		}
@@ -44,17 +53,18 @@ func LoginHandler(c iface.IConnection, message proto.Message) {
 		return
 	}
 
-	// 获取玩家存储数据
-	playerInfo, err := modules.Module.Redis().GetPlayerInfo(account.GetUserID(), logic.GetPlayer(c).Initialization())
-	if err != nil {
+	// 初始化玩家数据
+	player := logic.GetPlayer(c)
+	player.Initialization()
+	player.SetPlayerData(account.UserID, user)
+	// 读取缓存数据覆盖初始化数据
+	if redis.Redis.GetPlayerInfo(uint32(user.ID), player.Data) != nil {
 		res.Result = proto.Int32(modules.ErrPlayerInfoFetchFailed)
 		c.SendMsg(pb.MsgID_PlayerLogin_Res, res)
-		return
 	}
 
 	c.SendMsg(pb.MsgID_PlayerLogin_Res, res)
 
-	playerInfo.AccountData = account
 	// 推送玩家信息
-	c.SendMsg(pb.MsgID_PlayerInfo_Notify, playerInfo)
+	c.SendMsg(pb.MsgID_PlayerInfo_Notify, player.Data)
 }
