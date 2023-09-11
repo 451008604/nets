@@ -1,0 +1,9246 @@
+{
+  "1001": {
+    "ID": 1001,
+    "Name": "TaskName_001",
+    "Namekan": "地板刷漆",
+    "CroupName": "我的房间",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_1",
+    "TaskIcon": "DecorateIcon_17",
+    "level": 1,
+    "PreTask": "0",
+    "CompleteOpen": "1002",
+    "CompleteGold": 5,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 1011,
+    "PlotID2": 1010,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 10
+      },
+      {
+        "PrizeID": 201003,
+        "PrizeNum": 1
+      }
+    ],
+    "OpenFunction": "2",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101100,
+    "Target": [
+      {
+        "Type": 2,
+        "DecorateID": 100130
+      },
+      {
+        "Type": 3,
+        "DecorateID": 101100
+      }
+    ],
+    "FieldView": 44,
+    "TaskPos": "5.5/6.8/4"
+  },
+  "1002": {
+    "ID": 1002,
+    "Name": "TaskName_002",
+    "Namekan": "装饰墙面",
+    "CroupName": "我的房间",
+    "Feeling": "manman_normal",
+    "Dialog": "TaskDialog_2",
+    "TaskIcon": "DecorateIcon_17",
+    "level": 1,
+    "PreTask": "1001",
+    "CompleteOpen": "1003",
+    "CompleteGold": 10,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 1021,
+    "PlotID2": 1020,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 20
+      },
+      {
+        "PrizeID": 201005,
+        "PrizeNum": 1
+      }
+    ],
+    "OpenFunction": "3",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101107,
+    "Target": [
+      {
+        "Type": 2,
+        "DecorateID": 100139
+      },
+      {
+        "Type": 3,
+        "DecorateID": 101107
+      }
+    ],
+    "FieldView": 44,
+    "TaskPos": "5.5/6.8/4"
+  },
+  "1003": {
+    "ID": 1003,
+    "Name": "TaskName_003",
+    "Namekan": "布置新床",
+    "CroupName": "我的房间",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_3",
+    "TaskIcon": "DecorateIcon_20",
+    "level": 1,
+    "PreTask": "1002",
+    "CompleteOpen": "1004",
+    "CompleteGold": 15,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 1031,
+    "PlotID2": 1030,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 35
+      },
+      {
+        "PrizeID": 201006,
+        "PrizeNum": 1
+      }
+    ],
+    "OpenFunction": "4",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101095,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 101095
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "7.5/6.1/5.8"
+  },
+  "1004": {
+    "ID": 1004,
+    "Name": "TaskName_004",
+    "Namekan": "床头柜换新",
+    "CroupName": "我的房间",
+    "Feeling": "manman_normal",
+    "Dialog": "TaskDialog_4",
+    "TaskIcon": "DecorateIcon_22",
+    "level": 1,
+    "PreTask": "1003",
+    "CompleteOpen": "1005",
+    "CompleteGold": 20,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 1041,
+    "PlotID2": 1040,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 50
+      }
+    ],
+    "OpenFunction": "5",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101096,
+    "Target": [
+      {
+        "Type": 2,
+        "DecorateID": 100145
+      },
+      {
+        "Type": 3,
+        "DecorateID": 101096
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "7.3/5.6/5.1"
+  },
+  "1005": {
+    "ID": 1005,
+    "Name": "TaskName_005",
+    "Namekan": "布置床下地毯",
+    "CroupName": "我的房间",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_5",
+    "TaskIcon": "DecorateIcon_39",
+    "level": 1,
+    "PreTask": "1004",
+    "CompleteOpen": "1006",
+    "CompleteGold": 25,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 1051,
+    "PlotID2": 1050,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 60
+      },
+      {
+        "PrizeID": 201007,
+        "PrizeNum": 1
+      }
+    ],
+    "OpenFunction": "6",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101101,
+    "Target": [
+      {
+        "Type": 2,
+        "DecorateID": 100144
+      },
+      {
+        "Type": 3,
+        "DecorateID": 101101
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "6.8/5.9/5.2"
+  },
+  "1006": {
+    "ID": 1006,
+    "Name": "TaskName_006",
+    "Namekan": "添置垃圾桶",
+    "CroupName": "我的房间",
+    "Feeling": "manman_normal",
+    "Dialog": "TaskDialog_6",
+    "TaskIcon": "DecorateIcon_2",
+    "level": 1,
+    "PreTask": "1005",
+    "CompleteOpen": "1007",
+    "CompleteGold": 30,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 1061,
+    "PlotID2": 1060,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 75
+      },
+      {
+        "PrizeID": 201008,
+        "PrizeNum": 1
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101111,
+    "Target": [
+      {
+        "Type": 1,
+        "DecorateID": 101111
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "7.3/5.6/5.1"
+  },
+  "1007": {
+    "ID": 1007,
+    "Name": "TaskName_007",
+    "Namekan": "休息椅换新",
+    "CroupName": "我的房间",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_7",
+    "TaskIcon": "DecorateIcon_21",
+    "level": 1,
+    "PreTask": "1006",
+    "CompleteOpen": "1008",
+    "CompleteGold": 10,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 1071,
+    "PlotID2": 1070,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 10
+      },
+      {
+        "PrizeID": 202001,
+        "PrizeNum": 1
+      }
+    ],
+    "OpenFunction": "9",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101114,
+    "Target": [
+      {
+        "Type": 2,
+        "DecorateID": 100147
+      },
+      {
+        "Type": 3,
+        "DecorateID": 101114
+      }
+    ],
+    "FieldView": 44,
+    "TaskPos": "4.6/5.9/5.2"
+  },
+  "1008": {
+    "ID": 1008,
+    "Name": "TaskName_008",
+    "Namekan": "修复电视柜",
+    "CroupName": "我的房间",
+    "Feeling": "manman_normal",
+    "Dialog": "TaskDialog_8",
+    "TaskIcon": "DecorateIcon_43",
+    "level": 1,
+    "PreTask": "1007",
+    "CompleteOpen": "1009",
+    "CompleteGold": 20,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 1081,
+    "PlotID2": 1080,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 15
+      },
+      {
+        "PrizeID": 202004,
+        "PrizeNum": 1
+      }
+    ],
+    "OpenFunction": "7,8",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101098,
+    "Target": [
+      {
+        "Type": 2,
+        "DecorateID": 100127
+      },
+      {
+        "Type": 3,
+        "DecorateID": 101098
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "4/6/5.6"
+  },
+  "1009": {
+    "ID": 1009,
+    "Name": "TaskName_009",
+    "Namekan": "修复衣柜",
+    "CroupName": "我的房间",
+    "Feeling": "manman_normal",
+    "Dialog": "TaskDialog_9",
+    "TaskIcon": "DecorateIcon_38",
+    "level": 1,
+    "PreTask": "1008",
+    "CompleteOpen": "1010",
+    "CompleteGold": 30,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 1091,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 25
+      },
+      {
+        "PrizeID": 202005,
+        "PrizeNum": 1
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101103,
+    "Target": [
+      {
+        "Type": 2,
+        "DecorateID": 100146
+      },
+      {
+        "Type": 3,
+        "DecorateID": 101103
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "7/6.2/8.8"
+  },
+  "1010": {
+    "ID": 1010,
+    "Name": "TaskName_010",
+    "Namekan": "修复储物柜",
+    "CroupName": "我的房间",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_10",
+    "TaskIcon": "DecorateIcon_38",
+    "level": 1,
+    "PreTask": "1009",
+    "CompleteOpen": "1011",
+    "CompleteGold": 40,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 1101,
+    "PlotID2": 1100,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 35
+      },
+      {
+        "PrizeID": 202006,
+        "PrizeNum": 1
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101104,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 101104
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "7/6.2/8.8"
+  },
+  "1011": {
+    "ID": 1011,
+    "Name": "TaskName_011",
+    "Namekan": "添置行李收纳箱",
+    "CroupName": "我的房间",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_11",
+    "TaskIcon": "DecorateIcon_2",
+    "level": 1,
+    "PreTask": "1010",
+    "CompleteOpen": "1012",
+    "CompleteGold": 50,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 1111,
+    "PlotID2": 1110,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 40
+      },
+      {
+        "PrizeID": 202007,
+        "PrizeNum": 1
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101113,
+    "Target": [
+      {
+        "Type": 1,
+        "DecorateID": 101113
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "7/6.2/8.8"
+  },
+  "1012": {
+    "ID": 1012,
+    "Name": "TaskName_012",
+    "Namekan": "添置床边玩具",
+    "CroupName": "我的房间",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_12",
+    "TaskIcon": "DecorateIcon_12",
+    "level": 1,
+    "PreTask": "1011",
+    "CompleteOpen": "1013",
+    "CompleteGold": 60,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 1121,
+    "PlotID2": 1120,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 50
+      },
+      {
+        "PrizeID": 202008,
+        "PrizeNum": 1
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101109,
+    "Target": [
+      {
+        "Type": 2,
+        "DecorateID": 100143
+      },
+      {
+        "Type": 1,
+        "DecorateID": 101109
+      }
+    ],
+    "FieldView": 39,
+    "TaskPos": "7.3/5.6/5.1"
+  },
+  "1013": {
+    "ID": 1013,
+    "Name": "TaskName_013",
+    "Namekan": "修复落地窗",
+    "CroupName": "我的房间",
+    "Feeling": "manman_normal",
+    "Dialog": "TaskDialog_13",
+    "TaskIcon": "DecorateIcon_15",
+    "level": 1,
+    "PreTask": "1012",
+    "CompleteOpen": "1014",
+    "CompleteGold": 80,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 1131,
+    "PlotID2": 1130,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 30
+      },
+      {
+        "PrizeID": 203001,
+        "PrizeNum": 1
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101106,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 101106
+      }
+    ],
+    "FieldView": 48,
+    "TaskPos": "4.6/6.2/8.5"
+  },
+  "1014": {
+    "ID": 1014,
+    "Name": "TaskName_014",
+    "Namekan": "添置窗前地毯",
+    "CroupName": "我的房间",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_14",
+    "TaskIcon": "DecorateIcon_15",
+    "level": 1,
+    "PreTask": "1013",
+    "CompleteOpen": "1015",
+    "CompleteGold": 160,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 1141,
+    "PlotID2": 1140,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 55
+      },
+      {
+        "PrizeID": 203004,
+        "PrizeNum": 1
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101102,
+    "Target": [
+      {
+        "Type": 1,
+        "DecorateID": 101102
+      }
+    ],
+    "FieldView": 48,
+    "TaskPos": "4.6/6.2/8.5"
+  },
+  "1015": {
+    "ID": 1015,
+    "Name": "TaskName_015",
+    "Namekan": "修复门前装饰",
+    "CroupName": "我的房间",
+    "Feeling": "manman_normal",
+    "Dialog": "TaskDialog_15",
+    "TaskIcon": "DecorateIcon_57",
+    "level": 1,
+    "PreTask": "1014",
+    "CompleteOpen": "1016",
+    "CompleteGold": 260,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 1151,
+    "PlotID2": 1150,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 95
+      },
+      {
+        "PrizeID": 203005,
+        "PrizeNum": 1
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101108,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 101108
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "4.6/6.2/8.5"
+  },
+  "1016": {
+    "ID": 1016,
+    "Name": "TaskName_016",
+    "Namekan": "修复房间门",
+    "CroupName": "我的房间",
+    "Feeling": "manman_normal",
+    "Dialog": "TaskDialog_16",
+    "TaskIcon": "DecorateIcon_78",
+    "level": 1,
+    "PreTask": "1015",
+    "CompleteOpen": "1017",
+    "CompleteGold": 400,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 1161,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 145
+      },
+      {
+        "PrizeID": 203006,
+        "PrizeNum": 1
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101105,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 101105
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "4.6/6.2/8.5"
+  },
+  "1017": {
+    "ID": 1017,
+    "Name": "TaskName_017",
+    "Namekan": "添置墙上装饰",
+    "CroupName": "我的房间",
+    "Feeling": "manman_normal",
+    "Dialog": "TaskDialog_17",
+    "TaskIcon": "DecorateIcon_16",
+    "level": 1,
+    "PreTask": "1016",
+    "CompleteOpen": "1018/2001",
+    "CompleteGold": 540,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 1171,
+    "PlotID2": 1170,
+    "PlotID3": 2001,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 195
+      },
+      {
+        "PrizeID": 203007,
+        "PrizeNum": 1
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101112,
+    "Target": [
+      {
+        "Type": 1,
+        "DecorateID": 101112
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "7.5/6.1/5.8"
+  },
+  "1018": {
+    "ID": 1018,
+    "Name": "TaskName_018",
+    "Namekan": "地板刷漆",
+    "CroupName": "次卧",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_18",
+    "TaskIcon": "DecorateIcon_17",
+    "level": 1,
+    "PreTask": "1017",
+    "CompleteOpen": "1019",
+    "CompleteGold": 700,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 2011,
+    "PlotID2": 2010,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 250
+      },
+      {
+        "PrizeID": 203008,
+        "PrizeNum": 1
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101050,
+    "Target": [
+      {
+        "Type": 2,
+        "DecorateID": 100072
+      },
+      {
+        "Type": 3,
+        "DecorateID": 101050
+      }
+    ],
+    "FieldView": 44,
+    "TaskPos": "-3/6.8/5"
+  },
+  "1019": {
+    "ID": 1019,
+    "Name": "TaskName_019",
+    "Namekan": "装饰墙面",
+    "CroupName": "次卧",
+    "Feeling": "manman_normal",
+    "Dialog": "TaskDialog_19",
+    "TaskIcon": "DecorateIcon_17",
+    "level": 1,
+    "PreTask": "1018",
+    "CompleteOpen": "1020",
+    "CompleteGold": 100,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 2021,
+    "PlotID2": 2020,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 30
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101060,
+    "Target": [
+      {
+        "Type": 2,
+        "DecorateID": 100088
+      },
+      {
+        "Type": 3,
+        "DecorateID": 101060
+      }
+    ],
+    "FieldView": 44,
+    "TaskPos": "-3/6.8/5"
+  },
+  "1020": {
+    "ID": 1020,
+    "Name": "TaskName_020",
+    "Namekan": "修复房间门",
+    "CroupName": "次卧",
+    "Feeling": "manman_normal",
+    "Dialog": "TaskDialog_20",
+    "TaskIcon": "DecorateIcon_78",
+    "level": 1,
+    "PreTask": "1019",
+    "CompleteOpen": "1021",
+    "CompleteGold": 80,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 2031,
+    "PlotID2": 2030,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 20
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101059,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 101059
+      }
+    ],
+    "FieldView": 43,
+    "TaskPos": "-1.5/6/7.7"
+  },
+  "1021": {
+    "ID": 1021,
+    "Name": "TaskName_021",
+    "Namekan": "修复落地窗",
+    "CroupName": "次卧",
+    "Feeling": "manman_normal",
+    "Dialog": "TaskDialog_21",
+    "TaskIcon": "DecorateIcon_15",
+    "level": 1,
+    "PreTask": "1020",
+    "CompleteOpen": "1022",
+    "CompleteGold": 110,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 2041,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 70
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101049,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 101049
+      }
+    ],
+    "FieldView": 44,
+    "TaskPos": "-4.1/6/7.5"
+  },
+  "1022": {
+    "ID": 1022,
+    "Name": "TaskName_022",
+    "Namekan": "添置落地灯",
+    "CroupName": "次卧",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_22",
+    "TaskIcon": "DecorateIcon_3",
+    "level": 1,
+    "PreTask": "1021",
+    "CompleteOpen": "1023",
+    "CompleteGold": 120,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 2051,
+    "PlotID2": 2050,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 35
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101066,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 101066
+      }
+    ],
+    "FieldView": 43,
+    "TaskPos": "-1.5/6/7.7"
+  },
+  "1023": {
+    "ID": 1023,
+    "Name": "TaskName_023",
+    "Namekan": "布置新床",
+    "CroupName": "次卧",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_23",
+    "TaskIcon": "DecorateIcon_20",
+    "level": 1,
+    "PreTask": "1022",
+    "CompleteOpen": "1024",
+    "CompleteGold": 200,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 2061,
+    "PlotID2": 2060,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 95
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101048,
+    "Target": [
+      {
+        "Type": 2,
+        "DecorateID": 100069
+      },
+      {
+        "Type": 3,
+        "DecorateID": 101048
+      }
+    ],
+    "FieldView": 41,
+    "TaskPos": "-3.6/5.7/8.1"
+  },
+  "1024": {
+    "ID": 1024,
+    "Name": "TaskName_024",
+    "Namekan": "布置床下地毯",
+    "CroupName": "次卧",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_24",
+    "TaskIcon": "DecorateIcon_39",
+    "level": 1,
+    "PreTask": "1023",
+    "CompleteOpen": "1025",
+    "CompleteGold": 120,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 2071,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 35
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101051,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 101051
+      }
+    ],
+    "FieldView": 41,
+    "TaskPos": "-3.6/5.7/8.1"
+  },
+  "1025": {
+    "ID": 1025,
+    "Name": "TaskName_025",
+    "Namekan": "修复墙上储物柜",
+    "CroupName": "次卧",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_25",
+    "TaskIcon": "DecorateIcon_25",
+    "level": 1,
+    "PreTask": "1024",
+    "CompleteOpen": "1026",
+    "CompleteGold": 140,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 2081,
+    "PlotID2": 2080,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 40
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101056,
+    "Target": [
+      {
+        "Type": 2,
+        "DecorateID": 100082
+      },
+      {
+        "Type": 3,
+        "DecorateID": 101056
+      }
+    ],
+    "FieldView": 44,
+    "TaskPos": "-3.8/6/10"
+  },
+  "1026": {
+    "ID": 1026,
+    "Name": "TaskName_026",
+    "Namekan": "修复墙上储物柜",
+    "CroupName": "次卧",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_26",
+    "TaskIcon": "DecorateIcon_25",
+    "level": 1,
+    "PreTask": "1025",
+    "CompleteOpen": "1027",
+    "CompleteGold": 300,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 2091,
+    "PlotID2": 2090,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 120
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101055,
+    "Target": [
+      {
+        "Type": 2,
+        "DecorateID": 100080
+      },
+      {
+        "Type": 3,
+        "DecorateID": 101055
+      }
+    ],
+    "FieldView": 44,
+    "TaskPos": "-3.8/6/10"
+  },
+  "1027": {
+    "ID": 1027,
+    "Name": "TaskName_027",
+    "Namekan": "修复书桌",
+    "CroupName": "次卧",
+    "Feeling": "manman_normal",
+    "Dialog": "TaskDialog_27",
+    "TaskIcon": "DecorateIcon_18",
+    "level": 1,
+    "PreTask": "1026",
+    "CompleteOpen": "1028",
+    "CompleteGold": 140,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 2101,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 40
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101057,
+    "Target": [
+      {
+        "Type": 2,
+        "DecorateID": 100084
+      },
+      {
+        "Type": 3,
+        "DecorateID": 101057
+      }
+    ],
+    "FieldView": 45,
+    "TaskPos": "-2/6/9.8"
+  },
+  "1028": {
+    "ID": 1028,
+    "Name": "TaskName_028",
+    "Namekan": "书桌椅换新",
+    "CroupName": "次卧",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_28",
+    "TaskIcon": "DecorateIcon_18",
+    "level": 1,
+    "PreTask": "1027",
+    "CompleteOpen": "1029",
+    "CompleteGold": 160,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 2111,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 45
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101064,
+    "Target": [
+      {
+        "Type": 2,
+        "DecorateID": 100092
+      },
+      {
+        "Type": 3,
+        "DecorateID": 101064
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "-2.3/5.8/8.6"
+  },
+  "1029": {
+    "ID": 1029,
+    "Name": "TaskName_029",
+    "Namekan": "休息椅换新",
+    "CroupName": "次卧",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_29",
+    "TaskIcon": "DecorateIcon_21",
+    "level": 1,
+    "PreTask": "1028",
+    "CompleteOpen": "1030",
+    "CompleteGold": 320,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 2121,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 125
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101061,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 101061
+      }
+    ],
+    "FieldView": 37,
+    "TaskPos": "-2/5.6/5.7"
+  },
+  "1030": {
+    "ID": 1030,
+    "Name": "TaskName_030",
+    "Namekan": "修复化妆桌",
+    "CroupName": "次卧",
+    "Feeling": "manman_normal",
+    "Dialog": "TaskDialog_30",
+    "TaskIcon": "DecorateIcon_61",
+    "level": 1,
+    "PreTask": "1029",
+    "CompleteOpen": "1031",
+    "CompleteGold": 140,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 2131,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 40
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101053,
+    "Target": [
+      {
+        "Type": 2,
+        "DecorateID": 100078
+      },
+      {
+        "Type": 3,
+        "DecorateID": 101053
+      }
+    ],
+    "FieldView": 44,
+    "TaskPos": "-3.8/5.77/6.1"
+  },
+  "1031": {
+    "ID": 1031,
+    "Name": "TaskName_031",
+    "Namekan": "化妆桌椅换新",
+    "CroupName": "次卧",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_31",
+    "TaskIcon": "DecorateIcon_21",
+    "level": 1,
+    "PreTask": "1030",
+    "CompleteOpen": "1032/2006",
+    "CompleteGold": 150,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 2141,
+    "PlotID2": 2140,
+    "PlotID3": 3001,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 40
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101065,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 101065
+      }
+    ],
+    "FieldView": 44,
+    "TaskPos": "-3.8/5.77/6.1"
+  },
+  "1032": {
+    "ID": 1032,
+    "Name": "TaskName_032",
+    "Namekan": "地板刷漆",
+    "CroupName": "走廊",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_32",
+    "TaskIcon": "DecorateIcon_17",
+    "level": 1,
+    "PreTask": "1031",
+    "CompleteOpen": "1033",
+    "CompleteGold": 200,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 3011,
+    "PlotID2": 3010,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 55
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101116,
+    "Target": [
+      {
+        "Type": 2,
+        "DecorateID": 100149
+      },
+      {
+        "Type": 3,
+        "DecorateID": 101116
+      }
+    ],
+    "FieldView": 51,
+    "TaskPos": "0.7/6.35/5.1"
+  },
+  "1033": {
+    "ID": 1033,
+    "Name": "TaskName_033",
+    "Namekan": "装饰墙面",
+    "CroupName": "走廊",
+    "Feeling": "manman_normal",
+    "Dialog": "TaskDialog_33",
+    "TaskIcon": "DecorateIcon_17",
+    "level": 1,
+    "PreTask": "1032",
+    "CompleteOpen": "1034",
+    "CompleteGold": 300,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 3021,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 85
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101119,
+    "Target": [
+      {
+        "Type": 2,
+        "DecorateID": 100156
+      },
+      {
+        "Type": 3,
+        "DecorateID": 101119
+      }
+    ],
+    "FieldView": 51,
+    "TaskPos": "0.7/6.35/5.1"
+  },
+  "1034": {
+    "ID": 1034,
+    "Name": "TaskName_034",
+    "Namekan": "布置新地毯",
+    "CroupName": "走廊",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_34",
+    "TaskIcon": "DecorateIcon_39",
+    "level": 1,
+    "PreTask": "1033",
+    "CompleteOpen": "1035",
+    "CompleteGold": 600,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 3031,
+    "PlotID2": 3030,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 205
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101117,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 101117
+      }
+    ],
+    "FieldView": 41,
+    "TaskPos": "0.73/5.77/5.15"
+  },
+  "1035": {
+    "ID": 1035,
+    "Name": "TaskName_035",
+    "Namekan": "修复柜子",
+    "CroupName": "走廊",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_35",
+    "TaskIcon": "DecorateIcon_25",
+    "level": 1,
+    "PreTask": "1034",
+    "CompleteOpen": "1036",
+    "CompleteGold": 150,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 3041,
+    "PlotID2": 3040,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 35
+      },
+      {
+        "PrizeID": 205001,
+        "PrizeNum": 1
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101118,
+    "Target": [
+      {
+        "Type": 2,
+        "DecorateID": 100154
+      },
+      {
+        "Type": 3,
+        "DecorateID": 101118
+      }
+    ],
+    "FieldView": 46,
+    "TaskPos": "0.7/6.05/11"
+  },
+  "1036": {
+    "ID": 1036,
+    "Name": "TaskName_036",
+    "Namekan": "地柜换新",
+    "CroupName": "走廊",
+    "Feeling": "manman_normal",
+    "Dialog": "TaskDialog_36",
+    "TaskIcon": "DecorateIcon_25",
+    "level": 1,
+    "PreTask": "1035",
+    "CompleteOpen": "1037",
+    "CompleteGold": 300,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 3051,
+    "PlotID2": 3050,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 105
+      },
+      {
+        "PrizeID": 205004,
+        "PrizeNum": 1
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101120,
+    "Target": [
+      {
+        "Type": 2,
+        "DecorateID": 100159
+      },
+      {
+        "Type": 3,
+        "DecorateID": 101120
+      }
+    ],
+    "FieldView": 46,
+    "TaskPos": "0.7/6.05/11"
+  },
+  "1037": {
+    "ID": 1037,
+    "Name": "TaskName_037",
+    "Namekan": "休息凳换新",
+    "CroupName": "走廊",
+    "Feeling": "manman_normal",
+    "Dialog": "TaskDialog_37",
+    "TaskIcon": "DecorateIcon_9",
+    "level": 1,
+    "PreTask": "1036",
+    "CompleteOpen": "1038",
+    "CompleteGold": 450,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 3061,
+    "PlotID2": 3060,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 140
+      },
+      {
+        "PrizeID": 205005,
+        "PrizeNum": 1
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101122,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 101122
+      }
+    ],
+    "FieldView": 46,
+    "TaskPos": "0.7/6.05/11"
+  },
+  "1038": {
+    "ID": 1038,
+    "Name": "TaskName_038",
+    "Namekan": "栽种绿植",
+    "CroupName": "走廊",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_38",
+    "TaskIcon": "DecorateIcon_11",
+    "level": 1,
+    "PreTask": "1037",
+    "CompleteOpen": "1039",
+    "CompleteGold": 600,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 3071,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 210
+      },
+      {
+        "PrizeID": 205006,
+        "PrizeNum": 1
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101124,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 101124
+      }
+    ],
+    "FieldView": 43,
+    "TaskPos": "1.31/5.88/7.45"
+  },
+  "1039": {
+    "ID": 1039,
+    "Name": "TaskName_039",
+    "Namekan": "放置绿植",
+    "CroupName": "走廊",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_39",
+    "TaskIcon": "DecorateIcon_11",
+    "level": 1,
+    "PreTask": "1038",
+    "CompleteOpen": "1040",
+    "CompleteGold": 650,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 3081,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 225
+      },
+      {
+        "PrizeID": 205007,
+        "PrizeNum": 1
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101123,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 101123
+      }
+    ],
+    "FieldView": 43,
+    "TaskPos": "1.31/5.88/7.45"
+  },
+  "1040": {
+    "ID": 1040,
+    "Name": "TaskName_040",
+    "Namekan": "放置装饰画",
+    "CroupName": "走廊",
+    "Feeling": "manman_normal",
+    "Dialog": "TaskDialog_40",
+    "TaskIcon": "DecorateIcon_16",
+    "level": 1,
+    "PreTask": "1039",
+    "CompleteOpen": "1041",
+    "CompleteGold": 700,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 3091,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 160
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101125,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 101125
+      }
+    ],
+    "FieldView": 46,
+    "TaskPos": "1.17/6.05/6"
+  },
+  "1041": {
+    "ID": 1041,
+    "Name": "TaskName_041",
+    "Namekan": "放置装饰画",
+    "CroupName": "走廊",
+    "Feeling": "manman_normal",
+    "Dialog": "TaskDialog_41",
+    "TaskIcon": "DecorateIcon_16",
+    "level": 1,
+    "PreTask": "1040",
+    "CompleteOpen": "1042",
+    "CompleteGold": 800,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 3101,
+    "PlotID2": 3100,
+    "PlotID3": 4001,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 260
+      },
+      {
+        "PrizeID": 205008,
+        "PrizeNum": 1
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101127,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 101127
+      }
+    ],
+    "FieldView": 46,
+    "TaskPos": "0.34/6.05/6.21"
+  },
+  "1042": {
+    "ID": 1042,
+    "Name": "TaskName_042",
+    "Namekan": "地板刷漆",
+    "CroupName": "客厅",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_42",
+    "TaskIcon": "DecorateIcon_17",
+    "level": 1,
+    "PreTask": "1041",
+    "CompleteOpen": "1043/2009",
+    "CompleteGold": 900,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 4011,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 205
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101068,
+    "Target": [
+      {
+        "Type": 2,
+        "DecorateID": 100096
+      },
+      {
+        "Type": 3,
+        "DecorateID": 101068
+      }
+    ],
+    "FieldView": 35,
+    "TaskPos": "5.46/5.42/-3.82"
+  },
+  "1043": {
+    "ID": 1043,
+    "Name": "TaskName_043",
+    "Namekan": "更换瓷砖",
+    "CroupName": "客厅",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_43",
+    "TaskIcon": "DecorateIcon_17",
+    "level": 1,
+    "PreTask": "1042",
+    "CompleteOpen": "1044",
+    "CompleteGold": 1000,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 4021,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 340
+      },
+      {
+        "PrizeID": 205009,
+        "PrizeNum": 1
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101069,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 101069
+      }
+    ],
+    "FieldView": 35,
+    "TaskPos": "0.5/5.42/-3.82"
+  },
+  "1044": {
+    "ID": 1044,
+    "Name": "TaskName_044",
+    "Namekan": "装饰墙面",
+    "CroupName": "客厅",
+    "Feeling": "manman_normal",
+    "Dialog": "TaskDialog_44",
+    "TaskIcon": "DecorateIcon_17",
+    "level": 1,
+    "PreTask": "1043",
+    "CompleteOpen": "1045",
+    "CompleteGold": 1000,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 4031,
+    "PlotID2": 4030,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 190
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101086,
+    "Target": [
+      {
+        "Type": 2,
+        "DecorateID": 100115
+      },
+      {
+        "Type": 3,
+        "DecorateID": 101086
+      }
+    ],
+    "FieldView": 38,
+    "TaskPos": "5.7/5.6/-2.52"
+  },
+  "1045": {
+    "ID": 1045,
+    "Name": "TaskName_045",
+    "Namekan": "打扫楼梯",
+    "CroupName": "客厅",
+    "Feeling": "manman_normal",
+    "Dialog": "TaskDialog_45",
+    "TaskIcon": "DecorateIcon_4",
+    "level": 1,
+    "PreTask": "1044",
+    "CompleteOpen": "1046",
+    "CompleteGold": 300,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 4041,
+    "PlotID2": 4040,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 50
+      },
+      {
+        "PrizeID": 207001,
+        "PrizeNum": 1
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101083,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 101083
+      }
+    ],
+    "FieldView": 38,
+    "TaskPos": "1.66/5.6/-1.16"
+  },
+  "1046": {
+    "ID": 1046,
+    "Name": "TaskName_046",
+    "Namekan": "安装客厅门",
+    "CroupName": "客厅",
+    "Feeling": "manman_normal",
+    "Dialog": "TaskDialog_46",
+    "TaskIcon": "DecorateIcon_78",
+    "level": 1,
+    "PreTask": "1045",
+    "CompleteOpen": "1047",
+    "CompleteGold": 320,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 4051,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 90
+      },
+      {
+        "PrizeID": 207004,
+        "PrizeNum": 1
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101084,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 101084
+      }
+    ],
+    "FieldView": 35,
+    "TaskPos": "2.64/5.43/-3.78"
+  },
+  "1047": {
+    "ID": 1047,
+    "Name": "TaskName_047",
+    "Namekan": "安装客厅门",
+    "CroupName": "客厅",
+    "Feeling": "manman_normal",
+    "Dialog": "TaskDialog_47",
+    "TaskIcon": "DecorateIcon_78",
+    "level": 1,
+    "PreTask": "1046",
+    "CompleteOpen": "1048",
+    "CompleteGold": 350,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 4061,
+    "PlotID2": 4060,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 95
+      },
+      {
+        "PrizeID": 207005,
+        "PrizeNum": 1
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101085,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 101085
+      }
+    ],
+    "FieldView": 35,
+    "TaskPos": "6.04/5.42/-3.82"
+  },
+  "1048": {
+    "ID": 1048,
+    "Name": "TaskName_048",
+    "Namekan": "修复挂墙桌",
+    "CroupName": "客厅",
+    "Feeling": "manman_normal",
+    "Dialog": "TaskDialog_48",
+    "TaskIcon": "DecorateIcon_9",
+    "level": 1,
+    "PreTask": "1047",
+    "CompleteOpen": "1049",
+    "CompleteGold": 400,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 4071,
+    "PlotID2": 4070,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 65
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101074,
+    "Target": [
+      {
+        "Type": 2,
+        "DecorateID": 100102
+      },
+      {
+        "Type": 3,
+        "DecorateID": 101074
+      }
+    ],
+    "FieldView": 35,
+    "TaskPos": "2.2/5.42/-3.77"
+  },
+  "1049": {
+    "ID": 1049,
+    "Name": "TaskName_049",
+    "Namekan": "修缮柜子",
+    "CroupName": "客厅",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_49",
+    "TaskIcon": "DecorateIcon_25",
+    "level": 1,
+    "PreTask": "1048",
+    "CompleteOpen": "1050",
+    "CompleteGold": 450,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 4081,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 150
+      },
+      {
+        "PrizeID": 207006,
+        "PrizeNum": 1
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101075,
+    "Target": [
+      {
+        "Type": 2,
+        "DecorateID": 100104
+      },
+      {
+        "Type": 3,
+        "DecorateID": 101075
+      }
+    ],
+    "FieldView": 35,
+    "TaskPos": "3.95/5.42/-0.73"
+  },
+  "1050": {
+    "ID": 1050,
+    "Name": "TaskName_050",
+    "Namekan": "更换电视机",
+    "CroupName": "客厅",
+    "Feeling": "manman_normal",
+    "Dialog": "TaskDialog_50",
+    "TaskIcon": "DecorateIcon_43",
+    "level": 1,
+    "PreTask": "1049",
+    "CompleteOpen": "1051",
+    "CompleteGold": 520,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 4091,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 85
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101077,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 101077
+      }
+    ],
+    "FieldView": 35,
+    "TaskPos": "5.42/5.43/-0.12"
+  },
+  "1051": {
+    "ID": 1051,
+    "Name": "TaskName_051",
+    "Namekan": "清洁立柱",
+    "CroupName": "客厅",
+    "Feeling": "manman_normal",
+    "Dialog": "TaskDialog_51",
+    "TaskIcon": "DecorateIcon_44",
+    "level": 1,
+    "PreTask": "1050",
+    "CompleteOpen": "1052",
+    "CompleteGold": 600,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 4101,
+    "PlotID2": 4100,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 100
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101079,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 101079
+      }
+    ],
+    "FieldView": 35,
+    "TaskPos": "7/5.43/-0.12"
+  },
+  "1052": {
+    "ID": 1052,
+    "Name": "TaskName_052",
+    "Namekan": "更换沙发",
+    "CroupName": "客厅",
+    "Feeling": "manman_normal",
+    "Dialog": "TaskDialog_52",
+    "TaskIcon": "DecorateIcon_10",
+    "level": 1,
+    "PreTask": "1051",
+    "CompleteOpen": "1053",
+    "CompleteGold": 650,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 4111,
+    "PlotID2": 4110,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 185
+      },
+      {
+        "PrizeID": 207007,
+        "PrizeNum": 1
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101087,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 101087
+      }
+    ],
+    "FieldView": 38,
+    "TaskPos": "5.43/5.6/-2.98"
+  },
+  "1053": {
+    "ID": 1053,
+    "Name": "TaskName_053",
+    "Namekan": "更换地毯",
+    "CroupName": "客厅",
+    "Feeling": "manman_normal",
+    "Dialog": "TaskDialog_53",
+    "TaskIcon": "DecorateIcon_39",
+    "level": 1,
+    "PreTask": "1052",
+    "CompleteOpen": "1054",
+    "CompleteGold": 680,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 4121,
+    "PlotID2": 4120,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 115
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101070,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 101070
+      }
+    ],
+    "FieldView": 38,
+    "TaskPos": "5.43/5.6/-2.98"
+  },
+  "1054": {
+    "ID": 1054,
+    "Name": "TaskName_054",
+    "Namekan": "桌子换新",
+    "CroupName": "客厅",
+    "Feeling": "manman_normal",
+    "Dialog": "TaskDialog_54",
+    "TaskIcon": "DecorateIcon_9",
+    "level": 1,
+    "PreTask": "1053",
+    "CompleteOpen": "1055",
+    "CompleteGold": 750,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 4131,
+    "PlotID2": 4130,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 125
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101081,
+    "Target": [
+      {
+        "Type": 2,
+        "DecorateID": 100109
+      },
+      {
+        "Type": 3,
+        "DecorateID": 101081
+      }
+    ],
+    "FieldView": 35,
+    "TaskPos": "7.33/5.42/-3.83"
+  },
+  "1055": {
+    "ID": 1055,
+    "Name": "TaskName_055",
+    "Namekan": "按摩椅换新",
+    "CroupName": "客厅",
+    "Feeling": "manman_normal",
+    "Dialog": "TaskDialog_55",
+    "TaskIcon": "DecorateIcon_8",
+    "level": 1,
+    "PreTask": "1054",
+    "CompleteOpen": "1056",
+    "CompleteGold": 800,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 4141,
+    "PlotID2": 4140,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 135
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101082,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 101082
+      }
+    ],
+    "FieldView": 35,
+    "TaskPos": "4.68/5.42/-3.83"
+  },
+  "1056": {
+    "ID": 1056,
+    "Name": "TaskName_056",
+    "Namekan": "更换鞋柜",
+    "CroupName": "客厅",
+    "Feeling": "manman_normal",
+    "Dialog": "TaskDialog_56",
+    "TaskIcon": "DecorateIcon_9",
+    "level": 1,
+    "PreTask": "1055",
+    "CompleteOpen": "1057",
+    "CompleteGold": 800,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 4151,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 285
+      },
+      {
+        "PrizeID": 207008,
+        "PrizeNum": 1
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101089,
+    "Target": [
+      {
+        "Type": 2,
+        "DecorateID": 100119
+      },
+      {
+        "Type": 3,
+        "DecorateID": 101089
+      }
+    ],
+    "FieldView": 35,
+    "TaskPos": "2.7/5.42/-3.83"
+  },
+  "1057": {
+    "ID": 1057,
+    "Name": "TaskName_057",
+    "Namekan": "栽种绿植",
+    "CroupName": "客厅",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_57",
+    "TaskIcon": "DecorateIcon_11",
+    "level": 1,
+    "PreTask": "1056",
+    "CompleteOpen": "1058",
+    "CompleteGold": 200,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 4161,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 30
+      },
+      {
+        "PrizeID": 208001,
+        "PrizeNum": 1
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101090,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 101090
+      }
+    ],
+    "FieldView": 35,
+    "TaskPos": "2.7/5.42/-3.83"
+  },
+  "1058": {
+    "ID": 1058,
+    "Name": "TaskName_058",
+    "Namekan": "放置绿植",
+    "CroupName": "客厅",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_58",
+    "TaskIcon": "DecorateIcon_11",
+    "level": 1,
+    "PreTask": "1057",
+    "CompleteOpen": "1059",
+    "CompleteGold": 140,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 4171,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 55
+      },
+      {
+        "PrizeID": 208001,
+        "PrizeNum": 1
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101091,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 101091
+      }
+    ],
+    "FieldView": 35,
+    "TaskPos": "6.61/5.42/-2.31"
+  },
+  "1059": {
+    "ID": 1059,
+    "Name": "TaskName_059",
+    "Namekan": "更换落地灯",
+    "CroupName": "客厅",
+    "Feeling": "manman_normal",
+    "Dialog": "TaskDialog_59",
+    "TaskIcon": "DecorateIcon_3",
+    "level": 1,
+    "PreTask": "1058",
+    "CompleteOpen": "1060",
+    "CompleteGold": 160,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 4181,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 20
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101092,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 101092
+      }
+    ],
+    "FieldView": 35,
+    "TaskPos": "2.3/5.42/-2.89"
+  },
+  "1060": {
+    "ID": 1060,
+    "Name": "TaskName_060",
+    "Namekan": "修缮装饰物",
+    "CroupName": "客厅",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_60",
+    "TaskIcon": "DecorateIcon_16",
+    "level": 1,
+    "PreTask": "1059",
+    "CompleteOpen": "1061/2010",
+    "CompleteGold": 300,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 4191,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 80
+      },
+      {
+        "PrizeID": 208002,
+        "PrizeNum": 1
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101093,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 101093
+      }
+    ],
+    "FieldView": 35,
+    "TaskPos": "2.3/5.42/-2.89"
+  },
+  "1061": {
+    "ID": 1061,
+    "Name": "TaskName_061",
+    "Namekan": "更换落地灯",
+    "CroupName": "客厅",
+    "Feeling": "manman_normal",
+    "Dialog": "TaskDialog_61",
+    "TaskIcon": "DecorateIcon_3",
+    "level": 1,
+    "PreTask": "1060",
+    "CompleteOpen": "1062",
+    "CompleteGold": 200,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 4201,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 30
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101094,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 101094
+      }
+    ],
+    "FieldView": 35,
+    "TaskPos": "6.61/5.42/-2.31"
+  },
+  "1062": {
+    "ID": 1062,
+    "Name": "TaskName_062",
+    "Namekan": "添置地毯",
+    "CroupName": "客厅",
+    "Feeling": "manman_normal",
+    "Dialog": "TaskDialog_62",
+    "TaskIcon": "DecorateIcon_39",
+    "level": 1,
+    "PreTask": "1061",
+    "CompleteOpen": "1063",
+    "CompleteGold": 400,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 4211,
+    "PlotID2": 4210,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 130
+      },
+      {
+        "PrizeID": 208003,
+        "PrizeNum": 1
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101071,
+    "Target": [
+      {
+        "Type": 1,
+        "DecorateID": 101071
+      }
+    ],
+    "FieldView": 35,
+    "TaskPos": "5.43/5.42/-3.83"
+  },
+  "1063": {
+    "ID": 1063,
+    "Name": "TaskName_063",
+    "Namekan": "添置地毯",
+    "CroupName": "客厅",
+    "Feeling": "manman_normal",
+    "Dialog": "TaskDialog_63",
+    "TaskIcon": "DecorateIcon_39",
+    "level": 1,
+    "PreTask": "1062",
+    "CompleteOpen": "1064",
+    "CompleteGold": 240,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 4221,
+    "PlotID2": 4220,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 35
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101072,
+    "Target": [
+      {
+        "Type": 1,
+        "DecorateID": 101072
+      }
+    ],
+    "FieldView": 35,
+    "TaskPos": "2.87/5.42/-3.83"
+  },
+  "1064": {
+    "ID": 1064,
+    "Name": "TaskName_064",
+    "Namekan": "添置地毯",
+    "CroupName": "客厅",
+    "Feeling": "manman_normal",
+    "Dialog": "TaskDialog_64",
+    "TaskIcon": "DecorateIcon_39",
+    "level": 1,
+    "PreTask": "1063",
+    "CompleteOpen": "1065",
+    "CompleteGold": 320,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 4231,
+    "PlotID2": 4230,
+    "PlotID3": 5001,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 45
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101073,
+    "Target": [
+      {
+        "Type": 1,
+        "DecorateID": 101073
+      }
+    ],
+    "FieldView": 35,
+    "TaskPos": "5.75/5.42/-3.83"
+  },
+  "1065": {
+    "ID": 1065,
+    "Name": "TaskName_065",
+    "Namekan": "地板刷漆",
+    "CroupName": "厨房",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_65",
+    "TaskIcon": "DecorateIcon_17",
+    "level": 1,
+    "PreTask": "1064",
+    "CompleteOpen": "1066",
+    "CompleteGold": 500,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 5011,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 105
+      },
+      {
+        "PrizeID": 208004,
+        "PrizeNum": 1
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101041,
+    "Target": [
+      {
+        "Type": 2,
+        "DecorateID": 100053
+      },
+      {
+        "Type": 3,
+        "DecorateID": 101041
+      }
+    ],
+    "FieldView": 43,
+    "TaskPos": "12.5/5.86/6.05"
+  },
+  "1066": {
+    "ID": 1066,
+    "Name": "TaskName_066",
+    "Namekan": "装饰墙面",
+    "CroupName": "厨房",
+    "Feeling": "manman_normal",
+    "Dialog": "TaskDialog_66",
+    "TaskIcon": "DecorateIcon_17",
+    "level": 1,
+    "PreTask": "1065",
+    "CompleteOpen": "1067",
+    "CompleteGold": 320,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 5021,
+    "PlotID2": 5020,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 45
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101042,
+    "Target": [
+      {
+        "Type": 2,
+        "DecorateID": 100057
+      },
+      {
+        "Type": 3,
+        "DecorateID": 101042
+      }
+    ],
+    "FieldView": 43,
+    "TaskPos": "12.5/5.86/6.05"
+  },
+  "1067": {
+    "ID": 1067,
+    "Name": "TaskName_067",
+    "Namekan": "修复岛台",
+    "CroupName": "厨房",
+    "Feeling": "manman_normal",
+    "Dialog": "TaskDialog_67",
+    "TaskIcon": "DecorateIcon_9",
+    "level": 1,
+    "PreTask": "1066",
+    "CompleteOpen": "1068",
+    "CompleteGold": 400,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 5031,
+    "PlotID2": 5030,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 55
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101040,
+    "Target": [
+      {
+        "Type": 2,
+        "DecorateID": 100051
+      },
+      {
+        "Type": 3,
+        "DecorateID": 101040
+      }
+    ],
+    "FieldView": 43,
+    "TaskPos": "12.5/5.86/6.05"
+  },
+  "1068": {
+    "ID": 1068,
+    "Name": "TaskName_068",
+    "Namekan": "更换窗户",
+    "CroupName": "厨房",
+    "Feeling": "manman_normal",
+    "Dialog": "TaskDialog_68",
+    "TaskIcon": "DecorateIcon_15",
+    "level": 1,
+    "PreTask": "1067",
+    "CompleteOpen": "1069",
+    "CompleteGold": 500,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 5041,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 70
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101034,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 101034
+      }
+    ],
+    "FieldView": 43,
+    "TaskPos": "12.5/5.86/6.05"
+  },
+  "1069": {
+    "ID": 1069,
+    "Name": "TaskName_069",
+    "Namekan": "更换微波炉",
+    "CroupName": "厨房",
+    "Feeling": "manman_normal",
+    "Dialog": "TaskDialog_69",
+    "TaskIcon": "DecorateIcon_35",
+    "level": 1,
+    "PreTask": "1068",
+    "CompleteOpen": "1070",
+    "CompleteGold": 700,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 5051,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 210
+      },
+      {
+        "PrizeID": 208005,
+        "PrizeNum": 1
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101036,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 101036
+      }
+    ],
+    "FieldView": 43,
+    "TaskPos": "12.5/5.86/6.05"
+  },
+  "1070": {
+    "ID": 1070,
+    "Name": "TaskName_070",
+    "Namekan": "修复台面",
+    "CroupName": "厨房",
+    "Feeling": "manman_normal",
+    "Dialog": "TaskDialog_70",
+    "TaskIcon": "DecorateIcon_9",
+    "level": 1,
+    "PreTask": "1069",
+    "CompleteOpen": "1071",
+    "CompleteGold": 420,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 5061,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 60
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101043,
+    "Target": [
+      {
+        "Type": 2,
+        "DecorateID": 100060
+      },
+      {
+        "Type": 3,
+        "DecorateID": 101043
+      }
+    ],
+    "FieldView": 43,
+    "TaskPos": "12.5/5.86/6.05"
+  },
+  "1071": {
+    "ID": 1071,
+    "Name": "TaskName_071",
+    "Namekan": "更换净化器",
+    "CroupName": "厨房",
+    "Feeling": "manman_normal",
+    "Dialog": "TaskDialog_71",
+    "TaskIcon": "DecorateIcon_2",
+    "level": 1,
+    "PreTask": "1070",
+    "CompleteOpen": "1072/2011",
+    "CompleteGold": 510,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 5071,
+    "PlotID2": 5070,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 70
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101046,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 101046
+      }
+    ],
+    "FieldView": 43,
+    "TaskPos": "12.5/5.86/6.05"
+  },
+  "1072": {
+    "ID": 1072,
+    "Name": "TaskName_072",
+    "Namekan": "更换窗户",
+    "CroupName": "厨房",
+    "Feeling": "manman_normal",
+    "Dialog": "TaskDialog_72",
+    "TaskIcon": "DecorateIcon_15",
+    "level": 1,
+    "PreTask": "1071",
+    "CompleteOpen": "1073",
+    "CompleteGold": 600,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 5081,
+    "PlotID2": 5080,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 85
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101033,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 101033
+      }
+    ],
+    "FieldView": 43,
+    "TaskPos": "12.5/5.86/6.05"
+  },
+  "1073": {
+    "ID": 1073,
+    "Name": "TaskName_073",
+    "Namekan": "更换橱柜",
+    "CroupName": "厨房",
+    "Feeling": "manman_normal",
+    "Dialog": "TaskDialog_73",
+    "TaskIcon": "DecorateIcon_25",
+    "level": 1,
+    "PreTask": "1072",
+    "CompleteOpen": "1074",
+    "CompleteGold": 700,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 5091,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 95
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101038,
+    "Target": [
+      {
+        "Type": 2,
+        "DecorateID": 100049
+      },
+      {
+        "Type": 3,
+        "DecorateID": 101038
+      }
+    ],
+    "FieldView": 43,
+    "TaskPos": "12.5/5.86/6.05"
+  },
+  "1074": {
+    "ID": 1074,
+    "Name": "TaskName_074",
+    "Namekan": "修缮灶台",
+    "CroupName": "厨房",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_74",
+    "TaskIcon": "DecorateIcon_29",
+    "level": 1,
+    "PreTask": "1073",
+    "CompleteOpen": "1075",
+    "CompleteGold": 900,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 5101,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 240
+      },
+      {
+        "PrizeID": 208006,
+        "PrizeNum": 1
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101045,
+    "Target": [
+      {
+        "Type": 2,
+        "DecorateID": 100064
+      },
+      {
+        "Type": 3,
+        "DecorateID": 101045
+      }
+    ],
+    "FieldView": 43,
+    "TaskPos": "12.5/5.86/6.05"
+  },
+  "1075": {
+    "ID": 1075,
+    "Name": "TaskName_075",
+    "Namekan": "更换抽油烟机",
+    "CroupName": "厨房",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_75",
+    "TaskIcon": "DecorateIcon_29",
+    "level": 1,
+    "PreTask": "1074",
+    "CompleteOpen": "1076",
+    "CompleteGold": 240,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 5111,
+    "PlotID2": 5110,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 30
+      },
+      {
+        "PrizeID": 209001,
+        "PrizeNum": 1
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101044,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 101044
+      }
+    ],
+    "FieldView": 43,
+    "TaskPos": "12.5/5.86/6.05"
+  },
+  "1076": {
+    "ID": 1076,
+    "Name": "TaskName_076",
+    "Namekan": "修复壁橱",
+    "CroupName": "厨房",
+    "Feeling": "manman_normal",
+    "Dialog": "TaskDialog_76",
+    "TaskIcon": "DecorateIcon_25",
+    "level": 1,
+    "PreTask": "1075",
+    "CompleteOpen": "1077",
+    "CompleteGold": 260,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 5121,
+    "PlotID2": 5120,
+    "PlotID3": 6001,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 70
+      },
+      {
+        "PrizeID": 209001,
+        "PrizeNum": 1
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101032,
+    "Target": [
+      {
+        "Type": 2,
+        "DecorateID": 100042
+      },
+      {
+        "Type": 3,
+        "DecorateID": 101032
+      }
+    ],
+    "FieldView": 43,
+    "TaskPos": "12.5/5.86/6.05"
+  },
+  "1077": {
+    "ID": 1077,
+    "Name": "TaskName_077",
+    "Namekan": "地板刷漆",
+    "CroupName": "餐厅",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_77",
+    "TaskIcon": "DecorateIcon_17",
+    "level": 1,
+    "PreTask": "1076",
+    "CompleteOpen": "1078/2012",
+    "CompleteGold": 300,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 6011,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 35
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101004,
+    "Target": [
+      {
+        "Type": 2,
+        "DecorateID": 100003
+      },
+      {
+        "Type": 3,
+        "DecorateID": 101004
+      }
+    ],
+    "FieldView": 35,
+    "TaskPos": "12.62/5.43/-1.81"
+  },
+  "1078": {
+    "ID": 1078,
+    "Name": "TaskName_078",
+    "Namekan": "装饰墙面",
+    "CroupName": "餐厅",
+    "Feeling": "manman_normal",
+    "Dialog": "TaskDialog_78",
+    "TaskIcon": "DecorateIcon_17",
+    "level": 1,
+    "PreTask": "1077",
+    "CompleteOpen": "1079",
+    "CompleteGold": 400,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 6021,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 90
+      },
+      {
+        "PrizeID": 209002,
+        "PrizeNum": 1
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101013,
+    "Target": [
+      {
+        "Type": 2,
+        "DecorateID": 100016
+      },
+      {
+        "Type": 3,
+        "DecorateID": 101013
+      }
+    ],
+    "FieldView": 35,
+    "TaskPos": "12.62/5.43/-1.81"
+  },
+  "1079": {
+    "ID": 1079,
+    "Name": "TaskName_079",
+    "Namekan": "修复餐厅门",
+    "CroupName": "餐厅",
+    "Feeling": "manman_normal",
+    "Dialog": "TaskDialog_79",
+    "TaskIcon": "DecorateIcon_78",
+    "level": 1,
+    "PreTask": "1078",
+    "CompleteOpen": "1080",
+    "CompleteGold": 320,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 6031,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 45
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101011,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 101011
+      }
+    ],
+    "FieldView": 32,
+    "TaskPos": "12.71/5.23/1.45"
+  },
+  "1080": {
+    "ID": 1080,
+    "Name": "TaskName_080",
+    "Namekan": "修复餐厅门",
+    "CroupName": "餐厅",
+    "Feeling": "manman_normal",
+    "Dialog": "TaskDialog_80",
+    "TaskIcon": "DecorateIcon_78",
+    "level": 1,
+    "PreTask": "1079",
+    "CompleteOpen": "1081",
+    "CompleteGold": 380,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 6041,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 50
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101012,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 101012
+      }
+    ],
+    "FieldView": 29,
+    "TaskPos": "13.3/5/-1"
+  },
+  "1081": {
+    "ID": 1081,
+    "Name": "TaskName_081",
+    "Namekan": "修复装饰品",
+    "CroupName": "餐厅",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_81",
+    "TaskIcon": "DecorateIcon_16",
+    "level": 1,
+    "PreTask": "1080",
+    "CompleteOpen": "1082",
+    "CompleteGold": 500,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 6051,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 140
+      },
+      {
+        "PrizeID": 209003,
+        "PrizeNum": 1
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101020,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 101020
+      }
+    ],
+    "FieldView": 31,
+    "TaskPos": "13.28/5.19/-1.64"
+  },
+  "1082": {
+    "ID": 1082,
+    "Name": "TaskName_082",
+    "Namekan": "更换地毯",
+    "CroupName": "餐厅",
+    "Feeling": "manman_normal",
+    "Dialog": "TaskDialog_82",
+    "TaskIcon": "DecorateIcon_39",
+    "level": 1,
+    "PreTask": "1081",
+    "CompleteOpen": "1083",
+    "CompleteGold": 380,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 6061,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 50
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101005,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 101005
+      }
+    ],
+    "FieldView": 31,
+    "TaskPos": "13.37/5.19/-1.23"
+  },
+  "1083": {
+    "ID": 1083,
+    "Name": "TaskName_083",
+    "Namekan": "添置地毯",
+    "CroupName": "餐厅",
+    "Feeling": "manman_normal",
+    "Dialog": "TaskDialog_83",
+    "TaskIcon": "DecorateIcon_39",
+    "level": 1,
+    "PreTask": "1082",
+    "CompleteOpen": "1084",
+    "CompleteGold": 440,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 6071,
+    "PlotID2": 6070,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 60
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101007,
+    "Target": [
+      {
+        "Type": 1,
+        "DecorateID": 101007
+      }
+    ],
+    "FieldView": 35,
+    "TaskPos": "12.4/5.43/-2"
+  },
+  "1084": {
+    "ID": 1084,
+    "Name": "TaskName_084",
+    "Namekan": "更换餐桌",
+    "CroupName": "餐厅",
+    "Feeling": "manman_normal",
+    "Dialog": "TaskDialog_84",
+    "TaskIcon": "DecorateIcon_30",
+    "level": 1,
+    "PreTask": "1083",
+    "CompleteOpen": "1085",
+    "CompleteGold": 600,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 6081,
+    "PlotID2": 6080,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 150
+      },
+      {
+        "PrizeID": 209004,
+        "PrizeNum": 1
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101001,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 101001
+      }
+    ],
+    "FieldView": 35,
+    "TaskPos": "12.4/5.43/-2"
+  },
+  "1085": {
+    "ID": 1085,
+    "Name": "TaskName_085",
+    "Namekan": "更换沙发",
+    "CroupName": "餐厅",
+    "Feeling": "manman_normal",
+    "Dialog": "TaskDialog_85",
+    "TaskIcon": "DecorateIcon_8",
+    "level": 1,
+    "PreTask": "1084",
+    "CompleteOpen": "1086",
+    "CompleteGold": 420,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 6091,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 55
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101014,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 101014
+      }
+    ],
+    "FieldView": 35,
+    "TaskPos": "13.43/5.43/-1.77"
+  },
+  "1086": {
+    "ID": 1086,
+    "Name": "TaskName_086",
+    "Namekan": "栽种绿植",
+    "CroupName": "餐厅",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_86",
+    "TaskIcon": "DecorateIcon_11",
+    "level": 1,
+    "PreTask": "1085",
+    "CompleteOpen": "1087",
+    "CompleteGold": 500,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 6101,
+    "PlotID2": 6100,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 65
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101015,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 101015
+      }
+    ],
+    "FieldView": 35,
+    "TaskPos": "11.66/5.43/-1.82"
+  },
+  "1087": {
+    "ID": 1087,
+    "Name": "TaskName_087",
+    "Namekan": "修复装饰品",
+    "CroupName": "餐厅",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_87",
+    "TaskIcon": "DecorateIcon_16",
+    "level": 1,
+    "PreTask": "1086",
+    "CompleteOpen": "1088",
+    "CompleteGold": 580,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 6111,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 70
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101019,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 101019
+      }
+    ],
+    "FieldView": 35,
+    "TaskPos": "11.66/5.43/-1.82"
+  },
+  "1088": {
+    "ID": 1088,
+    "Name": "TaskName_088",
+    "Namekan": "添置地毯",
+    "CroupName": "餐厅",
+    "Feeling": "manman_normal",
+    "Dialog": "TaskDialog_88",
+    "TaskIcon": "DecorateIcon_39",
+    "level": 1,
+    "PreTask": "1087",
+    "CompleteOpen": "1089",
+    "CompleteGold": 700,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 6121,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 200
+      },
+      {
+        "PrizeID": 209005,
+        "PrizeNum": 1
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101006,
+    "Target": [
+      {
+        "Type": 1,
+        "DecorateID": 101006
+      }
+    ],
+    "FieldView": 35,
+    "TaskPos": "11.66/5.43/-1.82"
+  },
+  "1089": {
+    "ID": 1089,
+    "Name": "TaskName_089",
+    "Namekan": "清洁工艺品",
+    "CroupName": "餐厅",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_89",
+    "TaskIcon": "DecorateIcon_2",
+    "level": 1,
+    "PreTask": "1088",
+    "CompleteOpen": "1090",
+    "CompleteGold": 440,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 6131,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 55
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101016,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 101016
+      }
+    ],
+    "FieldView": 35,
+    "TaskPos": "11.69/5.43/-1.42"
+  },
+  "1090": {
+    "ID": 1090,
+    "Name": "TaskName_090",
+    "Namekan": "添置扫地机",
+    "CroupName": "餐厅",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_90",
+    "TaskIcon": "DecorateIcon_2",
+    "level": 1,
+    "PreTask": "1089",
+    "CompleteOpen": "1091",
+    "CompleteGold": 520,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 6141,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 65
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101017,
+    "Target": [
+      {
+        "Type": 1,
+        "DecorateID": 101017
+      }
+    ],
+    "FieldView": 35,
+    "TaskPos": "11.86/5.43/0"
+  },
+  "1091": {
+    "ID": 1091,
+    "Name": "TaskName_091",
+    "Namekan": "修复壁柜",
+    "CroupName": "餐厅",
+    "Feeling": "manman_normal",
+    "Dialog": "TaskDialog_91",
+    "TaskIcon": "DecorateIcon_79",
+    "level": 1,
+    "PreTask": "1090",
+    "CompleteOpen": "1092",
+    "CompleteGold": 600,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 6151,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 75
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101008,
+    "Target": [
+      {
+        "Type": 2,
+        "DecorateID": 100008
+      },
+      {
+        "Type": 3,
+        "DecorateID": 101008
+      }
+    ],
+    "FieldView": 35,
+    "TaskPos": "12.4/5.43/0.7"
+  },
+  "1092": {
+    "ID": 1092,
+    "Name": "TaskName_092",
+    "Namekan": "修复玻璃柜",
+    "CroupName": "餐厅",
+    "Feeling": "manman_normal",
+    "Dialog": "TaskDialog_92",
+    "TaskIcon": "DecorateIcon_79",
+    "level": 1,
+    "PreTask": "1091",
+    "CompleteOpen": "1093",
+    "CompleteGold": 680,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 6161,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 90
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101009,
+    "Target": [
+      {
+        "Type": 2,
+        "DecorateID": 100010
+      },
+      {
+        "Type": 3,
+        "DecorateID": 101009
+      }
+    ],
+    "FieldView": 35,
+    "TaskPos": "11.3/5.43/0.7"
+  },
+  "1093": {
+    "ID": 1093,
+    "Name": "TaskName_093",
+    "Namekan": "修复玻璃柜",
+    "CroupName": "餐厅",
+    "Feeling": "manman_normal",
+    "Dialog": "TaskDialog_93",
+    "TaskIcon": "DecorateIcon_79",
+    "level": 1,
+    "PreTask": "1092",
+    "CompleteOpen": "1094",
+    "CompleteGold": 800,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 6171,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 215
+      },
+      {
+        "PrizeID": 209006,
+        "PrizeNum": 1
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101010,
+    "Target": [
+      {
+        "Type": 2,
+        "DecorateID": 100012
+      },
+      {
+        "Type": 3,
+        "DecorateID": 101010
+      }
+    ],
+    "FieldView": 35,
+    "TaskPos": "13.7/5.43/0.7"
+  },
+  "1094": {
+    "ID": 1094,
+    "Name": "TaskName_094",
+    "Namekan": "放置绿植",
+    "CroupName": "餐厅",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_94",
+    "TaskIcon": "DecorateIcon_11",
+    "level": 1,
+    "PreTask": "1093",
+    "CompleteOpen": "1095/2013",
+    "CompleteGold": 280,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 6181,
+    "PlotID2": 0,
+    "PlotID3": 7001,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 30
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101018,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 101018
+      }
+    ],
+    "FieldView": 35,
+    "TaskPos": "13.7/5.43/0.7"
+  },
+  "1095": {
+    "ID": 1095,
+    "Name": "TaskName_095",
+    "Namekan": "修复地板",
+    "CroupName": "车库",
+    "Feeling": "manman_normal",
+    "Dialog": "TaskDialog_95",
+    "TaskIcon": "DecorateIcon_17",
+    "level": 1,
+    "PreTask": "1094",
+    "CompleteOpen": "1096",
+    "CompleteGold": 300,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 7011,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 35
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101022,
+    "Target": [
+      {
+        "Type": 2,
+        "DecorateID": 100026
+      },
+      {
+        "Type": 3,
+        "DecorateID": 101022
+      }
+    ],
+    "FieldView": 35,
+    "TaskPos": "-3.6/5.43/-1.32"
+  },
+  "1096": {
+    "ID": 1096,
+    "Name": "TaskName_096",
+    "Namekan": "清洁地毯",
+    "CroupName": "车库",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_96",
+    "TaskIcon": "DecorateIcon_39",
+    "level": 1,
+    "PreTask": "1095",
+    "CompleteOpen": "1097",
+    "CompleteGold": 340,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 7021,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 75
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101023,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 101023
+      }
+    ],
+    "FieldView": 35,
+    "TaskPos": "-3.6/5.43/-1.32"
+  },
+  "1097": {
+    "ID": 1097,
+    "Name": "TaskName_097",
+    "Namekan": "清洁墙面",
+    "CroupName": "车库",
+    "Feeling": "manman_normal",
+    "Dialog": "TaskDialog_97",
+    "TaskIcon": "DecorateIcon_17",
+    "level": 1,
+    "PreTask": "1096",
+    "CompleteOpen": "1098",
+    "CompleteGold": 400,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 7031,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 45
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101026,
+    "Target": [
+      {
+        "Type": 2,
+        "DecorateID": 100034
+      },
+      {
+        "Type": 3,
+        "DecorateID": 101026
+      }
+    ],
+    "FieldView": 35,
+    "TaskPos": "-3.6/5.43/-1.32"
+  },
+  "1098": {
+    "ID": 1098,
+    "Name": "TaskName_098",
+    "Namekan": "栽种绿植",
+    "CroupName": "车库",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_98",
+    "TaskIcon": "DecorateIcon_11",
+    "level": 1,
+    "PreTask": "1097",
+    "CompleteOpen": "1099",
+    "CompleteGold": 460,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 7041,
+    "PlotID2": 7040,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 90
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101027,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 101027
+      }
+    ],
+    "FieldView": 35,
+    "TaskPos": "-6.1/5.43/-1.32"
+  },
+  "1099": {
+    "ID": 1099,
+    "Name": "TaskName_099",
+    "Namekan": "汽车美容",
+    "CroupName": "车库",
+    "Feeling": "manman_normal",
+    "Dialog": "TaskDialog_99",
+    "TaskIcon": "DecorateIcon_54",
+    "level": 1,
+    "PreTask": "1098",
+    "CompleteOpen": "1100",
+    "CompleteGold": 420,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 7051,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 50
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101021,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 100025
+      },
+      {
+        "Type": 3,
+        "DecorateID": 101021
+      }
+    ],
+    "FieldView": 35,
+    "TaskPos": "-3.37/5.43/-1.32"
+  },
+  "1100": {
+    "ID": 1100,
+    "Name": "TaskName_100",
+    "Namekan": "修缮柱子",
+    "CroupName": "车库",
+    "Feeling": "manman_normal",
+    "Dialog": "TaskDialog_100",
+    "TaskIcon": "DecorateIcon_44",
+    "level": 1,
+    "PreTask": "1099",
+    "CompleteOpen": "1101",
+    "CompleteGold": 450,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 7061,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 50
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101030,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 101030
+      }
+    ],
+    "FieldView": 35,
+    "TaskPos": "-4.57/5.43/-1.32"
+  },
+  "1101": {
+    "ID": 1101,
+    "Name": "TaskName_101",
+    "Namekan": "更换边桌",
+    "CroupName": "车库",
+    "Feeling": "manman_normal",
+    "Dialog": "TaskDialog_101",
+    "TaskIcon": "DecorateIcon_9",
+    "level": 1,
+    "PreTask": "1100",
+    "CompleteOpen": "1102",
+    "CompleteGold": 500,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 7071,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 135
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101028,
+    "Target": [
+      {
+        "Type": 2,
+        "DecorateID": 100037
+      },
+      {
+        "Type": 3,
+        "DecorateID": 101028
+      }
+    ],
+    "FieldView": 35,
+    "TaskPos": "-2.4/5.43/-1.32"
+  },
+  "1102": {
+    "ID": 1102,
+    "Name": "TaskName_102",
+    "Namekan": "栽种绿植",
+    "CroupName": "车库",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_102",
+    "TaskIcon": "DecorateIcon_11",
+    "level": 1,
+    "PreTask": "1101",
+    "CompleteOpen": "1103",
+    "CompleteGold": 460,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 7081,
+    "PlotID2": 7080,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 50
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101029,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 101029
+      }
+    ],
+    "FieldView": 35,
+    "TaskPos": "-2.5/5.43/-1.32"
+  },
+  "1103": {
+    "ID": 1103,
+    "Name": "TaskName_103",
+    "Namekan": "修复工作台",
+    "CroupName": "车库",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_103",
+    "TaskIcon": "DecorateIcon_9",
+    "level": 1,
+    "PreTask": "1102",
+    "CompleteOpen": "1104",
+    "CompleteGold": 520,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 7091,
+    "PlotID2": 7090,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 60
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101024,
+    "Target": [
+      {
+        "Type": 2,
+        "DecorateID": 100030
+      },
+      {
+        "Type": 3,
+        "DecorateID": 101024
+      }
+    ],
+    "FieldView": 35,
+    "TaskPos": "-3/5.43/-1.32"
+  },
+  "1104": {
+    "ID": 1104,
+    "Name": "TaskName_104",
+    "Namekan": "修复储物柜",
+    "CroupName": "车库",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_104",
+    "TaskIcon": "DecorateIcon_25",
+    "level": 1,
+    "PreTask": "1103",
+    "CompleteOpen": "1105",
+    "CompleteGold": 600,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 7101,
+    "PlotID2": 7100,
+    "PlotID3": 8001,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 180
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 101025,
+    "Target": [
+      {
+        "Type": 2,
+        "DecorateID": 100032
+      },
+      {
+        "Type": 3,
+        "DecorateID": 101025
+      }
+    ],
+    "FieldView": 35,
+    "TaskPos": "-2.2/5.43/-1.32"
+  },
+  "1105": {
+    "ID": 1105,
+    "Name": "TaskName_105",
+    "Namekan": "凳子1",
+    "CroupName": "主楼_8",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_105",
+    "TaskIcon": "DecorateIcon_32",
+    "level": 1,
+    "PreTask": "1104",
+    "CompleteOpen": "1106",
+    "CompleteGold": 540,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 8011,
+    "PlotID2": 8010,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 60
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 210801,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 210801
+      }
+    ],
+    "FieldView": 50,
+    "TaskPos": "200/11/5"
+  },
+  "1106": {
+    "ID": 1106,
+    "Name": "TaskName_106",
+    "Namekan": "凳子2",
+    "CroupName": "主楼_8",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_106",
+    "TaskIcon": "DecorateIcon_32",
+    "level": 1,
+    "PreTask": "1105",
+    "CompleteOpen": "1107",
+    "CompleteGold": 620,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 8021,
+    "PlotID2": 8020,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 70
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 210802,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 210802
+      }
+    ],
+    "FieldView": 50,
+    "TaskPos": "200/11/5"
+  },
+  "1107": {
+    "ID": 1107,
+    "Name": "TaskName_107",
+    "Namekan": "地面",
+    "CroupName": "主楼_8",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_107",
+    "TaskIcon": "DecorateIcon_39",
+    "level": 1,
+    "PreTask": "1106",
+    "CompleteOpen": "1108",
+    "CompleteGold": 700,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 8031,
+    "PlotID2": 8030,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 80
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 210803,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 210803
+      }
+    ],
+    "FieldView": 50,
+    "TaskPos": "200/11/5"
+  },
+  "1108": {
+    "ID": 1108,
+    "Name": "TaskName_108",
+    "Namekan": "花坛1",
+    "CroupName": "主楼_8",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_108",
+    "TaskIcon": "DecorateIcon_11",
+    "level": 1,
+    "PreTask": "1107",
+    "CompleteOpen": "1109",
+    "CompleteGold": 800,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 8041,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 245
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 210804,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 210804
+      }
+    ],
+    "FieldView": 50,
+    "TaskPos": "200/11/5"
+  },
+  "1109": {
+    "ID": 1109,
+    "Name": "TaskName_109",
+    "Namekan": "花坛2",
+    "CroupName": "主楼_8",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_109",
+    "TaskIcon": "DecorateIcon_11",
+    "level": 1,
+    "PreTask": "1108",
+    "CompleteOpen": "1110",
+    "CompleteGold": 4600,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 8051,
+    "PlotID2": 8050,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 4600
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 210805,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 210805
+      }
+    ],
+    "FieldView": 50,
+    "TaskPos": "200/11/5"
+  },
+  "1110": {
+    "ID": 1110,
+    "Name": "TaskName_110",
+    "Namekan": "花坛3",
+    "CroupName": "主楼_8",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_110",
+    "TaskIcon": "DecorateIcon_11",
+    "level": 1,
+    "PreTask": "1109",
+    "CompleteOpen": "1111",
+    "CompleteGold": 5000,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 8061,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 5000
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 210806,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 210806
+      }
+    ],
+    "FieldView": 50,
+    "TaskPos": "200/11/5"
+  },
+  "1111": {
+    "ID": 1111,
+    "Name": "TaskName_111",
+    "Namekan": "花坛4",
+    "CroupName": "主楼_8",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_111",
+    "TaskIcon": "DecorateIcon_11",
+    "level": 1,
+    "PreTask": "1110",
+    "CompleteOpen": "1112",
+    "CompleteGold": 6400,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 8071,
+    "PlotID2": 8070,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 6400
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 210807,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 210807
+      }
+    ],
+    "FieldView": 50,
+    "TaskPos": "200/11/5"
+  },
+  "1112": {
+    "ID": 1112,
+    "Name": "TaskName_112",
+    "Namekan": "花坛5",
+    "CroupName": "主楼_8",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_112",
+    "TaskIcon": "DecorateIcon_11",
+    "level": 1,
+    "PreTask": "1111",
+    "CompleteOpen": "1113",
+    "CompleteGold": 3200,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 8081,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 3200
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 210808,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 210808
+      }
+    ],
+    "FieldView": 50,
+    "TaskPos": "200/11/5"
+  },
+  "1113": {
+    "ID": 1113,
+    "Name": "TaskName_113",
+    "Namekan": "花坛6",
+    "CroupName": "主楼_8",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_113",
+    "TaskIcon": "DecorateIcon_11",
+    "level": 1,
+    "PreTask": "1112",
+    "CompleteOpen": "1114",
+    "CompleteGold": 3200,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 8091,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 3200
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 210809,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 210809
+      }
+    ],
+    "FieldView": 50,
+    "TaskPos": "200/11/5"
+  },
+  "1114": {
+    "ID": 1114,
+    "Name": "TaskName_114",
+    "Namekan": "楼梯",
+    "CroupName": "主楼_8",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_114",
+    "TaskIcon": "DecorateIcon_44",
+    "level": 1,
+    "PreTask": "1113",
+    "CompleteOpen": "1115",
+    "CompleteGold": 4800,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 8101,
+    "PlotID2": 8100,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 4800
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 210810,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 210810
+      }
+    ],
+    "FieldView": 50,
+    "TaskPos": "200/11/5"
+  },
+  "1115": {
+    "ID": 1115,
+    "Name": "TaskName_115",
+    "Namekan": "路灯1",
+    "CroupName": "主楼_8",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_115",
+    "TaskIcon": "DecorateIcon_73",
+    "level": 1,
+    "PreTask": "1114",
+    "CompleteOpen": "1116",
+    "CompleteGold": 3600,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 8111,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 3600
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 210811,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 210811
+      }
+    ],
+    "FieldView": 50,
+    "TaskPos": "200/11/5"
+  },
+  "1116": {
+    "ID": 1116,
+    "Name": "TaskName_116",
+    "Namekan": "路灯2",
+    "CroupName": "主楼_8",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_116",
+    "TaskIcon": "DecorateIcon_16",
+    "level": 1,
+    "PreTask": "1115",
+    "CompleteOpen": "1117",
+    "CompleteGold": 3600,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 8121,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 3600
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 210812,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 210812
+      }
+    ],
+    "FieldView": 50,
+    "TaskPos": "200/11/5"
+  },
+  "1117": {
+    "ID": 1117,
+    "Name": "TaskName_117",
+    "Namekan": "装饰",
+    "CroupName": "主楼_8",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_117",
+    "TaskIcon": "DecorateIcon_54",
+    "level": 1,
+    "PreTask": "1116",
+    "CompleteOpen": "1118",
+    "CompleteGold": 6400,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 8131,
+    "PlotID2": 8130,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 6400
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 210813,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 210813
+      }
+    ],
+    "FieldView": 50,
+    "TaskPos": "200/11/5"
+  },
+  "1118": {
+    "ID": 1118,
+    "Name": "TaskName_118",
+    "Namekan": "主楼",
+    "CroupName": "主楼_8",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_118",
+    "TaskIcon": "DecorateIcon_54",
+    "level": 1,
+    "PreTask": "1117",
+    "CompleteOpen": "1119",
+    "CompleteGold": 12800,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 8141,
+    "PlotID2": 8140,
+    "PlotID3": 9001,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 12800
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 210814,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 210814
+      }
+    ],
+    "FieldView": 50,
+    "TaskPos": "200/11/5"
+  },
+  "1119": {
+    "ID": 1119,
+    "Name": "TaskName_119",
+    "Namekan": "草坪1",
+    "CroupName": "中庭_9",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_119",
+    "TaskIcon": "DecorateIcon_54",
+    "level": 1,
+    "PreTask": "1118",
+    "CompleteOpen": "1120",
+    "CompleteGold": 6200,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 9011,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 6200
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 210901,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 210901
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "193.6/8.58/-19.96"
+  },
+  "1120": {
+    "ID": 1120,
+    "Name": "TaskName_120",
+    "Namekan": "草坪2",
+    "CroupName": "中庭_9",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_120",
+    "TaskIcon": "DecorateIcon_27",
+    "level": 1,
+    "PreTask": "1119",
+    "CompleteOpen": "1121",
+    "CompleteGold": 5800,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 9021,
+    "PlotID2": 9020,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 5800
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 210902,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 210902
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "193.88/8.56/-7.7"
+  },
+  "1121": {
+    "ID": 1121,
+    "Name": "TaskName_121",
+    "Namekan": "草坪3",
+    "CroupName": "中庭_9",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_121",
+    "TaskIcon": "DecorateIcon_54",
+    "level": 1,
+    "PreTask": "1120",
+    "CompleteOpen": "1122",
+    "CompleteGold": 6200,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 9031,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 6200
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 210903,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 210903
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "206.62/8.57/-19.72"
+  },
+  "1122": {
+    "ID": 1122,
+    "Name": "TaskName_122",
+    "Namekan": "草坪4",
+    "CroupName": "中庭_9",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_122",
+    "TaskIcon": "DecorateIcon_16",
+    "level": 1,
+    "PreTask": "1121",
+    "CompleteOpen": "1123",
+    "CompleteGold": 5800,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 9041,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 5800
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 210904,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 210904
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "205.94/9.08/-8.48"
+  },
+  "1123": {
+    "ID": 1123,
+    "Name": "TaskName_123",
+    "Namekan": "凳子1",
+    "CroupName": "中庭_9",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_123",
+    "TaskIcon": "DecorateIcon_32",
+    "level": 1,
+    "PreTask": "1122",
+    "CompleteOpen": "1124",
+    "CompleteGold": 5400,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 9051,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 5400
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 210905,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 210905
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "187.03/7.04/-17.85"
+  },
+  "1124": {
+    "ID": 1124,
+    "Name": "TaskName_124",
+    "Namekan": "凳子2",
+    "CroupName": "中庭_9",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_124",
+    "TaskIcon": "DecorateIcon_32",
+    "level": 1,
+    "PreTask": "1123",
+    "CompleteOpen": "1125",
+    "CompleteGold": 4800,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 9061,
+    "PlotID2": 9060,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 4800
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 210906,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 210906
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "187.03/7.04/-3"
+  },
+  "1125": {
+    "ID": 1125,
+    "Name": "TaskName_125",
+    "Namekan": "凳子3",
+    "CroupName": "中庭_9",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_125",
+    "TaskIcon": "DecorateIcon_32",
+    "level": 1,
+    "PreTask": "1124",
+    "CompleteOpen": "1126",
+    "CompleteGold": 5400,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 9071,
+    "PlotID2": 9070,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 5400
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 210907,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 210907
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "212.5/7.04/-17.85"
+  },
+  "1126": {
+    "ID": 1126,
+    "Name": "TaskName_126",
+    "Namekan": "凳子4",
+    "CroupName": "中庭_9",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_126",
+    "TaskIcon": "DecorateIcon_32",
+    "level": 1,
+    "PreTask": "1125",
+    "CompleteOpen": "1127",
+    "CompleteGold": 4800,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 9081,
+    "PlotID2": 9080,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 4800
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 210908,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 210908
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "212.5/7.04/-3"
+  },
+  "1127": {
+    "ID": 1127,
+    "Name": "TaskName_127",
+    "Namekan": "地灯1",
+    "CroupName": "中庭_9",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_127",
+    "TaskIcon": "DecorateIcon_3",
+    "level": 1,
+    "PreTask": "1126",
+    "CompleteOpen": "1128",
+    "CompleteGold": 3200,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 9091,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 3200
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 210909,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 210909
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "191.13/7.67/-19.15"
+  },
+  "1128": {
+    "ID": 1128,
+    "Name": "TaskName_128",
+    "Namekan": "地灯2",
+    "CroupName": "中庭_9",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_128",
+    "TaskIcon": "DecorateIcon_3",
+    "level": 1,
+    "PreTask": "1127",
+    "CompleteOpen": "1129",
+    "CompleteGold": 3200,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 9101,
+    "PlotID2": 9100,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 3200
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 210910,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 210910
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "191.13/7.67/-1.57"
+  },
+  "1129": {
+    "ID": 1129,
+    "Name": "TaskName_129",
+    "Namekan": "地灯3",
+    "CroupName": "中庭_9",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_129",
+    "TaskIcon": "DecorateIcon_3",
+    "level": 1,
+    "PreTask": "1128",
+    "CompleteOpen": "1130",
+    "CompleteGold": 3200,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 9111,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 3200
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 210911,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 210911
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "208.69/7.67/-19.15"
+  },
+  "1130": {
+    "ID": 1130,
+    "Name": "TaskName_130",
+    "Namekan": "地灯4",
+    "CroupName": "中庭_9",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_130",
+    "TaskIcon": "DecorateIcon_3",
+    "level": 1,
+    "PreTask": "1129",
+    "CompleteOpen": "1131",
+    "CompleteGold": 3200,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 9121,
+    "PlotID2": 9120,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 3200
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 210912,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 210912
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "208.69/7.67/-1.57"
+  },
+  "1131": {
+    "ID": 1131,
+    "Name": "TaskName_131",
+    "Namekan": "地面1",
+    "CroupName": "中庭_9",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_131",
+    "TaskIcon": "DecorateIcon_39",
+    "level": 1,
+    "PreTask": "1130",
+    "CompleteOpen": "1132",
+    "CompleteGold": 7200,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 9131,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 7200
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 210913,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 210913
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "200/10.27/-21.27"
+  },
+  "1132": {
+    "ID": 1132,
+    "Name": "TaskName_132",
+    "Namekan": "地面2",
+    "CroupName": "中庭_9",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_132",
+    "TaskIcon": "DecorateIcon_39",
+    "level": 1,
+    "PreTask": "1131",
+    "CompleteOpen": "1133",
+    "CompleteGold": 5400,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 9141,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 5400
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 210914,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 210914
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "200/8.46/-15.14"
+  },
+  "1133": {
+    "ID": 1133,
+    "Name": "TaskName_133",
+    "Namekan": "楼梯",
+    "CroupName": "中庭_9",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_133",
+    "TaskIcon": "DecorateIcon_16",
+    "level": 1,
+    "PreTask": "1132",
+    "CompleteOpen": "1134",
+    "CompleteGold": 4400,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 9151,
+    "PlotID2": 9150,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 4400
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 210915,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 210915
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "200/7.5/-15.86"
+  },
+  "1134": {
+    "ID": 1134,
+    "Name": "TaskName_134",
+    "Namekan": "路灯1",
+    "CroupName": "中庭_9",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_134",
+    "TaskIcon": "DecorateIcon_54",
+    "level": 1,
+    "PreTask": "1133",
+    "CompleteOpen": "1135",
+    "CompleteGold": 3600,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 9161,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 3600
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 210916,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 210916
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "186.91/8.58/-11.29"
+  },
+  "1135": {
+    "ID": 1135,
+    "Name": "TaskName_135",
+    "Namekan": "路灯2",
+    "CroupName": "中庭_9",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_135",
+    "TaskIcon": "DecorateIcon_54",
+    "level": 1,
+    "PreTask": "1134",
+    "CompleteOpen": "1136",
+    "CompleteGold": 3600,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 9171,
+    "PlotID2": 9170,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 3600
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 210917,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 210917
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "186.91/8.58/-6.44"
+  },
+  "1136": {
+    "ID": 1136,
+    "Name": "TaskName_136",
+    "Namekan": "路灯3",
+    "CroupName": "中庭_9",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_136",
+    "TaskIcon": "DecorateIcon_25",
+    "level": 1,
+    "PreTask": "1135",
+    "CompleteOpen": "1137",
+    "CompleteGold": 3600,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 9181,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 3600
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 210918,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 210918
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "212.91/8.58/-11.29"
+  },
+  "1137": {
+    "ID": 1137,
+    "Name": "TaskName_137",
+    "Namekan": "路灯4",
+    "CroupName": "中庭_9",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_137",
+    "TaskIcon": "DecorateIcon_16",
+    "level": 1,
+    "PreTask": "1136",
+    "CompleteOpen": "1138",
+    "CompleteGold": 3600,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 9191,
+    "PlotID2": 9190,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 3600
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 210919,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 210919
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "212.91/8.58/-6.44"
+  },
+  "1138": {
+    "ID": 1138,
+    "Name": "TaskName_138",
+    "Namekan": "喷泉1",
+    "CroupName": "中庭_9",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_138",
+    "TaskIcon": "DecorateIcon_44",
+    "level": 1,
+    "PreTask": "1137",
+    "CompleteOpen": "1139",
+    "CompleteGold": 3200,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 9201,
+    "PlotID2": 9200,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 3200
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 210920,
+    "Target": [
+      {
+        "Type": 1,
+        "DecorateID": 210920
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "194.64/7.51/-15.07"
+  },
+  "1139": {
+    "ID": 1139,
+    "Name": "TaskName_139",
+    "Namekan": "喷泉2",
+    "CroupName": "中庭_9",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_139",
+    "TaskIcon": "DecorateIcon_54",
+    "level": 1,
+    "PreTask": "1138",
+    "CompleteOpen": "1140",
+    "CompleteGold": 3200,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 9211,
+    "PlotID2": 9210,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 3200
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 210921,
+    "Target": [
+      {
+        "Type": 1,
+        "DecorateID": 210921
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "194.64/7.51/-4.34"
+  },
+  "1140": {
+    "ID": 1140,
+    "Name": "TaskName_140",
+    "Namekan": "喷泉3",
+    "CroupName": "中庭_9",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_140",
+    "TaskIcon": "DecorateIcon_73",
+    "level": 1,
+    "PreTask": "1139",
+    "CompleteOpen": "1141",
+    "CompleteGold": 3200,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 9221,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 3200
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 210922,
+    "Target": [
+      {
+        "Type": 1,
+        "DecorateID": 210922
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "205.18/7.51/-15.07"
+  },
+  "1141": {
+    "ID": 1141,
+    "Name": "TaskName_141",
+    "Namekan": "喷泉4",
+    "CroupName": "中庭_9",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_141",
+    "TaskIcon": "DecorateIcon_54",
+    "level": 1,
+    "PreTask": "1140",
+    "CompleteOpen": "1142",
+    "CompleteGold": 3200,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 9231,
+    "PlotID2": 9230,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 3200
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 210923,
+    "Target": [
+      {
+        "Type": 1,
+        "DecorateID": 210923
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "205.18/7.51/-4.34"
+  },
+  "1142": {
+    "ID": 1142,
+    "Name": "TaskName_142",
+    "Namekan": "墙1",
+    "CroupName": "中庭_9",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_142",
+    "TaskIcon": "DecorateIcon_27",
+    "level": 1,
+    "PreTask": "1141",
+    "CompleteOpen": "1143",
+    "CompleteGold": 6400,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 9241,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 6400
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 210924,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 210924
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "185.66/7/-19"
+  },
+  "1143": {
+    "ID": 1143,
+    "Name": "TaskName_143",
+    "Namekan": "墙2",
+    "CroupName": "中庭_9",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_143",
+    "TaskIcon": "DecorateIcon_44",
+    "level": 1,
+    "PreTask": "1142",
+    "CompleteOpen": "1144",
+    "CompleteGold": 6400,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 9251,
+    "PlotID2": 9250,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 6400
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 210925,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 210925
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "185.66/7/-3.03"
+  },
+  "1144": {
+    "ID": 1144,
+    "Name": "TaskName_144",
+    "Namekan": "墙3",
+    "CroupName": "中庭_9",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_144",
+    "TaskIcon": "DecorateIcon_17",
+    "level": 1,
+    "PreTask": "1143",
+    "CompleteOpen": "1145",
+    "CompleteGold": 6400,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 9261,
+    "PlotID2": 9260,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 6400
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 210926,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 210926
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "214.16/7/-19"
+  },
+  "1145": {
+    "ID": 1145,
+    "Name": "TaskName_145",
+    "Namekan": "墙4",
+    "CroupName": "中庭_9",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_145",
+    "TaskIcon": "DecorateIcon_27",
+    "level": 1,
+    "PreTask": "1144",
+    "CompleteOpen": "1146",
+    "CompleteGold": 6400,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 9271,
+    "PlotID2": 9270,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 6400
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 210927,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 210927
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "214.16/7/-3.03"
+  },
+  "1146": {
+    "ID": 1146,
+    "Name": "TaskName_146",
+    "Namekan": "树1",
+    "CroupName": "中庭_9",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_146",
+    "TaskIcon": "DecorateIcon_44",
+    "level": 1,
+    "PreTask": "1145",
+    "CompleteOpen": "1147",
+    "CompleteGold": 4800,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 9281,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 4800
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 210928,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 210928
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "186.81/8.38/-22.44"
+  },
+  "1147": {
+    "ID": 1147,
+    "Name": "TaskName_147",
+    "Namekan": "树2",
+    "CroupName": "中庭_9",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_147",
+    "TaskIcon": "DecorateIcon_25",
+    "level": 1,
+    "PreTask": "1146",
+    "CompleteOpen": "1148",
+    "CompleteGold": 4800,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 9291,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 4800
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 210929,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 210929
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "186.81/8.38/-6.75"
+  },
+  "1148": {
+    "ID": 1148,
+    "Name": "TaskName_148",
+    "Namekan": "树3",
+    "CroupName": "中庭_9",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_148",
+    "TaskIcon": "DecorateIcon_25",
+    "level": 1,
+    "PreTask": "1147",
+    "CompleteOpen": "1149",
+    "CompleteGold": 4800,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 9301,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 4800
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 210930,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 210930
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "213.01/8.38/-22.44"
+  },
+  "1149": {
+    "ID": 1149,
+    "Name": "TaskName_149",
+    "Namekan": "树4",
+    "CroupName": "中庭_9",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_149",
+    "TaskIcon": "DecorateIcon_73",
+    "level": 1,
+    "PreTask": "1148",
+    "CompleteOpen": "1150",
+    "CompleteGold": 4800,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 9311,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 4800
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 210931,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 210931
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "213.01/8.38/-6.75"
+  },
+  "1150": {
+    "ID": 1150,
+    "Name": "TaskName_150",
+    "Namekan": "喷泉5",
+    "CroupName": "中庭_9",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_150",
+    "TaskIcon": "DecorateIcon_44",
+    "level": 1,
+    "PreTask": "1149",
+    "CompleteOpen": "1151/2014",
+    "CompleteGold": 8800,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 9321,
+    "PlotID2": 9320,
+    "PlotID3": 10001,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 8800
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 210932,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 210932
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "200/8.38/-11.22"
+  },
+  "1151": {
+    "ID": 1151,
+    "Name": "TaskName_151",
+    "Namekan": "地灯",
+    "CroupName": "前庭_10",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_151",
+    "TaskIcon": "DecorateIcon_44",
+    "level": 1,
+    "PreTask": "1150",
+    "CompleteOpen": "1152",
+    "CompleteGold": 6000,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 10011,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 6000
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 211001,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 211001
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "200/6.58/-30.58"
+  },
+  "1152": {
+    "ID": 1152,
+    "Name": "TaskName_152",
+    "Namekan": "地面",
+    "CroupName": "前庭_10",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_152",
+    "TaskIcon": "DecorateIcon_39",
+    "level": 1,
+    "PreTask": "1151",
+    "CompleteOpen": "1153",
+    "CompleteGold": 7600,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 10021,
+    "PlotID2": 10020,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 7600
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 211002,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 211002
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "200/6.58/-33.28"
+  },
+  "1153": {
+    "ID": 1153,
+    "Name": "TaskName_153",
+    "Namekan": "花坛",
+    "CroupName": "前庭_10",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_153",
+    "TaskIcon": "DecorateIcon_11",
+    "level": 1,
+    "PreTask": "1152",
+    "CompleteOpen": "1154",
+    "CompleteGold": 5400,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 10031,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 5400
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 211003,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 211003
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "200/6.58/-35.28"
+  },
+  "1154": {
+    "ID": 1154,
+    "Name": "TaskName_154",
+    "Namekan": "楼梯1",
+    "CroupName": "前庭_10",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_154",
+    "TaskIcon": "DecorateIcon_73",
+    "level": 1,
+    "PreTask": "1153",
+    "CompleteOpen": "1155",
+    "CompleteGold": 4200,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 10041,
+    "PlotID2": 10040,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 4200
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 211004,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 211004
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "193.46/6.78/-24.26"
+  },
+  "1155": {
+    "ID": 1155,
+    "Name": "TaskName_155",
+    "Namekan": "楼梯2",
+    "CroupName": "前庭_10",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_155",
+    "TaskIcon": "DecorateIcon_54",
+    "level": 1,
+    "PreTask": "1154",
+    "CompleteOpen": "1156",
+    "CompleteGold": 4200,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 10051,
+    "PlotID2": 10050,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 4200
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 211005,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 211005
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "206.54/6.78/-24.26"
+  },
+  "1156": {
+    "ID": 1156,
+    "Name": "TaskName_156",
+    "Namekan": "路灯1",
+    "CroupName": "前庭_10",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_156",
+    "TaskIcon": "DecorateIcon_17",
+    "level": 1,
+    "PreTask": "1155",
+    "CompleteOpen": "1157",
+    "CompleteGold": 3600,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 10061,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 3600
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 211006,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 211006
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "195.97/6.78/-36.5"
+  },
+  "1157": {
+    "ID": 1157,
+    "Name": "TaskName_157",
+    "Namekan": "路灯2",
+    "CroupName": "前庭_10",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_157",
+    "TaskIcon": "DecorateIcon_25",
+    "level": 1,
+    "PreTask": "1156",
+    "CompleteOpen": "1158",
+    "CompleteGold": 3600,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 10071,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 3600
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 211007,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 211007
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "204.03/6.78/-36.5"
+  },
+  "1158": {
+    "ID": 1158,
+    "Name": "TaskName_158",
+    "Namekan": "喷泉",
+    "CroupName": "前庭_10",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_158",
+    "TaskIcon": "DecorateIcon_44",
+    "level": 1,
+    "PreTask": "1157",
+    "CompleteOpen": "1159",
+    "CompleteGold": 8800,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 10081,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 8800
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 211008,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 211008
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "200/7.78/-28.34"
+  },
+  "1159": {
+    "ID": 1159,
+    "Name": "TaskName_159",
+    "Namekan": "步道",
+    "CroupName": "前庭_10",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_159",
+    "TaskIcon": "DecorateIcon_16",
+    "level": 1,
+    "PreTask": "1158",
+    "CompleteOpen": "1160",
+    "CompleteGold": 6400,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 10091,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 6400
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 211009,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 211009
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "200/6.78/-30.23"
+  },
+  "1160": {
+    "ID": 1160,
+    "Name": "TaskName_160",
+    "Namekan": "墙1",
+    "CroupName": "前庭_10",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_160",
+    "TaskIcon": "DecorateIcon_17",
+    "level": 1,
+    "PreTask": "1159",
+    "CompleteOpen": "1161",
+    "CompleteGold": 6800,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 10101,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 6800
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 211010,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 211010
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "190.27/6.78/-34.7"
+  },
+  "1161": {
+    "ID": 1161,
+    "Name": "TaskName_161",
+    "Namekan": "墙2",
+    "CroupName": "前庭_10",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_161",
+    "TaskIcon": "DecorateIcon_25",
+    "level": 1,
+    "PreTask": "1160",
+    "CompleteOpen": "1162",
+    "CompleteGold": 7200,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 10111,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 7200
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 211011,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 211011
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "209.73/6.78/-34.7"
+  },
+  "1162": {
+    "ID": 1162,
+    "Name": "TaskName_162",
+    "Namekan": "树1",
+    "CroupName": "前庭_10",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_162",
+    "TaskIcon": "DecorateIcon_16",
+    "level": 1,
+    "PreTask": "1161",
+    "CompleteOpen": "1163",
+    "CompleteGold": 4800,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 10121,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 4800
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 211012,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 211012
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "187.56/7.8/-33.63"
+  },
+  "1163": {
+    "ID": 1163,
+    "Name": "TaskName_163",
+    "Namekan": "树2",
+    "CroupName": "前庭_10",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_163",
+    "TaskIcon": "DecorateIcon_16",
+    "level": 1,
+    "PreTask": "1162",
+    "CompleteOpen": "1164",
+    "CompleteGold": 4800,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 10131,
+    "PlotID2": 10130,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 4800
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 211013,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 211013
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "187.56/7.8/-25.47"
+  },
+  "1164": {
+    "ID": 1164,
+    "Name": "TaskName_164",
+    "Namekan": "树3",
+    "CroupName": "前庭_10",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_164",
+    "TaskIcon": "DecorateIcon_17",
+    "level": 1,
+    "PreTask": "1163",
+    "CompleteOpen": "1165",
+    "CompleteGold": 4800,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 10141,
+    "PlotID2": 10140,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 4800
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 211014,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 211014
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "212.44/7.8/-33.63"
+  },
+  "1165": {
+    "ID": 1165,
+    "Name": "TaskName_165",
+    "Namekan": "树4",
+    "CroupName": "前庭_10",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_165",
+    "TaskIcon": "DecorateIcon_25",
+    "level": 1,
+    "PreTask": "1164",
+    "CompleteOpen": "1166",
+    "CompleteGold": 4800,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 10151,
+    "PlotID2": 10150,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 4800
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 211015,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 211015
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "212.44/7.8/-25.47"
+  },
+  "1166": {
+    "ID": 1166,
+    "Name": "TaskName_166",
+    "Namekan": "鱼塘1",
+    "CroupName": "前庭_10",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_166",
+    "TaskIcon": "DecorateIcon_54",
+    "level": 1,
+    "PreTask": "1165",
+    "CompleteOpen": "1167",
+    "CompleteGold": 8000,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 10161,
+    "PlotID2": 10160,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 8000
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 211016,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 211016
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "190.32/6.42/-28.89"
+  },
+  "1167": {
+    "ID": 1167,
+    "Name": "TaskName_167",
+    "Namekan": "鱼塘2",
+    "CroupName": "前庭_10",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_167",
+    "TaskIcon": "DecorateIcon_73",
+    "level": 1,
+    "PreTask": "1166",
+    "CompleteOpen": "1168/2015",
+    "CompleteGold": 8000,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 10171,
+    "PlotID2": 10170,
+    "PlotID3": 11001,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 8000
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 211017,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 211017
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "209.68/6.42/-28.89"
+  },
+  "1168": {
+    "ID": 1168,
+    "Name": "TaskName_168",
+    "Namekan": "厨房",
+    "CroupName": "野餐_11",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_168",
+    "TaskIcon": "DecorateIcon_73",
+    "level": 1,
+    "PreTask": "1167",
+    "CompleteOpen": "1169",
+    "CompleteGold": 7400,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 11011,
+    "PlotID2": 11010,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 7400
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 211101,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 211101
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "178.72/7/-0.77"
+  },
+  "1169": {
+    "ID": 1169,
+    "Name": "TaskName_169",
+    "Namekan": "地面",
+    "CroupName": "野餐_11",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_169",
+    "TaskIcon": "DecorateIcon_39",
+    "level": 1,
+    "PreTask": "1168",
+    "CompleteOpen": "1170",
+    "CompleteGold": 6000,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 11021,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 6000
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 211102,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 211102
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "179.32/7/-6.8"
+  },
+  "1170": {
+    "ID": 1170,
+    "Name": "TaskName_170",
+    "Namekan": "花坛",
+    "CroupName": "野餐_11",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_170",
+    "TaskIcon": "DecorateIcon_11",
+    "level": 1,
+    "PreTask": "1169",
+    "CompleteOpen": "1171",
+    "CompleteGold": 6400,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 11031,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 6400
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 211103,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 211103
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "172.34/7/-12.26"
+  },
+  "1171": {
+    "ID": 1171,
+    "Name": "TaskName_171",
+    "Namekan": "楼梯",
+    "CroupName": "野餐_11",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_171",
+    "TaskIcon": "DecorateIcon_27",
+    "level": 1,
+    "PreTask": "1170",
+    "CompleteOpen": "1172",
+    "CompleteGold": 4200,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 11041,
+    "PlotID2": 11040,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 4200
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 211104,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 211104
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "183.95/7/-8.34"
+  },
+  "1172": {
+    "ID": 1172,
+    "Name": "TaskName_172",
+    "Namekan": "墙",
+    "CroupName": "野餐_11",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_172",
+    "TaskIcon": "DecorateIcon_17",
+    "level": 1,
+    "PreTask": "1171",
+    "CompleteOpen": "1173",
+    "CompleteGold": 6200,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 11051,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 6200
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 211105,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 211105
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "171.12/8/-2.96"
+  },
+  "1173": {
+    "ID": 1173,
+    "Name": "TaskName_173",
+    "Namekan": "烧烤",
+    "CroupName": "野餐_11",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_173",
+    "TaskIcon": "DecorateIcon_27",
+    "level": 1,
+    "PreTask": "1172",
+    "CompleteOpen": "1174",
+    "CompleteGold": 2400,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 11061,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 2400
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 211106,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 211106
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "174.8/7/-6.8"
+  },
+  "1174": {
+    "ID": 1174,
+    "Name": "TaskName_174",
+    "Namekan": "亭子",
+    "CroupName": "野餐_11",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_174",
+    "TaskIcon": "DecorateIcon_17",
+    "level": 1,
+    "PreTask": "1173",
+    "CompleteOpen": "1175",
+    "CompleteGold": 6600,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 11071,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 6600
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 211107,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 211107
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "182.31/7.35/-5.24"
+  },
+  "1175": {
+    "ID": 1175,
+    "Name": "TaskName_175",
+    "Namekan": "装饰",
+    "CroupName": "野餐_11",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_175",
+    "TaskIcon": "DecorateIcon_44",
+    "level": 1,
+    "PreTask": "1174",
+    "CompleteOpen": "1176",
+    "CompleteGold": 6400,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 11081,
+    "PlotID2": 11080,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 6400
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 211108,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 211108
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "176.03/7/-11.44"
+  },
+  "1176": {
+    "ID": 1176,
+    "Name": "TaskName_176",
+    "Namekan": "沙发",
+    "CroupName": "野餐_11",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_176",
+    "TaskIcon": "DecorateIcon_47",
+    "level": 1,
+    "PreTask": "1175",
+    "CompleteOpen": "1177",
+    "CompleteGold": 5800,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 11091,
+    "PlotID2": 0,
+    "PlotID3": 12001,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 5800
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 211109,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 211109
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "176/7/-4.59"
+  },
+  "1177": {
+    "ID": 1177,
+    "Name": "TaskName_177",
+    "Namekan": "地面",
+    "CroupName": "观水_12",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_177",
+    "TaskIcon": "DecorateIcon_39",
+    "level": 1,
+    "PreTask": "1176",
+    "CompleteOpen": "1178",
+    "CompleteGold": 7000,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 12011,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 7000
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 211201,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 211201
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "181.46/5.81/-23.24"
+  },
+  "1178": {
+    "ID": 1178,
+    "Name": "TaskName_178",
+    "Namekan": "地灯1",
+    "CroupName": "观水_12",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_178",
+    "TaskIcon": "DecorateIcon_25",
+    "level": 1,
+    "PreTask": "1177",
+    "CompleteOpen": "1179",
+    "CompleteGold": 5200,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 12021,
+    "PlotID2": 12020,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 5200
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 211202,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 211202
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "180.18/6.35/-20.85"
+  },
+  "1179": {
+    "ID": 1179,
+    "Name": "TaskName_179",
+    "Namekan": "地灯2",
+    "CroupName": "观水_12",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_179",
+    "TaskIcon": "DecorateIcon_73",
+    "level": 1,
+    "PreTask": "1178",
+    "CompleteOpen": "1180",
+    "CompleteGold": 5200,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 12031,
+    "PlotID2": 12030,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 5200
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 211203,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 211203
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "183.55/6.35/-26.84"
+  },
+  "1180": {
+    "ID": 1180,
+    "Name": "TaskName_180",
+    "Namekan": "花坛2",
+    "CroupName": "观水_12",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_180",
+    "TaskIcon": "DecorateIcon_11",
+    "level": 1,
+    "PreTask": "1179",
+    "CompleteOpen": "1181",
+    "CompleteGold": 3600,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 12041,
+    "PlotID2": 12040,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 3600
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 211204,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 211204
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "184.05/6.35/-18.86"
+  },
+  "1181": {
+    "ID": 1181,
+    "Name": "TaskName_181",
+    "Namekan": "花坛3",
+    "CroupName": "观水_12",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_181",
+    "TaskIcon": "DecorateIcon_11",
+    "level": 1,
+    "PreTask": "1180",
+    "CompleteOpen": "1182",
+    "CompleteGold": 8800,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 12051,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 8800
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 211205,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 211205
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "177.05/6.35/-32.11"
+  },
+  "1182": {
+    "ID": 1182,
+    "Name": "TaskName_182",
+    "Namekan": "步道",
+    "CroupName": "观水_12",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_182",
+    "TaskIcon": "DecorateIcon_25",
+    "level": 1,
+    "PreTask": "1181",
+    "CompleteOpen": "1183",
+    "CompleteGold": 5400,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 12061,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 5400
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 211206,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 211206
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "179.42/6.35/-15.88"
+  },
+  "1183": {
+    "ID": 1183,
+    "Name": "TaskName_183",
+    "Namekan": "墙",
+    "CroupName": "观水_12",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_183",
+    "TaskIcon": "DecorateIcon_17",
+    "level": 1,
+    "PreTask": "1182",
+    "CompleteOpen": "1184",
+    "CompleteGold": 6800,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 12071,
+    "PlotID2": 12070,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 6800
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 211207,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 211207
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "176.72/7.92/-21.92"
+  },
+  "1184": {
+    "ID": 1184,
+    "Name": "TaskName_184",
+    "Namekan": "沙发",
+    "CroupName": "观水_12",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_184",
+    "TaskIcon": "DecorateIcon_47",
+    "level": 1,
+    "PreTask": "1183",
+    "CompleteOpen": "1185",
+    "CompleteGold": 7200,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 12081,
+    "PlotID2": 12080,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 7200
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 211208,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 211208
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "175.15/5.88/-21.59"
+  },
+  "1185": {
+    "ID": 1185,
+    "Name": "TaskName_185",
+    "Namekan": "床",
+    "CroupName": "观水_12",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_185",
+    "TaskIcon": "DecorateIcon_27",
+    "level": 1,
+    "PreTask": "1184",
+    "CompleteOpen": "1186",
+    "CompleteGold": 4600,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 12091,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 4600
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 211209,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 211209
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "182.98/6.35/-24.48"
+  },
+  "1186": {
+    "ID": 1186,
+    "Name": "TaskName_186",
+    "Namekan": "装饰",
+    "CroupName": "观水_12",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_186",
+    "TaskIcon": "DecorateIcon_16",
+    "level": 1,
+    "PreTask": "1185",
+    "CompleteOpen": "1187",
+    "CompleteGold": 5800,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 12101,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 5800
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 211210,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 211210
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "181.45/6.35/-29.81"
+  },
+  "1187": {
+    "ID": 1187,
+    "Name": "TaskName_187",
+    "Namekan": "植物",
+    "CroupName": "观水_12",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_187",
+    "TaskIcon": "DecorateIcon_25",
+    "level": 1,
+    "PreTask": "1186",
+    "CompleteOpen": "1188/2016",
+    "CompleteGold": 6400,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 12111,
+    "PlotID2": 12110,
+    "PlotID3": 13001,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 6400
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 211211,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 211211
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "177/6.41/-29.59"
+  },
+  "1188": {
+    "ID": 1188,
+    "Name": "TaskName_188",
+    "Namekan": "床",
+    "CroupName": "泳池_13",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_188",
+    "TaskIcon": "DecorateIcon_27",
+    "level": 1,
+    "PreTask": "1187",
+    "CompleteOpen": "1189",
+    "CompleteGold": 5600,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 13011,
+    "PlotID2": 13010,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 5600
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 211301,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 211301
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "216.64/8.5/7.66"
+  },
+  "1189": {
+    "ID": 1189,
+    "Name": "TaskName_189",
+    "Namekan": "地面",
+    "CroupName": "泳池_13",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_189",
+    "TaskIcon": "DecorateIcon_39",
+    "level": 1,
+    "PreTask": "1188",
+    "CompleteOpen": "1190",
+    "CompleteGold": 7000,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 13021,
+    "PlotID2": 13020,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 7000
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 211302,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 211302
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "222.68/8.79/-0.61"
+  },
+  "1190": {
+    "ID": 1190,
+    "Name": "TaskName_190",
+    "Namekan": "房子",
+    "CroupName": "泳池_13",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_190",
+    "TaskIcon": "DecorateIcon_44",
+    "level": 1,
+    "PreTask": "1189",
+    "CompleteOpen": "1191",
+    "CompleteGold": 7600,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 13031,
+    "PlotID2": 13030,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 7600
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 211303,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 211303
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "225/8.5/14.66"
+  },
+  "1191": {
+    "ID": 1191,
+    "Name": "TaskName_191",
+    "Namekan": "花坛",
+    "CroupName": "泳池_13",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_191",
+    "TaskIcon": "DecorateIcon_11",
+    "level": 1,
+    "PreTask": "1190",
+    "CompleteOpen": "1192",
+    "CompleteGold": 6600,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 13041,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 6600
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 211304,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 211304
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "214/8.5/7.41"
+  },
+  "1192": {
+    "ID": 1192,
+    "Name": "TaskName_192",
+    "Namekan": "楼梯",
+    "CroupName": "泳池_13",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_192",
+    "TaskIcon": "DecorateIcon_17",
+    "level": 1,
+    "PreTask": "1191",
+    "CompleteOpen": "1193",
+    "CompleteGold": 6400,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 13051,
+    "PlotID2": 13050,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 6400
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 211305,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 211305
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "216.42/7.32/-2.7"
+  },
+  "1193": {
+    "ID": 1193,
+    "Name": "TaskName_193",
+    "Namekan": "沙发",
+    "CroupName": "泳池_13",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_193",
+    "TaskIcon": "DecorateIcon_54",
+    "level": 1,
+    "PreTask": "1192",
+    "CompleteOpen": "1194",
+    "CompleteGold": 6400,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 13061,
+    "PlotID2": 13060,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 6400
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 211307,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 211307
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "227.93/7.79/9.95"
+  },
+  "1194": {
+    "ID": 1194,
+    "Name": "TaskName_194",
+    "Namekan": "树",
+    "CroupName": "泳池_13",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_194",
+    "TaskIcon": "DecorateIcon_47",
+    "level": 1,
+    "PreTask": "1193",
+    "CompleteOpen": "1195",
+    "CompleteGold": 4800,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 13071,
+    "PlotID2": 13070,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 4800
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 211308,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 211308
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "215.37/8.5/16.39"
+  },
+  "1195": {
+    "ID": 1195,
+    "Name": "TaskName_195",
+    "Namekan": "围栏",
+    "CroupName": "泳池_13",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_195",
+    "TaskIcon": "DecorateIcon_25",
+    "level": 1,
+    "PreTask": "1194",
+    "CompleteOpen": "1196",
+    "CompleteGold": 7200,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 13081,
+    "PlotID2": 13080,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 7200
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 211309,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 211309
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "224/9.43/-2.76"
+  },
+  "1196": {
+    "ID": 1196,
+    "Name": "TaskName_196",
+    "Namekan": "温泉",
+    "CroupName": "泳池_13",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_196",
+    "TaskIcon": "DecorateIcon_74",
+    "level": 1,
+    "PreTask": "1195",
+    "CompleteOpen": "1197",
+    "CompleteGold": 6200,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 13091,
+    "PlotID2": 13090,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 6200
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 211310,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 211310
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "224.46/8.5/7.44"
+  },
+  "1197": {
+    "ID": 1197,
+    "Name": "TaskName_197",
+    "Namekan": "泳池",
+    "CroupName": "泳池_13",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_197",
+    "TaskIcon": "DecorateIcon_25",
+    "level": 1,
+    "PreTask": "1196",
+    "CompleteOpen": "1198",
+    "CompleteGold": 9200,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 13101,
+    "PlotID2": 13100,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 9200
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 211311,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 211311
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "224/9.1/-0.93"
+  },
+  "1198": {
+    "ID": 1198,
+    "Name": "TaskName_198",
+    "Namekan": "球",
+    "CroupName": "泳池_13",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_198",
+    "TaskIcon": "DecorateIcon_44",
+    "level": 1,
+    "PreTask": "1197",
+    "CompleteOpen": "1199",
+    "CompleteGold": 2400,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 13111,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 2400
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 211306,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 211306
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "225.45/8.15/5.49"
+  },
+  "1199": {
+    "ID": 1199,
+    "Name": "TaskName_199",
+    "Namekan": "装饰",
+    "CroupName": "泳池_13",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_199",
+    "TaskIcon": "DecorateIcon_73",
+    "level": 1,
+    "PreTask": "1198",
+    "CompleteOpen": "1200/2017",
+    "CompleteGold": 5000,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 13121,
+    "PlotID2": 13120,
+    "PlotID3": 14001,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 5000
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 211312,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 211312
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "229.62/8.5/13.66"
+  },
+  "1200": {
+    "ID": 1200,
+    "Name": "TaskName_200",
+    "Namekan": "地灯",
+    "CroupName": "健身_14",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_200",
+    "TaskIcon": "DecorateIcon_25",
+    "level": 1,
+    "PreTask": "1199",
+    "CompleteOpen": "1201",
+    "CompleteGold": 7200,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 14011,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 7200
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 211401,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 211401
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "216.27/6.36/-6.84"
+  },
+  "1201": {
+    "ID": 1201,
+    "Name": "TaskName_201",
+    "Namekan": "地面",
+    "CroupName": "健身_14",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_201",
+    "TaskIcon": "DecorateIcon_39",
+    "level": 1,
+    "PreTask": "1200",
+    "CompleteOpen": "1202",
+    "CompleteGold": 6400,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 14021,
+    "PlotID2": 14020,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 6400
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 211402,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 211402
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "221/6.36/-8.88"
+  },
+  "1202": {
+    "ID": 1202,
+    "Name": "TaskName_202",
+    "Namekan": "花坛",
+    "CroupName": "健身_14",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_202",
+    "TaskIcon": "DecorateIcon_11",
+    "level": 1,
+    "PreTask": "1201",
+    "CompleteOpen": "1203",
+    "CompleteGold": 6200,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 14031,
+    "PlotID2": 14030,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 6200
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 211403,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 211403
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "227.32/7.16/-9.74"
+  },
+  "1203": {
+    "ID": 1203,
+    "Name": "TaskName_203",
+    "Namekan": "健身房",
+    "CroupName": "健身_14",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_203",
+    "TaskIcon": "DecorateIcon_73",
+    "level": 1,
+    "PreTask": "1202",
+    "CompleteOpen": "1204",
+    "CompleteGold": 7800,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 14041,
+    "PlotID2": 14040,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 7800
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 211404,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 211404
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "220.7/6.35/-6.37"
+  },
+  "1204": {
+    "ID": 1204,
+    "Name": "TaskName_204",
+    "Namekan": "楼梯",
+    "CroupName": "健身_14",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_204",
+    "TaskIcon": "DecorateIcon_73",
+    "level": 1,
+    "PreTask": "1203",
+    "CompleteOpen": "1205",
+    "CompleteGold": 4400,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 14051,
+    "PlotID2": 14050,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 4400
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 211405,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 211405
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "215.78/6.7/-8.2"
+  },
+  "1205": {
+    "ID": 1205,
+    "Name": "TaskName_205",
+    "Namekan": "器材1",
+    "CroupName": "健身_14",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_205",
+    "TaskIcon": "DecorateIcon_73",
+    "level": 1,
+    "PreTask": "1204",
+    "CompleteOpen": "1206",
+    "CompleteGold": 5200,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 14061,
+    "PlotID2": 14060,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 5200
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 211406,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 211406
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "224.57/6.35/-6.51"
+  },
+  "1206": {
+    "ID": 1206,
+    "Name": "TaskName_206",
+    "Namekan": "器材2",
+    "CroupName": "健身_14",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_206",
+    "TaskIcon": "DecorateIcon_17",
+    "level": 1,
+    "PreTask": "1205",
+    "CompleteOpen": "1207",
+    "CompleteGold": 7200,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 14071,
+    "PlotID2": 0,
+    "PlotID3": 15001,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 7200
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 211407,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 211407
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "224.57/6.35/-9.34"
+  },
+  "1207": {
+    "ID": 1207,
+    "Name": "TaskName_207",
+    "Namekan": "凳子",
+    "CroupName": "花园_15",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_207",
+    "TaskIcon": "DecorateIcon_32",
+    "level": 1,
+    "PreTask": "1206",
+    "CompleteOpen": "1208",
+    "CompleteGold": 5400,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 15011,
+    "PlotID2": 15010,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 5400
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 211501,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 211501
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "225.32/6.09/-18.19"
+  },
+  "1208": {
+    "ID": 1208,
+    "Name": "TaskName_208",
+    "Namekan": "装饰",
+    "CroupName": "花园_15",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_208",
+    "TaskIcon": "DecorateIcon_54",
+    "level": 1,
+    "PreTask": "1207",
+    "CompleteOpen": "1209",
+    "CompleteGold": 8000,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 15021,
+    "PlotID2": 15020,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 8000
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 211502,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 211502
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "221.28/7.18/-29.13"
+  },
+  "1209": {
+    "ID": 1209,
+    "Name": "TaskName_209",
+    "Namekan": "地灯",
+    "CroupName": "花园_15",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_209",
+    "TaskIcon": "DecorateIcon_16",
+    "level": 1,
+    "PreTask": "1208",
+    "CompleteOpen": "1210",
+    "CompleteGold": 5200,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 15031,
+    "PlotID2": 15030,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 5200
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 211503,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 211503
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "216.81/6.35/-22.78"
+  },
+  "1210": {
+    "ID": 1210,
+    "Name": "TaskName_210",
+    "Namekan": "地面",
+    "CroupName": "花园_15",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_210",
+    "TaskIcon": "DecorateIcon_39",
+    "level": 1,
+    "PreTask": "1209",
+    "CompleteOpen": "1211",
+    "CompleteGold": 7000,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 15041,
+    "PlotID2": 15040,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 7000
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 211504,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 211504
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "223.43/6.35/-19.02"
+  },
+  "1211": {
+    "ID": 1211,
+    "Name": "TaskName_211",
+    "Namekan": "花坛1",
+    "CroupName": "花园_15",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_211",
+    "TaskIcon": "DecorateIcon_11",
+    "level": 1,
+    "PreTask": "1210",
+    "CompleteOpen": "1212",
+    "CompleteGold": 3600,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 15051,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 3600
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 211505,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 211505
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "222/6.35/-28.07"
+  },
+  "1212": {
+    "ID": 1212,
+    "Name": "TaskName_212",
+    "Namekan": "花坛2",
+    "CroupName": "花园_15",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_212",
+    "TaskIcon": "DecorateIcon_11",
+    "level": 1,
+    "PreTask": "1211",
+    "CompleteOpen": "1213",
+    "CompleteGold": 4200,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 15061,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 4200
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 211506,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 211506
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "222.68/6.35/-16.81"
+  },
+  "1213": {
+    "ID": 1213,
+    "Name": "TaskName_213",
+    "Namekan": "花坛3",
+    "CroupName": "花园_15",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_213",
+    "TaskIcon": "DecorateIcon_11",
+    "level": 1,
+    "PreTask": "1212",
+    "CompleteOpen": "1214",
+    "CompleteGold": 5400,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 15071,
+    "PlotID2": 15070,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 5400
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 211507,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 211507
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "221.6/6.35/-21.61"
+  },
+  "1214": {
+    "ID": 1214,
+    "Name": "TaskName_214",
+    "Namekan": "绿化",
+    "CroupName": "花园_15",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_214",
+    "TaskIcon": "DecorateIcon_54",
+    "level": 1,
+    "PreTask": "1213",
+    "CompleteOpen": "1215",
+    "CompleteGold": 6400,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 15081,
+    "PlotID2": 15080,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 6400
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 211508,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 211508
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "217.74/6.39/-18.14"
+  },
+  "1215": {
+    "ID": 1215,
+    "Name": "TaskName_215",
+    "Namekan": "墙1",
+    "CroupName": "花园_15",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_215",
+    "TaskIcon": "DecorateIcon_17",
+    "level": 1,
+    "PreTask": "1214",
+    "CompleteOpen": "1216",
+    "CompleteGold": 7200,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 15091,
+    "PlotID2": 15090,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 7200
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 211509,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 211509
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "217.45/6.42/-17.09"
+  },
+  "1216": {
+    "ID": 1216,
+    "Name": "TaskName_216",
+    "Namekan": "墙2",
+    "CroupName": "花园_15",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_216",
+    "TaskIcon": "DecorateIcon_27",
+    "level": 1,
+    "PreTask": "1215",
+    "CompleteOpen": "1217",
+    "CompleteGold": 7200,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 15101,
+    "PlotID2": 15100,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 7200
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 211510,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 211510
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "225.85/7.05/-18.04"
+  },
+  "1217": {
+    "ID": 1217,
+    "Name": "TaskName_217",
+    "Namekan": "墙3",
+    "CroupName": "花园_15",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_217",
+    "TaskIcon": "DecorateIcon_54",
+    "level": 1,
+    "PreTask": "1216",
+    "CompleteOpen": "0",
+    "CompleteGold": 8800,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 15111,
+    "PlotID2": 15110,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 8800
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 0,
+    "UnlockNpcID": 0,
+    "NpcPos": "",
+    "NpcTaskPos": "",
+    "EnableID": 211511,
+    "Target": [
+      {
+        "Type": 3,
+        "DecorateID": 211511
+      }
+    ],
+    "FieldView": 42,
+    "TaskPos": "222/6.92/-31.82"
+  },
+  "2001": {
+    "ID": 2001,
+    "Name": "TaskName_npc_1",
+    "Namekan": "Npc任务",
+    "CroupName": "主卧",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_npc_1",
+    "TaskIcon": "DecorateIcon_npc_1",
+    "level": 1,
+    "PreTask": "1017",
+    "CompleteOpen": "2002",
+    "CompleteGold": 100,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 99011,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 130101,
+        "PrizeNum": 1
+      },
+      {
+        "PrizeID": 4,
+        "PrizeNum": 100
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 1,
+    "UnlockNpcID": 0,
+    "NpcPos": "1/2/4",
+    "NpcTaskPos": "2.4/4.4/12.4",
+    "EnableID": 0,
+    "Target": [
+    ],
+    "FieldView": 35,
+    "TaskPos": "4.6/6.2/8.5"
+  },
+  "2002": {
+    "ID": 2002,
+    "Name": "TaskName_npc_2",
+    "Namekan": "Npc任务",
+    "CroupName": "主卧",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_npc_2",
+    "TaskIcon": "DecorateIcon_npc_1",
+    "level": 1,
+    "PreTask": "2001",
+    "CompleteOpen": "2003",
+    "CompleteGold": 150,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 99021,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 130201,
+        "PrizeNum": 1
+      },
+      {
+        "PrizeID": 4,
+        "PrizeNum": 150
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 1,
+    "UnlockNpcID": 0,
+    "NpcPos": "5",
+    "NpcTaskPos": "7.5/4/9",
+    "EnableID": 0,
+    "Target": [
+    ],
+    "FieldView": 42,
+    "TaskPos": "7.5/6.1/5.8"
+  },
+  "2003": {
+    "ID": 2003,
+    "Name": "TaskName_npc_3",
+    "Namekan": "Npc任务",
+    "CroupName": "主卧",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_npc_3",
+    "TaskIcon": "DecorateIcon_npc_1",
+    "level": 1,
+    "PreTask": "2002",
+    "CompleteOpen": "2004",
+    "CompleteGold": 200,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 99031,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 130601,
+        "PrizeNum": 1
+      },
+      {
+        "PrizeID": 4,
+        "PrizeNum": 200
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 1,
+    "UnlockNpcID": 0,
+    "NpcPos": "3",
+    "NpcTaskPos": "7.2/3.9/12.55",
+    "EnableID": 0,
+    "Target": [
+    ],
+    "FieldView": 42,
+    "TaskPos": "7/6.2/8.8"
+  },
+  "2004": {
+    "ID": 2004,
+    "Name": "TaskName_npc_4",
+    "Namekan": "Npc任务",
+    "CroupName": "主卧",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_npc_4",
+    "TaskIcon": "DecorateIcon_npc_1",
+    "level": 1,
+    "PreTask": "2003",
+    "CompleteOpen": "2005",
+    "CompleteGold": 250,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 99041,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 130401,
+        "PrizeNum": 1
+      },
+      {
+        "PrizeID": 4,
+        "PrizeNum": 250
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 1,
+    "UnlockNpcID": 0,
+    "NpcPos": "6",
+    "NpcTaskPos": "5.1/3.8/8.4",
+    "EnableID": 0,
+    "Target": [
+    ],
+    "FieldView": 44,
+    "TaskPos": "4.6/5.9/5.2"
+  },
+  "2005": {
+    "ID": 2005,
+    "Name": "TaskName_npc_5",
+    "Namekan": "Npc任务",
+    "CroupName": "主卧",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_npc_5",
+    "TaskIcon": "DecorateIcon_npc_1",
+    "level": 1,
+    "PreTask": "2004",
+    "CompleteOpen": "2006",
+    "CompleteGold": 300,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 99051,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 130301,
+        "PrizeNum": 1
+      },
+      {
+        "PrizeID": 4,
+        "PrizeNum": 300
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 1,
+    "UnlockNpcID": 1,
+    "NpcPos": "7",
+    "NpcTaskPos": "3.7/3.4/10.8",
+    "EnableID": 0,
+    "Target": [
+    ],
+    "FieldView": 42,
+    "TaskPos": "4/6/5.6"
+  },
+  "2006": {
+    "ID": 2006,
+    "Name": "TaskName_npc_6",
+    "Namekan": "Npc任务",
+    "CroupName": "次卧",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_npc_6",
+    "TaskIcon": "DecorateIcon_npc_2",
+    "level": 1,
+    "PreTask": "1031&2005",
+    "CompleteOpen": "2007",
+    "CompleteGold": 300,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 99061,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 130501,
+        "PrizeNum": 1
+      },
+      {
+        "PrizeID": 4,
+        "PrizeNum": 300
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 2,
+    "UnlockNpcID": 0,
+    "NpcPos": "8/9/10",
+    "NpcTaskPos": "-3/3.7/11.8",
+    "EnableID": 0,
+    "Target": [
+    ],
+    "FieldView": 41,
+    "TaskPos": "-3.6/5.7/8.1"
+  },
+  "2007": {
+    "ID": 2007,
+    "Name": "TaskName_npc_7",
+    "Namekan": "Npc任务",
+    "CroupName": "次卧",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_npc_7",
+    "TaskIcon": "DecorateIcon_npc_2",
+    "level": 1,
+    "PreTask": "2006",
+    "CompleteOpen": "2008",
+    "CompleteGold": 400,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 99071,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 130701,
+        "PrizeNum": 1
+      },
+      {
+        "PrizeID": 4,
+        "PrizeNum": 400
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 2,
+    "UnlockNpcID": 0,
+    "NpcPos": "11/12",
+    "NpcTaskPos": "-4.4/4.47/9.184",
+    "EnableID": 0,
+    "Target": [
+    ],
+    "FieldView": 44,
+    "TaskPos": "-2.5/6.8/5"
+  },
+  "2008": {
+    "ID": 2008,
+    "Name": "TaskName_npc_8",
+    "Namekan": "Npc任务",
+    "CroupName": "次卧",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_npc_8",
+    "TaskIcon": "DecorateIcon_npc_2",
+    "level": 1,
+    "PreTask": "2007",
+    "CompleteOpen": "2009",
+    "CompleteGold": 500,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 99081,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 121103,
+        "PrizeNum": 1
+      },
+      {
+        "PrizeID": 4,
+        "PrizeNum": 500
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 2,
+    "UnlockNpcID": 2,
+    "NpcPos": "13",
+    "NpcTaskPos": "-2.38/3.45/9.6",
+    "EnableID": 0,
+    "Target": [
+    ],
+    "FieldView": 44,
+    "TaskPos": "-2.5/6.8/5"
+  },
+  "2009": {
+    "ID": 2009,
+    "Name": "TaskName_npc_9",
+    "Namekan": "Npc任务",
+    "CroupName": "客厅",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_npc_9",
+    "TaskIcon": "DecorateIcon_npc_3",
+    "level": 1,
+    "PreTask": "2008&1042",
+    "CompleteOpen": "2010",
+    "CompleteGold": 1000,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 99091,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 121103,
+        "PrizeNum": 1
+      },
+      {
+        "PrizeID": 4,
+        "PrizeNum": 1000
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 3,
+    "UnlockNpcID": 3,
+    "NpcPos": "14/15/16/17/18",
+    "NpcTaskPos": "-0.08/2.54/2.21",
+    "EnableID": 0,
+    "Target": [
+    ],
+    "FieldView": 50,
+    "TaskPos": "200/11/0"
+  },
+  "2010": {
+    "ID": 2010,
+    "Name": "TaskName_npc_10",
+    "Namekan": "Npc任务",
+    "CroupName": "客厅",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_npc_10",
+    "TaskIcon": "DecorateIcon_npc_7",
+    "level": 1,
+    "PreTask": "2009&1060",
+    "CompleteOpen": "2011",
+    "CompleteGold": 3000,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 99101,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 121104,
+        "PrizeNum": 1
+      },
+      {
+        "PrizeID": 4,
+        "PrizeNum": 3000
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 7,
+    "UnlockNpcID": 7,
+    "NpcPos": "19/20/21/22",
+    "NpcTaskPos": "5.39/2.19/6.34",
+    "EnableID": 0,
+    "Target": [
+    ],
+    "FieldView": 50,
+    "TaskPos": "200/11/-5.5"
+  },
+  "2011": {
+    "ID": 2011,
+    "Name": "TaskName_npc_11",
+    "Namekan": "Npc任务",
+    "CroupName": "厨房",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_npc_11",
+    "TaskIcon": "DecorateIcon_npc_4",
+    "level": 1,
+    "PreTask": "2010&1071",
+    "CompleteOpen": "2012",
+    "CompleteGold": 4000,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 99111,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 121104,
+        "PrizeNum": 1
+      },
+      {
+        "PrizeID": 4,
+        "PrizeNum": 4000
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 4,
+    "UnlockNpcID": 4,
+    "NpcPos": "23/24/25/26",
+    "NpcTaskPos": "14.74/2.11/12.2",
+    "EnableID": 0,
+    "Target": [
+    ],
+    "FieldView": 50,
+    "TaskPos": "177/11/-11"
+  },
+  "2012": {
+    "ID": 2012,
+    "Name": "TaskName_npc_12",
+    "Namekan": "Npc任务",
+    "CroupName": "餐厅",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_npc_12",
+    "TaskIcon": "DecorateIcon_npc_6",
+    "level": 1,
+    "PreTask": "2011&1077",
+    "CompleteOpen": "2013",
+    "CompleteGold": 5000,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 99121,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 121104,
+        "PrizeNum": 1
+      },
+      {
+        "PrizeID": 4,
+        "PrizeNum": 5000
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 6,
+    "UnlockNpcID": 6,
+    "NpcPos": "27/28/29/30/31",
+    "NpcTaskPos": "14.89/1.91/2.77",
+    "EnableID": 0,
+    "Target": [
+    ],
+    "FieldView": 50,
+    "TaskPos": "220/11/-14"
+  },
+  "2013": {
+    "ID": 2013,
+    "Name": "TaskName_npc_13",
+    "Namekan": "Npc任务",
+    "CroupName": "餐厅",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_npc_13",
+    "TaskIcon": "DecorateIcon_npc_5",
+    "level": 1,
+    "PreTask": "2012&1094",
+    "CompleteOpen": "2014",
+    "CompleteGold": 6000,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 99131,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 121104,
+        "PrizeNum": 1
+      },
+      {
+        "PrizeID": 4,
+        "PrizeNum": 6000
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 5,
+    "UnlockNpcID": 5,
+    "NpcPos": "32/33/34/35",
+    "NpcTaskPos": "10.59/1.64/6.31",
+    "EnableID": 0,
+    "Target": [
+    ],
+    "FieldView": 50,
+    "TaskPos": "220/11/-31"
+  },
+  "2014": {
+    "ID": 2014,
+    "Name": "TaskName_npc_14",
+    "Namekan": "Npc任务",
+    "CroupName": "中庭_9",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_npc_13",
+    "TaskIcon": "DecorateIcon_npc_11",
+    "level": 1,
+    "PreTask": "2013&1150",
+    "CompleteOpen": "2015",
+    "CompleteGold": 7000,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 99141,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 121104,
+        "PrizeNum": 1
+      },
+      {
+        "PrizeID": 4,
+        "PrizeNum": 7000
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 11,
+    "UnlockNpcID": 11,
+    "NpcPos": "36/37/38/39/40",
+    "NpcTaskPos": "201.42/1/-2.88",
+    "EnableID": 0,
+    "Target": [
+    ],
+    "FieldView": 50,
+    "TaskPos": "200/11/-22"
+  },
+  "2015": {
+    "ID": 2015,
+    "Name": "TaskName_npc_15",
+    "Namekan": "Npc任务",
+    "CroupName": "前庭_10",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_npc_13",
+    "TaskIcon": "DecorateIcon_npc_8",
+    "level": 1,
+    "PreTask": "2014&1167",
+    "CompleteOpen": "2016",
+    "CompleteGold": 8000,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 99151,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 121104,
+        "PrizeNum": 1
+      },
+      {
+        "PrizeID": 4,
+        "PrizeNum": 8000
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 8,
+    "UnlockNpcID": 8,
+    "NpcPos": "41/42/43/44",
+    "NpcTaskPos": "209.68/0.42/-20.55",
+    "EnableID": 0,
+    "Target": [
+    ],
+    "FieldView": 50,
+    "TaskPos": "200/11/-36"
+  },
+  "2016": {
+    "ID": 2016,
+    "Name": "TaskName_npc_16",
+    "Namekan": "Npc任务",
+    "CroupName": "观水_12",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_npc_13",
+    "TaskIcon": "DecorateIcon_npc_9",
+    "level": 1,
+    "PreTask": "2015&1187",
+    "CompleteOpen": "2017",
+    "CompleteGold": 9000,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 99161,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 121104,
+        "PrizeNum": 1
+      },
+      {
+        "PrizeID": 4,
+        "PrizeNum": 9000
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 9,
+    "UnlockNpcID": 9,
+    "NpcPos": "45/46/47/48",
+    "NpcTaskPos": "177/0.35/-18.68",
+    "EnableID": 0,
+    "Target": [
+    ],
+    "FieldView": 50,
+    "TaskPos": "183/11/-25"
+  },
+  "2017": {
+    "ID": 2017,
+    "Name": "TaskName_npc_17",
+    "Namekan": "Npc任务",
+    "CroupName": "泳池_13",
+    "Feeling": "manman_doubt",
+    "Dialog": "TaskDialog_npc_13",
+    "TaskIcon": "DecorateIcon_npc_10",
+    "level": 1,
+    "PreTask": "2016&1199",
+    "CompleteOpen": "0",
+    "CompleteGold": 10000,
+    "CompleteCondition": [
+    ],
+    "PlotID1": 99171,
+    "PlotID2": 0,
+    "PlotID3": 0,
+    "Prize": [
+      {
+        "PrizeID": 121104,
+        "PrizeNum": 1
+      },
+      {
+        "PrizeID": 4,
+        "PrizeNum": 10000
+      }
+    ],
+    "OpenFunction": "",
+    "NpcID": 10,
+    "UnlockNpcID": 10,
+    "NpcPos": "49/50/51",
+    "NpcTaskPos": "229.62/2.5/22",
+    "EnableID": 0,
+    "Target": [
+    ],
+    "FieldView": 50,
+    "TaskPos": "217/11/-6"
+  }
+}

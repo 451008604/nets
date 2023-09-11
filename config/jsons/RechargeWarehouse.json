@@ -1,0 +1,34 @@
+{
+  "1": {
+    "ID": 1,
+    "Index": 0,
+    "RechargeID": 101,
+    "BuffID": 25,
+    "BuffTime": 1,
+    "UnlockCount": 3
+  },
+  "2": {
+    "ID": 2,
+    "Index": 1,
+    "RechargeID": 102,
+    "BuffID": 25,
+    "BuffTime": 5,
+    "UnlockCount": 5
+  },
+  "3": {
+    "ID": 3,
+    "Index": 2,
+    "RechargeID": 103,
+    "BuffID": 25,
+    "BuffTime": 7,
+    "UnlockCount": 7
+  },
+  "4": {
+    "ID": 4,
+    "Index": 3,
+    "RechargeID": 104,
+    "BuffID": 25,
+    "BuffTime": 10,
+    "UnlockCount": 10
+  }
+}

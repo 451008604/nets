@@ -29,7 +29,7 @@ func (r *Module) GetAccountInfo(account, password string) (register int32, accou
 func (r *Module) createNewAccount(account, password string) (accountData *sqlmodel.HouseAccount, userData *sqlmodel.HouseUser, err error) {
 	// 创建事务
 	session := r.Query.Begin()
-	// ==========================================================================================
+	// ===========================================创建玩家关联表数据===========================================
 
 	if userData, err = r.insertUserData(session.Query, &sqlmodel.HouseUser{Nickname: account, HeadImage: "1", RegisterTime: int32(time.Now().Unix())}); session.Error != nil {
 		_ = session.Rollback()
@@ -46,7 +46,7 @@ func (r *Module) createNewAccount(account, password string) (accountData *sqlmod
 		return nil, nil, err
 	}
 
-	// ==========================================================================================
+	// =====================================================================================================
 	// 提交事务
 	if err = session.Commit(); err != nil {
 		return nil, nil, err

@@ -1,0 +1,390 @@
+{
+  "1": {
+    "ID": 1,
+    "Name": "诺拉",
+    "Res": "nuola",
+    "NpcInfo": "住在车里的诺拉终于决定安家啦，可别小瞧一个姐姐的担当！",
+    "BubbleIDs": "60/61/62/63/64/65/66/67/68/69/70/71/72/73/74/75/76/77/78/79",
+    "BubbleGroup": 10100,
+    "FieldView": "30/0/0",
+    "NpcPos": "5.5/6.4/4",
+    "DefaultSkinID": 20101,
+    "Prize": [
+      {
+        "PrizeID": 122103,
+        "PrizeNum": 1
+      },
+      {
+        "PrizeID": 121105,
+        "PrizeNum": 1
+      },
+      {
+        "PrizeID": 130403,
+        "PrizeNum": 1
+      }
+    ],
+    "SayHelloTime": 3,
+    "PartType": 1,
+    "Drawings": 1
+  },
+  "2": {
+    "ID": 2,
+    "Name": "小哇",
+    "Res": "bulu",
+    "NpcInfo": "他总能制造让人摸不着头脑的麻烦，但不经意间暖心的表达却能甜进你心里~",
+    "BubbleIDs": "102/103/104/105/106/107/108/109/110/111/112/113",
+    "BubbleGroup": 10200,
+    "FieldView": "30/0/0",
+    "NpcPos": "-3/6.8/5",
+    "DefaultSkinID": 20201,
+    "Prize": [
+      {
+        "PrizeID": 122103,
+        "PrizeNum": 1
+      },
+      {
+        "PrizeID": 121105,
+        "PrizeNum": 1
+      },
+      {
+        "PrizeID": 130403,
+        "PrizeNum": 1
+      }
+    ],
+    "SayHelloTime": 3,
+    "PartType": 1,
+    "Drawings": 1
+  },
+  "3": {
+    "ID": 3,
+    "Name": "星仔",
+    "Res": "dannier",
+    "NpcInfo": "红石镇无人不知，事关房屋维修、家具定制，就没有他搞不定的！",
+    "BubbleIDs": "102/103/104/105/106/107/108/109/110/111/112/113",
+    "BubbleGroup": 10300,
+    "FieldView": "30/0/0",
+    "NpcPos": "200/11/0",
+    "DefaultSkinID": 20301,
+    "Prize": [
+      {
+        "PrizeID": 122103,
+        "PrizeNum": 1
+      },
+      {
+        "PrizeID": 121105,
+        "PrizeNum": 1
+      },
+      {
+        "PrizeID": 130403,
+        "PrizeNum": 1
+      }
+    ],
+    "SayHelloTime": 5,
+    "PartType": 2,
+    "Drawings": 1
+  },
+  "4": {
+    "ID": 4,
+    "Name": "渤哥",
+    "Res": "dexima",
+    "NpcInfo": "历经数十年经营，小镇咖啡馆依然屹立不倒，秘诀就是他，热情似火的馆主~",
+    "BubbleIDs": "102/103/104/105/106/107/108/109/110/111/112/113",
+    "BubbleGroup": 10400,
+    "FieldView": "30/0/0",
+    "NpcPos": "177/11/-11",
+    "DefaultSkinID": 20401,
+    "Prize": [
+      {
+        "PrizeID": 122103,
+        "PrizeNum": 1
+      },
+      {
+        "PrizeID": 121105,
+        "PrizeNum": 1
+      },
+      {
+        "PrizeID": 130403,
+        "PrizeNum": 1
+      }
+    ],
+    "SayHelloTime": 4,
+    "PartType": 2,
+    "Drawings": 1
+  },
+  "5": {
+    "ID": 5,
+    "Name": "石榴姐",
+    "Res": "geluoruiya",
+    "NpcInfo": "“花海谜美人”，是她没错啦~自花店开业以来，她竟从未与客户攀谈！",
+    "BubbleIDs": "102/103/104/105/106/107/108/109/110/111/112/113",
+    "BubbleGroup": 10500,
+    "FieldView": "30/0/0",
+    "NpcPos": "220/11/-31",
+    "DefaultSkinID": 20501,
+    "Prize": [
+      {
+        "PrizeID": 122103,
+        "PrizeNum": 1
+      },
+      {
+        "PrizeID": 121105,
+        "PrizeNum": 1
+      },
+      {
+        "PrizeID": 130403,
+        "PrizeNum": 1
+      }
+    ],
+    "SayHelloTime": 3,
+    "PartType": 2,
+    "Drawings": 1
+  },
+  "6": {
+    "ID": 6,
+    "Name": "赵小刀",
+    "Res": "xinxiya",
+    "NpcInfo": "作为马拉松活动的组织者，她可是妥妥的阳光美少女！可惜总也处不好与父亲的关系……",
+    "BubbleIDs": "102/103/104/105/106/107/108/109/110/111/112/113",
+    "BubbleGroup": 10600,
+    "FieldView": "30/0/0",
+    "NpcPos": "220/11/-14",
+    "DefaultSkinID": 20601,
+    "Prize": [
+      {
+        "PrizeID": 122103,
+        "PrizeNum": 1
+      },
+      {
+        "PrizeID": 121105,
+        "PrizeNum": 1
+      },
+      {
+        "PrizeID": 130403,
+        "PrizeNum": 1
+      }
+    ],
+    "SayHelloTime": 4,
+    "PartType": 2,
+    "Drawings": 1
+  },
+  "7": {
+    "ID": 7,
+    "Name": "黄小除",
+    "Res": "duensi",
+    "NpcInfo": "他曾宣誓一生守护红石镇，虽说即将退休，却仍以精神饱满的状态维护小镇治安。",
+    "BubbleIDs": "102/103/104/105/106/107/108/109/110/111/112/113",
+    "BubbleGroup": 10700,
+    "FieldView": "30/0/0",
+    "NpcPos": "200/11/-5.5",
+    "DefaultSkinID": 20701,
+    "Prize": [
+      {
+        "PrizeID": 122103,
+        "PrizeNum": 1
+      },
+      {
+        "PrizeID": 121105,
+        "PrizeNum": 1
+      },
+      {
+        "PrizeID": 130403,
+        "PrizeNum": 1
+      }
+    ],
+    "SayHelloTime": 3,
+    "PartType": 2,
+    "Drawings": 1
+  },
+  "8": {
+    "ID": 8,
+    "Name": "矮大紧",
+    "Res": "luoen",
+    "NpcInfo": "爱戴墨镜隐藏真实的自己，自定居小镇，他就从风光摄影开始转拍人像，业务繁忙。",
+    "BubbleIDs": "",
+    "BubbleGroup": 10800,
+    "FieldView": "30/0/0",
+    "NpcPos": "200/11/-36",
+    "DefaultSkinID": 20801,
+    "Prize": [
+      {
+        "PrizeID": 122103,
+        "PrizeNum": 1
+      },
+      {
+        "PrizeID": 121105,
+        "PrizeNum": 1
+      },
+      {
+        "PrizeID": 130403,
+        "PrizeNum": 1
+      }
+    ],
+    "SayHelloTime": 3,
+    "PartType": 2,
+    "Drawings": 1
+  },
+  "9": {
+    "ID": 9,
+    "Name": "晴格格",
+    "Res": "teleisha",
+    "NpcInfo": "看似镇上大闲人，实则常来回晃荡寻找作曲灵感，悠长的假期倒被她过成了工作日。",
+    "BubbleIDs": "",
+    "BubbleGroup": 10900,
+    "FieldView": "30/0/0",
+    "NpcPos": "183/11/-25",
+    "DefaultSkinID": 20901,
+    "Prize": [
+      {
+        "PrizeID": 122103,
+        "PrizeNum": 1
+      },
+      {
+        "PrizeID": 121105,
+        "PrizeNum": 1
+      },
+      {
+        "PrizeID": 130403,
+        "PrizeNum": 1
+      }
+    ],
+    "SayHelloTime": 3,
+    "PartType": 2,
+    "Drawings": 1
+  },
+  "10": {
+    "ID": 10,
+    "Name": "娜娜",
+    "Res": "linda",
+    "NpcInfo": "“叮!”每当这声号角响起，她必然会翩然去往顾客身边，送上一杯暖心咖啡。",
+    "BubbleIDs": "",
+    "BubbleGroup": 11000,
+    "FieldView": "30/0/0",
+    "NpcPos": "217/11/-6",
+    "DefaultSkinID": 21001,
+    "Prize": [
+      {
+        "PrizeID": 122103,
+        "PrizeNum": 1
+      },
+      {
+        "PrizeID": 121105,
+        "PrizeNum": 1
+      },
+      {
+        "PrizeID": 130403,
+        "PrizeNum": 1
+      }
+    ],
+    "SayHelloTime": 3,
+    "PartType": 2,
+    "Drawings": 1
+  },
+  "11": {
+    "ID": 11,
+    "Name": "邹公子",
+    "Res": "saila",
+    "NpcInfo": "她通常按单收费，似乎很少关心别人，却又对小镇民众都了若指掌……",
+    "BubbleIDs": "",
+    "BubbleGroup": 11100,
+    "FieldView": "30/0/0",
+    "NpcPos": "200/11/-22",
+    "DefaultSkinID": 21101,
+    "Prize": [
+      {
+        "PrizeID": 122103,
+        "PrizeNum": 1
+      },
+      {
+        "PrizeID": 121105,
+        "PrizeNum": 1
+      },
+      {
+        "PrizeID": 130403,
+        "PrizeNum": 1
+      }
+    ],
+    "SayHelloTime": 3,
+    "PartType": 2,
+    "Drawings": 1
+  },
+  "12": {
+    "ID": 12,
+    "Name": "旁白",
+    "Res": "",
+    "NpcInfo": "",
+    "BubbleIDs": "",
+    "BubbleGroup": 0,
+    "FieldView": "",
+    "NpcPos": "",
+    "DefaultSkinID": 0,
+    "Prize": [
+    ],
+    "SayHelloTime": 4,
+    "PartType": 1,
+    "Drawings": 0
+  },
+  "13": {
+    "ID": 13,
+    "Name": "可可奶猫",
+    "Res": "cat2",
+    "NpcInfo": "自带可可奶香的它深受吸猫群体欢迎。",
+    "BubbleIDs": "",
+    "BubbleGroup": 0,
+    "FieldView": "",
+    "NpcPos": "1.31/5.88/7.45",
+    "DefaultSkinID": 21301,
+    "Prize": [
+    ],
+    "SayHelloTime": 3,
+    "PartType": 1,
+    "Drawings": 0
+  },
+  "14": {
+    "ID": 14,
+    "Name": "大眼猫",
+    "Res": "cat1",
+    "NpcInfo": "谁能抵挡它电力十足的媚眼呢？",
+    "BubbleIDs": "",
+    "BubbleGroup": 0,
+    "FieldView": "",
+    "NpcPos": "-2.5/5.43/-1.32",
+    "DefaultSkinID": 21401,
+    "Prize": [
+    ],
+    "SayHelloTime": 4,
+    "PartType": 1,
+    "Drawings": 0
+  },
+  "15": {
+    "ID": 15,
+    "Name": "幼稚猫",
+    "Res": "cat3",
+    "NpcInfo": "懵懂粘人的它总能用纯真眼神将你俘获！",
+    "BubbleIDs": "",
+    "BubbleGroup": 0,
+    "FieldView": "",
+    "NpcPos": "200/11/5",
+    "DefaultSkinID": 21501,
+    "Prize": [
+    ],
+    "SayHelloTime": 6.5,
+    "PartType": 1,
+    "Drawings": 0
+  },
+  "16": {
+    "ID": 16,
+    "Name": "柯基宝宝",
+    "Res": "dog",
+    "NpcInfo": "一个不乖巧的小烦人精，但天生的活力笑容又能瞬间治愈人心。",
+    "BubbleIDs": "",
+    "BubbleGroup": 0,
+    "FieldView": "",
+    "NpcPos": "179.32/7/-6.8",
+    "DefaultSkinID": 21601,
+    "Prize": [
+    ],
+    "SayHelloTime": 2.8,
+    "PartType": 1,
+    "Drawings": 0
+  }
+}

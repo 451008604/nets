@@ -32,6 +32,7 @@ type IConnection interface {
 	RemoveProperty(key string)
 
 	SetPlayer(player interface{})
+	// Deprecated: 通过`logic.GetPlayer`获取 conn 绑定的 player 实例化对象
 	GetPlayer() interface{}
 
 	// 协议转字节

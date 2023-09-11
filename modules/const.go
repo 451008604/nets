@@ -4,3 +4,13 @@ package modules
 const (
 	LoginTypeQuick = "quick"
 )
+
+const (
+	ExportJsonPath = "./config/jsons/"
+)
+
+// 道具空间配置
+const (
+	ItemSpaceWidth  = 7 // 道具空间宽度
+	ItemSpaceHeight = 9 // 道具空间高度
+)

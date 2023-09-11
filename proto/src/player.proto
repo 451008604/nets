@@ -1,9 +1,11 @@
 syntax = "proto2";
+import "item.proto";
 package pb;
 option go_package = "./;pb";
 
 message PBPlayerData {
-    optional PBCommonData CommonData = 2;   // 公共数据
+    optional PBCommonData CommonData = 1;   // 公共数据
+    optional PBItemSpaceData ItemSpaceData = 2;
 }
 
 message PBCommonData {
@@ -37,3 +39,12 @@ message PlayerLoginRes {
 message PlayerInfoNotify {
     optional PBPlayerData PlayerInfo = 1;   // 玩家信息
 }
+
+// 心跳请求
+message HeartBeatReq {
+}
+
+// 心跳响应
+message HeartBeatRes {
+}
+

@@ -1,0 +1,77 @@
+{
+  "1": {
+    "Count": 1,
+    "Resource": "",
+    "ComboScore": 0
+  },
+  "2": {
+    "Count": 2,
+    "Resource": "",
+    "ComboScore": 0
+  },
+  "3": {
+    "Count": 3,
+    "Resource": "",
+    "ComboScore": 0
+  },
+  "4": {
+    "Count": 4,
+    "Resource": "",
+    "ComboScore": 0
+  },
+  "5": {
+    "Count": 5,
+    "Resource": "MergeTip_1",
+    "ComboScore": 1
+  },
+  "6": {
+    "Count": 6,
+    "Resource": "MergeTip_1",
+    "ComboScore": 1
+  },
+  "7": {
+    "Count": 7,
+    "Resource": "MergeTip_2",
+    "ComboScore": 1
+  },
+  "8": {
+    "Count": 8,
+    "Resource": "MergeTip_2",
+    "ComboScore": 1
+  },
+  "9": {
+    "Count": 9,
+    "Resource": "MergeTip_3",
+    "ComboScore": 1
+  },
+  "10": {
+    "Count": 10,
+    "Resource": "MergeTip_3",
+    "ComboScore": 1
+  },
+  "11": {
+    "Count": 11,
+    "Resource": "MergeTip_3",
+    "ComboScore": 1
+  },
+  "12": {
+    "Count": 12,
+    "Resource": "MergeTip_4",
+    "ComboScore": 1
+  },
+  "13": {
+    "Count": 13,
+    "Resource": "MergeTip_4",
+    "ComboScore": 1
+  },
+  "14": {
+    "Count": 14,
+    "Resource": "MergeTip_4",
+    "ComboScore": 1
+  },
+  "15": {
+    "Count": 15,
+    "Resource": "MergeTip_5",
+    "ComboScore": 2
+  }
+}

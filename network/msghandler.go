@@ -3,10 +3,10 @@ package network
 import (
 	"errors"
 	"fmt"
+	"github.com/451008604/socketServerFrame/config"
 	"github.com/451008604/socketServerFrame/logic"
 	"sync"
 
-	"github.com/451008604/socketServerFrame/config"
 	"github.com/451008604/socketServerFrame/iface"
 	"github.com/451008604/socketServerFrame/logs"
 	pb "github.com/451008604/socketServerFrame/proto/bin"

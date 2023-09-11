@@ -1,0 +1,1664 @@
+{
+  "1": {
+    "ID": 1,
+    "Name": "10钻石",
+    "Fun": 0,
+    "Icon": "diamond_01",
+    "Price": "1",
+    "Currency": "Y",
+    "Flag": 0,
+    "ItemInfo": [
+      {
+        "ItemID": 104102,
+        "ItemNum": 0
+      },
+      {
+        "ItemID": 104103,
+        "ItemNum": 0
+      }
+    ]
+  },
+  "2": {
+    "ID": 2,
+    "Name": "100钻石",
+    "Fun": 0,
+    "Icon": "diamond_02",
+    "Price": "1",
+    "Currency": "Y",
+    "Flag": 0,
+    "ItemInfo": [
+      {
+        "ItemID": 104103,
+        "ItemNum": 0
+      }
+    ]
+  },
+  "3": {
+    "ID": 3,
+    "Name": "女王的礼物",
+    "Fun": 1,
+    "Icon": "",
+    "Price": "18",
+    "Currency": "Y",
+    "Flag": 0,
+    "ItemInfo": [
+    ]
+  },
+  "4": {
+    "ID": 4,
+    "Name": "仆从礼包",
+    "Fun": 2,
+    "Icon": "UIShop/gift_1",
+    "Price": "30",
+    "Currency": "Y",
+    "Flag": 0,
+    "ItemInfo": [
+      {
+        "ItemID": 2,
+        "ItemNum": 180
+      },
+      {
+        "ItemID": 121105,
+        "ItemNum": 5
+      },
+      {
+        "ItemID": 121001,
+        "ItemNum": 5
+      },
+      {
+        "ItemID": 130102,
+        "ItemNum": 2
+      },
+      {
+        "ItemID": 130202,
+        "ItemNum": 2
+      },
+      {
+        "ItemID": 130302,
+        "ItemNum": 2
+      }
+    ]
+  },
+  "5": {
+    "ID": 5,
+    "Name": "贵族礼包",
+    "Fun": 2,
+    "Icon": "UIShop/gift_2",
+    "Price": "45",
+    "Currency": "Y",
+    "Flag": 0,
+    "ItemInfo": [
+      {
+        "ItemID": 2,
+        "ItemNum": 300
+      },
+      {
+        "ItemID": 121105,
+        "ItemNum": 10
+      },
+      {
+        "ItemID": 121001,
+        "ItemNum": 10
+      },
+      {
+        "ItemID": 130102,
+        "ItemNum": 3
+      },
+      {
+        "ItemID": 130202,
+        "ItemNum": 3
+      },
+      {
+        "ItemID": 130302,
+        "ItemNum": 3
+      },
+      {
+        "ItemID": 130402,
+        "ItemNum": 3
+      }
+    ]
+  },
+  "6": {
+    "ID": 6,
+    "Name": "女王礼包",
+    "Fun": 2,
+    "Icon": "UIShop/gift_3",
+    "Price": "98",
+    "Currency": "Y",
+    "Flag": 0,
+    "ItemInfo": [
+      {
+        "ItemID": 2,
+        "ItemNum": 680
+      },
+      {
+        "ItemID": 121105,
+        "ItemNum": 15
+      },
+      {
+        "ItemID": 121001,
+        "ItemNum": 25
+      },
+      {
+        "ItemID": 130103,
+        "ItemNum": 6
+      },
+      {
+        "ItemID": 130203,
+        "ItemNum": 6
+      },
+      {
+        "ItemID": 130303,
+        "ItemNum": 6
+      },
+      {
+        "ItemID": 130403,
+        "ItemNum": 6
+      }
+    ]
+  },
+  "7": {
+    "ID": 7,
+    "Name": "质朴礼包",
+    "Fun": 3,
+    "Icon": "UIIcon/item_23_6113",
+    "Price": "6",
+    "Currency": "Y",
+    "Flag": 0,
+    "ItemInfo": [
+      {
+        "ItemID": 2,
+        "ItemNum": 80
+      },
+      {
+        "ItemID": 121105,
+        "ItemNum": 2
+      },
+      {
+        "ItemID": 130101,
+        "ItemNum": 1
+      },
+      {
+        "ItemID": 130201,
+        "ItemNum": 1
+      },
+      {
+        "ItemID": 130301,
+        "ItemNum": 1
+      },
+      {
+        "ItemID": 130401,
+        "ItemNum": 1
+      },
+      {
+        "ItemID": 130601,
+        "ItemNum": 1
+      }
+    ]
+  },
+  "8": {
+    "ID": 8,
+    "Name": "简约礼包",
+    "Fun": 3,
+    "Icon": "UIIcon/item_23_6113",
+    "Price": "18",
+    "Currency": "Y",
+    "Flag": 0,
+    "ItemInfo": [
+      {
+        "ItemID": 2,
+        "ItemNum": 240
+      },
+      {
+        "ItemID": 121105,
+        "ItemNum": 6
+      },
+      {
+        "ItemID": 130102,
+        "ItemNum": 2
+      },
+      {
+        "ItemID": 130202,
+        "ItemNum": 2
+      },
+      {
+        "ItemID": 130302,
+        "ItemNum": 2
+      },
+      {
+        "ItemID": 130402,
+        "ItemNum": 2
+      },
+      {
+        "ItemID": 130602,
+        "ItemNum": 2
+      }
+    ]
+  },
+  "9": {
+    "ID": 9,
+    "Name": "雅致礼包",
+    "Fun": 3,
+    "Icon": "UIIcon/item_23_6113",
+    "Price": "36",
+    "Currency": "Y",
+    "Flag": 0,
+    "ItemInfo": [
+      {
+        "ItemID": 2,
+        "ItemNum": 480
+      },
+      {
+        "ItemID": 121105,
+        "ItemNum": 12
+      },
+      {
+        "ItemID": 130103,
+        "ItemNum": 4
+      },
+      {
+        "ItemID": 130203,
+        "ItemNum": 4
+      },
+      {
+        "ItemID": 130303,
+        "ItemNum": 4
+      },
+      {
+        "ItemID": 130403,
+        "ItemNum": 4
+      },
+      {
+        "ItemID": 130603,
+        "ItemNum": 4
+      }
+    ]
+  },
+  "10": {
+    "ID": 10,
+    "Name": "精品礼包1",
+    "Fun": 3,
+    "Icon": "UIIcon/item_23_6113",
+    "Price": "60",
+    "Currency": "Y",
+    "Flag": 0,
+    "ItemInfo": [
+      {
+        "ItemID": 2,
+        "ItemNum": 800
+      },
+      {
+        "ItemID": 121105,
+        "ItemNum": 20
+      },
+      {
+        "ItemID": 130705,
+        "ItemNum": 2
+      },
+      {
+        "ItemID": 130205,
+        "ItemNum": 2
+      },
+      {
+        "ItemID": 130305,
+        "ItemNum": 2
+      },
+      {
+        "ItemID": 130405,
+        "ItemNum": 2
+      },
+      {
+        "ItemID": 130505,
+        "ItemNum": 2
+      }
+    ]
+  },
+  "11": {
+    "ID": 11,
+    "Name": "精品礼包2",
+    "Fun": 3,
+    "Icon": "UIIcon/item_23_6113",
+    "Price": "24",
+    "Currency": "Y",
+    "Flag": 0,
+    "ItemInfo": [
+      {
+        "ItemID": 2,
+        "ItemNum": 320
+      },
+      {
+        "ItemID": 121001,
+        "ItemNum": 8
+      },
+      {
+        "ItemID": 121105,
+        "ItemNum": 8
+      },
+      {
+        "ItemID": 130203,
+        "ItemNum": 2
+      },
+      {
+        "ItemID": 130303,
+        "ItemNum": 2
+      },
+      {
+        "ItemID": 130403,
+        "ItemNum": 2
+      },
+      {
+        "ItemID": 130603,
+        "ItemNum": 2
+      }
+    ]
+  },
+  "12": {
+    "ID": 12,
+    "Name": "华贵礼包1",
+    "Fun": 3,
+    "Icon": "UIIcon/item_23_6113",
+    "Price": "36",
+    "Currency": "Y",
+    "Flag": 0,
+    "ItemInfo": [
+      {
+        "ItemID": 2,
+        "ItemNum": 480
+      },
+      {
+        "ItemID": 121001,
+        "ItemNum": 12
+      },
+      {
+        "ItemID": 121105,
+        "ItemNum": 12
+      },
+      {
+        "ItemID": 130203,
+        "ItemNum": 4
+      },
+      {
+        "ItemID": 130303,
+        "ItemNum": 4
+      },
+      {
+        "ItemID": 130403,
+        "ItemNum": 4
+      },
+      {
+        "ItemID": 130603,
+        "ItemNum": 4
+      }
+    ]
+  },
+  "13": {
+    "ID": 13,
+    "Name": "华贵礼包2",
+    "Fun": 3,
+    "Icon": "UIIcon/item_23_6113",
+    "Price": "60",
+    "Currency": "Y",
+    "Flag": 0,
+    "ItemInfo": [
+      {
+        "ItemID": 2,
+        "ItemNum": 800
+      },
+      {
+        "ItemID": 121001,
+        "ItemNum": 20
+      },
+      {
+        "ItemID": 121105,
+        "ItemNum": 20
+      },
+      {
+        "ItemID": 130205,
+        "ItemNum": 2
+      },
+      {
+        "ItemID": 130305,
+        "ItemNum": 2
+      },
+      {
+        "ItemID": 130405,
+        "ItemNum": 2
+      },
+      {
+        "ItemID": 130505,
+        "ItemNum": 2
+      }
+    ]
+  },
+  "14": {
+    "ID": 14,
+    "Name": "华贵礼包3",
+    "Fun": 3,
+    "Icon": "UIIcon/item_23_6113",
+    "Price": "90",
+    "Currency": "Y",
+    "Flag": 0,
+    "ItemInfo": [
+      {
+        "ItemID": 2,
+        "ItemNum": 1200
+      },
+      {
+        "ItemID": 121105,
+        "ItemNum": 30
+      },
+      {
+        "ItemID": 130105,
+        "ItemNum": 4
+      },
+      {
+        "ItemID": 130205,
+        "ItemNum": 4
+      },
+      {
+        "ItemID": 130305,
+        "ItemNum": 4
+      },
+      {
+        "ItemID": 130405,
+        "ItemNum": 4
+      },
+      {
+        "ItemID": 130605,
+        "ItemNum": 4
+      }
+    ]
+  },
+  "15": {
+    "ID": 15,
+    "Name": "宝藏礼包1",
+    "Fun": 3,
+    "Icon": "UIIcon/item_23_6113",
+    "Price": "36",
+    "Currency": "Y",
+    "Flag": 0,
+    "ItemInfo": [
+      {
+        "ItemID": 2,
+        "ItemNum": 480
+      },
+      {
+        "ItemID": 121105,
+        "ItemNum": 12
+      },
+      {
+        "ItemID": 130103,
+        "ItemNum": 4
+      },
+      {
+        "ItemID": 130203,
+        "ItemNum": 4
+      },
+      {
+        "ItemID": 130303,
+        "ItemNum": 4
+      },
+      {
+        "ItemID": 130403,
+        "ItemNum": 4
+      },
+      {
+        "ItemID": 130603,
+        "ItemNum": 4
+      }
+    ]
+  },
+  "16": {
+    "ID": 16,
+    "Name": "宝藏礼包2",
+    "Fun": 3,
+    "Icon": "UIIcon/item_23_6113",
+    "Price": "60",
+    "Currency": "Y",
+    "Flag": 0,
+    "ItemInfo": [
+      {
+        "ItemID": 2,
+        "ItemNum": 800
+      },
+      {
+        "ItemID": 121105,
+        "ItemNum": 20
+      },
+      {
+        "ItemID": 130705,
+        "ItemNum": 2
+      },
+      {
+        "ItemID": 130205,
+        "ItemNum": 2
+      },
+      {
+        "ItemID": 130305,
+        "ItemNum": 2
+      },
+      {
+        "ItemID": 130405,
+        "ItemNum": 2
+      },
+      {
+        "ItemID": 130505,
+        "ItemNum": 2
+      }
+    ]
+  },
+  "17": {
+    "ID": 17,
+    "Name": "宝藏礼包3",
+    "Fun": 3,
+    "Icon": "UIIcon/item_23_6113",
+    "Price": "90",
+    "Currency": "Y",
+    "Flag": 0,
+    "ItemInfo": [
+      {
+        "ItemID": 2,
+        "ItemNum": 1200
+      },
+      {
+        "ItemID": 121001,
+        "ItemNum": 30
+      },
+      {
+        "ItemID": 121105,
+        "ItemNum": 30
+      },
+      {
+        "ItemID": 130205,
+        "ItemNum": 4
+      },
+      {
+        "ItemID": 130305,
+        "ItemNum": 4
+      },
+      {
+        "ItemID": 130405,
+        "ItemNum": 4
+      },
+      {
+        "ItemID": 130605,
+        "ItemNum": 4
+      }
+    ]
+  },
+  "18": {
+    "ID": 18,
+    "Name": "宝藏礼包4",
+    "Fun": 3,
+    "Icon": "UIIcon/item_23_6113",
+    "Price": "60",
+    "Currency": "Y",
+    "Flag": 0,
+    "ItemInfo": [
+      {
+        "ItemID": 2,
+        "ItemNum": 800
+      },
+      {
+        "ItemID": 121001,
+        "ItemNum": 20
+      },
+      {
+        "ItemID": 121105,
+        "ItemNum": 20
+      },
+      {
+        "ItemID": 130205,
+        "ItemNum": 2
+      },
+      {
+        "ItemID": 130305,
+        "ItemNum": 2
+      },
+      {
+        "ItemID": 130405,
+        "ItemNum": 2
+      },
+      {
+        "ItemID": 130505,
+        "ItemNum": 2
+      }
+    ]
+  },
+  "19": {
+    "ID": 19,
+    "Name": "少许钻石",
+    "Fun": 4,
+    "Icon": "UIIcon/item_15_1211",
+    "Price": "6",
+    "Currency": "Y",
+    "Flag": 0,
+    "ItemInfo": [
+      {
+        "ItemID": 2,
+        "ItemNum": 30
+      },
+      {
+        "ItemID": 2,
+        "ItemNum": 0
+      }
+    ]
+  },
+  "20": {
+    "ID": 20,
+    "Name": "几块钻石",
+    "Fun": 4,
+    "Icon": "UIIcon/item_15_1212",
+    "Price": "30",
+    "Currency": "Y",
+    "Flag": 1,
+    "ItemInfo": [
+      {
+        "ItemID": 2,
+        "ItemNum": 150
+      },
+      {
+        "ItemID": 2,
+        "ItemNum": 30
+      }
+    ]
+  },
+  "21": {
+    "ID": 21,
+    "Name": "较多钻石",
+    "Fun": 4,
+    "Icon": "UIIcon/item_15_1213",
+    "Price": "68",
+    "Currency": "Y",
+    "Flag": 0,
+    "ItemInfo": [
+      {
+        "ItemID": 2,
+        "ItemNum": 350
+      },
+      {
+        "ItemID": 2,
+        "ItemNum": 80
+      }
+    ]
+  },
+  "22": {
+    "ID": 22,
+    "Name": "大量钻石",
+    "Fun": 4,
+    "Icon": "UIIcon/item_15_1214",
+    "Price": "128",
+    "Currency": "Y",
+    "Flag": 0,
+    "ItemInfo": [
+      {
+        "ItemID": 2,
+        "ItemNum": 650
+      },
+      {
+        "ItemID": 2,
+        "ItemNum": 210
+      }
+    ]
+  },
+  "23": {
+    "ID": 23,
+    "Name": "钻石宝箱",
+    "Fun": 4,
+    "Icon": "UIShop/diamond_01",
+    "Price": "328",
+    "Currency": "Y",
+    "Flag": 0,
+    "ItemInfo": [
+      {
+        "ItemID": 2,
+        "ItemNum": 1650
+      },
+      {
+        "ItemID": 2,
+        "ItemNum": 580
+      }
+    ]
+  },
+  "24": {
+    "ID": 24,
+    "Name": "豪华钻石箱",
+    "Fun": 4,
+    "Icon": "UIShop/diamond_02",
+    "Price": "648",
+    "Currency": "Y",
+    "Flag": 2,
+    "ItemInfo": [
+      {
+        "ItemID": 2,
+        "ItemNum": 3250
+      },
+      {
+        "ItemID": 2,
+        "ItemNum": 1280
+      }
+    ]
+  },
+  "25": {
+    "ID": 25,
+    "Name": "飞镖礼包",
+    "Fun": 2,
+    "Icon": "UIShop/gift_3",
+    "Price": "24",
+    "Currency": "Y",
+    "Flag": 0,
+    "ItemInfo": [
+      {
+        "ItemID": 2,
+        "ItemNum": 120
+      },
+      {
+        "ItemID": 130202,
+        "ItemNum": 12
+      },
+      {
+        "ItemID": 121105,
+        "ItemNum": 2
+      },
+      {
+        "ItemID": 104206,
+        "ItemNum": 1
+      },
+      {
+        "ItemID": 103305,
+        "ItemNum": 1
+      }
+    ]
+  },
+  "26": {
+    "ID": 26,
+    "Name": "相机礼包",
+    "Fun": 2,
+    "Icon": "UIShop/gift_3",
+    "Price": "24",
+    "Currency": "Y",
+    "Flag": 0,
+    "ItemInfo": [
+      {
+        "ItemID": 2,
+        "ItemNum": 120
+      },
+      {
+        "ItemID": 130301,
+        "ItemNum": 12
+      },
+      {
+        "ItemID": 121105,
+        "ItemNum": 2
+      },
+      {
+        "ItemID": 102306,
+        "ItemNum": 1
+      },
+      {
+        "ItemID": 101305,
+        "ItemNum": 1
+      }
+    ]
+  },
+  "27": {
+    "ID": 27,
+    "Name": "锤子礼包",
+    "Fun": 2,
+    "Icon": "UIShop/gift_3",
+    "Price": "24",
+    "Currency": "Y",
+    "Flag": 0,
+    "ItemInfo": [
+      {
+        "ItemID": 2,
+        "ItemNum": 120
+      },
+      {
+        "ItemID": 130702,
+        "ItemNum": 12
+      },
+      {
+        "ItemID": 121105,
+        "ItemNum": 2
+      },
+      {
+        "ItemID": 105306,
+        "ItemNum": 1
+      },
+      {
+        "ItemID": 106305,
+        "ItemNum": 1
+      }
+    ]
+  },
+  "28": {
+    "ID": 28,
+    "Name": "电池礼包",
+    "Fun": 2,
+    "Icon": "UIShop/gift_3",
+    "Price": "24",
+    "Currency": "Y",
+    "Flag": 0,
+    "ItemInfo": [
+      {
+        "ItemID": 2,
+        "ItemNum": 120
+      },
+      {
+        "ItemID": 130401,
+        "ItemNum": 12
+      },
+      {
+        "ItemID": 121105,
+        "ItemNum": 2
+      },
+      {
+        "ItemID": 107206,
+        "ItemNum": 1
+      },
+      {
+        "ItemID": 105206,
+        "ItemNum": 1
+      }
+    ]
+  },
+  "29": {
+    "ID": 29,
+    "Name": "普通月卡",
+    "Fun": 5,
+    "Icon": "-",
+    "Price": "98",
+    "Currency": "Y",
+    "Flag": 0,
+    "ItemInfo": [
+      {
+        "ItemID": 2,
+        "ItemNum": 680
+      }
+    ]
+  },
+  "30": {
+    "ID": 30,
+    "Name": "黄金月卡",
+    "Fun": 5,
+    "Icon": "-",
+    "Price": "188",
+    "Currency": "Y",
+    "Flag": 0,
+    "ItemInfo": [
+      {
+        "ItemID": 2,
+        "ItemNum": 1280
+      }
+    ]
+  },
+  "31": {
+    "ID": 31,
+    "Name": "魔力嘉年华",
+    "Fun": 6,
+    "Icon": "-",
+    "Price": "45",
+    "Currency": "Y",
+    "Flag": 0,
+    "ItemInfo": [
+    ]
+  },
+  "32": {
+    "ID": 32,
+    "Name": "有钱礼包",
+    "Fun": 2,
+    "Icon": "UIShop/gift_1",
+    "Price": "3",
+    "Currency": "Y",
+    "Flag": 0,
+    "ItemInfo": [
+      {
+        "ItemID": 2,
+        "ItemNum": 20
+      },
+      {
+        "ItemID": 130601,
+        "ItemNum": 3
+      },
+      {
+        "ItemID": 130201,
+        "ItemNum": 3
+      }
+    ]
+  },
+  "33": {
+    "ID": 33,
+    "Name": "财主礼包",
+    "Fun": 2,
+    "Icon": "UIShop/gift_2",
+    "Price": "6",
+    "Currency": "Y",
+    "Flag": 0,
+    "ItemInfo": [
+      {
+        "ItemID": 2,
+        "ItemNum": 50
+      },
+      {
+        "ItemID": 130601,
+        "ItemNum": 3
+      },
+      {
+        "ItemID": 130201,
+        "ItemNum": 3
+      },
+      {
+        "ItemID": 130301,
+        "ItemNum": 3
+      }
+    ]
+  },
+  "34": {
+    "ID": 34,
+    "Name": "土豪礼包",
+    "Fun": 2,
+    "Icon": "UIShop/gift_3",
+    "Price": "12",
+    "Currency": "Y",
+    "Flag": 0,
+    "ItemInfo": [
+      {
+        "ItemID": 2,
+        "ItemNum": 100
+      },
+      {
+        "ItemID": 130601,
+        "ItemNum": 3
+      },
+      {
+        "ItemID": 130201,
+        "ItemNum": 3
+      },
+      {
+        "ItemID": 130301,
+        "ItemNum": 3
+      },
+      {
+        "ItemID": 130401,
+        "ItemNum": 3
+      },
+      {
+        "ItemID": 130501,
+        "ItemNum": 3
+      },
+      {
+        "ItemID": 130701,
+        "ItemNum": 3
+      }
+    ]
+  },
+  "35": {
+    "ID": 35,
+    "Name": "大亨礼包",
+    "Fun": 2,
+    "Icon": "UIShop/gift_1",
+    "Price": "18",
+    "Currency": "Y",
+    "Flag": 0,
+    "ItemInfo": [
+      {
+        "ItemID": 2,
+        "ItemNum": 250
+      },
+      {
+        "ItemID": 130601,
+        "ItemNum": 8
+      },
+      {
+        "ItemID": 130201,
+        "ItemNum": 8
+      },
+      {
+        "ItemID": 130301,
+        "ItemNum": 8
+      },
+      {
+        "ItemID": 130401,
+        "ItemNum": 8
+      }
+    ]
+  },
+  "36": {
+    "ID": 36,
+    "Name": "公爵礼包",
+    "Fun": 2,
+    "Icon": "UIShop/gift_2",
+    "Price": "30",
+    "Currency": "Y",
+    "Flag": 0,
+    "ItemInfo": [
+      {
+        "ItemID": 2,
+        "ItemNum": 500
+      },
+      {
+        "ItemID": 130601,
+        "ItemNum": 8
+      },
+      {
+        "ItemID": 130201,
+        "ItemNum": 8
+      },
+      {
+        "ItemID": 130301,
+        "ItemNum": 8
+      },
+      {
+        "ItemID": 130401,
+        "ItemNum": 8
+      },
+      {
+        "ItemID": 130501,
+        "ItemNum": 8
+      }
+    ]
+  },
+  "37": {
+    "ID": 37,
+    "Name": "国王礼包",
+    "Fun": 2,
+    "Icon": "UIShop/gift_3",
+    "Price": "68",
+    "Currency": "Y",
+    "Flag": 0,
+    "ItemInfo": [
+      {
+        "ItemID": 2,
+        "ItemNum": 1000
+      },
+      {
+        "ItemID": 130601,
+        "ItemNum": 20
+      },
+      {
+        "ItemID": 130201,
+        "ItemNum": 20
+      },
+      {
+        "ItemID": 130301,
+        "ItemNum": 20
+      },
+      {
+        "ItemID": 130401,
+        "ItemNum": 20
+      },
+      {
+        "ItemID": 130501,
+        "ItemNum": 20
+      },
+      {
+        "ItemID": 130701,
+        "ItemNum": 20
+      }
+    ]
+  },
+  "38": {
+    "ID": 38,
+    "Name": "剪刀礼包",
+    "Fun": 2,
+    "Icon": "UIShop/gift_3",
+    "Price": "24",
+    "Currency": "Y",
+    "Flag": 0,
+    "ItemInfo": [
+      {
+        "ItemID": 2,
+        "ItemNum": 120
+      },
+      {
+        "ItemID": 130102,
+        "ItemNum": 12
+      },
+      {
+        "ItemID": 121105,
+        "ItemNum": 2
+      },
+      {
+        "ItemID": 102307,
+        "ItemNum": 1
+      },
+      {
+        "ItemID": 103305,
+        "ItemNum": 1
+      }
+    ]
+  },
+  "39": {
+    "ID": 39,
+    "Name": "闹钟礼包",
+    "Fun": 2,
+    "Icon": "UIShop/gift_3",
+    "Price": "24",
+    "Currency": "Y",
+    "Flag": 0,
+    "ItemInfo": [
+      {
+        "ItemID": 2,
+        "ItemNum": 120
+      },
+      {
+        "ItemID": 130602,
+        "ItemNum": 12
+      },
+      {
+        "ItemID": 121105,
+        "ItemNum": 2
+      },
+      {
+        "ItemID": 104207,
+        "ItemNum": 1
+      },
+      {
+        "ItemID": 101305,
+        "ItemNum": 1
+      }
+    ]
+  },
+  "40": {
+    "ID": 40,
+    "Name": "沙漏礼包",
+    "Fun": 2,
+    "Icon": "UIShop/gift_3",
+    "Price": "24",
+    "Currency": "Y",
+    "Flag": 0,
+    "ItemInfo": [
+      {
+        "ItemID": 2,
+        "ItemNum": 120
+      },
+      {
+        "ItemID": 130501,
+        "ItemNum": 12
+      },
+      {
+        "ItemID": 121105,
+        "ItemNum": 2
+      },
+      {
+        "ItemID": 107206,
+        "ItemNum": 1
+      },
+      {
+        "ItemID": 108206,
+        "ItemNum": 1
+      }
+    ]
+  },
+  "41": {
+    "ID": 41,
+    "Name": "限时体力礼包",
+    "Fun": 7,
+    "Icon": "-",
+    "Price": "30",
+    "Currency": "Y",
+    "Flag": 0,
+    "ItemInfo": [
+      {
+        "ItemID": 121105,
+        "ItemNum": 20
+      }
+    ]
+  },
+  "42": {
+    "ID": 42,
+    "Name": "一小包钻石1",
+    "Fun": 8,
+    "Icon": "UIIcon/item_15_1211",
+    "Price": "6",
+    "Currency": "Y",
+    "Flag": 0,
+    "ItemInfo": [
+      {
+        "ItemID": 2,
+        "ItemNum": 100
+      }
+    ]
+  },
+  "43": {
+    "ID": 43,
+    "Name": "一小包钻石2",
+    "Fun": 8,
+    "Icon": "UIIcon/item_15_1211",
+    "Price": "6",
+    "Currency": "Y",
+    "Flag": 0,
+    "ItemInfo": [
+      {
+        "ItemID": 2,
+        "ItemNum": 100
+      }
+    ]
+  },
+  "44": {
+    "ID": 44,
+    "Name": "一小包钻石3",
+    "Fun": 8,
+    "Icon": "UIIcon/item_15_1211",
+    "Price": "6",
+    "Currency": "Y",
+    "Flag": 0,
+    "ItemInfo": [
+      {
+        "ItemID": 2,
+        "ItemNum": 100
+      }
+    ]
+  },
+  "45": {
+    "ID": 45,
+    "Name": "一小包钻石4",
+    "Fun": 8,
+    "Icon": "UIIcon/item_15_1211",
+    "Price": "6",
+    "Currency": "Y",
+    "Flag": 0,
+    "ItemInfo": [
+      {
+        "ItemID": 2,
+        "ItemNum": 100
+      }
+    ]
+  },
+  "46": {
+    "ID": 46,
+    "Name": "一小包钻石5",
+    "Fun": 8,
+    "Icon": "UIIcon/item_15_1211",
+    "Price": "6",
+    "Currency": "Y",
+    "Flag": 0,
+    "ItemInfo": [
+      {
+        "ItemID": 2,
+        "ItemNum": 100
+      }
+    ]
+  },
+  "47": {
+    "ID": 47,
+    "Name": "限时体力礼包",
+    "Fun": 7,
+    "Icon": "-",
+    "Price": "18",
+    "Currency": "Y",
+    "Flag": 0,
+    "ItemInfo": [
+      {
+        "ItemID": 121105,
+        "ItemNum": 10
+      }
+    ]
+  },
+  "48": {
+    "ID": 48,
+    "Name": "猪猪储蓄罐",
+    "Fun": 9,
+    "Icon": "-",
+    "Price": "3",
+    "Currency": "Y",
+    "Flag": 0,
+    "ItemInfo": [
+    ]
+  },
+  "49": {
+    "ID": 49,
+    "Name": "猪猪储蓄罐",
+    "Fun": 9,
+    "Icon": "-",
+    "Price": "12",
+    "Currency": "Y",
+    "Flag": 0,
+    "ItemInfo": [
+    ]
+  },
+  "50": {
+    "ID": 50,
+    "Name": "猪猪储蓄罐",
+    "Fun": 9,
+    "Icon": "-",
+    "Price": "18",
+    "Currency": "Y",
+    "Flag": 0,
+    "ItemInfo": [
+    ]
+  },
+  "51": {
+    "ID": 51,
+    "Name": "猪猪储蓄罐",
+    "Fun": 9,
+    "Icon": "-",
+    "Price": "30",
+    "Currency": "Y",
+    "Flag": 0,
+    "ItemInfo": [
+    ]
+  },
+  "52": {
+    "ID": 52,
+    "Name": "促销道具",
+    "Fun": 10,
+    "Icon": "-",
+    "Price": "1",
+    "Currency": "Y",
+    "Flag": 0,
+    "ItemInfo": [
+    ]
+  },
+  "53": {
+    "ID": 53,
+    "Name": "促销道具",
+    "Fun": 10,
+    "Icon": "-",
+    "Price": "3",
+    "Currency": "Y",
+    "Flag": 0,
+    "ItemInfo": [
+    ]
+  },
+  "54": {
+    "ID": 54,
+    "Name": "促销道具",
+    "Fun": 10,
+    "Icon": "-",
+    "Price": "6",
+    "Currency": "Y",
+    "Flag": 0,
+    "ItemInfo": [
+    ]
+  },
+  "55": {
+    "ID": 55,
+    "Name": "促销道具",
+    "Fun": 10,
+    "Icon": "-",
+    "Price": "12",
+    "Currency": "Y",
+    "Flag": 0,
+    "ItemInfo": [
+    ]
+  },
+  "56": {
+    "ID": 56,
+    "Name": "体力礼包",
+    "Fun": 11,
+    "Icon": "UIIcon/item_15_1112",
+    "Price": "3",
+    "Currency": "Y",
+    "Flag": 0,
+    "ItemInfo": [
+      {
+        "ItemID": 3,
+        "ItemNum": 160
+      }
+    ]
+  },
+  "57": {
+    "ID": 57,
+    "Name": "促销道具",
+    "Fun": 10,
+    "Icon": "-",
+    "Price": "30",
+    "Currency": "Y",
+    "Flag": 0,
+    "ItemInfo": [
+    ]
+  },
+  "58": {
+    "ID": 58,
+    "Name": "促销道具",
+    "Fun": 10,
+    "Icon": "-",
+    "Price": "68",
+    "Currency": "Y",
+    "Flag": 0,
+    "ItemInfo": [
+    ]
+  },
+  "59": {
+    "ID": 59,
+    "Name": "促销道具",
+    "Fun": 10,
+    "Icon": "-",
+    "Price": "98",
+    "Currency": "Y",
+    "Flag": 0,
+    "ItemInfo": [
+    ]
+  },
+  "60": {
+    "ID": 60,
+    "Name": "促销道具",
+    "Fun": 10,
+    "Icon": "-",
+    "Price": "128",
+    "Currency": "Y",
+    "Flag": 0,
+    "ItemInfo": [
+    ]
+  },
+  "61": {
+    "ID": 61,
+    "Name": "限时体力礼包",
+    "Fun": 7,
+    "Icon": "-",
+    "Price": "48",
+    "Currency": "Y",
+    "Flag": 0,
+    "ItemInfo": [
+      {
+        "ItemID": 121105,
+        "ItemNum": 30
+      }
+    ]
+  },
+  "62": {
+    "ID": 62,
+    "Name": "限时体力礼包",
+    "Fun": 7,
+    "Icon": "-",
+    "Price": "72",
+    "Currency": "Y",
+    "Flag": 0,
+    "ItemInfo": [
+      {
+        "ItemID": 121105,
+        "ItemNum": 40
+      }
+    ]
+  },
+  "101": {
+    "ID": 101,
+    "Name": "至尊享受1",
+    "Fun": 12,
+    "Icon": "-",
+    "Price": "6",
+    "Currency": "Y",
+    "Flag": 0,
+    "ItemInfo": [
+    ]
+  },
+  "102": {
+    "ID": 102,
+    "Name": "至尊享受2",
+    "Fun": 12,
+    "Icon": "-",
+    "Price": "18",
+    "Currency": "Y",
+    "Flag": 0,
+    "ItemInfo": [
+    ]
+  },
+  "103": {
+    "ID": 103,
+    "Name": "至尊享受3",
+    "Fun": 12,
+    "Icon": "-",
+    "Price": "30",
+    "Currency": "Y",
+    "Flag": 0,
+    "ItemInfo": [
+    ]
+  },
+  "104": {
+    "ID": 104,
+    "Name": "至尊享受4",
+    "Fun": 12,
+    "Icon": "-",
+    "Price": "45",
+    "Currency": "Y",
+    "Flag": 0,
+    "ItemInfo": [
+    ]
+  },
+  "201": {
+    "ID": 201,
+    "Name": "金币礼包1",
+    "Fun": 13,
+    "Icon": "-",
+    "Price": "18",
+    "Currency": "Y",
+    "Flag": 0,
+    "ItemInfo": [
+      {
+        "ItemID": 1,
+        "ItemNum": 900
+      }
+    ]
+  },
+  "202": {
+    "ID": 202,
+    "Name": "金币礼包2",
+    "Fun": 13,
+    "Icon": "-",
+    "Price": "30",
+    "Currency": "Y",
+    "Flag": 0,
+    "ItemInfo": [
+      {
+        "ItemID": 1,
+        "ItemNum": 1500
+      }
+    ]
+  },
+  "203": {
+    "ID": 203,
+    "Name": "金币礼包3",
+    "Fun": 13,
+    "Icon": "-",
+    "Price": "68",
+    "Currency": "Y",
+    "Flag": 0,
+    "ItemInfo": [
+      {
+        "ItemID": 1,
+        "ItemNum": 3400
+      }
+    ]
+  },
+  "204": {
+    "ID": 204,
+    "Name": "金币礼包4",
+    "Fun": 13,
+    "Icon": "-",
+    "Price": "128",
+    "Currency": "Y",
+    "Flag": 0,
+    "ItemInfo": [
+      {
+        "ItemID": 1,
+        "ItemNum": 6400
+      }
+    ]
+  },
+  "205": {
+    "ID": 205,
+    "Name": "金币礼包5",
+    "Fun": 13,
+    "Icon": "-",
+    "Price": "328",
+    "Currency": "Y",
+    "Flag": 0,
+    "ItemInfo": [
+      {
+        "ItemID": 1,
+        "ItemNum": 16400
+      }
+    ]
+  },
+  "206": {
+    "ID": 206,
+    "Name": "金币礼包6",
+    "Fun": 13,
+    "Icon": "-",
+    "Price": "648",
+    "Currency": "Y",
+    "Flag": 0,
+    "ItemInfo": [
+      {
+        "ItemID": 1,
+        "ItemNum": 32400
+      }
+    ]
+  },
+  "301": {
+    "ID": 301,
+    "Name": "回归礼包",
+    "Fun": 14,
+    "Icon": "-",
+    "Price": "6",
+    "Currency": "Y",
+    "Flag": 0,
+    "ItemInfo": [
+      {
+        "ItemID": 122104,
+        "ItemNum": 4
+      },
+      {
+        "ItemID": 130303,
+        "ItemNum": 3
+      },
+      {
+        "ItemID": 130603,
+        "ItemNum": 3
+      },
+      {
+        "ItemID": 130703,
+        "ItemNum": 3
+      },
+      {
+        "ItemID": 121105,
+        "ItemNum": 3
+      }
+    ]
+  },
+  "302": {
+    "ID": 302,
+    "Name": "成长基金",
+    "Fun": 15,
+    "Icon": "-",
+    "Price": "328",
+    "Currency": "Y",
+    "Flag": 0,
+    "ItemInfo": [
+      {
+        "ItemID": 122104,
+        "ItemNum": 8
+      },
+      {
+        "ItemID": 130303,
+        "ItemNum": 6
+      },
+      {
+        "ItemID": 130703,
+        "ItemNum": 6
+      }
+    ]
+  }
+}

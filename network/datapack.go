@@ -3,7 +3,6 @@ package network
 import (
 	"bytes"
 	"encoding/binary"
-
 	"github.com/451008604/socketServerFrame/config"
 	"github.com/451008604/socketServerFrame/iface"
 	"github.com/451008604/socketServerFrame/logs"

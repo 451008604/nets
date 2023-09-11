@@ -1,0 +1,4052 @@
+{
+  "1": {
+    "ID": 1,
+    "groupID": 1,
+    "index": 1,
+    "Probability": 1554,
+    "Min": 1,
+    "Max": 50,
+    "Limit": 61
+  },
+  "2": {
+    "ID": 2,
+    "groupID": 1,
+    "index": 2,
+    "Probability": 1636,
+    "Min": 1,
+    "Max": 40,
+    "Limit": 64
+  },
+  "3": {
+    "ID": 3,
+    "groupID": 1,
+    "index": 3,
+    "Probability": 1967,
+    "Min": 1,
+    "Max": 30,
+    "Limit": 75
+  },
+  "4": {
+    "ID": 4,
+    "groupID": 1,
+    "index": 4,
+    "Probability": 2613,
+    "Min": 1,
+    "Max": 20,
+    "Limit": 96
+  },
+  "5": {
+    "ID": 5,
+    "groupID": 1,
+    "index": 5,
+    "Probability": 1452,
+    "Min": 1,
+    "Max": 20,
+    "Limit": 58
+  },
+  "6": {
+    "ID": 6,
+    "groupID": 1,
+    "index": 6,
+    "Probability": 1161,
+    "Min": 1,
+    "Max": 20,
+    "Limit": 49
+  },
+  "7": {
+    "ID": 7,
+    "groupID": 1,
+    "index": 7,
+    "Probability": 1016,
+    "Min": 1,
+    "Max": 20,
+    "Limit": 44
+  },
+  "8": {
+    "ID": 8,
+    "groupID": 1,
+    "index": 8,
+    "Probability": 871,
+    "Min": 1,
+    "Max": 20,
+    "Limit": 39
+  },
+  "9": {
+    "ID": 9,
+    "groupID": 1,
+    "index": 9,
+    "Probability": 726,
+    "Min": 1,
+    "Max": 20,
+    "Limit": 34
+  },
+  "10": {
+    "ID": 10,
+    "groupID": 1,
+    "index": 10,
+    "Probability": 953,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 42
+  },
+  "11": {
+    "ID": 11,
+    "groupID": 1,
+    "index": 11,
+    "Probability": 953,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 42
+  },
+  "12": {
+    "ID": 12,
+    "groupID": 1,
+    "index": 12,
+    "Probability": 762,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 35
+  },
+  "13": {
+    "ID": 13,
+    "groupID": 1,
+    "index": 13,
+    "Probability": 743,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 35
+  },
+  "14": {
+    "ID": 14,
+    "groupID": 1,
+    "index": 14,
+    "Probability": 724,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 34
+  },
+  "15": {
+    "ID": 15,
+    "groupID": 1,
+    "index": 15,
+    "Probability": 705,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 34
+  },
+  "16": {
+    "ID": 16,
+    "groupID": 1,
+    "index": 16,
+    "Probability": 686,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 33
+  },
+  "17": {
+    "ID": 17,
+    "groupID": 1,
+    "index": 17,
+    "Probability": 667,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 32
+  },
+  "18": {
+    "ID": 18,
+    "groupID": 1,
+    "index": 18,
+    "Probability": 648,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 32
+  },
+  "19": {
+    "ID": 19,
+    "groupID": 1,
+    "index": 19,
+    "Probability": 629,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 31
+  },
+  "20": {
+    "ID": 20,
+    "groupID": 1,
+    "index": 20,
+    "Probability": 610,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 30
+  },
+  "21": {
+    "ID": 21,
+    "groupID": 1,
+    "index": 21,
+    "Probability": 591,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 30
+  },
+  "22": {
+    "ID": 22,
+    "groupID": 1,
+    "index": 22,
+    "Probability": 572,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 29
+  },
+  "23": {
+    "ID": 23,
+    "groupID": 1,
+    "index": 23,
+    "Probability": 553,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 29
+  },
+  "24": {
+    "ID": 24,
+    "groupID": 1,
+    "index": 24,
+    "Probability": 534,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 28
+  },
+  "25": {
+    "ID": 25,
+    "groupID": 1,
+    "index": 25,
+    "Probability": 514,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 27
+  },
+  "26": {
+    "ID": 26,
+    "groupID": 1,
+    "index": 26,
+    "Probability": 495,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 27
+  },
+  "27": {
+    "ID": 27,
+    "groupID": 1,
+    "index": 27,
+    "Probability": 476,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 26
+  },
+  "28": {
+    "ID": 28,
+    "groupID": 1,
+    "index": 28,
+    "Probability": 457,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 25
+  },
+  "29": {
+    "ID": 29,
+    "groupID": 1,
+    "index": 29,
+    "Probability": 438,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 25
+  },
+  "30": {
+    "ID": 30,
+    "groupID": 1,
+    "index": 30,
+    "Probability": 419,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 24
+  },
+  "31": {
+    "ID": 31,
+    "groupID": 1,
+    "index": 31,
+    "Probability": 400,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 24
+  },
+  "32": {
+    "ID": 32,
+    "groupID": 1,
+    "index": 32,
+    "Probability": 381,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 23
+  },
+  "33": {
+    "ID": 33,
+    "groupID": 1,
+    "index": 33,
+    "Probability": 191,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 17
+  },
+  "34": {
+    "ID": 34,
+    "groupID": 1,
+    "index": 34,
+    "Probability": 191,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 17
+  },
+  "35": {
+    "ID": 35,
+    "groupID": 1,
+    "index": 35,
+    "Probability": 191,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 17
+  },
+  "36": {
+    "ID": 36,
+    "groupID": 1,
+    "index": 36,
+    "Probability": 191,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 17
+  },
+  "37": {
+    "ID": 37,
+    "groupID": 1,
+    "index": 37,
+    "Probability": 191,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 17
+  },
+  "38": {
+    "ID": 38,
+    "groupID": 1,
+    "index": 38,
+    "Probability": 191,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 17
+  },
+  "39": {
+    "ID": 39,
+    "groupID": 1,
+    "index": 39,
+    "Probability": 191,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 17
+  },
+  "40": {
+    "ID": 40,
+    "groupID": 1,
+    "index": 40,
+    "Probability": 191,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 17
+  },
+  "41": {
+    "ID": 41,
+    "groupID": 1,
+    "index": 41,
+    "Probability": 19,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 11
+  },
+  "42": {
+    "ID": 42,
+    "groupID": 1,
+    "index": 42,
+    "Probability": 19,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 11
+  },
+  "43": {
+    "ID": 43,
+    "groupID": 1,
+    "index": 43,
+    "Probability": 19,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 11
+  },
+  "44": {
+    "ID": 44,
+    "groupID": 1,
+    "index": 44,
+    "Probability": 19,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 11
+  },
+  "45": {
+    "ID": 45,
+    "groupID": 1,
+    "index": 45,
+    "Probability": 19,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 11
+  },
+  "46": {
+    "ID": 46,
+    "groupID": 1,
+    "index": 46,
+    "Probability": 19,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 11
+  },
+  "47": {
+    "ID": 47,
+    "groupID": 1,
+    "index": 47,
+    "Probability": 19,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 11
+  },
+  "48": {
+    "ID": 48,
+    "groupID": 1,
+    "index": 48,
+    "Probability": 19,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 11
+  },
+  "49": {
+    "ID": 49,
+    "groupID": 1,
+    "index": 49,
+    "Probability": 19,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 11
+  },
+  "50": {
+    "ID": 50,
+    "groupID": 1,
+    "index": 50,
+    "Probability": 19,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 11
+  },
+  "51": {
+    "ID": 51,
+    "groupID": 2,
+    "index": 1,
+    "Probability": 1674,
+    "Min": 1,
+    "Max": 50,
+    "Limit": 65
+  },
+  "52": {
+    "ID": 52,
+    "groupID": 2,
+    "index": 2,
+    "Probability": 1933,
+    "Min": 1,
+    "Max": 40,
+    "Limit": 74
+  },
+  "53": {
+    "ID": 53,
+    "groupID": 2,
+    "index": 3,
+    "Probability": 2360,
+    "Min": 1,
+    "Max": 30,
+    "Limit": 88
+  },
+  "54": {
+    "ID": 54,
+    "groupID": 2,
+    "index": 4,
+    "Probability": 3194,
+    "Min": 1,
+    "Max": 20,
+    "Limit": 115
+  },
+  "55": {
+    "ID": 55,
+    "groupID": 2,
+    "index": 5,
+    "Probability": 2904,
+    "Min": 1,
+    "Max": 20,
+    "Limit": 106
+  },
+  "56": {
+    "ID": 56,
+    "groupID": 2,
+    "index": 6,
+    "Probability": 2613,
+    "Min": 1,
+    "Max": 20,
+    "Limit": 96
+  },
+  "57": {
+    "ID": 57,
+    "groupID": 2,
+    "index": 7,
+    "Probability": 2323,
+    "Min": 1,
+    "Max": 20,
+    "Limit": 87
+  },
+  "58": {
+    "ID": 58,
+    "groupID": 2,
+    "index": 8,
+    "Probability": 2033,
+    "Min": 1,
+    "Max": 20,
+    "Limit": 77
+  },
+  "59": {
+    "ID": 59,
+    "groupID": 2,
+    "index": 9,
+    "Probability": 1742,
+    "Min": 1,
+    "Max": 20,
+    "Limit": 68
+  },
+  "60": {
+    "ID": 60,
+    "groupID": 2,
+    "index": 10,
+    "Probability": 2222,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 83
+  },
+  "61": {
+    "ID": 61,
+    "groupID": 2,
+    "index": 11,
+    "Probability": 1780,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 69
+  },
+  "62": {
+    "ID": 62,
+    "groupID": 2,
+    "index": 12,
+    "Probability": 1734,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 67
+  },
+  "63": {
+    "ID": 63,
+    "groupID": 2,
+    "index": 13,
+    "Probability": 1688,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 66
+  },
+  "64": {
+    "ID": 64,
+    "groupID": 2,
+    "index": 14,
+    "Probability": 1646,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 64
+  },
+  "65": {
+    "ID": 65,
+    "groupID": 2,
+    "index": 15,
+    "Probability": 1601,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 63
+  },
+  "66": {
+    "ID": 66,
+    "groupID": 2,
+    "index": 16,
+    "Probability": 1555,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 61
+  },
+  "67": {
+    "ID": 67,
+    "groupID": 2,
+    "index": 17,
+    "Probability": 1513,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 60
+  },
+  "68": {
+    "ID": 68,
+    "groupID": 2,
+    "index": 18,
+    "Probability": 1467,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 59
+  },
+  "69": {
+    "ID": 69,
+    "groupID": 2,
+    "index": 19,
+    "Probability": 1421,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 57
+  },
+  "70": {
+    "ID": 70,
+    "groupID": 2,
+    "index": 20,
+    "Probability": 1380,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 56
+  },
+  "71": {
+    "ID": 71,
+    "groupID": 2,
+    "index": 21,
+    "Probability": 1334,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 54
+  },
+  "72": {
+    "ID": 72,
+    "groupID": 2,
+    "index": 22,
+    "Probability": 1288,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 53
+  },
+  "73": {
+    "ID": 73,
+    "groupID": 2,
+    "index": 23,
+    "Probability": 1246,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 51
+  },
+  "74": {
+    "ID": 74,
+    "groupID": 2,
+    "index": 24,
+    "Probability": 1200,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 50
+  },
+  "75": {
+    "ID": 75,
+    "groupID": 2,
+    "index": 25,
+    "Probability": 1155,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 48
+  },
+  "76": {
+    "ID": 76,
+    "groupID": 2,
+    "index": 26,
+    "Probability": 1113,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 47
+  },
+  "77": {
+    "ID": 77,
+    "groupID": 2,
+    "index": 27,
+    "Probability": 1067,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 45
+  },
+  "78": {
+    "ID": 78,
+    "groupID": 2,
+    "index": 28,
+    "Probability": 1021,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 44
+  },
+  "79": {
+    "ID": 79,
+    "groupID": 2,
+    "index": 29,
+    "Probability": 979,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 43
+  },
+  "80": {
+    "ID": 80,
+    "groupID": 2,
+    "index": 30,
+    "Probability": 934,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 41
+  },
+  "81": {
+    "ID": 81,
+    "groupID": 2,
+    "index": 31,
+    "Probability": 888,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 40
+  },
+  "82": {
+    "ID": 82,
+    "groupID": 2,
+    "index": 32,
+    "Probability": 846,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 38
+  },
+  "83": {
+    "ID": 83,
+    "groupID": 2,
+    "index": 33,
+    "Probability": 800,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 37
+  },
+  "84": {
+    "ID": 84,
+    "groupID": 2,
+    "index": 34,
+    "Probability": 755,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 35
+  },
+  "85": {
+    "ID": 85,
+    "groupID": 2,
+    "index": 35,
+    "Probability": 713,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 34
+  },
+  "86": {
+    "ID": 86,
+    "groupID": 2,
+    "index": 36,
+    "Probability": 667,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 32
+  },
+  "87": {
+    "ID": 87,
+    "groupID": 2,
+    "index": 37,
+    "Probability": 621,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 31
+  },
+  "88": {
+    "ID": 88,
+    "groupID": 2,
+    "index": 38,
+    "Probability": 579,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 29
+  },
+  "89": {
+    "ID": 89,
+    "groupID": 2,
+    "index": 39,
+    "Probability": 534,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 28
+  },
+  "90": {
+    "ID": 90,
+    "groupID": 2,
+    "index": 40,
+    "Probability": 488,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 26
+  },
+  "91": {
+    "ID": 91,
+    "groupID": 2,
+    "index": 41,
+    "Probability": 446,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 25
+  },
+  "92": {
+    "ID": 92,
+    "groupID": 2,
+    "index": 42,
+    "Probability": 400,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 24
+  },
+  "93": {
+    "ID": 93,
+    "groupID": 2,
+    "index": 43,
+    "Probability": 354,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 22
+  },
+  "94": {
+    "ID": 94,
+    "groupID": 2,
+    "index": 44,
+    "Probability": 313,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 21
+  },
+  "95": {
+    "ID": 95,
+    "groupID": 2,
+    "index": 45,
+    "Probability": 267,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 19
+  },
+  "96": {
+    "ID": 96,
+    "groupID": 2,
+    "index": 46,
+    "Probability": 221,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 18
+  },
+  "97": {
+    "ID": 97,
+    "groupID": 2,
+    "index": 47,
+    "Probability": 179,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 16
+  },
+  "98": {
+    "ID": 98,
+    "groupID": 2,
+    "index": 48,
+    "Probability": 133,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 15
+  },
+  "99": {
+    "ID": 99,
+    "groupID": 2,
+    "index": 49,
+    "Probability": 88,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 13
+  },
+  "100": {
+    "ID": 100,
+    "groupID": 2,
+    "index": 50,
+    "Probability": 46,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 12
+  },
+  "101": {
+    "ID": 101,
+    "groupID": 3,
+    "index": 1,
+    "Probability": 1793,
+    "Min": 1,
+    "Max": 50,
+    "Limit": 69
+  },
+  "102": {
+    "ID": 102,
+    "groupID": 3,
+    "index": 2,
+    "Probability": 2156,
+    "Min": 1,
+    "Max": 40,
+    "Limit": 81
+  },
+  "103": {
+    "ID": 103,
+    "groupID": 3,
+    "index": 3,
+    "Probability": 2754,
+    "Min": 1,
+    "Max": 30,
+    "Limit": 101
+  },
+  "104": {
+    "ID": 104,
+    "groupID": 3,
+    "index": 4,
+    "Probability": 3775,
+    "Min": 1,
+    "Max": 20,
+    "Limit": 134
+  },
+  "105": {
+    "ID": 105,
+    "groupID": 3,
+    "index": 5,
+    "Probability": 3484,
+    "Min": 1,
+    "Max": 20,
+    "Limit": 125
+  },
+  "106": {
+    "ID": 106,
+    "groupID": 3,
+    "index": 6,
+    "Probability": 3194,
+    "Min": 1,
+    "Max": 20,
+    "Limit": 115
+  },
+  "107": {
+    "ID": 107,
+    "groupID": 3,
+    "index": 7,
+    "Probability": 2904,
+    "Min": 1,
+    "Max": 20,
+    "Limit": 106
+  },
+  "108": {
+    "ID": 108,
+    "groupID": 3,
+    "index": 8,
+    "Probability": 2613,
+    "Min": 1,
+    "Max": 20,
+    "Limit": 96
+  },
+  "109": {
+    "ID": 109,
+    "groupID": 3,
+    "index": 9,
+    "Probability": 2323,
+    "Min": 1,
+    "Max": 20,
+    "Limit": 87
+  },
+  "110": {
+    "ID": 110,
+    "groupID": 3,
+    "index": 10,
+    "Probability": 2668,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 98
+  },
+  "111": {
+    "ID": 111,
+    "groupID": 3,
+    "index": 11,
+    "Probability": 2287,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 85
+  },
+  "112": {
+    "ID": 112,
+    "groupID": 3,
+    "index": 12,
+    "Probability": 2222,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 83
+  },
+  "113": {
+    "ID": 113,
+    "groupID": 3,
+    "index": 13,
+    "Probability": 1780,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 69
+  },
+  "114": {
+    "ID": 114,
+    "groupID": 3,
+    "index": 14,
+    "Probability": 1734,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 67
+  },
+  "115": {
+    "ID": 115,
+    "groupID": 3,
+    "index": 15,
+    "Probability": 1688,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 66
+  },
+  "116": {
+    "ID": 116,
+    "groupID": 3,
+    "index": 16,
+    "Probability": 1646,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 64
+  },
+  "117": {
+    "ID": 117,
+    "groupID": 3,
+    "index": 17,
+    "Probability": 1601,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 63
+  },
+  "118": {
+    "ID": 118,
+    "groupID": 3,
+    "index": 18,
+    "Probability": 1555,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 61
+  },
+  "119": {
+    "ID": 119,
+    "groupID": 3,
+    "index": 19,
+    "Probability": 1513,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 60
+  },
+  "120": {
+    "ID": 120,
+    "groupID": 3,
+    "index": 20,
+    "Probability": 1467,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 59
+  },
+  "121": {
+    "ID": 121,
+    "groupID": 3,
+    "index": 21,
+    "Probability": 1421,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 57
+  },
+  "122": {
+    "ID": 122,
+    "groupID": 3,
+    "index": 22,
+    "Probability": 1380,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 56
+  },
+  "123": {
+    "ID": 123,
+    "groupID": 3,
+    "index": 23,
+    "Probability": 1334,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 54
+  },
+  "124": {
+    "ID": 124,
+    "groupID": 3,
+    "index": 24,
+    "Probability": 1288,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 53
+  },
+  "125": {
+    "ID": 125,
+    "groupID": 3,
+    "index": 25,
+    "Probability": 1246,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 51
+  },
+  "126": {
+    "ID": 126,
+    "groupID": 3,
+    "index": 26,
+    "Probability": 1200,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 50
+  },
+  "127": {
+    "ID": 127,
+    "groupID": 3,
+    "index": 27,
+    "Probability": 1155,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 48
+  },
+  "128": {
+    "ID": 128,
+    "groupID": 3,
+    "index": 28,
+    "Probability": 1113,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 47
+  },
+  "129": {
+    "ID": 129,
+    "groupID": 3,
+    "index": 29,
+    "Probability": 1067,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 45
+  },
+  "130": {
+    "ID": 130,
+    "groupID": 3,
+    "index": 30,
+    "Probability": 1021,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 44
+  },
+  "131": {
+    "ID": 131,
+    "groupID": 3,
+    "index": 31,
+    "Probability": 979,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 43
+  },
+  "132": {
+    "ID": 132,
+    "groupID": 3,
+    "index": 32,
+    "Probability": 934,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 41
+  },
+  "133": {
+    "ID": 133,
+    "groupID": 3,
+    "index": 33,
+    "Probability": 888,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 40
+  },
+  "134": {
+    "ID": 134,
+    "groupID": 3,
+    "index": 34,
+    "Probability": 846,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 38
+  },
+  "135": {
+    "ID": 135,
+    "groupID": 3,
+    "index": 35,
+    "Probability": 800,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 37
+  },
+  "136": {
+    "ID": 136,
+    "groupID": 3,
+    "index": 36,
+    "Probability": 755,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 35
+  },
+  "137": {
+    "ID": 137,
+    "groupID": 3,
+    "index": 37,
+    "Probability": 713,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 34
+  },
+  "138": {
+    "ID": 138,
+    "groupID": 3,
+    "index": 38,
+    "Probability": 667,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 32
+  },
+  "139": {
+    "ID": 139,
+    "groupID": 3,
+    "index": 39,
+    "Probability": 621,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 31
+  },
+  "140": {
+    "ID": 140,
+    "groupID": 3,
+    "index": 40,
+    "Probability": 579,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 29
+  },
+  "141": {
+    "ID": 141,
+    "groupID": 3,
+    "index": 41,
+    "Probability": 534,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 28
+  },
+  "142": {
+    "ID": 142,
+    "groupID": 3,
+    "index": 42,
+    "Probability": 488,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 26
+  },
+  "143": {
+    "ID": 143,
+    "groupID": 3,
+    "index": 43,
+    "Probability": 446,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 25
+  },
+  "144": {
+    "ID": 144,
+    "groupID": 3,
+    "index": 44,
+    "Probability": 400,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 24
+  },
+  "145": {
+    "ID": 145,
+    "groupID": 3,
+    "index": 45,
+    "Probability": 354,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 22
+  },
+  "146": {
+    "ID": 146,
+    "groupID": 3,
+    "index": 46,
+    "Probability": 313,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 21
+  },
+  "147": {
+    "ID": 147,
+    "groupID": 3,
+    "index": 47,
+    "Probability": 267,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 19
+  },
+  "148": {
+    "ID": 148,
+    "groupID": 3,
+    "index": 48,
+    "Probability": 221,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 18
+  },
+  "149": {
+    "ID": 149,
+    "groupID": 3,
+    "index": 49,
+    "Probability": 179,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 16
+  },
+  "150": {
+    "ID": 150,
+    "groupID": 3,
+    "index": 50,
+    "Probability": 133,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 15
+  },
+  "151": {
+    "ID": 151,
+    "groupID": 4,
+    "index": 1,
+    "Probability": 1913,
+    "Min": 1,
+    "Max": 50,
+    "Limit": 73
+  },
+  "152": {
+    "ID": 152,
+    "groupID": 4,
+    "index": 2,
+    "Probability": 2305,
+    "Min": 1,
+    "Max": 40,
+    "Limit": 86
+  },
+  "153": {
+    "ID": 153,
+    "groupID": 4,
+    "index": 3,
+    "Probability": 2950,
+    "Min": 1,
+    "Max": 30,
+    "Limit": 107
+  },
+  "154": {
+    "ID": 154,
+    "groupID": 4,
+    "index": 4,
+    "Probability": 4210,
+    "Min": 1,
+    "Max": 20,
+    "Limit": 149
+  },
+  "155": {
+    "ID": 155,
+    "groupID": 4,
+    "index": 5,
+    "Probability": 4065,
+    "Min": 1,
+    "Max": 20,
+    "Limit": 144
+  },
+  "156": {
+    "ID": 156,
+    "groupID": 4,
+    "index": 6,
+    "Probability": 3775,
+    "Min": 1,
+    "Max": 20,
+    "Limit": 134
+  },
+  "157": {
+    "ID": 157,
+    "groupID": 4,
+    "index": 7,
+    "Probability": 3484,
+    "Min": 1,
+    "Max": 20,
+    "Limit": 125
+  },
+  "158": {
+    "ID": 158,
+    "groupID": 4,
+    "index": 8,
+    "Probability": 3194,
+    "Min": 1,
+    "Max": 20,
+    "Limit": 115
+  },
+  "159": {
+    "ID": 159,
+    "groupID": 4,
+    "index": 9,
+    "Probability": 2904,
+    "Min": 1,
+    "Max": 20,
+    "Limit": 106
+  },
+  "160": {
+    "ID": 160,
+    "groupID": 4,
+    "index": 10,
+    "Probability": 3430,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 123
+  },
+  "161": {
+    "ID": 161,
+    "groupID": 4,
+    "index": 11,
+    "Probability": 3049,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 110
+  },
+  "162": {
+    "ID": 162,
+    "groupID": 4,
+    "index": 12,
+    "Probability": 2668,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 98
+  },
+  "163": {
+    "ID": 163,
+    "groupID": 4,
+    "index": 13,
+    "Probability": 2287,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 85
+  },
+  "164": {
+    "ID": 164,
+    "groupID": 4,
+    "index": 14,
+    "Probability": 2222,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 83
+  },
+  "165": {
+    "ID": 165,
+    "groupID": 4,
+    "index": 15,
+    "Probability": 1780,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 69
+  },
+  "166": {
+    "ID": 166,
+    "groupID": 4,
+    "index": 16,
+    "Probability": 1734,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 67
+  },
+  "167": {
+    "ID": 167,
+    "groupID": 4,
+    "index": 17,
+    "Probability": 1688,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 66
+  },
+  "168": {
+    "ID": 168,
+    "groupID": 4,
+    "index": 18,
+    "Probability": 1646,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 64
+  },
+  "169": {
+    "ID": 169,
+    "groupID": 4,
+    "index": 19,
+    "Probability": 1601,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 63
+  },
+  "170": {
+    "ID": 170,
+    "groupID": 4,
+    "index": 20,
+    "Probability": 1555,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 61
+  },
+  "171": {
+    "ID": 171,
+    "groupID": 4,
+    "index": 21,
+    "Probability": 1513,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 60
+  },
+  "172": {
+    "ID": 172,
+    "groupID": 4,
+    "index": 22,
+    "Probability": 1467,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 59
+  },
+  "173": {
+    "ID": 173,
+    "groupID": 4,
+    "index": 23,
+    "Probability": 1421,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 57
+  },
+  "174": {
+    "ID": 174,
+    "groupID": 4,
+    "index": 24,
+    "Probability": 1380,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 56
+  },
+  "175": {
+    "ID": 175,
+    "groupID": 4,
+    "index": 25,
+    "Probability": 1334,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 54
+  },
+  "176": {
+    "ID": 176,
+    "groupID": 4,
+    "index": 26,
+    "Probability": 1288,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 53
+  },
+  "177": {
+    "ID": 177,
+    "groupID": 4,
+    "index": 27,
+    "Probability": 1246,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 51
+  },
+  "178": {
+    "ID": 178,
+    "groupID": 4,
+    "index": 28,
+    "Probability": 1200,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 50
+  },
+  "179": {
+    "ID": 179,
+    "groupID": 4,
+    "index": 29,
+    "Probability": 1155,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 48
+  },
+  "180": {
+    "ID": 180,
+    "groupID": 4,
+    "index": 30,
+    "Probability": 1113,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 47
+  },
+  "181": {
+    "ID": 181,
+    "groupID": 4,
+    "index": 31,
+    "Probability": 1067,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 45
+  },
+  "182": {
+    "ID": 182,
+    "groupID": 4,
+    "index": 32,
+    "Probability": 1021,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 44
+  },
+  "183": {
+    "ID": 183,
+    "groupID": 4,
+    "index": 33,
+    "Probability": 979,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 43
+  },
+  "184": {
+    "ID": 184,
+    "groupID": 4,
+    "index": 34,
+    "Probability": 934,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 41
+  },
+  "185": {
+    "ID": 185,
+    "groupID": 4,
+    "index": 35,
+    "Probability": 888,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 40
+  },
+  "186": {
+    "ID": 186,
+    "groupID": 4,
+    "index": 36,
+    "Probability": 846,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 38
+  },
+  "187": {
+    "ID": 187,
+    "groupID": 4,
+    "index": 37,
+    "Probability": 800,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 37
+  },
+  "188": {
+    "ID": 188,
+    "groupID": 4,
+    "index": 38,
+    "Probability": 755,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 35
+  },
+  "189": {
+    "ID": 189,
+    "groupID": 4,
+    "index": 39,
+    "Probability": 713,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 34
+  },
+  "190": {
+    "ID": 190,
+    "groupID": 4,
+    "index": 40,
+    "Probability": 667,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 32
+  },
+  "191": {
+    "ID": 191,
+    "groupID": 4,
+    "index": 41,
+    "Probability": 621,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 31
+  },
+  "192": {
+    "ID": 192,
+    "groupID": 4,
+    "index": 42,
+    "Probability": 579,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 29
+  },
+  "193": {
+    "ID": 193,
+    "groupID": 4,
+    "index": 43,
+    "Probability": 534,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 28
+  },
+  "194": {
+    "ID": 194,
+    "groupID": 4,
+    "index": 44,
+    "Probability": 488,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 26
+  },
+  "195": {
+    "ID": 195,
+    "groupID": 4,
+    "index": 45,
+    "Probability": 446,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 25
+  },
+  "196": {
+    "ID": 196,
+    "groupID": 4,
+    "index": 46,
+    "Probability": 400,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 24
+  },
+  "197": {
+    "ID": 197,
+    "groupID": 4,
+    "index": 47,
+    "Probability": 354,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 22
+  },
+  "198": {
+    "ID": 198,
+    "groupID": 4,
+    "index": 48,
+    "Probability": 313,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 21
+  },
+  "199": {
+    "ID": 199,
+    "groupID": 4,
+    "index": 49,
+    "Probability": 267,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 19
+  },
+  "200": {
+    "ID": 200,
+    "groupID": 4,
+    "index": 50,
+    "Probability": 221,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 18
+  },
+  "201": {
+    "ID": 201,
+    "groupID": 5,
+    "index": 1,
+    "Probability": 2033,
+    "Min": 1,
+    "Max": 50,
+    "Limit": 77
+  },
+  "202": {
+    "ID": 202,
+    "groupID": 5,
+    "index": 2,
+    "Probability": 2454,
+    "Min": 1,
+    "Max": 40,
+    "Limit": 91
+  },
+  "203": {
+    "ID": 203,
+    "groupID": 5,
+    "index": 3,
+    "Probability": 3147,
+    "Min": 1,
+    "Max": 30,
+    "Limit": 114
+  },
+  "204": {
+    "ID": 204,
+    "groupID": 5,
+    "index": 4,
+    "Probability": 4501,
+    "Min": 1,
+    "Max": 20,
+    "Limit": 158
+  },
+  "205": {
+    "ID": 205,
+    "groupID": 5,
+    "index": 5,
+    "Probability": 4355,
+    "Min": 1,
+    "Max": 20,
+    "Limit": 153
+  },
+  "206": {
+    "ID": 206,
+    "groupID": 5,
+    "index": 6,
+    "Probability": 4210,
+    "Min": 1,
+    "Max": 20,
+    "Limit": 149
+  },
+  "207": {
+    "ID": 207,
+    "groupID": 5,
+    "index": 7,
+    "Probability": 4065,
+    "Min": 1,
+    "Max": 20,
+    "Limit": 144
+  },
+  "208": {
+    "ID": 208,
+    "groupID": 5,
+    "index": 8,
+    "Probability": 3775,
+    "Min": 1,
+    "Max": 20,
+    "Limit": 134
+  },
+  "209": {
+    "ID": 209,
+    "groupID": 5,
+    "index": 9,
+    "Probability": 3484,
+    "Min": 1,
+    "Max": 20,
+    "Limit": 125
+  },
+  "210": {
+    "ID": 210,
+    "groupID": 5,
+    "index": 10,
+    "Probability": 4192,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 148
+  },
+  "211": {
+    "ID": 211,
+    "groupID": 5,
+    "index": 11,
+    "Probability": 3811,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 135
+  },
+  "212": {
+    "ID": 212,
+    "groupID": 5,
+    "index": 12,
+    "Probability": 3430,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 123
+  },
+  "213": {
+    "ID": 213,
+    "groupID": 5,
+    "index": 13,
+    "Probability": 3049,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 110
+  },
+  "214": {
+    "ID": 214,
+    "groupID": 5,
+    "index": 14,
+    "Probability": 2668,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 98
+  },
+  "215": {
+    "ID": 215,
+    "groupID": 5,
+    "index": 15,
+    "Probability": 2287,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 85
+  },
+  "216": {
+    "ID": 216,
+    "groupID": 5,
+    "index": 16,
+    "Probability": 2222,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 83
+  },
+  "217": {
+    "ID": 217,
+    "groupID": 5,
+    "index": 17,
+    "Probability": 1780,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 69
+  },
+  "218": {
+    "ID": 218,
+    "groupID": 5,
+    "index": 18,
+    "Probability": 1734,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 67
+  },
+  "219": {
+    "ID": 219,
+    "groupID": 5,
+    "index": 19,
+    "Probability": 1688,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 66
+  },
+  "220": {
+    "ID": 220,
+    "groupID": 5,
+    "index": 20,
+    "Probability": 1646,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 64
+  },
+  "221": {
+    "ID": 221,
+    "groupID": 5,
+    "index": 21,
+    "Probability": 1601,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 63
+  },
+  "222": {
+    "ID": 222,
+    "groupID": 5,
+    "index": 22,
+    "Probability": 1555,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 61
+  },
+  "223": {
+    "ID": 223,
+    "groupID": 5,
+    "index": 23,
+    "Probability": 1513,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 60
+  },
+  "224": {
+    "ID": 224,
+    "groupID": 5,
+    "index": 24,
+    "Probability": 1467,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 59
+  },
+  "225": {
+    "ID": 225,
+    "groupID": 5,
+    "index": 25,
+    "Probability": 1421,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 57
+  },
+  "226": {
+    "ID": 226,
+    "groupID": 5,
+    "index": 26,
+    "Probability": 1380,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 56
+  },
+  "227": {
+    "ID": 227,
+    "groupID": 5,
+    "index": 27,
+    "Probability": 1334,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 54
+  },
+  "228": {
+    "ID": 228,
+    "groupID": 5,
+    "index": 28,
+    "Probability": 1288,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 53
+  },
+  "229": {
+    "ID": 229,
+    "groupID": 5,
+    "index": 29,
+    "Probability": 1246,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 51
+  },
+  "230": {
+    "ID": 230,
+    "groupID": 5,
+    "index": 30,
+    "Probability": 1200,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 50
+  },
+  "231": {
+    "ID": 231,
+    "groupID": 5,
+    "index": 31,
+    "Probability": 1155,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 48
+  },
+  "232": {
+    "ID": 232,
+    "groupID": 5,
+    "index": 32,
+    "Probability": 1113,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 47
+  },
+  "233": {
+    "ID": 233,
+    "groupID": 5,
+    "index": 33,
+    "Probability": 1067,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 45
+  },
+  "234": {
+    "ID": 234,
+    "groupID": 5,
+    "index": 34,
+    "Probability": 1021,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 44
+  },
+  "235": {
+    "ID": 235,
+    "groupID": 5,
+    "index": 35,
+    "Probability": 979,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 43
+  },
+  "236": {
+    "ID": 236,
+    "groupID": 5,
+    "index": 36,
+    "Probability": 934,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 41
+  },
+  "237": {
+    "ID": 237,
+    "groupID": 5,
+    "index": 37,
+    "Probability": 888,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 40
+  },
+  "238": {
+    "ID": 238,
+    "groupID": 5,
+    "index": 38,
+    "Probability": 846,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 38
+  },
+  "239": {
+    "ID": 239,
+    "groupID": 5,
+    "index": 39,
+    "Probability": 800,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 37
+  },
+  "240": {
+    "ID": 240,
+    "groupID": 5,
+    "index": 40,
+    "Probability": 755,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 35
+  },
+  "241": {
+    "ID": 241,
+    "groupID": 5,
+    "index": 41,
+    "Probability": 713,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 34
+  },
+  "242": {
+    "ID": 242,
+    "groupID": 5,
+    "index": 42,
+    "Probability": 667,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 32
+  },
+  "243": {
+    "ID": 243,
+    "groupID": 5,
+    "index": 43,
+    "Probability": 621,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 31
+  },
+  "244": {
+    "ID": 244,
+    "groupID": 5,
+    "index": 44,
+    "Probability": 579,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 29
+  },
+  "245": {
+    "ID": 245,
+    "groupID": 5,
+    "index": 45,
+    "Probability": 534,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 28
+  },
+  "246": {
+    "ID": 246,
+    "groupID": 5,
+    "index": 46,
+    "Probability": 488,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 26
+  },
+  "247": {
+    "ID": 247,
+    "groupID": 5,
+    "index": 47,
+    "Probability": 446,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 25
+  },
+  "248": {
+    "ID": 248,
+    "groupID": 5,
+    "index": 48,
+    "Probability": 400,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 24
+  },
+  "249": {
+    "ID": 249,
+    "groupID": 5,
+    "index": 49,
+    "Probability": 354,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 22
+  },
+  "250": {
+    "ID": 250,
+    "groupID": 5,
+    "index": 50,
+    "Probability": 313,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 21
+  },
+  "251": {
+    "ID": 251,
+    "groupID": 6,
+    "index": 1,
+    "Probability": 2152,
+    "Min": 1,
+    "Max": 50,
+    "Limit": 81
+  },
+  "252": {
+    "ID": 252,
+    "groupID": 6,
+    "index": 2,
+    "Probability": 2603,
+    "Min": 1,
+    "Max": 40,
+    "Limit": 96
+  },
+  "253": {
+    "ID": 253,
+    "groupID": 6,
+    "index": 3,
+    "Probability": 3344,
+    "Min": 1,
+    "Max": 30,
+    "Limit": 120
+  },
+  "254": {
+    "ID": 254,
+    "groupID": 6,
+    "index": 4,
+    "Probability": 4791,
+    "Min": 1,
+    "Max": 20,
+    "Limit": 168
+  },
+  "255": {
+    "ID": 255,
+    "groupID": 6,
+    "index": 5,
+    "Probability": 4646,
+    "Min": 1,
+    "Max": 20,
+    "Limit": 163
+  },
+  "256": {
+    "ID": 256,
+    "groupID": 6,
+    "index": 6,
+    "Probability": 4501,
+    "Min": 1,
+    "Max": 20,
+    "Limit": 158
+  },
+  "257": {
+    "ID": 257,
+    "groupID": 6,
+    "index": 7,
+    "Probability": 4355,
+    "Min": 1,
+    "Max": 20,
+    "Limit": 153
+  },
+  "258": {
+    "ID": 258,
+    "groupID": 6,
+    "index": 8,
+    "Probability": 4210,
+    "Min": 1,
+    "Max": 20,
+    "Limit": 149
+  },
+  "259": {
+    "ID": 259,
+    "groupID": 6,
+    "index": 9,
+    "Probability": 4065,
+    "Min": 1,
+    "Max": 20,
+    "Limit": 144
+  },
+  "260": {
+    "ID": 260,
+    "groupID": 6,
+    "index": 10,
+    "Probability": 4954,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 173
+  },
+  "261": {
+    "ID": 261,
+    "groupID": 6,
+    "index": 11,
+    "Probability": 4573,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 160
+  },
+  "262": {
+    "ID": 262,
+    "groupID": 6,
+    "index": 12,
+    "Probability": 4192,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 148
+  },
+  "263": {
+    "ID": 263,
+    "groupID": 6,
+    "index": 13,
+    "Probability": 3811,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 135
+  },
+  "264": {
+    "ID": 264,
+    "groupID": 6,
+    "index": 14,
+    "Probability": 3430,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 123
+  },
+  "265": {
+    "ID": 265,
+    "groupID": 6,
+    "index": 15,
+    "Probability": 3049,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 110
+  },
+  "266": {
+    "ID": 266,
+    "groupID": 6,
+    "index": 16,
+    "Probability": 2668,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 98
+  },
+  "267": {
+    "ID": 267,
+    "groupID": 6,
+    "index": 17,
+    "Probability": 2287,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 85
+  },
+  "268": {
+    "ID": 268,
+    "groupID": 6,
+    "index": 18,
+    "Probability": 2222,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 83
+  },
+  "269": {
+    "ID": 269,
+    "groupID": 6,
+    "index": 19,
+    "Probability": 1780,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 69
+  },
+  "270": {
+    "ID": 270,
+    "groupID": 6,
+    "index": 20,
+    "Probability": 1734,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 67
+  },
+  "271": {
+    "ID": 271,
+    "groupID": 6,
+    "index": 21,
+    "Probability": 1688,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 66
+  },
+  "272": {
+    "ID": 272,
+    "groupID": 6,
+    "index": 22,
+    "Probability": 1646,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 64
+  },
+  "273": {
+    "ID": 273,
+    "groupID": 6,
+    "index": 23,
+    "Probability": 1601,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 63
+  },
+  "274": {
+    "ID": 274,
+    "groupID": 6,
+    "index": 24,
+    "Probability": 1555,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 61
+  },
+  "275": {
+    "ID": 275,
+    "groupID": 6,
+    "index": 25,
+    "Probability": 1513,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 60
+  },
+  "276": {
+    "ID": 276,
+    "groupID": 6,
+    "index": 26,
+    "Probability": 1467,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 59
+  },
+  "277": {
+    "ID": 277,
+    "groupID": 6,
+    "index": 27,
+    "Probability": 1421,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 57
+  },
+  "278": {
+    "ID": 278,
+    "groupID": 6,
+    "index": 28,
+    "Probability": 1380,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 56
+  },
+  "279": {
+    "ID": 279,
+    "groupID": 6,
+    "index": 29,
+    "Probability": 1334,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 54
+  },
+  "280": {
+    "ID": 280,
+    "groupID": 6,
+    "index": 30,
+    "Probability": 1288,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 53
+  },
+  "281": {
+    "ID": 281,
+    "groupID": 6,
+    "index": 31,
+    "Probability": 1246,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 51
+  },
+  "282": {
+    "ID": 282,
+    "groupID": 6,
+    "index": 32,
+    "Probability": 1200,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 50
+  },
+  "283": {
+    "ID": 283,
+    "groupID": 6,
+    "index": 33,
+    "Probability": 1155,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 48
+  },
+  "284": {
+    "ID": 284,
+    "groupID": 6,
+    "index": 34,
+    "Probability": 1113,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 47
+  },
+  "285": {
+    "ID": 285,
+    "groupID": 6,
+    "index": 35,
+    "Probability": 1067,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 45
+  },
+  "286": {
+    "ID": 286,
+    "groupID": 6,
+    "index": 36,
+    "Probability": 1021,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 44
+  },
+  "287": {
+    "ID": 287,
+    "groupID": 6,
+    "index": 37,
+    "Probability": 979,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 43
+  },
+  "288": {
+    "ID": 288,
+    "groupID": 6,
+    "index": 38,
+    "Probability": 934,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 41
+  },
+  "289": {
+    "ID": 289,
+    "groupID": 6,
+    "index": 39,
+    "Probability": 888,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 40
+  },
+  "290": {
+    "ID": 290,
+    "groupID": 6,
+    "index": 40,
+    "Probability": 846,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 38
+  },
+  "291": {
+    "ID": 291,
+    "groupID": 6,
+    "index": 41,
+    "Probability": 800,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 37
+  },
+  "292": {
+    "ID": 292,
+    "groupID": 6,
+    "index": 42,
+    "Probability": 755,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 35
+  },
+  "293": {
+    "ID": 293,
+    "groupID": 6,
+    "index": 43,
+    "Probability": 713,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 34
+  },
+  "294": {
+    "ID": 294,
+    "groupID": 6,
+    "index": 44,
+    "Probability": 667,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 32
+  },
+  "295": {
+    "ID": 295,
+    "groupID": 6,
+    "index": 45,
+    "Probability": 621,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 31
+  },
+  "296": {
+    "ID": 296,
+    "groupID": 6,
+    "index": 46,
+    "Probability": 579,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 29
+  },
+  "297": {
+    "ID": 297,
+    "groupID": 6,
+    "index": 47,
+    "Probability": 534,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 28
+  },
+  "298": {
+    "ID": 298,
+    "groupID": 6,
+    "index": 48,
+    "Probability": 488,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 26
+  },
+  "299": {
+    "ID": 299,
+    "groupID": 6,
+    "index": 49,
+    "Probability": 446,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 25
+  },
+  "300": {
+    "ID": 300,
+    "groupID": 6,
+    "index": 50,
+    "Probability": 400,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 24
+  },
+  "301": {
+    "ID": 301,
+    "groupID": 7,
+    "index": 1,
+    "Probability": 2272,
+    "Min": 1,
+    "Max": 50,
+    "Limit": 85
+  },
+  "302": {
+    "ID": 302,
+    "groupID": 7,
+    "index": 2,
+    "Probability": 2751,
+    "Min": 1,
+    "Max": 40,
+    "Limit": 101
+  },
+  "303": {
+    "ID": 303,
+    "groupID": 7,
+    "index": 3,
+    "Probability": 3541,
+    "Min": 1,
+    "Max": 30,
+    "Limit": 127
+  },
+  "304": {
+    "ID": 304,
+    "groupID": 7,
+    "index": 4,
+    "Probability": 5081,
+    "Min": 1,
+    "Max": 20,
+    "Limit": 177
+  },
+  "305": {
+    "ID": 305,
+    "groupID": 7,
+    "index": 5,
+    "Probability": 4936,
+    "Min": 1,
+    "Max": 20,
+    "Limit": 172
+  },
+  "306": {
+    "ID": 306,
+    "groupID": 7,
+    "index": 6,
+    "Probability": 4791,
+    "Min": 1,
+    "Max": 20,
+    "Limit": 168
+  },
+  "307": {
+    "ID": 307,
+    "groupID": 7,
+    "index": 7,
+    "Probability": 4646,
+    "Min": 1,
+    "Max": 20,
+    "Limit": 163
+  },
+  "308": {
+    "ID": 308,
+    "groupID": 7,
+    "index": 8,
+    "Probability": 4501,
+    "Min": 1,
+    "Max": 20,
+    "Limit": 158
+  },
+  "309": {
+    "ID": 309,
+    "groupID": 7,
+    "index": 9,
+    "Probability": 4355,
+    "Min": 1,
+    "Max": 20,
+    "Limit": 153
+  },
+  "310": {
+    "ID": 310,
+    "groupID": 7,
+    "index": 10,
+    "Probability": 5526,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 192
+  },
+  "311": {
+    "ID": 311,
+    "groupID": 7,
+    "index": 11,
+    "Probability": 5335,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 185
+  },
+  "312": {
+    "ID": 312,
+    "groupID": 7,
+    "index": 12,
+    "Probability": 4954,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 173
+  },
+  "313": {
+    "ID": 313,
+    "groupID": 7,
+    "index": 13,
+    "Probability": 4573,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 160
+  },
+  "314": {
+    "ID": 314,
+    "groupID": 7,
+    "index": 14,
+    "Probability": 4192,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 148
+  },
+  "315": {
+    "ID": 315,
+    "groupID": 7,
+    "index": 15,
+    "Probability": 3811,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 135
+  },
+  "316": {
+    "ID": 316,
+    "groupID": 7,
+    "index": 16,
+    "Probability": 3430,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 123
+  },
+  "317": {
+    "ID": 317,
+    "groupID": 7,
+    "index": 17,
+    "Probability": 3049,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 110
+  },
+  "318": {
+    "ID": 318,
+    "groupID": 7,
+    "index": 18,
+    "Probability": 2668,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 98
+  },
+  "319": {
+    "ID": 319,
+    "groupID": 7,
+    "index": 19,
+    "Probability": 2287,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 85
+  },
+  "320": {
+    "ID": 320,
+    "groupID": 7,
+    "index": 20,
+    "Probability": 2222,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 83
+  },
+  "321": {
+    "ID": 321,
+    "groupID": 7,
+    "index": 21,
+    "Probability": 1780,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 69
+  },
+  "322": {
+    "ID": 322,
+    "groupID": 7,
+    "index": 22,
+    "Probability": 1734,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 67
+  },
+  "323": {
+    "ID": 323,
+    "groupID": 7,
+    "index": 23,
+    "Probability": 1688,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 66
+  },
+  "324": {
+    "ID": 324,
+    "groupID": 7,
+    "index": 24,
+    "Probability": 1646,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 64
+  },
+  "325": {
+    "ID": 325,
+    "groupID": 7,
+    "index": 25,
+    "Probability": 1601,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 63
+  },
+  "326": {
+    "ID": 326,
+    "groupID": 7,
+    "index": 26,
+    "Probability": 1555,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 61
+  },
+  "327": {
+    "ID": 327,
+    "groupID": 7,
+    "index": 27,
+    "Probability": 1513,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 60
+  },
+  "328": {
+    "ID": 328,
+    "groupID": 7,
+    "index": 28,
+    "Probability": 1467,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 59
+  },
+  "329": {
+    "ID": 329,
+    "groupID": 7,
+    "index": 29,
+    "Probability": 1421,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 57
+  },
+  "330": {
+    "ID": 330,
+    "groupID": 7,
+    "index": 30,
+    "Probability": 1380,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 56
+  },
+  "331": {
+    "ID": 331,
+    "groupID": 7,
+    "index": 31,
+    "Probability": 1334,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 54
+  },
+  "332": {
+    "ID": 332,
+    "groupID": 7,
+    "index": 32,
+    "Probability": 1288,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 53
+  },
+  "333": {
+    "ID": 333,
+    "groupID": 7,
+    "index": 33,
+    "Probability": 1246,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 51
+  },
+  "334": {
+    "ID": 334,
+    "groupID": 7,
+    "index": 34,
+    "Probability": 1200,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 50
+  },
+  "335": {
+    "ID": 335,
+    "groupID": 7,
+    "index": 35,
+    "Probability": 1155,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 48
+  },
+  "336": {
+    "ID": 336,
+    "groupID": 7,
+    "index": 36,
+    "Probability": 1113,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 47
+  },
+  "337": {
+    "ID": 337,
+    "groupID": 7,
+    "index": 37,
+    "Probability": 1067,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 45
+  },
+  "338": {
+    "ID": 338,
+    "groupID": 7,
+    "index": 38,
+    "Probability": 1021,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 44
+  },
+  "339": {
+    "ID": 339,
+    "groupID": 7,
+    "index": 39,
+    "Probability": 979,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 43
+  },
+  "340": {
+    "ID": 340,
+    "groupID": 7,
+    "index": 40,
+    "Probability": 934,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 41
+  },
+  "341": {
+    "ID": 341,
+    "groupID": 7,
+    "index": 41,
+    "Probability": 888,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 40
+  },
+  "342": {
+    "ID": 342,
+    "groupID": 7,
+    "index": 42,
+    "Probability": 846,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 38
+  },
+  "343": {
+    "ID": 343,
+    "groupID": 7,
+    "index": 43,
+    "Probability": 800,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 37
+  },
+  "344": {
+    "ID": 344,
+    "groupID": 7,
+    "index": 44,
+    "Probability": 755,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 35
+  },
+  "345": {
+    "ID": 345,
+    "groupID": 7,
+    "index": 45,
+    "Probability": 713,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 34
+  },
+  "346": {
+    "ID": 346,
+    "groupID": 7,
+    "index": 46,
+    "Probability": 667,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 32
+  },
+  "347": {
+    "ID": 347,
+    "groupID": 7,
+    "index": 47,
+    "Probability": 621,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 31
+  },
+  "348": {
+    "ID": 348,
+    "groupID": 7,
+    "index": 48,
+    "Probability": 579,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 29
+  },
+  "349": {
+    "ID": 349,
+    "groupID": 7,
+    "index": 49,
+    "Probability": 534,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 28
+  },
+  "350": {
+    "ID": 350,
+    "groupID": 7,
+    "index": 50,
+    "Probability": 488,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 26
+  },
+  "351": {
+    "ID": 351,
+    "groupID": 8,
+    "index": 1,
+    "Probability": 2391,
+    "Min": 1,
+    "Max": 50,
+    "Limit": 89
+  },
+  "352": {
+    "ID": 352,
+    "groupID": 8,
+    "index": 2,
+    "Probability": 2900,
+    "Min": 1,
+    "Max": 40,
+    "Limit": 106
+  },
+  "353": {
+    "ID": 353,
+    "groupID": 8,
+    "index": 3,
+    "Probability": 3737,
+    "Min": 1,
+    "Max": 30,
+    "Limit": 133
+  },
+  "354": {
+    "ID": 354,
+    "groupID": 8,
+    "index": 4,
+    "Probability": 5372,
+    "Min": 1,
+    "Max": 20,
+    "Limit": 187
+  },
+  "355": {
+    "ID": 355,
+    "groupID": 8,
+    "index": 5,
+    "Probability": 5226,
+    "Min": 1,
+    "Max": 20,
+    "Limit": 182
+  },
+  "356": {
+    "ID": 356,
+    "groupID": 8,
+    "index": 6,
+    "Probability": 5081,
+    "Min": 1,
+    "Max": 20,
+    "Limit": 177
+  },
+  "357": {
+    "ID": 357,
+    "groupID": 8,
+    "index": 7,
+    "Probability": 4936,
+    "Min": 1,
+    "Max": 20,
+    "Limit": 172
+  },
+  "358": {
+    "ID": 358,
+    "groupID": 8,
+    "index": 8,
+    "Probability": 4791,
+    "Min": 1,
+    "Max": 20,
+    "Limit": 168
+  },
+  "359": {
+    "ID": 359,
+    "groupID": 8,
+    "index": 9,
+    "Probability": 4646,
+    "Min": 1,
+    "Max": 20,
+    "Limit": 163
+  },
+  "360": {
+    "ID": 360,
+    "groupID": 8,
+    "index": 10,
+    "Probability": 5907,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 204
+  },
+  "361": {
+    "ID": 361,
+    "groupID": 8,
+    "index": 11,
+    "Probability": 5716,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 198
+  },
+  "362": {
+    "ID": 362,
+    "groupID": 8,
+    "index": 12,
+    "Probability": 5526,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 192
+  },
+  "363": {
+    "ID": 363,
+    "groupID": 8,
+    "index": 13,
+    "Probability": 5335,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 185
+  },
+  "364": {
+    "ID": 364,
+    "groupID": 8,
+    "index": 14,
+    "Probability": 4954,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 173
+  },
+  "365": {
+    "ID": 365,
+    "groupID": 8,
+    "index": 15,
+    "Probability": 4573,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 160
+  },
+  "366": {
+    "ID": 366,
+    "groupID": 8,
+    "index": 16,
+    "Probability": 4192,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 148
+  },
+  "367": {
+    "ID": 367,
+    "groupID": 8,
+    "index": 17,
+    "Probability": 3811,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 135
+  },
+  "368": {
+    "ID": 368,
+    "groupID": 8,
+    "index": 18,
+    "Probability": 3430,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 123
+  },
+  "369": {
+    "ID": 369,
+    "groupID": 8,
+    "index": 19,
+    "Probability": 3049,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 110
+  },
+  "370": {
+    "ID": 370,
+    "groupID": 8,
+    "index": 20,
+    "Probability": 2668,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 98
+  },
+  "371": {
+    "ID": 371,
+    "groupID": 8,
+    "index": 21,
+    "Probability": 2287,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 85
+  },
+  "372": {
+    "ID": 372,
+    "groupID": 8,
+    "index": 22,
+    "Probability": 2222,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 83
+  },
+  "373": {
+    "ID": 373,
+    "groupID": 8,
+    "index": 23,
+    "Probability": 1780,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 69
+  },
+  "374": {
+    "ID": 374,
+    "groupID": 8,
+    "index": 24,
+    "Probability": 1734,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 67
+  },
+  "375": {
+    "ID": 375,
+    "groupID": 8,
+    "index": 25,
+    "Probability": 1688,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 66
+  },
+  "376": {
+    "ID": 376,
+    "groupID": 8,
+    "index": 26,
+    "Probability": 1646,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 64
+  },
+  "377": {
+    "ID": 377,
+    "groupID": 8,
+    "index": 27,
+    "Probability": 1601,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 63
+  },
+  "378": {
+    "ID": 378,
+    "groupID": 8,
+    "index": 28,
+    "Probability": 1555,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 61
+  },
+  "379": {
+    "ID": 379,
+    "groupID": 8,
+    "index": 29,
+    "Probability": 1513,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 60
+  },
+  "380": {
+    "ID": 380,
+    "groupID": 8,
+    "index": 30,
+    "Probability": 1467,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 59
+  },
+  "381": {
+    "ID": 381,
+    "groupID": 8,
+    "index": 31,
+    "Probability": 1421,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 57
+  },
+  "382": {
+    "ID": 382,
+    "groupID": 8,
+    "index": 32,
+    "Probability": 1380,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 56
+  },
+  "383": {
+    "ID": 383,
+    "groupID": 8,
+    "index": 33,
+    "Probability": 1334,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 54
+  },
+  "384": {
+    "ID": 384,
+    "groupID": 8,
+    "index": 34,
+    "Probability": 1288,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 53
+  },
+  "385": {
+    "ID": 385,
+    "groupID": 8,
+    "index": 35,
+    "Probability": 1246,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 51
+  },
+  "386": {
+    "ID": 386,
+    "groupID": 8,
+    "index": 36,
+    "Probability": 1200,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 50
+  },
+  "387": {
+    "ID": 387,
+    "groupID": 8,
+    "index": 37,
+    "Probability": 1155,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 48
+  },
+  "388": {
+    "ID": 388,
+    "groupID": 8,
+    "index": 38,
+    "Probability": 1113,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 47
+  },
+  "389": {
+    "ID": 389,
+    "groupID": 8,
+    "index": 39,
+    "Probability": 1067,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 45
+  },
+  "390": {
+    "ID": 390,
+    "groupID": 8,
+    "index": 40,
+    "Probability": 1021,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 44
+  },
+  "391": {
+    "ID": 391,
+    "groupID": 8,
+    "index": 41,
+    "Probability": 979,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 43
+  },
+  "392": {
+    "ID": 392,
+    "groupID": 8,
+    "index": 42,
+    "Probability": 934,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 41
+  },
+  "393": {
+    "ID": 393,
+    "groupID": 8,
+    "index": 43,
+    "Probability": 888,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 40
+  },
+  "394": {
+    "ID": 394,
+    "groupID": 8,
+    "index": 44,
+    "Probability": 846,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 38
+  },
+  "395": {
+    "ID": 395,
+    "groupID": 8,
+    "index": 45,
+    "Probability": 800,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 37
+  },
+  "396": {
+    "ID": 396,
+    "groupID": 8,
+    "index": 46,
+    "Probability": 755,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 35
+  },
+  "397": {
+    "ID": 397,
+    "groupID": 8,
+    "index": 47,
+    "Probability": 713,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 34
+  },
+  "398": {
+    "ID": 398,
+    "groupID": 8,
+    "index": 48,
+    "Probability": 667,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 32
+  },
+  "399": {
+    "ID": 399,
+    "groupID": 8,
+    "index": 49,
+    "Probability": 621,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 31
+  },
+  "400": {
+    "ID": 400,
+    "groupID": 8,
+    "index": 50,
+    "Probability": 579,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 29
+  },
+  "401": {
+    "ID": 401,
+    "groupID": 9,
+    "index": 1,
+    "Probability": 2511,
+    "Min": 1,
+    "Max": 50,
+    "Limit": 93
+  },
+  "402": {
+    "ID": 402,
+    "groupID": 9,
+    "index": 2,
+    "Probability": 3049,
+    "Min": 1,
+    "Max": 40,
+    "Limit": 110
+  },
+  "403": {
+    "ID": 403,
+    "groupID": 9,
+    "index": 3,
+    "Probability": 3934,
+    "Min": 1,
+    "Max": 30,
+    "Limit": 140
+  },
+  "404": {
+    "ID": 404,
+    "groupID": 9,
+    "index": 4,
+    "Probability": 5662,
+    "Min": 1,
+    "Max": 20,
+    "Limit": 196
+  },
+  "405": {
+    "ID": 405,
+    "groupID": 9,
+    "index": 5,
+    "Probability": 5517,
+    "Min": 1,
+    "Max": 20,
+    "Limit": 191
+  },
+  "406": {
+    "ID": 406,
+    "groupID": 9,
+    "index": 6,
+    "Probability": 5372,
+    "Min": 1,
+    "Max": 20,
+    "Limit": 187
+  },
+  "407": {
+    "ID": 407,
+    "groupID": 9,
+    "index": 7,
+    "Probability": 5226,
+    "Min": 1,
+    "Max": 20,
+    "Limit": 182
+  },
+  "408": {
+    "ID": 408,
+    "groupID": 9,
+    "index": 8,
+    "Probability": 5081,
+    "Min": 1,
+    "Max": 20,
+    "Limit": 177
+  },
+  "409": {
+    "ID": 409,
+    "groupID": 9,
+    "index": 9,
+    "Probability": 4936,
+    "Min": 1,
+    "Max": 20,
+    "Limit": 172
+  },
+  "410": {
+    "ID": 410,
+    "groupID": 9,
+    "index": 10,
+    "Probability": 6288,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 217
+  },
+  "411": {
+    "ID": 411,
+    "groupID": 9,
+    "index": 11,
+    "Probability": 6098,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 210
+  },
+  "412": {
+    "ID": 412,
+    "groupID": 9,
+    "index": 12,
+    "Probability": 5907,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 204
+  },
+  "413": {
+    "ID": 413,
+    "groupID": 9,
+    "index": 13,
+    "Probability": 5716,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 198
+  },
+  "414": {
+    "ID": 414,
+    "groupID": 9,
+    "index": 14,
+    "Probability": 5526,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 192
+  },
+  "415": {
+    "ID": 415,
+    "groupID": 9,
+    "index": 15,
+    "Probability": 5335,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 185
+  },
+  "416": {
+    "ID": 416,
+    "groupID": 9,
+    "index": 16,
+    "Probability": 4954,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 173
+  },
+  "417": {
+    "ID": 417,
+    "groupID": 9,
+    "index": 17,
+    "Probability": 4573,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 160
+  },
+  "418": {
+    "ID": 418,
+    "groupID": 9,
+    "index": 18,
+    "Probability": 4192,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 148
+  },
+  "419": {
+    "ID": 419,
+    "groupID": 9,
+    "index": 19,
+    "Probability": 3811,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 135
+  },
+  "420": {
+    "ID": 420,
+    "groupID": 9,
+    "index": 20,
+    "Probability": 3430,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 123
+  },
+  "421": {
+    "ID": 421,
+    "groupID": 9,
+    "index": 21,
+    "Probability": 3049,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 110
+  },
+  "422": {
+    "ID": 422,
+    "groupID": 9,
+    "index": 22,
+    "Probability": 2668,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 98
+  },
+  "423": {
+    "ID": 423,
+    "groupID": 9,
+    "index": 23,
+    "Probability": 2287,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 85
+  },
+  "424": {
+    "ID": 424,
+    "groupID": 9,
+    "index": 24,
+    "Probability": 2222,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 83
+  },
+  "425": {
+    "ID": 425,
+    "groupID": 9,
+    "index": 25,
+    "Probability": 1780,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 69
+  },
+  "426": {
+    "ID": 426,
+    "groupID": 9,
+    "index": 26,
+    "Probability": 1734,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 67
+  },
+  "427": {
+    "ID": 427,
+    "groupID": 9,
+    "index": 27,
+    "Probability": 1688,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 66
+  },
+  "428": {
+    "ID": 428,
+    "groupID": 9,
+    "index": 28,
+    "Probability": 1646,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 64
+  },
+  "429": {
+    "ID": 429,
+    "groupID": 9,
+    "index": 29,
+    "Probability": 1601,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 63
+  },
+  "430": {
+    "ID": 430,
+    "groupID": 9,
+    "index": 30,
+    "Probability": 1555,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 61
+  },
+  "431": {
+    "ID": 431,
+    "groupID": 9,
+    "index": 31,
+    "Probability": 1513,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 60
+  },
+  "432": {
+    "ID": 432,
+    "groupID": 9,
+    "index": 32,
+    "Probability": 1467,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 59
+  },
+  "433": {
+    "ID": 433,
+    "groupID": 9,
+    "index": 33,
+    "Probability": 1421,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 57
+  },
+  "434": {
+    "ID": 434,
+    "groupID": 9,
+    "index": 34,
+    "Probability": 1380,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 56
+  },
+  "435": {
+    "ID": 435,
+    "groupID": 9,
+    "index": 35,
+    "Probability": 1334,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 54
+  },
+  "436": {
+    "ID": 436,
+    "groupID": 9,
+    "index": 36,
+    "Probability": 1288,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 53
+  },
+  "437": {
+    "ID": 437,
+    "groupID": 9,
+    "index": 37,
+    "Probability": 1246,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 51
+  },
+  "438": {
+    "ID": 438,
+    "groupID": 9,
+    "index": 38,
+    "Probability": 1200,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 50
+  },
+  "439": {
+    "ID": 439,
+    "groupID": 9,
+    "index": 39,
+    "Probability": 1155,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 48
+  },
+  "440": {
+    "ID": 440,
+    "groupID": 9,
+    "index": 40,
+    "Probability": 1113,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 47
+  },
+  "441": {
+    "ID": 441,
+    "groupID": 9,
+    "index": 41,
+    "Probability": 1067,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 45
+  },
+  "442": {
+    "ID": 442,
+    "groupID": 9,
+    "index": 42,
+    "Probability": 1021,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 44
+  },
+  "443": {
+    "ID": 443,
+    "groupID": 9,
+    "index": 43,
+    "Probability": 979,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 43
+  },
+  "444": {
+    "ID": 444,
+    "groupID": 9,
+    "index": 44,
+    "Probability": 934,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 41
+  },
+  "445": {
+    "ID": 445,
+    "groupID": 9,
+    "index": 45,
+    "Probability": 888,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 40
+  },
+  "446": {
+    "ID": 446,
+    "groupID": 9,
+    "index": 46,
+    "Probability": 846,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 38
+  },
+  "447": {
+    "ID": 447,
+    "groupID": 9,
+    "index": 47,
+    "Probability": 800,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 37
+  },
+  "448": {
+    "ID": 448,
+    "groupID": 9,
+    "index": 48,
+    "Probability": 755,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 35
+  },
+  "449": {
+    "ID": 449,
+    "groupID": 9,
+    "index": 49,
+    "Probability": 713,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 34
+  },
+  "450": {
+    "ID": 450,
+    "groupID": 9,
+    "index": 50,
+    "Probability": 667,
+    "Min": 1,
+    "Max": 15,
+    "Limit": 32
+  }
+}

@@ -1,0 +1,46 @@
+syntax = "proto2";
+package pb;
+option go_package = "./;pb";
+
+message PBItemSpaceData {
+    repeated PBItemData ItemData = 1;
+}
+
+message PBItemData {
+    optional uint32 ItemID = 1;
+    optional uint32 UnLocked = 2;
+}
+
+// 道具生产请求
+message ItemProduceReq {
+    optional uint32 OriginIdx = 1;          // 原始Idx
+    optional uint32 ProduceItemID = 2;      // 产出的道具ID
+    optional uint32 ProduceItemIdx = 3;     // 产出的道具Idx
+    optional uint32 OverItemID = 4;         // 产量耗尽后变成的道具ID
+    optional uint32 OverItemIdx = 5;        // 产量耗尽后变成的道具Idx
+    optional uint32 ProductionCycle = 6;    // 生产周期
+    optional uint32 ProductionCount = 7;    // 当前周期生产次数
+    optional uint32 ProductionNextTime = 8; // 下次可生产时间
+    optional uint32 CurStrength = 9;        // 当前体力值
+}
+
+// 道具生产回应
+message ItemProduceRes {
+    optional uint32 Result = 1;
+}
+
+// 道具合成请求
+message ItemCombineReq {
+    optional uint32 OriginIdx = 1;      // 原始Idx
+    optional uint32 TargetIdx = 3;      // 目标Idx
+    optional uint32 CombineID = 4;      // 合成的ID
+    optional uint32 CombineIdx = 5;     // 合成的Idx
+    optional uint32 RandomIdx = 6;      // 随机Idx
+    optional uint32 RandomItemID = 7;   // 随机ID
+    optional uint32 UnlockCellIdx = 8;  // 解锁格子Idx
+}
+
+// 道具合成回应
+message ItemCombineRes {
+    optional uint32 Result = 1;
+}

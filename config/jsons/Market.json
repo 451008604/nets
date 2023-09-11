@@ -1,0 +1,2378 @@
+{
+  "1": {
+    "Id": 1,
+    "dynamic": 0,
+    "AssistId": 0,
+    "marketType": 2,
+    "propType": 0,
+    "Priority": 1,
+    "itemTitle": "体力大礼包",
+    "itemIcon": "prop_1",
+    "moneyType": 2,
+    "moneyNumber": 10,
+    "buyCount": 9999,
+    "Prize": [
+      {
+        "PrizeID": 3,
+        "PrizeNum": 75
+      }
+    ],
+    "additionalReward": 3,
+    "additionalRewardNumber": 15,
+    "PurchaseCountsAndProductQuantityMapping": "1:60:40:20-2:60:40:40-3:60:40:40-4:60:40:40-5:60:40:40-6:60:40:40-7:60:40:40-8:60:40:40-9:60:40:40-10:60:40:40",
+    "LevelLimit": 1,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "2": {
+    "Id": 2,
+    "dynamic": 2,
+    "AssistId": 0,
+    "marketType": 2,
+    "propType": 0,
+    "Priority": 2,
+    "itemTitle": "体力礼包（废弃）",
+    "itemIcon": "prop_3",
+    "moneyType": 2,
+    "moneyNumber": 150,
+    "buyCount": 1,
+    "Prize": [
+      {
+        "PrizeID": 3,
+        "PrizeNum": 300
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 1,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "3": {
+    "Id": 3,
+    "dynamic": 5,
+    "AssistId": 0,
+    "marketType": 1,
+    "propType": 0,
+    "Priority": 1,
+    "itemTitle": "一些金币",
+    "itemIcon": "coin_3",
+    "moneyType": 2,
+    "moneyNumber": 49,
+    "buyCount": 999,
+    "Prize": [
+      {
+        "PrizeID": 1,
+        "PrizeNum": 100
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 1,
+    "discountFlag": 0,
+    "Title": "UI_Shop_Title_Coin",
+    "Des": "UI_Shop_Des_Coin",
+    "RandomPoolID": 0
+  },
+  "4": {
+    "Id": 4,
+    "dynamic": 0,
+    "AssistId": 0,
+    "marketType": 1,
+    "propType": 0,
+    "Priority": 2,
+    "itemTitle": "许多金币",
+    "itemIcon": "coin_2",
+    "moneyType": 2,
+    "moneyNumber": 99,
+    "buyCount": 2,
+    "Prize": [
+      {
+        "PrizeID": 1,
+        "PrizeNum": 250
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 1,
+    "discountFlag": 0,
+    "Title": "UI_Shop_Title_Coin",
+    "Des": "UI_Shop_Des_Coin",
+    "RandomPoolID": 0
+  },
+  "5": {
+    "Id": 5,
+    "dynamic": 0,
+    "AssistId": 0,
+    "marketType": 1,
+    "propType": 0,
+    "Priority": 3,
+    "itemTitle": "金币礼盒",
+    "itemIcon": "coin_1",
+    "moneyType": 2,
+    "moneyNumber": 198,
+    "buyCount": 2,
+    "Prize": [
+      {
+        "PrizeID": 1,
+        "PrizeNum": 550
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 1,
+    "discountFlag": 0,
+    "Title": "UI_Shop_Title_Coin",
+    "Des": "UI_Shop_Des_Coin",
+    "RandomPoolID": 0
+  },
+  "6": {
+    "Id": 6,
+    "dynamic": 0,
+    "AssistId": 0,
+    "marketType": 3,
+    "propType": 0,
+    "Priority": 1,
+    "itemTitle": "钟表面",
+    "itemIcon": "item_24_1611",
+    "moneyType": 2,
+    "moneyNumber": 2,
+    "buyCount": 3,
+    "Prize": [
+      {
+        "PrizeID": 130601,
+        "PrizeNum": 1
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 1,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "7": {
+    "Id": 7,
+    "dynamic": 0,
+    "AssistId": 0,
+    "marketType": 3,
+    "propType": 0,
+    "Priority": 2,
+    "itemTitle": "普通飞镖",
+    "itemIcon": "item_24_1211",
+    "moneyType": 2,
+    "moneyNumber": 5,
+    "buyCount": 3,
+    "Prize": [
+      {
+        "PrizeID": 130201,
+        "PrizeNum": 1
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 3,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "8": {
+    "Id": 8,
+    "dynamic": 0,
+    "AssistId": 0,
+    "marketType": 3,
+    "propType": 0,
+    "Priority": 3,
+    "itemTitle": "塑料小剪刀",
+    "itemIcon": "item_24_1111",
+    "moneyType": 2,
+    "moneyNumber": 3,
+    "buyCount": 3,
+    "Prize": [
+      {
+        "PrizeID": 130101,
+        "PrizeNum": 1
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 5,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "9": {
+    "Id": 9,
+    "dynamic": 0,
+    "AssistId": 0,
+    "marketType": 3,
+    "propType": 0,
+    "Priority": 4,
+    "itemTitle": "普通相机",
+    "itemIcon": "item_24_1311",
+    "moneyType": 2,
+    "moneyNumber": 10,
+    "buyCount": 3,
+    "Prize": [
+      {
+        "PrizeID": 130301,
+        "PrizeNum": 1
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 7,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "10": {
+    "Id": 10,
+    "dynamic": 0,
+    "AssistId": 0,
+    "marketType": 3,
+    "propType": 0,
+    "Priority": 5,
+    "itemTitle": "单极电池",
+    "itemIcon": "item_24_1411",
+    "moneyType": 2,
+    "moneyNumber": 10,
+    "buyCount": 3,
+    "Prize": [
+      {
+        "PrizeID": 130401,
+        "PrizeNum": 1
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 9,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "11": {
+    "Id": 11,
+    "dynamic": 0,
+    "AssistId": 0,
+    "marketType": 3,
+    "propType": 0,
+    "Priority": 6,
+    "itemTitle": "半成品沙漏",
+    "itemIcon": "item_24_1511",
+    "moneyType": 2,
+    "moneyNumber": 10,
+    "buyCount": 3,
+    "Prize": [
+      {
+        "PrizeID": 130501,
+        "PrizeNum": 1
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 12,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "12": {
+    "Id": 12,
+    "dynamic": 0,
+    "AssistId": 0,
+    "marketType": 3,
+    "propType": 0,
+    "Priority": 7,
+    "itemTitle": "简易锤子",
+    "itemIcon": "item_24_1711",
+    "moneyType": 2,
+    "moneyNumber": 5,
+    "buyCount": 3,
+    "Prize": [
+      {
+        "PrizeID": 130701,
+        "PrizeNum": 1
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 15,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "13": {
+    "Id": 13,
+    "dynamic": 0,
+    "AssistId": 0,
+    "marketType": 0,
+    "propType": 0,
+    "Priority": 8,
+    "itemTitle": "道具8",
+    "itemIcon": "item_24_1112",
+    "moneyType": 2,
+    "moneyNumber": 10,
+    "buyCount": 1,
+    "Prize": [
+      {
+        "PrizeID": 130102,
+        "PrizeNum": 1
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 8,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "14": {
+    "Id": 14,
+    "dynamic": 0,
+    "AssistId": 0,
+    "marketType": 0,
+    "propType": 0,
+    "Priority": 9,
+    "itemTitle": "道具9",
+    "itemIcon": "item_24_1212",
+    "moneyType": 2,
+    "moneyNumber": 20,
+    "buyCount": 1,
+    "Prize": [
+      {
+        "PrizeID": 130202,
+        "PrizeNum": 1
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 9,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "15": {
+    "Id": 15,
+    "dynamic": 0,
+    "AssistId": 0,
+    "marketType": 0,
+    "propType": 0,
+    "Priority": 10,
+    "itemTitle": "道具10",
+    "itemIcon": "item_24_1312",
+    "moneyType": 2,
+    "moneyNumber": 25,
+    "buyCount": 1,
+    "Prize": [
+      {
+        "PrizeID": 130302,
+        "PrizeNum": 1
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 10,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "16": {
+    "Id": 16,
+    "dynamic": 0,
+    "AssistId": 0,
+    "marketType": 0,
+    "propType": 0,
+    "Priority": 11,
+    "itemTitle": "道具11",
+    "itemIcon": "item_24_1412",
+    "moneyType": 2,
+    "moneyNumber": 26,
+    "buyCount": 1,
+    "Prize": [
+      {
+        "PrizeID": 130402,
+        "PrizeNum": 1
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 11,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "17": {
+    "Id": 17,
+    "dynamic": 0,
+    "AssistId": 0,
+    "marketType": 0,
+    "propType": 0,
+    "Priority": 12,
+    "itemTitle": "道具12",
+    "itemIcon": "item_24_1512",
+    "moneyType": 2,
+    "moneyNumber": 28,
+    "buyCount": 1,
+    "Prize": [
+      {
+        "PrizeID": 130502,
+        "PrizeNum": 1
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 12,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "18": {
+    "Id": 18,
+    "dynamic": 0,
+    "AssistId": 0,
+    "marketType": 5,
+    "propType": 5,
+    "Priority": 9,
+    "itemTitle": "每日免费礼包",
+    "itemIcon": "item_23_2111",
+    "moneyType": 0,
+    "moneyNumber": 0,
+    "buyCount": 1,
+    "Prize": [
+      {
+        "PrizeID": 125001,
+        "PrizeNum": 1
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 1,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "19": {
+    "Id": 19,
+    "dynamic": 0,
+    "AssistId": 0,
+    "marketType": 5,
+    "propType": 5,
+    "Priority": 9,
+    "itemTitle": "每日免费礼包",
+    "itemIcon": "item_23_2111",
+    "moneyType": 0,
+    "moneyNumber": 0,
+    "buyCount": 1,
+    "Prize": [
+      {
+        "PrizeID": 125002,
+        "PrizeNum": 1
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 999,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "20": {
+    "Id": 20,
+    "dynamic": 0,
+    "AssistId": 0,
+    "marketType": 5,
+    "propType": 5,
+    "Priority": 9,
+    "itemTitle": "每日免费礼包",
+    "itemIcon": "item_23_2111",
+    "moneyType": 0,
+    "moneyNumber": 0,
+    "buyCount": 1,
+    "Prize": [
+      {
+        "PrizeID": 125003,
+        "PrizeNum": 1
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 999,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "21": {
+    "Id": 21,
+    "dynamic": 0,
+    "AssistId": 0,
+    "marketType": 5,
+    "propType": 5,
+    "Priority": 9,
+    "itemTitle": "每日免费礼包",
+    "itemIcon": "item_23_2111",
+    "moneyType": 0,
+    "moneyNumber": 0,
+    "buyCount": 1,
+    "Prize": [
+      {
+        "PrizeID": 125004,
+        "PrizeNum": 1
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 999,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "22": {
+    "Id": 22,
+    "dynamic": 0,
+    "AssistId": 0,
+    "marketType": 5,
+    "propType": 6,
+    "Priority": 1,
+    "itemTitle": "闪购1",
+    "itemIcon": "根据道具（标题同）",
+    "moneyType": 2,
+    "moneyNumber": 0,
+    "buyCount": 1,
+    "Prize": [
+      {
+        "PrizeID": 1,
+        "PrizeNum": 0
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 2,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "23": {
+    "Id": 23,
+    "dynamic": 0,
+    "AssistId": 0,
+    "marketType": 5,
+    "propType": 6,
+    "Priority": 2,
+    "itemTitle": "闪购2",
+    "itemIcon": "根据道具（标题同）",
+    "moneyType": 2,
+    "moneyNumber": 0,
+    "buyCount": 1,
+    "Prize": [
+      {
+        "PrizeID": 1,
+        "PrizeNum": 0
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 3,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 1
+  },
+  "24": {
+    "Id": 24,
+    "dynamic": 0,
+    "AssistId": 0,
+    "marketType": 5,
+    "propType": 6,
+    "Priority": 3,
+    "itemTitle": "闪购3",
+    "itemIcon": "根据道具（标题同）",
+    "moneyType": 2,
+    "moneyNumber": 0,
+    "buyCount": 1,
+    "Prize": [
+      {
+        "PrizeID": 1,
+        "PrizeNum": 0
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 4,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "25": {
+    "Id": 25,
+    "dynamic": 0,
+    "AssistId": 0,
+    "marketType": 5,
+    "propType": 6,
+    "Priority": 6,
+    "itemTitle": "闪购6",
+    "itemIcon": "根据道具（标题同）",
+    "moneyType": 2,
+    "moneyNumber": 0,
+    "buyCount": 1,
+    "Prize": [
+      {
+        "PrizeID": 1,
+        "PrizeNum": 0
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 7,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "26": {
+    "Id": 26,
+    "dynamic": 0,
+    "AssistId": 0,
+    "marketType": 5,
+    "propType": 6,
+    "Priority": 7,
+    "itemTitle": "闪购7",
+    "itemIcon": "根据道具（标题同）",
+    "moneyType": 2,
+    "moneyNumber": 0,
+    "buyCount": 1,
+    "Prize": [
+      {
+        "PrizeID": 1,
+        "PrizeNum": 0
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 8,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 2
+  },
+  "27": {
+    "Id": 27,
+    "dynamic": 0,
+    "AssistId": 0,
+    "marketType": 5,
+    "propType": 6,
+    "Priority": 8,
+    "itemTitle": "闪购8",
+    "itemIcon": "根据道具（标题同）",
+    "moneyType": 2,
+    "moneyNumber": 0,
+    "buyCount": 1,
+    "Prize": [
+      {
+        "PrizeID": 1,
+        "PrizeNum": 0
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 9,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "28": {
+    "Id": 28,
+    "dynamic": 0,
+    "AssistId": 0,
+    "marketType": 5,
+    "propType": 6,
+    "Priority": 10,
+    "itemTitle": "闪购9",
+    "itemIcon": "根据道具（标题同）",
+    "moneyType": 2,
+    "moneyNumber": 0,
+    "buyCount": 1,
+    "Prize": [
+      {
+        "PrizeID": 1,
+        "PrizeNum": 0
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 10,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "29": {
+    "Id": 29,
+    "dynamic": 0,
+    "AssistId": 0,
+    "marketType": 3,
+    "propType": 0,
+    "Priority": 13,
+    "itemTitle": "经验",
+    "itemIcon": "item_exp",
+    "moneyType": 1,
+    "moneyNumber": 600,
+    "buyCount": 2,
+    "Prize": [
+      {
+        "PrizeID": 4,
+        "PrizeNum": 600
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 20,
+    "discountFlag": 0,
+    "Title": "UI_Shop_Title_Exp",
+    "Des": "UI_Shop_Des_Exp",
+    "RandomPoolID": 0
+  },
+  "30": {
+    "Id": 30,
+    "dynamic": 0,
+    "AssistId": 0,
+    "marketType": 2,
+    "propType": 0,
+    "Priority": 3,
+    "itemTitle": "超级体力补给（废弃）",
+    "itemIcon": "prop_1",
+    "moneyType": 2,
+    "moneyNumber": 100,
+    "buyCount": 5,
+    "Prize": [
+      {
+        "PrizeID": 3,
+        "PrizeNum": 89
+      }
+    ],
+    "additionalReward": 3,
+    "additionalRewardNumber": 1,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 1,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "31": {
+    "Id": 31,
+    "dynamic": 0,
+    "AssistId": 0,
+    "marketType": 5,
+    "propType": 6,
+    "Priority": 4,
+    "itemTitle": "闪购4",
+    "itemIcon": "根据道具（标题同）",
+    "moneyType": 2,
+    "moneyNumber": 0,
+    "buyCount": 1,
+    "Prize": [
+      {
+        "PrizeID": 1,
+        "PrizeNum": 0
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 5,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "32": {
+    "Id": 32,
+    "dynamic": 0,
+    "AssistId": 0,
+    "marketType": 5,
+    "propType": 6,
+    "Priority": 5,
+    "itemTitle": "闪购5",
+    "itemIcon": "根据道具（标题同）",
+    "moneyType": 2,
+    "moneyNumber": 0,
+    "buyCount": 1,
+    "Prize": [
+      {
+        "PrizeID": 1,
+        "PrizeNum": 0
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 6,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 3
+  },
+  "33": {
+    "Id": 33,
+    "dynamic": 1,
+    "AssistId": 0,
+    "marketType": 2,
+    "propType": 0,
+    "Priority": 4,
+    "itemTitle": "体力礼包",
+    "itemIcon": "prop_3",
+    "moneyType": 2,
+    "moneyNumber": 40,
+    "buyCount": 1,
+    "Prize": [
+      {
+        "PrizeID": 3,
+        "PrizeNum": 150
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 1,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "34": {
+    "Id": 34,
+    "dynamic": 0,
+    "AssistId": 0,
+    "marketType": 6,
+    "propType": 0,
+    "Priority": 1,
+    "itemTitle": "升星材料1",
+    "itemIcon": "item_11_10014",
+    "moneyType": 1,
+    "moneyNumber": 100,
+    "buyCount": 10,
+    "Prize": [
+      {
+        "PrizeID": 140104,
+        "PrizeNum": 1
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 13,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "35": {
+    "Id": 35,
+    "dynamic": 0,
+    "AssistId": 0,
+    "marketType": 6,
+    "propType": 0,
+    "Priority": 2,
+    "itemTitle": "升星材料2",
+    "itemIcon": "item_16_10014",
+    "moneyType": 1,
+    "moneyNumber": 100,
+    "buyCount": 10,
+    "Prize": [
+      {
+        "PrizeID": 140404,
+        "PrizeNum": 1
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 14,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "36": {
+    "Id": 36,
+    "dynamic": 0,
+    "AssistId": 0,
+    "marketType": 6,
+    "propType": 0,
+    "Priority": 3,
+    "itemTitle": "升星材料3",
+    "itemIcon": "item_14_10014",
+    "moneyType": 1,
+    "moneyNumber": 100,
+    "buyCount": 10,
+    "Prize": [
+      {
+        "PrizeID": 140304,
+        "PrizeNum": 1
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 16,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "37": {
+    "Id": 37,
+    "dynamic": 0,
+    "AssistId": 0,
+    "marketType": 6,
+    "propType": 0,
+    "Priority": 4,
+    "itemTitle": "升星材料4",
+    "itemIcon": "item_12_10014",
+    "moneyType": 1,
+    "moneyNumber": 100,
+    "buyCount": 10,
+    "Prize": [
+      {
+        "PrizeID": 140204,
+        "PrizeNum": 1
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 19,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "38": {
+    "Id": 38,
+    "dynamic": 0,
+    "AssistId": 0,
+    "marketType": 6,
+    "propType": 0,
+    "Priority": 5,
+    "itemTitle": "升星材料5",
+    "itemIcon": "item_18_10014",
+    "moneyType": 1,
+    "moneyNumber": 100,
+    "buyCount": 10,
+    "Prize": [
+      {
+        "PrizeID": 140604,
+        "PrizeNum": 1
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 32,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "39": {
+    "Id": 39,
+    "dynamic": 0,
+    "AssistId": 0,
+    "marketType": 6,
+    "propType": 0,
+    "Priority": 6,
+    "itemTitle": "升星材料6",
+    "itemIcon": "item_17_10014",
+    "moneyType": 1,
+    "moneyNumber": 100,
+    "buyCount": 10,
+    "Prize": [
+      {
+        "PrizeID": 140504,
+        "PrizeNum": 1
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 36,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "40": {
+    "Id": 40,
+    "dynamic": 0,
+    "AssistId": 0,
+    "marketType": 6,
+    "propType": 0,
+    "Priority": 7,
+    "itemTitle": "升星材料7",
+    "itemIcon": "item_19_10014",
+    "moneyType": 1,
+    "moneyNumber": 100,
+    "buyCount": 10,
+    "Prize": [
+      {
+        "PrizeID": 140704,
+        "PrizeNum": 1
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 49,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "41": {
+    "Id": 41,
+    "dynamic": 0,
+    "AssistId": 0,
+    "marketType": 6,
+    "propType": 0,
+    "Priority": 8,
+    "itemTitle": "升星材料8",
+    "itemIcon": "item_20_10014",
+    "moneyType": 1,
+    "moneyNumber": 100,
+    "buyCount": 10,
+    "Prize": [
+      {
+        "PrizeID": 140804,
+        "PrizeNum": 1
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 53,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "42": {
+    "Id": 42,
+    "dynamic": 0,
+    "AssistId": 0,
+    "marketType": 6,
+    "propType": 0,
+    "Priority": 9,
+    "itemTitle": "升星材料9",
+    "itemIcon": "item_21_10014",
+    "moneyType": 1,
+    "moneyNumber": 100,
+    "buyCount": 10,
+    "Prize": [
+      {
+        "PrizeID": 141004,
+        "PrizeNum": 1
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 57,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "43": {
+    "Id": 43,
+    "dynamic": 0,
+    "AssistId": 0,
+    "marketType": 6,
+    "propType": 0,
+    "Priority": 10,
+    "itemTitle": "升星材料10",
+    "itemIcon": "item_22_10014",
+    "moneyType": 1,
+    "moneyNumber": 100,
+    "buyCount": 10,
+    "Prize": [
+      {
+        "PrizeID": 140904,
+        "PrizeNum": 1
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 58,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "1001": {
+    "Id": 1001,
+    "dynamic": 0,
+    "AssistId": 1,
+    "marketType": 7,
+    "propType": 7,
+    "Priority": 1,
+    "itemTitle": "生产",
+    "itemIcon": "",
+    "moneyType": 5,
+    "moneyNumber": 0,
+    "buyCount": 1,
+    "Prize": [
+      {
+        "PrizeID": 1,
+        "PrizeNum": 0
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 1,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "1002": {
+    "Id": 1002,
+    "dynamic": 0,
+    "AssistId": 2,
+    "marketType": 7,
+    "propType": 7,
+    "Priority": 1,
+    "itemTitle": "生产",
+    "itemIcon": "",
+    "moneyType": 5,
+    "moneyNumber": 0,
+    "buyCount": 1,
+    "Prize": [
+      {
+        "PrizeID": 1,
+        "PrizeNum": 0
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 1,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "1003": {
+    "Id": 1003,
+    "dynamic": 0,
+    "AssistId": 3,
+    "marketType": 7,
+    "propType": 7,
+    "Priority": 1,
+    "itemTitle": "生产",
+    "itemIcon": "",
+    "moneyType": 5,
+    "moneyNumber": 0,
+    "buyCount": 1,
+    "Prize": [
+      {
+        "PrizeID": 1,
+        "PrizeNum": 0
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 1,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "1004": {
+    "Id": 1004,
+    "dynamic": 0,
+    "AssistId": 4,
+    "marketType": 7,
+    "propType": 7,
+    "Priority": 1,
+    "itemTitle": "生产",
+    "itemIcon": "",
+    "moneyType": 5,
+    "moneyNumber": 0,
+    "buyCount": 1,
+    "Prize": [
+      {
+        "PrizeID": 1,
+        "PrizeNum": 0
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 1,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "1005": {
+    "Id": 1005,
+    "dynamic": 0,
+    "AssistId": 5,
+    "marketType": 7,
+    "propType": 7,
+    "Priority": 1,
+    "itemTitle": "生产",
+    "itemIcon": "",
+    "moneyType": 5,
+    "moneyNumber": 0,
+    "buyCount": 1,
+    "Prize": [
+      {
+        "PrizeID": 1,
+        "PrizeNum": 0
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 1,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "1006": {
+    "Id": 1006,
+    "dynamic": 0,
+    "AssistId": 6,
+    "marketType": 7,
+    "propType": 7,
+    "Priority": 1,
+    "itemTitle": "生产",
+    "itemIcon": "",
+    "moneyType": 5,
+    "moneyNumber": 0,
+    "buyCount": 1,
+    "Prize": [
+      {
+        "PrizeID": 1,
+        "PrizeNum": 0
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 1,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "1007": {
+    "Id": 1007,
+    "dynamic": 0,
+    "AssistId": 7,
+    "marketType": 7,
+    "propType": 7,
+    "Priority": 1,
+    "itemTitle": "生产",
+    "itemIcon": "",
+    "moneyType": 5,
+    "moneyNumber": 0,
+    "buyCount": 1,
+    "Prize": [
+      {
+        "PrizeID": 1,
+        "PrizeNum": 0
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 1,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "2001": {
+    "Id": 2001,
+    "dynamic": 0,
+    "AssistId": 1,
+    "marketType": 8,
+    "propType": 0,
+    "Priority": 1,
+    "itemTitle": "",
+    "itemIcon": "",
+    "moneyType": 2,
+    "moneyNumber": 8,
+    "buyCount": 16,
+    "Prize": [
+      {
+        "PrizeID": 111105,
+        "PrizeNum": 1
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 1,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "2002": {
+    "Id": 2002,
+    "dynamic": 0,
+    "AssistId": 1,
+    "marketType": 8,
+    "propType": 0,
+    "Priority": 2,
+    "itemTitle": "",
+    "itemIcon": "",
+    "moneyType": 2,
+    "moneyNumber": 6,
+    "buyCount": 8,
+    "Prize": [
+      {
+        "PrizeID": 111203,
+        "PrizeNum": 1
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 1,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "2003": {
+    "Id": 2003,
+    "dynamic": 0,
+    "AssistId": 1,
+    "marketType": 8,
+    "propType": 0,
+    "Priority": 3,
+    "itemTitle": "",
+    "itemIcon": "",
+    "moneyType": 2,
+    "moneyNumber": 7,
+    "buyCount": 16,
+    "Prize": [
+      {
+        "PrizeID": 111405,
+        "PrizeNum": 1
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 1,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "2004": {
+    "Id": 2004,
+    "dynamic": 0,
+    "AssistId": 1,
+    "marketType": 8,
+    "propType": 0,
+    "Priority": 4,
+    "itemTitle": "",
+    "itemIcon": "",
+    "moneyType": 2,
+    "moneyNumber": 11,
+    "buyCount": 8,
+    "Prize": [
+      {
+        "PrizeID": 111503,
+        "PrizeNum": 1
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 1,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "2005": {
+    "Id": 2005,
+    "dynamic": 0,
+    "AssistId": 2,
+    "marketType": 8,
+    "propType": 0,
+    "Priority": 1,
+    "itemTitle": "",
+    "itemIcon": "",
+    "moneyType": 2,
+    "moneyNumber": 15,
+    "buyCount": 16,
+    "Prize": [
+      {
+        "PrizeID": 112105,
+        "PrizeNum": 1
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 1,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "2006": {
+    "Id": 2006,
+    "dynamic": 0,
+    "AssistId": 2,
+    "marketType": 8,
+    "propType": 0,
+    "Priority": 2,
+    "itemTitle": "",
+    "itemIcon": "",
+    "moneyType": 2,
+    "moneyNumber": 15,
+    "buyCount": 16,
+    "Prize": [
+      {
+        "PrizeID": 112205,
+        "PrizeNum": 1
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 1,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "2007": {
+    "Id": 2007,
+    "dynamic": 0,
+    "AssistId": 2,
+    "marketType": 8,
+    "propType": 0,
+    "Priority": 3,
+    "itemTitle": "",
+    "itemIcon": "",
+    "moneyType": 2,
+    "moneyNumber": 19,
+    "buyCount": 16,
+    "Prize": [
+      {
+        "PrizeID": 112405,
+        "PrizeNum": 1
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 1,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "2008": {
+    "Id": 2008,
+    "dynamic": 0,
+    "AssistId": 2,
+    "marketType": 8,
+    "propType": 0,
+    "Priority": 4,
+    "itemTitle": "",
+    "itemIcon": "",
+    "moneyType": 2,
+    "moneyNumber": 15,
+    "buyCount": 16,
+    "Prize": [
+      {
+        "PrizeID": 112505,
+        "PrizeNum": 1
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 1,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "2009": {
+    "Id": 2009,
+    "dynamic": 0,
+    "AssistId": 3,
+    "marketType": 8,
+    "propType": 0,
+    "Priority": 1,
+    "itemTitle": "",
+    "itemIcon": "",
+    "moneyType": 2,
+    "moneyNumber": 8,
+    "buyCount": 16,
+    "Prize": [
+      {
+        "PrizeID": 113105,
+        "PrizeNum": 1
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 1,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "2010": {
+    "Id": 2010,
+    "dynamic": 0,
+    "AssistId": 3,
+    "marketType": 8,
+    "propType": 0,
+    "Priority": 2,
+    "itemTitle": "",
+    "itemIcon": "",
+    "moneyType": 2,
+    "moneyNumber": 6,
+    "buyCount": 16,
+    "Prize": [
+      {
+        "PrizeID": 113203,
+        "PrizeNum": 1
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 1,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "2011": {
+    "Id": 2011,
+    "dynamic": 0,
+    "AssistId": 3,
+    "marketType": 8,
+    "propType": 0,
+    "Priority": 3,
+    "itemTitle": "",
+    "itemIcon": "",
+    "moneyType": 2,
+    "moneyNumber": 6,
+    "buyCount": 16,
+    "Prize": [
+      {
+        "PrizeID": 113405,
+        "PrizeNum": 1
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 1,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "2012": {
+    "Id": 2012,
+    "dynamic": 0,
+    "AssistId": 3,
+    "marketType": 8,
+    "propType": 0,
+    "Priority": 4,
+    "itemTitle": "",
+    "itemIcon": "",
+    "moneyType": 2,
+    "moneyNumber": 11,
+    "buyCount": 16,
+    "Prize": [
+      {
+        "PrizeID": 113503,
+        "PrizeNum": 1
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 1,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "2013": {
+    "Id": 2013,
+    "dynamic": 0,
+    "AssistId": 4,
+    "marketType": 8,
+    "propType": 0,
+    "Priority": 1,
+    "itemTitle": "",
+    "itemIcon": "",
+    "moneyType": 2,
+    "moneyNumber": 7,
+    "buyCount": 16,
+    "Prize": [
+      {
+        "PrizeID": 114105,
+        "PrizeNum": 1
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 1,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "2014": {
+    "Id": 2014,
+    "dynamic": 0,
+    "AssistId": 4,
+    "marketType": 8,
+    "propType": 0,
+    "Priority": 2,
+    "itemTitle": "",
+    "itemIcon": "",
+    "moneyType": 2,
+    "moneyNumber": 9,
+    "buyCount": 16,
+    "Prize": [
+      {
+        "PrizeID": 114203,
+        "PrizeNum": 1
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 1,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "2015": {
+    "Id": 2015,
+    "dynamic": 0,
+    "AssistId": 4,
+    "marketType": 8,
+    "propType": 0,
+    "Priority": 3,
+    "itemTitle": "",
+    "itemIcon": "",
+    "moneyType": 2,
+    "moneyNumber": 7,
+    "buyCount": 16,
+    "Prize": [
+      {
+        "PrizeID": 114405,
+        "PrizeNum": 1
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 1,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "2016": {
+    "Id": 2016,
+    "dynamic": 0,
+    "AssistId": 4,
+    "marketType": 8,
+    "propType": 0,
+    "Priority": 4,
+    "itemTitle": "",
+    "itemIcon": "",
+    "moneyType": 2,
+    "moneyNumber": 9,
+    "buyCount": 16,
+    "Prize": [
+      {
+        "PrizeID": 114503,
+        "PrizeNum": 1
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 1,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "2017": {
+    "Id": 2017,
+    "dynamic": 0,
+    "AssistId": 5,
+    "marketType": 8,
+    "propType": 0,
+    "Priority": 1,
+    "itemTitle": "",
+    "itemIcon": "",
+    "moneyType": 2,
+    "moneyNumber": 7,
+    "buyCount": 16,
+    "Prize": [
+      {
+        "PrizeID": 115105,
+        "PrizeNum": 1
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 1,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "2018": {
+    "Id": 2018,
+    "dynamic": 0,
+    "AssistId": 5,
+    "marketType": 8,
+    "propType": 0,
+    "Priority": 2,
+    "itemTitle": "",
+    "itemIcon": "",
+    "moneyType": 2,
+    "moneyNumber": 8,
+    "buyCount": 16,
+    "Prize": [
+      {
+        "PrizeID": 115203,
+        "PrizeNum": 1
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 1,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "2019": {
+    "Id": 2019,
+    "dynamic": 0,
+    "AssistId": 5,
+    "marketType": 8,
+    "propType": 0,
+    "Priority": 3,
+    "itemTitle": "",
+    "itemIcon": "",
+    "moneyType": 2,
+    "moneyNumber": 6,
+    "buyCount": 16,
+    "Prize": [
+      {
+        "PrizeID": 115405,
+        "PrizeNum": 1
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 1,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "2020": {
+    "Id": 2020,
+    "dynamic": 0,
+    "AssistId": 5,
+    "marketType": 8,
+    "propType": 0,
+    "Priority": 4,
+    "itemTitle": "",
+    "itemIcon": "",
+    "moneyType": 2,
+    "moneyNumber": 9,
+    "buyCount": 16,
+    "Prize": [
+      {
+        "PrizeID": 115503,
+        "PrizeNum": 1
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 1,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "2021": {
+    "Id": 2021,
+    "dynamic": 0,
+    "AssistId": 6,
+    "marketType": 8,
+    "propType": 0,
+    "Priority": 1,
+    "itemTitle": "",
+    "itemIcon": "",
+    "moneyType": 2,
+    "moneyNumber": 7,
+    "buyCount": 16,
+    "Prize": [
+      {
+        "PrizeID": 116105,
+        "PrizeNum": 1
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 1,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "2022": {
+    "Id": 2022,
+    "dynamic": 0,
+    "AssistId": 6,
+    "marketType": 8,
+    "propType": 0,
+    "Priority": 2,
+    "itemTitle": "",
+    "itemIcon": "",
+    "moneyType": 2,
+    "moneyNumber": 8,
+    "buyCount": 16,
+    "Prize": [
+      {
+        "PrizeID": 116203,
+        "PrizeNum": 1
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 1,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "2023": {
+    "Id": 2023,
+    "dynamic": 0,
+    "AssistId": 6,
+    "marketType": 8,
+    "propType": 0,
+    "Priority": 3,
+    "itemTitle": "",
+    "itemIcon": "",
+    "moneyType": 2,
+    "moneyNumber": 6,
+    "buyCount": 16,
+    "Prize": [
+      {
+        "PrizeID": 116405,
+        "PrizeNum": 1
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 1,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "2024": {
+    "Id": 2024,
+    "dynamic": 0,
+    "AssistId": 6,
+    "marketType": 8,
+    "propType": 0,
+    "Priority": 4,
+    "itemTitle": "",
+    "itemIcon": "",
+    "moneyType": 2,
+    "moneyNumber": 11,
+    "buyCount": 16,
+    "Prize": [
+      {
+        "PrizeID": 116503,
+        "PrizeNum": 1
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 1,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "2025": {
+    "Id": 2025,
+    "dynamic": 0,
+    "AssistId": 7,
+    "marketType": 8,
+    "propType": 0,
+    "Priority": 1,
+    "itemTitle": "",
+    "itemIcon": "",
+    "moneyType": 2,
+    "moneyNumber": 8,
+    "buyCount": 16,
+    "Prize": [
+      {
+        "PrizeID": 117105,
+        "PrizeNum": 1
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 1,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "2026": {
+    "Id": 2026,
+    "dynamic": 0,
+    "AssistId": 7,
+    "marketType": 8,
+    "propType": 0,
+    "Priority": 2,
+    "itemTitle": "",
+    "itemIcon": "",
+    "moneyType": 2,
+    "moneyNumber": 8,
+    "buyCount": 16,
+    "Prize": [
+      {
+        "PrizeID": 117203,
+        "PrizeNum": 1
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 1,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "2027": {
+    "Id": 2027,
+    "dynamic": 0,
+    "AssistId": 7,
+    "marketType": 8,
+    "propType": 0,
+    "Priority": 3,
+    "itemTitle": "",
+    "itemIcon": "",
+    "moneyType": 2,
+    "moneyNumber": 8,
+    "buyCount": 16,
+    "Prize": [
+      {
+        "PrizeID": 117405,
+        "PrizeNum": 1
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 1,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "2028": {
+    "Id": 2028,
+    "dynamic": 0,
+    "AssistId": 7,
+    "marketType": 8,
+    "propType": 0,
+    "Priority": 4,
+    "itemTitle": "",
+    "itemIcon": "",
+    "moneyType": 2,
+    "moneyNumber": 8,
+    "buyCount": 16,
+    "Prize": [
+      {
+        "PrizeID": 117503,
+        "PrizeNum": 1
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 1,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "3001": {
+    "Id": 3001,
+    "dynamic": 0,
+    "AssistId": 0,
+    "marketType": 9,
+    "propType": 0,
+    "Priority": 1,
+    "itemTitle": "",
+    "itemIcon": "",
+    "moneyType": 1,
+    "moneyNumber": 500,
+    "buyCount": 3,
+    "Prize": [
+      {
+        "PrizeID": 210001,
+        "PrizeNum": 1
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 1,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "3002": {
+    "Id": 3002,
+    "dynamic": 0,
+    "AssistId": 0,
+    "marketType": 9,
+    "propType": 0,
+    "Priority": 2,
+    "itemTitle": "",
+    "itemIcon": "",
+    "moneyType": 1,
+    "moneyNumber": 500,
+    "buyCount": 3,
+    "Prize": [
+      {
+        "PrizeID": 210101,
+        "PrizeNum": 1
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 1,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "3003": {
+    "Id": 3003,
+    "dynamic": 0,
+    "AssistId": 0,
+    "marketType": 9,
+    "propType": 0,
+    "Priority": 3,
+    "itemTitle": "",
+    "itemIcon": "",
+    "moneyType": 1,
+    "moneyNumber": 500,
+    "buyCount": 3,
+    "Prize": [
+      {
+        "PrizeID": 210201,
+        "PrizeNum": 1
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 1,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "3004": {
+    "Id": 3004,
+    "dynamic": 0,
+    "AssistId": 0,
+    "marketType": 9,
+    "propType": 0,
+    "Priority": 4,
+    "itemTitle": "",
+    "itemIcon": "",
+    "moneyType": 1,
+    "moneyNumber": 500,
+    "buyCount": 3,
+    "Prize": [
+      {
+        "PrizeID": 210301,
+        "PrizeNum": 1
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 25,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "3005": {
+    "Id": 3005,
+    "dynamic": 0,
+    "AssistId": 0,
+    "marketType": 9,
+    "propType": 0,
+    "Priority": 5,
+    "itemTitle": "",
+    "itemIcon": "",
+    "moneyType": 1,
+    "moneyNumber": 500,
+    "buyCount": 3,
+    "Prize": [
+      {
+        "PrizeID": 210401,
+        "PrizeNum": 1
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 30,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "3006": {
+    "Id": 3006,
+    "dynamic": 0,
+    "AssistId": 0,
+    "marketType": 9,
+    "propType": 0,
+    "Priority": 6,
+    "itemTitle": "",
+    "itemIcon": "",
+    "moneyType": 1,
+    "moneyNumber": 500,
+    "buyCount": 3,
+    "Prize": [
+      {
+        "PrizeID": 210501,
+        "PrizeNum": 1
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 35,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "3007": {
+    "Id": 3007,
+    "dynamic": 0,
+    "AssistId": 0,
+    "marketType": 9,
+    "propType": 0,
+    "Priority": 7,
+    "itemTitle": "",
+    "itemIcon": "",
+    "moneyType": 1,
+    "moneyNumber": 500,
+    "buyCount": 3,
+    "Prize": [
+      {
+        "PrizeID": 210601,
+        "PrizeNum": 1
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 40,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "3008": {
+    "Id": 3008,
+    "dynamic": 0,
+    "AssistId": 0,
+    "marketType": 9,
+    "propType": 0,
+    "Priority": 8,
+    "itemTitle": "",
+    "itemIcon": "",
+    "moneyType": 1,
+    "moneyNumber": 500,
+    "buyCount": 3,
+    "Prize": [
+      {
+        "PrizeID": 210701,
+        "PrizeNum": 1
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 45,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "3009": {
+    "Id": 3009,
+    "dynamic": 0,
+    "AssistId": 0,
+    "marketType": 9,
+    "propType": 0,
+    "Priority": 9,
+    "itemTitle": "",
+    "itemIcon": "",
+    "moneyType": 1,
+    "moneyNumber": 500,
+    "buyCount": 3,
+    "Prize": [
+      {
+        "PrizeID": 210801,
+        "PrizeNum": 1
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 50,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  },
+  "3010": {
+    "Id": 3010,
+    "dynamic": 0,
+    "AssistId": 0,
+    "marketType": 9,
+    "propType": 0,
+    "Priority": 10,
+    "itemTitle": "",
+    "itemIcon": "",
+    "moneyType": 1,
+    "moneyNumber": 500,
+    "buyCount": 3,
+    "Prize": [
+      {
+        "PrizeID": 210901,
+        "PrizeNum": 1
+      }
+    ],
+    "additionalReward": 0,
+    "additionalRewardNumber": 0,
+    "PurchaseCountsAndProductQuantityMapping": "",
+    "LevelLimit": 55,
+    "discountFlag": 0,
+    "Title": "",
+    "Des": "",
+    "RandomPoolID": 0
+  }
+}

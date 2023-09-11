@@ -1,0 +1,28 @@
+{
+  "1": {
+    "ID": 1,
+    "Left": -5,
+    "Right": 14,
+    "Up": 8,
+    "Down": -10,
+    "FieldOfViewMax": 50,
+    "FieldOfViewMin": 30,
+    "HeightMax": 8,
+    "HeightMin": 4,
+    "CameraPos": "5.33/4.9",
+    "FieldView": 49
+  },
+  "2": {
+    "ID": 2,
+    "Left": 175,
+    "Right": 225,
+    "Up": 12,
+    "Down": -36,
+    "FieldOfViewMax": 50,
+    "FieldOfViewMin": 30,
+    "HeightMax": 11,
+    "HeightMin": 4,
+    "CameraPos": "200/-22",
+    "FieldView": 50
+  }
+}

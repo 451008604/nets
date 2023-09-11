@@ -1,0 +1,312 @@
+{
+  "1": {
+    "ID": 1,
+    "MissionType": 1,
+    "SubMissionIDs": "10010-10011-10012-10013-10014-10015-10016-10017-10018-10019",
+    "Reward": "130102-130202-130602-130702",
+    "RewardNum": 1,
+    "MissionEndReward": "",
+    "ScoreReward": "",
+    "Unlock": 0
+  },
+  "2": {
+    "ID": 2,
+    "MissionType": 1,
+    "SubMissionIDs": "10020-10021-10022-10023-10024-10025-10026-10027-10028-10029",
+    "Reward": "121104",
+    "RewardNum": 1,
+    "MissionEndReward": "",
+    "ScoreReward": "",
+    "Unlock": 0
+  },
+  "3": {
+    "ID": 3,
+    "MissionType": 1,
+    "SubMissionIDs": "10030-10031-10032-10033-10034-10035-10036-10037-10038-10039",
+    "Reward": "130502-130402-130302",
+    "RewardNum": 1,
+    "MissionEndReward": "",
+    "ScoreReward": "",
+    "Unlock": 0
+  },
+  "4": {
+    "ID": 4,
+    "MissionType": 1,
+    "SubMissionIDs": "10040-10041-10042-10043-10044-10045-10046-10047-10048-10049",
+    "Reward": "101304-102306-103305-104206",
+    "RewardNum": 1,
+    "MissionEndReward": "",
+    "ScoreReward": "",
+    "Unlock": 0
+  },
+  "5": {
+    "ID": 5,
+    "MissionType": 1,
+    "SubMissionIDs": "10050-10051-10052-10053-10054-10055-10056-10057-10058-10059",
+    "Reward": "123009",
+    "RewardNum": 1,
+    "MissionEndReward": "",
+    "ScoreReward": "",
+    "Unlock": 0
+  },
+  "6": {
+    "ID": 6,
+    "MissionType": 2,
+    "SubMissionIDs": "20001-20002-20003-20004-20005-20006-20007-20008-20009-20010-20011-20012-20013-20014-20015-20016-20017-20018-20019-20020",
+    "Reward": "",
+    "RewardNum": 0,
+    "MissionEndReward": "",
+    "ScoreReward": "40:130401:1-80:122102:1-120:121103:3-160:123001:1-200:122102:3",
+    "Unlock": 0
+  },
+  "7": {
+    "ID": 7,
+    "MissionType": 3,
+    "SubMissionIDs": "30010-30011-30012-30013-30014-30015-30016-30017-30018-30019",
+    "Reward": "",
+    "RewardNum": 0,
+    "MissionEndReward": "",
+    "ScoreReward": "",
+    "Unlock": 1
+  },
+  "8": {
+    "ID": 8,
+    "MissionType": 3,
+    "SubMissionIDs": "30020-30021-30022-30023-30024-30025-30026-30027-30028-30029",
+    "Reward": "",
+    "RewardNum": 0,
+    "MissionEndReward": "",
+    "ScoreReward": "",
+    "Unlock": 3
+  },
+  "9": {
+    "ID": 9,
+    "MissionType": 3,
+    "SubMissionIDs": "30030-30031-30032-30033-30034-30035-30036-30037-30038-30039",
+    "Reward": "",
+    "RewardNum": 0,
+    "MissionEndReward": "",
+    "ScoreReward": "",
+    "Unlock": 5
+  },
+  "10": {
+    "ID": 10,
+    "MissionType": 3,
+    "SubMissionIDs": "30040-30041-30042-30043-30044-30045-30046-30047-30048-30049",
+    "Reward": "",
+    "RewardNum": 0,
+    "MissionEndReward": "",
+    "ScoreReward": "",
+    "Unlock": 7
+  },
+  "11": {
+    "ID": 11,
+    "MissionType": 3,
+    "SubMissionIDs": "30050-30051-30052-30053-30054-30055-30056-30057-30058-30059",
+    "Reward": "",
+    "RewardNum": 0,
+    "MissionEndReward": "",
+    "ScoreReward": "",
+    "Unlock": 9
+  },
+  "12": {
+    "ID": 12,
+    "MissionType": 3,
+    "SubMissionIDs": "30060-30061-30062-30063-30064-30065-30066-30067-30068-30069",
+    "Reward": "",
+    "RewardNum": 0,
+    "MissionEndReward": "",
+    "ScoreReward": "",
+    "Unlock": 11
+  },
+  "13": {
+    "ID": 13,
+    "MissionType": 3,
+    "SubMissionIDs": "30070-30071-30072-30073-30074-30075-30076-30077-30078-30079",
+    "Reward": "",
+    "RewardNum": 0,
+    "MissionEndReward": "",
+    "ScoreReward": "",
+    "Unlock": 13
+  },
+  "14": {
+    "ID": 14,
+    "MissionType": 3,
+    "SubMissionIDs": "30080-30081-30082-30083-30084-30085-30086-30087-30088-30089",
+    "Reward": "",
+    "RewardNum": 0,
+    "MissionEndReward": "121001:1-122104:1-130303:1-130405:1-123003:1-121001:1",
+    "ScoreReward": "",
+    "Unlock": 15
+  },
+  "15": {
+    "ID": 15,
+    "MissionType": 4,
+    "SubMissionIDs": "40010-40011-40012-40013-40014-40015-40016-40017-40018-40019",
+    "Reward": "",
+    "RewardNum": 0,
+    "MissionEndReward": "",
+    "ScoreReward": "",
+    "Unlock": 17
+  },
+  "16": {
+    "ID": 16,
+    "MissionType": 4,
+    "SubMissionIDs": "40020-40021-40022-40023-40024-40025-40026-40027-40028-40029",
+    "Reward": "",
+    "RewardNum": 0,
+    "MissionEndReward": "",
+    "ScoreReward": "",
+    "Unlock": 19
+  },
+  "17": {
+    "ID": 17,
+    "MissionType": 4,
+    "SubMissionIDs": "40030-40031-40032-40033-40034-40035-40036-40037-40038-40039",
+    "Reward": "",
+    "RewardNum": 0,
+    "MissionEndReward": "",
+    "ScoreReward": "",
+    "Unlock": 21
+  },
+  "18": {
+    "ID": 18,
+    "MissionType": 4,
+    "SubMissionIDs": "40040-40041-40042-40043-40044-40045-40046-40047-40048-40049",
+    "Reward": "",
+    "RewardNum": 0,
+    "MissionEndReward": "",
+    "ScoreReward": "",
+    "Unlock": 23
+  },
+  "19": {
+    "ID": 19,
+    "MissionType": 4,
+    "SubMissionIDs": "40050-40051-40052-40053-40054-40055-40056-40057-40058-40059",
+    "Reward": "",
+    "RewardNum": 0,
+    "MissionEndReward": "",
+    "ScoreReward": "",
+    "Unlock": 25
+  },
+  "20": {
+    "ID": 20,
+    "MissionType": 4,
+    "SubMissionIDs": "40060-40061-40062-40063-40064-40065-40066-40067-40068-40069",
+    "Reward": "",
+    "RewardNum": 0,
+    "MissionEndReward": "",
+    "ScoreReward": "",
+    "Unlock": 27
+  },
+  "21": {
+    "ID": 21,
+    "MissionType": 4,
+    "SubMissionIDs": "40070-40071-40072-40073-40074-40075-40076-40077-40078-40079",
+    "Reward": "",
+    "RewardNum": 0,
+    "MissionEndReward": "",
+    "ScoreReward": "",
+    "Unlock": 29
+  },
+  "22": {
+    "ID": 22,
+    "MissionType": 4,
+    "SubMissionIDs": "40080-40081-40082-40083-40084-40085-40086-40087-40088-40089",
+    "Reward": "",
+    "RewardNum": 0,
+    "MissionEndReward": "121001:1-122104:1-130303:1-130405:1-123003:1-121001:1",
+    "ScoreReward": "",
+    "Unlock": 31
+  },
+  "23": {
+    "ID": 23,
+    "MissionType": 5,
+    "SubMissionIDs": "50001-50002-50003-50004-50005-50006-50007-50008-50009-50010-50011-50012-50013-50014-50015-50016-50017-50018-50019-50020",
+    "Reward": "",
+    "RewardNum": 0,
+    "MissionEndReward": "",
+    "ScoreReward": "",
+    "Unlock": 0
+  },
+  "24": {
+    "ID": 24,
+    "MissionType": 6,
+    "SubMissionIDs": "60010-60011-60012-60013-60014-60015-60016-60017-60018-60019",
+    "Reward": "",
+    "RewardNum": 0,
+    "MissionEndReward": "",
+    "ScoreReward": "",
+    "Unlock": 35
+  },
+  "25": {
+    "ID": 25,
+    "MissionType": 6,
+    "SubMissionIDs": "60020-60021-60022-60023-60024-60025-60026-60027-60028-60029",
+    "Reward": "",
+    "RewardNum": 0,
+    "MissionEndReward": "",
+    "ScoreReward": "",
+    "Unlock": 37
+  },
+  "26": {
+    "ID": 26,
+    "MissionType": 6,
+    "SubMissionIDs": "60030-60031-60032-60033-60034-60035-60036-60037-60038-60039",
+    "Reward": "",
+    "RewardNum": 0,
+    "MissionEndReward": "",
+    "ScoreReward": "",
+    "Unlock": 39
+  },
+  "27": {
+    "ID": 27,
+    "MissionType": 6,
+    "SubMissionIDs": "60040-60041-60042-60043-60044-60045-60046-60047-60048-60049",
+    "Reward": "",
+    "RewardNum": 0,
+    "MissionEndReward": "",
+    "ScoreReward": "",
+    "Unlock": 41
+  },
+  "28": {
+    "ID": 28,
+    "MissionType": 6,
+    "SubMissionIDs": "60050-60051-60052-60053-60054-60055-60056-60057-60058-60059",
+    "Reward": "",
+    "RewardNum": 0,
+    "MissionEndReward": "",
+    "ScoreReward": "",
+    "Unlock": 43
+  },
+  "29": {
+    "ID": 29,
+    "MissionType": 6,
+    "SubMissionIDs": "60060-60061-60062-60063-60064-60065-60066-60067-60068-60069",
+    "Reward": "",
+    "RewardNum": 0,
+    "MissionEndReward": "",
+    "ScoreReward": "",
+    "Unlock": 45
+  },
+  "30": {
+    "ID": 30,
+    "MissionType": 6,
+    "SubMissionIDs": "60070-60071-60072-60073-60074-60075-60076-60077-60078-60079",
+    "Reward": "",
+    "RewardNum": 0,
+    "MissionEndReward": "",
+    "ScoreReward": "",
+    "Unlock": 47
+  },
+  "31": {
+    "ID": 31,
+    "MissionType": 6,
+    "SubMissionIDs": "60080-60081-60082-60083-60084-60085-60086-60087-60088-60089",
+    "Reward": "",
+    "RewardNum": 0,
+    "MissionEndReward": "121001:1-122104:1-130303:1-130405:1-123003:1-121001:1",
+    "ScoreReward": "",
+    "Unlock": 49
+  }
+}

@@ -58,17 +58,12 @@ func GetGlobalObject() GlobalObj {
 }
 
 func (o *GlobalObj) Reload() {
-	err := json.Unmarshal(getConfigDataToBytes("config.json"), &globalObject)
+	err := json.Unmarshal(getConfigDataToBytes("./config/", "config.json"), &globalObject)
 	logs.PrintLogErr(err)
 }
 
 // 获取配置数据到字节
-func getConfigDataToBytes(configName string) []byte {
-	if configPath == "" {
-		// configPath = os.Getenv("GOPATH") + "/src/" + globalObject.Name + "/config/"
-		configPath = "./config/"
-	}
-
+func getConfigDataToBytes(configPath string, configName string) []byte {
 	bytes, err := ioutil.ReadFile(configPath + configName)
 	logs.PrintLogPanic(err)
 	return bytes

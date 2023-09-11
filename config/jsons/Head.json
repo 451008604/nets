@@ -1,0 +1,110 @@
+{
+  "10101": {
+    "ID": 10101,
+    "Resource": "role_1_1",
+    "UnlockCondition": 0,
+    "Round": "Buyerleader01"
+  },
+  "10102": {
+    "ID": 10102,
+    "Resource": "role_1_2",
+    "UnlockCondition": 0,
+    "Round": "Buyerleader02"
+  },
+  "10103": {
+    "ID": 10103,
+    "Resource": "role_1_3",
+    "UnlockCondition": 0,
+    "Round": "Buyerleader03"
+  },
+  "10104": {
+    "ID": 10104,
+    "Resource": "role_1_4",
+    "UnlockCondition": 0,
+    "Round": "Buyerleader04"
+  },
+  "10201": {
+    "ID": 10201,
+    "Resource": "role_2_1",
+    "UnlockCondition": 0,
+    "Round": "Buyernpc02"
+  },
+  "10202": {
+    "ID": 10202,
+    "Resource": "role_2_2",
+    "UnlockCondition": 0,
+    "Round": "Buyernpc08"
+  },
+  "10301": {
+    "ID": 10301,
+    "Resource": "role_3_1",
+    "UnlockCondition": 0,
+    "Round": "Buyernpc05"
+  },
+  "10302": {
+    "ID": 10302,
+    "Resource": "role_3_2",
+    "UnlockCondition": 0,
+    "Round": "Buyernpc11"
+  },
+  "10401": {
+    "ID": 10401,
+    "Resource": "role_4_1",
+    "UnlockCondition": 0,
+    "Round": "Buyernpc03"
+  },
+  "10402": {
+    "ID": 10402,
+    "Resource": "role_4_2",
+    "UnlockCondition": 0,
+    "Round": "Buyernpc09"
+  },
+  "10501": {
+    "ID": 10501,
+    "Resource": "role_5_1",
+    "UnlockCondition": 0,
+    "Round": "Buyernpc04"
+  },
+  "10502": {
+    "ID": 10502,
+    "Resource": "role_5_2",
+    "UnlockCondition": 0,
+    "Round": "Buyernpc10"
+  },
+  "10601": {
+    "ID": 10601,
+    "Resource": "role_6_1",
+    "UnlockCondition": 0,
+    "Round": "Buyernpc07"
+  },
+  "10701": {
+    "ID": 10701,
+    "Resource": "role_7_1",
+    "UnlockCondition": 0,
+    "Round": "Buyernpc01"
+  },
+  "10801": {
+    "ID": 10801,
+    "Resource": "role_8_1",
+    "UnlockCondition": 0,
+    "Round": "Buyernpc06"
+  },
+  "10901": {
+    "ID": 10901,
+    "Resource": "role_9_1",
+    "UnlockCondition": 0,
+    "Round": "Buyernpc14"
+  },
+  "11001": {
+    "ID": 11001,
+    "Resource": "role_10_1",
+    "UnlockCondition": 0,
+    "Round": "Buyernpc13"
+  },
+  "11101": {
+    "ID": 11101,
+    "Resource": "role_11_1",
+    "UnlockCondition": 0,
+    "Round": "Buyernpc12"
+  }
+}

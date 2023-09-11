@@ -1,0 +1,1126 @@
+{
+  "1": {
+    "ID": 1,
+    "Name": "引导第一个任务",
+    "Priority": 100,
+    "GuideType": 2,
+    "GuideStep": [
+      {
+        "JumpToStep": 3,
+        "Delay": 0.1,
+        "Save": 1,
+        "ShowType": 1,
+        "rotation": 45,
+        "offset": "-50/0",
+        "dialogPos": "0/-100",
+        "GuideDes": "叮，神秘包裹已送到！点击打开它，可以查看你的专属任务哦~",
+        "ItemID": "",
+        "TargetItemID": "",
+        "UIPath": "UIMainView(Clone)/flagPanel/TaskFlag(Clone)",
+        "OrderID": ""
+      },
+      {
+        "JumpToStep": 3,
+        "Delay": 0.1,
+        "Save": 1,
+        "ShowType": 1,
+        "rotation": 0,
+        "offset": "0/0",
+        "dialogPos": "0/350",
+        "GuideDes": "一只幼稚猫走丢啦，快进入合成界面找找它吧！",
+        "ItemID": "",
+        "TargetItemID": "",
+        "UIPath": "UITaskDetails(Clone)/Panel/back/btnReceive",
+        "OrderID": ""
+      },
+      {
+        "JumpToStep": 0,
+        "Delay": 0.1,
+        "Save": 1,
+        "ShowType": 2,
+        "rotation": 0,
+        "offset": "0/0",
+        "dialogPos": "0/0",
+        "GuideDes": "将相同物品拖动到一起，竟然能合成一个全新升级的物件呢！",
+        "ItemID": "101902/101902",
+        "TargetItemID": "101903",
+        "UIPath": "",
+        "OrderID": ""
+      },
+      {
+        "JumpToStep": 0,
+        "Delay": 0.1,
+        "Save": 1,
+        "ShowType": 2,
+        "rotation": 0,
+        "offset": "0/0",
+        "dialogPos": "0/0",
+        "GuideDes": "",
+        "ItemID": "101903/101903",
+        "TargetItemID": "101904",
+        "UIPath": "",
+        "OrderID": ""
+      },
+      {
+        "JumpToStep": 0,
+        "Delay": 0.1,
+        "Save": 1,
+        "ShowType": 1,
+        "rotation": 0,
+        "offset": "0/0",
+        "dialogPos": "0/200",
+        "GuideDes": "等等，幼稚猫会不会就躲在里面！点击它找找看吧？",
+        "ItemID": "101904",
+        "TargetItemID": "101101",
+        "UIPath": "",
+        "OrderID": ""
+      },
+      {
+        "JumpToStep": 0,
+        "Delay": 0.1,
+        "Save": 1,
+        "ShowType": 2,
+        "rotation": 0,
+        "offset": "0/0",
+        "dialogPos": "0/0",
+        "GuideDes": "",
+        "ItemID": "101101/101101",
+        "TargetItemID": "101102",
+        "UIPath": "",
+        "OrderID": ""
+      },
+      {
+        "JumpToStep": 0,
+        "Delay": 0.1,
+        "Save": 1,
+        "ShowType": 1,
+        "rotation": 0,
+        "offset": "170/-50",
+        "dialogPos": "0/0",
+        "GuideDes": "你真的找到它啦！点击将它送还，说不定会有好事发生？",
+        "ItemID": "",
+        "TargetItemID": "",
+        "UIPath": "UIComposeHouse(Clone)/Panel/LeftPanel/taskPanel/MainTaskInfo",
+        "OrderID": ""
+      },
+      {
+        "JumpToStep": 0,
+        "Delay": 0.1,
+        "Save": 1,
+        "ShowType": 1,
+        "rotation": 0,
+        "offset": "",
+        "dialogPos": "0/0",
+        "GuideDes": "",
+        "ItemID": "",
+        "TargetItemID": "",
+        "UIPath": "UITaskDetails(Clone)/Panel/back/btnReceive",
+        "OrderID": ""
+      },
+      {
+        "JumpToStep": 0,
+        "Delay": 0.1,
+        "Save": 1,
+        "ShowType": 1,
+        "rotation": 0,
+        "offset": "0/0",
+        "dialogPos": "0/0",
+        "GuideDes": "",
+        "ItemID": "",
+        "TargetItemID": "",
+        "UIPath": "UIDecorateView(Clone)/Panel/confirmBtn",
+        "OrderID": ""
+      }
+    ]
+  },
+  "2": {
+    "ID": 2,
+    "Name": "引导第二个任务",
+    "Priority": 90,
+    "GuideType": 2,
+    "GuideStep": [
+      {
+        "JumpToStep": 3,
+        "Delay": 0.1,
+        "Save": 1,
+        "ShowType": 1,
+        "rotation": 0,
+        "offset": "",
+        "dialogPos": "",
+        "GuideDes": "",
+        "ItemID": "",
+        "TargetItemID": "",
+        "UIPath": "UIMainView(Clone)/leftPanel/taskScroll/Viewport/Content/1/item/back",
+        "OrderID": ""
+      },
+      {
+        "JumpToStep": 3,
+        "Delay": 0.1,
+        "Save": 1,
+        "ShowType": 1,
+        "rotation": 0,
+        "offset": "",
+        "dialogPos": "",
+        "GuideDes": "",
+        "ItemID": "",
+        "TargetItemID": "",
+        "UIPath": "UITaskDetails(Clone)/Panel/back/btnReceive",
+        "OrderID": ""
+      },
+      {
+        "JumpToStep": 0,
+        "Delay": 0.1,
+        "Save": 1,
+        "ShowType": 1,
+        "rotation": 0,
+        "offset": "0/0",
+        "dialogPos": "",
+        "GuideDes": "",
+        "ItemID": "101904",
+        "TargetItemID": "101101",
+        "UIPath": "",
+        "OrderID": ""
+      },
+      {
+        "JumpToStep": 0,
+        "Delay": 0.1,
+        "Save": 1,
+        "ShowType": 2,
+        "rotation": 0,
+        "offset": "",
+        "dialogPos": "",
+        "GuideDes": "",
+        "ItemID": "101101/101101",
+        "TargetItemID": "101102",
+        "UIPath": "",
+        "OrderID": ""
+      },
+      {
+        "JumpToStep": 0,
+        "Delay": 0.1,
+        "Save": 1,
+        "ShowType": 2,
+        "rotation": 0,
+        "offset": "",
+        "dialogPos": "0/200",
+        "GuideDes": "",
+        "ItemID": "101102/101102",
+        "TargetItemID": "101103",
+        "UIPath": "",
+        "OrderID": ""
+      },
+      {
+        "JumpToStep": 0,
+        "Delay": 0.1,
+        "Save": 1,
+        "ShowType": 2,
+        "rotation": 0,
+        "offset": "",
+        "dialogPos": "",
+        "GuideDes": "",
+        "ItemID": "101103/101103",
+        "TargetItemID": "101104",
+        "UIPath": "",
+        "OrderID": ""
+      },
+      {
+        "JumpToStep": 0,
+        "Delay": 0.1,
+        "Save": 1,
+        "ShowType": 2,
+        "rotation": 0,
+        "offset": "",
+        "dialogPos": "",
+        "GuideDes": "",
+        "ItemID": "101104/101104",
+        "TargetItemID": "101105",
+        "UIPath": "",
+        "OrderID": ""
+      },
+      {
+        "JumpToStep": 0,
+        "Delay": 0.1,
+        "Save": 1,
+        "ShowType": 1,
+        "rotation": 0,
+        "offset": "170/-50",
+        "dialogPos": "",
+        "GuideDes": "点击将它送到委托人身边，可以收取委托报酬哦！",
+        "ItemID": "",
+        "TargetItemID": "",
+        "UIPath": "UIComposeHouse(Clone)/Panel/LeftPanel/taskPanel/ScrollView/Viewport/1",
+        "OrderID": ""
+      },
+      {
+        "JumpToStep": 0,
+        "Delay": 0.1,
+        "Save": 1,
+        "ShowType": 1,
+        "rotation": 0,
+        "offset": "170/-50",
+        "dialogPos": "",
+        "GuideDes": "终于能用获取的金币启动任务啦，多亏你努力完成了委托呢！",
+        "ItemID": "",
+        "TargetItemID": "",
+        "UIPath": "UIComposeHouse(Clone)/Panel/LeftPanel/taskPanel/MainTaskInfo",
+        "OrderID": ""
+      },
+      {
+        "JumpToStep": 0,
+        "Delay": 0.1,
+        "Save": 1,
+        "ShowType": 1,
+        "rotation": 0,
+        "offset": "",
+        "dialogPos": "",
+        "GuideDes": "",
+        "ItemID": "",
+        "TargetItemID": "",
+        "UIPath": "UITaskDetails(Clone)/Panel/back/btnReceive",
+        "OrderID": ""
+      }
+    ]
+  },
+  "10": {
+    "ID": 10,
+    "Name": "第三次任务（原道具详情）",
+    "Priority": 89,
+    "GuideType": 2,
+    "GuideStep": [
+      {
+        "JumpToStep": 0,
+        "Delay": 0.1,
+        "Save": 1,
+        "ShowType": 1,
+        "rotation": 45,
+        "offset": "",
+        "dialogPos": "",
+        "GuideDes": "这里有条去合成界面的捷径哦！快跟上~",
+        "ItemID": "",
+        "TargetItemID": "",
+        "UIPath": "UIMainView(Clone)/downPanel/homePanel/ObjCompose/composeBtn",
+        "OrderID": ""
+      },
+      {
+        "JumpToStep": 0,
+        "Delay": 0.1,
+        "Save": 1,
+        "ShowType": 1,
+        "rotation": 45,
+        "offset": "",
+        "dialogPos": "0/250",
+        "GuideDes": "听说这种生产道具来自地外文明？谣言止于智者！快快点击了解它吧~",
+        "ItemID": "101904",
+        "TargetItemID": "",
+        "UIPath": "",
+        "OrderID": ""
+      },
+      {
+        "JumpToStep": 0,
+        "Delay": 0.1,
+        "Save": 1,
+        "ShowType": 1,
+        "rotation": -135,
+        "offset": "0/0",
+        "dialogPos": "",
+        "GuideDes": "好奇它能产出啥？点击此处揭秘哦！",
+        "ItemID": "",
+        "TargetItemID": "",
+        "UIPath": "UIComposeHouse(Clone)/Panel/LeftPanel/infoPanel/btnInfo",
+        "OrderID": ""
+      },
+      {
+        "JumpToStep": 0,
+        "Delay": 0.1,
+        "Save": 1,
+        "ShowType": 1,
+        "rotation": 0,
+        "offset": "50/0",
+        "dialogPos": "0/0",
+        "GuideDes": "点击一下，了解它的成长轨迹~",
+        "ItemID": "",
+        "TargetItemID": "",
+        "UIPath": "UIComposeInfoView(Clone)/Panel/Produce/SeriesLayout/InfoItem",
+        "OrderID": ""
+      },
+      {
+        "JumpToStep": 0,
+        "Delay": 0.1,
+        "Save": 1,
+        "ShowType": 1,
+        "rotation": 0,
+        "offset": "",
+        "dialogPos": "",
+        "GuideDes": "快用放大镜找找它的生产道具吧！",
+        "ItemID": "",
+        "TargetItemID": "",
+        "UIPath": "UIComposeInfoView(Clone)/Panel/Product/BtnExamine",
+        "OrderID": ""
+      },
+      {
+        "JumpToStep": 0,
+        "Delay": 0.1,
+        "Save": 1,
+        "ShowType": 1,
+        "rotation": 45,
+        "offset": "",
+        "dialogPos": "0/200",
+        "GuideDes": "点击此处，它的成长轨迹一目了然哦！",
+        "ItemID": "",
+        "TargetItemID": "",
+        "UIPath": "UIComposeHouse(Clone)/Panel/LeftPanel/taskPanel/ScrollView/Viewport/1/Panel/costItem/item",
+        "OrderID": ""
+      },
+      {
+        "JumpToStep": 0,
+        "Delay": 0.1,
+        "Save": 1,
+        "ShowType": 1,
+        "rotation": -45,
+        "offset": "0",
+        "dialogPos": "0/0",
+        "GuideDes": "快关闭此界面，找到“道具出处”显示的生产道具开始生产吧！",
+        "ItemID": "",
+        "TargetItemID": "",
+        "UIPath": "UIComposeInfoView(Clone)/Panel/Product/CloseBtn",
+        "OrderID": ""
+      },
+      {
+        "JumpToStep": 0,
+        "Delay": 0.1,
+        "Save": 1,
+        "ShowType": 5,
+        "rotation": 1,
+        "offset": "0",
+        "dialogPos": "0/200",
+        "GuideDes": "长按！长按！！长按！！！",
+        "ItemID": "101904",
+        "TargetItemID": "",
+        "UIPath": "",
+        "OrderID": ""
+      }
+    ]
+  },
+  "5": {
+    "ID": 5,
+    "Name": "仓库满的提示",
+    "Priority": 60,
+    "GuideType": 2,
+    "GuideStep": [
+      {
+        "JumpToStep": 0,
+        "Delay": 0.1,
+        "Save": 1,
+        "ShowType": 2,
+        "rotation": 0,
+        "offset": "",
+        "dialogPos": "0/-350",
+        "GuideDes": "拜托给小家伙们留一丝丝空间啦！可以将暂时不用的物品拖入宽敞的仓库哦~",
+        "ItemID": "",
+        "TargetItemID": "",
+        "UIPath": "UIComposeHouse(Clone)/Panel/RightPanel/rightList/store/itemList/item",
+        "OrderID": ""
+      }
+    ]
+  },
+  "6": {
+    "ID": 6,
+    "Name": "仓库购买提示",
+    "Priority": 50,
+    "GuideType": 2,
+    "GuideStep": [
+      {
+        "JumpToStep": 0,
+        "Delay": 0.1,
+        "Save": 1,
+        "ShowType": 1,
+        "rotation": 45,
+        "offset": "",
+        "dialogPos": "",
+        "GuideDes": "糟糕，仓库也堆满啦！莫急莫急，又忘了吗，满仓情况下可以扩容呀！",
+        "ItemID": "",
+        "TargetItemID": "",
+        "UIPath": "UIComposeHouse(Clone)/Panel/RightPanel/rightList/store/btn_store",
+        "OrderID": ""
+      },
+      {
+        "JumpToStep": 0,
+        "Delay": 0.1,
+        "Save": 1,
+        "ShowType": 1,
+        "rotation": 45,
+        "offset": "",
+        "dialogPos": "",
+        "GuideDes": "是不是又没处放置物品啦，点击购买仓库位，你家仓库会变大哦！",
+        "ItemID": "",
+        "TargetItemID": "",
+        "UIPath": "UIWareHouse(Clone)/Panel/DownPanel/btnBuy",
+        "OrderID": ""
+      }
+    ]
+  },
+  "7": {
+    "ID": 7,
+    "Name": "等级礼包解锁",
+    "Priority": 40,
+    "GuideType": 2,
+    "GuideStep": [
+      {
+        "JumpToStep": 0,
+        "Delay": 0.1,
+        "Save": 0,
+        "ShowType": 1,
+        "rotation": 45,
+        "offset": "",
+        "dialogPos": "",
+        "GuideDes": "这里有条去合成界面的捷径哦！快跟上~",
+        "ItemID": "",
+        "TargetItemID": "",
+        "UIPath": "UIMainView(Clone)/downPanel/homePanel/ObjCompose/composeBtn",
+        "OrderID": ""
+      },
+      {
+        "JumpToStep": 0,
+        "Delay": 0.1,
+        "Save": 1,
+        "ShowType": 1,
+        "rotation": 45,
+        "offset": "",
+        "dialogPos": "",
+        "GuideDes": "看来得整出足够空间放置宝箱啦，据说里头会有新的生产道具呢！",
+        "ItemID": "",
+        "TargetItemID": "",
+        "UIPath": "UIComposeHouse(Clone)/Panel/RightPanel/rightList/waitTrigger/waitItem",
+        "OrderID": ""
+      }
+    ]
+  },
+  "8": {
+    "ID": 8,
+    "Name": "解锁宝箱",
+    "Priority": 30,
+    "GuideType": 2,
+    "GuideStep": [
+      {
+        "JumpToStep": 0,
+        "Delay": 0.1,
+        "Save": 1,
+        "ShowType": 1,
+        "rotation": 45,
+        "offset": "",
+        "dialogPos": "",
+        "GuideDes": "宝箱竟被锁住了！快点击解锁它，看看里面有什么吧~",
+        "ItemID": "",
+        "TargetItemID": "",
+        "UIPath": "UIComposeHouse(Clone)/Panel/LeftPanel/infoPanel/btnResetCD",
+        "OrderID": ""
+      }
+    ]
+  },
+  "9": {
+    "ID": 9,
+    "Name": "加速冷却",
+    "Priority": 20,
+    "GuideType": 2,
+    "GuideStep": [
+      {
+        "JumpToStep": 0,
+        "Delay": 0.1,
+        "Save": 1,
+        "ShowType": 1,
+        "rotation": 45,
+        "offset": "",
+        "dialogPos": "",
+        "GuideDes": "这陈年宝箱可冻得太紧了，看来得加速解冻，才能立刻打开呢！幸好首次加速是免费的。",
+        "ItemID": "",
+        "TargetItemID": "",
+        "UIPath": "UIComposeHouse(Clone)/Panel/LeftPanel/infoPanel/btnResetCD",
+        "OrderID": ""
+      },
+      {
+        "JumpToStep": 0,
+        "Delay": 0.1,
+        "Save": 1,
+        "ShowType": 1,
+        "rotation": 45,
+        "offset": "",
+        "dialogPos": "",
+        "GuideDes": "",
+        "ItemID": "",
+        "TargetItemID": "",
+        "UIPath": "UIComposeHouse(Clone)/Panel/ObjItemCD/Back/BtnPay",
+        "OrderID": ""
+      }
+    ]
+  },
+  "11": {
+    "ID": 11,
+    "Name": "气泡提醒",
+    "Priority": 9,
+    "GuideType": 1,
+    "GuideStep": [
+      {
+        "JumpToStep": 0,
+        "Delay": 0.1,
+        "Save": 1,
+        "ShowType": 0,
+        "rotation": 0,
+        "offset": "",
+        "dialogPos": "",
+        "GuideDes": "从商店购买飞镖戳破泡泡，能获得其中的道具哦！也可待5分钟后泡泡自动破裂，获得1个能量罐~",
+        "ItemID": "",
+        "TargetItemID": "",
+        "UIPath": "",
+        "OrderID": ""
+      },
+      {
+        "JumpToStep": 0,
+        "Delay": 0.1,
+        "Save": 1,
+        "ShowType": 1,
+        "rotation": 45,
+        "offset": "",
+        "dialogPos": "",
+        "GuideDes": "这里赠送了一个飞镖，快拿出来试试吧！",
+        "ItemID": "",
+        "TargetItemID": "",
+        "UIPath": "UIComposeHouse(Clone)/Panel/RightPanel/rightList/waitTrigger/waitItem",
+        "OrderID": ""
+      }
+    ]
+  },
+  "12": {
+    "ID": 12,
+    "Name": "装扮提醒",
+    "Priority": 8,
+    "GuideType": 1,
+    "GuideStep": [
+      {
+        "JumpToStep": 0,
+        "Delay": 0.1,
+        "Save": 1,
+        "ShowType": 1,
+        "rotation": -45,
+        "offset": "",
+        "dialogPos": "",
+        "GuideDes": "不喜欢现在的房间？快点击星星，为已解锁的家居品换上你最喜爱的装扮吧！",
+        "ItemID": "",
+        "TargetItemID": "",
+        "UIPath": "UIMainView(Clone)/downPanel/homePanel/starBtn",
+        "OrderID": ""
+      }
+    ]
+  },
+  "13": {
+    "ID": 13,
+    "Name": "日常任务",
+    "Priority": 95,
+    "GuideType": 2,
+    "GuideStep": [
+      {
+        "JumpToStep": 0,
+        "Delay": 0.1,
+        "Save": 1,
+        "ShowType": 1,
+        "rotation": 45,
+        "offset": "",
+        "dialogPos": "",
+        "GuideDes": "点击看看都有些什么奇形怪状的任务吧！",
+        "ItemID": "",
+        "TargetItemID": "",
+        "UIPath": "UIMainView(Clone)/downPanel/homePanel/LaytouRightBtn/missionBtn",
+        "OrderID": ""
+      },
+      {
+        "JumpToStep": 0,
+        "Delay": 0.1,
+        "Save": 1,
+        "ShowType": 1,
+        "rotation": 0,
+        "offset": "0/50",
+        "dialogPos": "",
+        "GuideDes": "听说进入新手任务可了解基础玩法，还将领奖到手软呢，快去看看吧~",
+        "ItemID": "",
+        "TargetItemID": "",
+        "UIPath": "UIMission(Clone)/Panel/ToggleList/BtnNew",
+        "OrderID": ""
+      },
+      {
+        "JumpToStep": 0,
+        "Delay": 0.1,
+        "Save": 1,
+        "ShowType": 1,
+        "rotation": 45,
+        "offset": "",
+        "dialogPos": "",
+        "GuideDes": "恭喜完成该任务，快来领取您的专属大礼包~",
+        "ItemID": "",
+        "TargetItemID": "",
+        "UIPath": "UIMission(Clone)/Panel/NewPanel/Scroll View/Viewport/Content/1/BtnGet",
+        "OrderID": ""
+      },
+      {
+        "JumpToStep": 0,
+        "Delay": 0.1,
+        "Save": 1,
+        "ShowType": 1,
+        "rotation": 45,
+        "offset": "",
+        "dialogPos": "",
+        "GuideDes": "能量爆棚了有没有！快点击关闭此界面，继续游戏吧~",
+        "ItemID": "",
+        "TargetItemID": "",
+        "UIPath": "UIMission(Clone)/Panel/btnClose",
+        "OrderID": ""
+      }
+    ]
+  },
+  "14": {
+    "ID": 14,
+    "Name": "图鉴提醒",
+    "Priority": 79,
+    "GuideType": 1,
+    "GuideStep": [
+      {
+        "JumpToStep": 0,
+        "Delay": 0.1,
+        "Save": 1,
+        "ShowType": 1,
+        "rotation": 45,
+        "offset": "",
+        "dialogPos": "",
+        "GuideDes": "进入图鉴点击“心跳”能量罐及钻石不仅能收取该奖励，还能揭开您已解锁道具的真面目哦！",
+        "ItemID": "",
+        "TargetItemID": "",
+        "UIPath": "UIMainView(Clone)/downPanel/homePanel/LaytouRightBtn/bookBtn",
+        "OrderID": ""
+      }
+    ]
+  },
+  "16": {
+    "ID": 16,
+    "Name": "回到棋盘",
+    "Priority": 7,
+    "GuideType": 2,
+    "GuideStep": [
+      {
+        "JumpToStep": 0,
+        "Delay": 0.1,
+        "Save": 1,
+        "ShowType": 1,
+        "rotation": 45,
+        "offset": "",
+        "dialogPos": "",
+        "GuideDes": "恭喜获得等级宝箱，快点击小三角去合成棋盘暂存区收取宝箱吧！",
+        "ItemID": "",
+        "TargetItemID": "",
+        "UIPath": "UIMainView(Clone)/downPanel/homePanel/ObjCompose/composeBtn",
+        "OrderID": ""
+      }
+    ]
+  },
+  "17": {
+    "ID": 17,
+    "Name": "预告引导",
+    "Priority": 19,
+    "GuideType": 2,
+    "GuideStep": [
+      {
+        "JumpToStep": 0,
+        "Delay": 0.1,
+        "Save": 1,
+        "ShowType": 1,
+        "rotation": 45,
+        "offset": "",
+        "dialogPos": "",
+        "GuideDes": "注意啦，倒计时结束后活动棋盘又将开启哦！",
+        "ItemID": "",
+        "TargetItemID": "",
+        "UIPath": "UIMainView(Clone)/downPanel/homePanel/ScrollBtnActivity/Content/prepare",
+        "OrderID": ""
+      },
+      {
+        "JumpToStep": 0,
+        "Delay": 0.1,
+        "Save": 1,
+        "ShowType": 1,
+        "rotation": 45,
+        "offset": "",
+        "dialogPos": "",
+        "GuideDes": "了解规则后才能更便捷地完成活动，获取新衣哦！",
+        "ItemID": "",
+        "TargetItemID": "",
+        "UIPath": "UIAssistEnter(Clone)/Panel/btnDes",
+        "OrderID": ""
+      }
+    ]
+  },
+  "18": {
+    "ID": 18,
+    "Name": "加工引导",
+    "Priority": 18,
+    "GuideType": 2,
+    "GuideStep": [
+      {
+        "JumpToStep": 0,
+        "Delay": 0.1,
+        "Save": 1,
+        "ShowType": 2,
+        "rotation": 0,
+        "offset": "",
+        "dialogPos": "0/-300",
+        "GuideDes": "试试将绿格中物品拖入魔法帽中，进行配方调制吧！",
+        "ItemID": "111103/100010",
+        "TargetItemID": "",
+        "UIPath": "",
+        "OrderID": ""
+      },
+      {
+        "JumpToStep": 0,
+        "Delay": 0.1,
+        "Save": 1,
+        "ShowType": 1,
+        "rotation": 225,
+        "offset": "",
+        "dialogPos": "",
+        "GuideDes": "据说这里藏着从世界各地收集而来的魔法配方哦！",
+        "ItemID": "",
+        "TargetItemID": "",
+        "UIPath": "UIComposeHouse(Clone)/Panel/LeftPanel/infoPanel/btnInfo",
+        "OrderID": ""
+      },
+      {
+        "JumpToStep": 0,
+        "Delay": 0.1,
+        "Save": 1,
+        "ShowType": 1,
+        "rotation": 45,
+        "offset": "",
+        "dialogPos": "0/-320",
+        "GuideDes": "快点击看看该用什么配方调制它吧！",
+        "ItemID": "",
+        "TargetItemID": "",
+        "UIPath": "UIComposeInfoView(Clone)/Panel/MakePanel/Make/CanMakeProduct/SeriesLayout/CanMakeProductItem(Clone)/Back",
+        "OrderID": ""
+      }
+    ]
+  },
+  "19": {
+    "ID": 19,
+    "Name": "种植界面",
+    "Priority": 6,
+    "GuideType": 2,
+    "GuideStep": [
+      {
+        "JumpToStep": 0,
+        "Delay": 0.1,
+        "Save": 1,
+        "ShowType": 1,
+        "rotation": 45,
+        "offset": "",
+        "dialogPos": "",
+        "GuideDes": "嘿，行李箱收拾好了吗，马上要出发前往异世界咯！",
+        "ItemID": "",
+        "TargetItemID": "",
+        "UIPath": "UIMainView(Clone)/leftPanel/travelBtn",
+        "OrderID": ""
+      },
+      {
+        "JumpToStep": 0,
+        "Delay": 0.1,
+        "Save": 1,
+        "ShowType": 1,
+        "rotation": 45,
+        "offset": "",
+        "dialogPos": "",
+        "GuideDes": "恭喜，你解锁了新的区域！快点击前去探索吧~",
+        "ItemID": "",
+        "TargetItemID": "",
+        "UIPath": "UITravelView(Clone)/BackGround/Scroll View/Viewport/Content/1/Panel/GotoBtn",
+        "OrderID": ""
+      }
+    ]
+  },
+  "20": {
+    "ID": 20,
+    "Name": "种植界面介绍",
+    "Priority": 5,
+    "GuideType": 1,
+    "GuideStep": [
+      {
+        "JumpToStep": 0,
+        "Delay": 0.1,
+        "Save": 1,
+        "ShowType": 0,
+        "rotation": 0,
+        "offset": "",
+        "dialogPos": "",
+        "GuideDes": "未种植的种子将会显示在下面仓库，拖入棋盘等待种子生产可收获食物原材料",
+        "ItemID": "",
+        "TargetItemID": "",
+        "UIPath": "",
+        "OrderID": ""
+      },
+      {
+        "JumpToStep": 0,
+        "Delay": 0.1,
+        "Save": 1,
+        "ShowType": 1,
+        "rotation": 225,
+        "offset": "100/-30",
+        "dialogPos": "",
+        "GuideDes": "点击左侧仓库栏中的食材，与其相关的系列种子将出现在底端种子箱哦！",
+        "ItemID": "",
+        "TargetItemID": "",
+        "UIPath": "UIPlant(Clone)/Panel/LeftPanel/TypeBack/TypeScroll/Viewport/Content/2",
+        "OrderID": ""
+      },
+      {
+        "JumpToStep": 0,
+        "Delay": 0.1,
+        "Save": 1,
+        "ShowType": 1,
+        "rotation": 45,
+        "offset": "",
+        "dialogPos": "",
+        "GuideDes": "要是种子箱空空如也，可以前往兑换区哦！",
+        "ItemID": "",
+        "TargetItemID": "",
+        "UIPath": "UIPlant(Clone)/Panel/RightPanel/btnChange",
+        "OrderID": ""
+      }
+    ]
+  },
+  "21": {
+    "ID": 21,
+    "Name": "种植兑换引导",
+    "Priority": 4,
+    "GuideType": 2,
+    "GuideStep": [
+      {
+        "JumpToStep": 0,
+        "Delay": 0.1,
+        "Save": 1,
+        "ShowType": 1,
+        "rotation": 45,
+        "offset": "",
+        "dialogPos": "0/-130",
+        "GuideDes": "试试用已有物品换取种子吧！",
+        "ItemID": "",
+        "TargetItemID": "",
+        "UIPath": "UIPlantExchange(Clone)/Panel/LeftBack/LeftScrollView/Viewport/Content/1",
+        "OrderID": ""
+      },
+      {
+        "JumpToStep": 0,
+        "Delay": 0.1,
+        "Save": 1,
+        "ShowType": 1,
+        "rotation": 45,
+        "offset": "",
+        "dialogPos": "0/-130",
+        "GuideDes": "挑选心仪的种子，慢慢培养吧~",
+        "ItemID": "",
+        "TargetItemID": "",
+        "UIPath": "UIPlantExchange(Clone)/Panel/RightBack/RightScrollView/Viewport/Content/1",
+        "OrderID": ""
+      },
+      {
+        "JumpToStep": 0,
+        "Delay": 0.1,
+        "Save": 1,
+        "ShowType": 1,
+        "rotation": 45,
+        "offset": "",
+        "dialogPos": "",
+        "GuideDes": "若还未集到左框规定兑换物，可先去合成界面打造哦！",
+        "ItemID": "",
+        "TargetItemID": "",
+        "UIPath": "UIPlantExchange(Clone)/Panel/BtnCommit",
+        "OrderID": ""
+      }
+    ]
+  },
+  "22": {
+    "ID": 22,
+    "Name": "订单引导",
+    "Priority": 77,
+    "GuideType": 2,
+    "GuideStep": [
+      {
+        "JumpToStep": 0,
+        "Delay": 0.1,
+        "Save": 1,
+        "ShowType": 1,
+        "rotation": 45,
+        "offset": "",
+        "dialogPos": "",
+        "GuideDes": "“友情小栈”开业啦，快去刷爆好感度获挚交好友吧！",
+        "ItemID": "",
+        "TargetItemID": "",
+        "UIPath": "UIMainView(Clone)/downPanel/homePanel/ScrollBtnActivity/Content/role",
+        "OrderID": ""
+      },
+      {
+        "JumpToStep": 0,
+        "Delay": 0.1,
+        "Save": 1,
+        "ShowType": 1,
+        "rotation": 45,
+        "offset": "",
+        "dialogPos": "",
+        "GuideDes": "增进好感可获取好友赠礼，好感越多赠礼越丰厚哦，快点击头像查看其当前好感度吧！",
+        "ItemID": "",
+        "TargetItemID": "",
+        "UIPath": "UIFeelOrderView(Clone)/Panel/ScrollView/Viewport/1/ItemPanel/imgHadeBack",
+        "OrderID": ""
+      },
+      {
+        "JumpToStep": 0,
+        "Delay": 0.1,
+        "Save": 1,
+        "ShowType": 1,
+        "rotation": 45,
+        "offset": "",
+        "dialogPos": "",
+        "GuideDes": "集齐好友所需心愿礼物后赠礼可提升好感度收获回赠甚至触发对话，若未集齐可选红包代礼哦！",
+        "ItemID": "",
+        "TargetItemID": "",
+        "UIPath": "UIRoleFeelView(Clone)/Panel/BtnPayObtain",
+        "OrderID": ""
+      }
+    ]
+  },
+  "23": {
+    "ID": 23,
+    "Name": "不点出等级宝箱",
+    "Priority": 10,
+    "GuideType": 1,
+    "GuideStep": [
+      {
+        "JumpToStep": 0,
+        "Delay": 0.1,
+        "Save": 0,
+        "ShowType": 1,
+        "rotation": 45,
+        "offset": "",
+        "dialogPos": "",
+        "GuideDes": "点击此处取出宝箱进行解锁，解锁后长按宝箱可获取全新生产道具哦！",
+        "ItemID": "",
+        "TargetItemID": "",
+        "UIPath": "UIComposeHouse(Clone)/Panel/RightPanel/rightList/waitTrigger/waitItem",
+        "OrderID": ""
+      }
+    ]
+  },
+  "24": {
+    "ID": 24,
+    "Name": "不提交主线任务",
+    "Priority": 11,
+    "GuideType": 1,
+    "GuideStep": [
+      {
+        "JumpToStep": 0,
+        "Delay": 0.1,
+        "Save": 0,
+        "ShowType": 1,
+        "rotation": 0,
+        "offset": "170/-50",
+        "dialogPos": "",
+        "GuideDes": "想升级并获取全新的生产道具嘛！嘘，我只告诉你哦，秘诀就是持续用金币交付任务~",
+        "ItemID": "",
+        "TargetItemID": "",
+        "UIPath": "UIComposeHouse(Clone)/Panel/LeftPanel/taskPanel/MainTaskInfo",
+        "OrderID": ""
+      }
+    ]
+  },
+  "25": {
+    "ID": 25,
+    "Name": "完成1003任务强引导制提交",
+    "Priority": 79,
+    "GuideType": 2,
+    "GuideStep": [
+      {
+        "JumpToStep": 0,
+        "Delay": 0.1,
+        "Save": 1,
+        "ShowType": 1,
+        "rotation": 0,
+        "offset": "170/-50",
+        "dialogPos": "",
+        "GuideDes": "还不提交任务吗，诺拉都快等得睡着啦！",
+        "ItemID": "",
+        "TargetItemID": "",
+        "UIPath": "UIComposeHouse(Clone)/Panel/LeftPanel/taskPanel/MainTaskInfo",
+        "OrderID": ""
+      }
+    ]
+  },
+  "26": {
+    "ID": 26,
+    "Name": "完成15002订单强制引导提交",
+    "Priority": 78,
+    "GuideType": 2,
+    "GuideStep": [
+      {
+        "JumpToStep": 0,
+        "Delay": 0.1,
+        "Save": 1,
+        "ShowType": 1,
+        "rotation": 0,
+        "offset": "170/-50",
+        "dialogPos": "",
+        "GuideDes": "",
+        "ItemID": "",
+        "TargetItemID": "",
+        "UIPath": "",
+        "OrderID": "15002"
+      }
+    ]
+  },
+  "27": {
+    "ID": 27,
+    "Name": "完成15003订单强制引导提交",
+    "Priority": 77,
+    "GuideType": 2,
+    "GuideStep": [
+      {
+        "JumpToStep": 0,
+        "Delay": 0.1,
+        "Save": 1,
+        "ShowType": 1,
+        "rotation": 0,
+        "offset": "170/-50",
+        "dialogPos": "",
+        "GuideDes": "",
+        "ItemID": "",
+        "TargetItemID": "",
+        "UIPath": "",
+        "OrderID": "15003"
+      }
+    ]
+  },
+  "28": {
+    "ID": 28,
+    "Name": "完成15004订单强制引导提交",
+    "Priority": 76,
+    "GuideType": 2,
+    "GuideStep": [
+      {
+        "JumpToStep": 0,
+        "Delay": 0.1,
+        "Save": 1,
+        "ShowType": 1,
+        "rotation": 0,
+        "offset": "170/-50",
+        "dialogPos": "",
+        "GuideDes": "",
+        "ItemID": "",
+        "TargetItemID": "",
+        "UIPath": "",
+        "OrderID": "15004"
+      }
+    ]
+  }
+}
