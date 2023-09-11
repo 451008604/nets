@@ -6,7 +6,7 @@ import (
 )
 
 func NewSqlDBModel() gdb.DB {
-	dsn := "mysql:root:Guohaoqin123.@tcp(ggghq.cn:6606)/game_library?charset=utf8mb4&parseTime=true&loc=Local"
+	dsn := ""
 	sqlDB, err := gdb.New(gdb.ConfigNode{
 		Link:                 dsn,
 		CreatedAt:            "created_at", // 自动创建时间字段名称
