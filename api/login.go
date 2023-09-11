@@ -8,6 +8,7 @@ import (
 	"github.com/451008604/socketServerFrame/logic"
 	"github.com/451008604/socketServerFrame/modules"
 	pb "github.com/451008604/socketServerFrame/proto/bin"
+	"github.com/google/uuid"
 	"google.golang.org/protobuf/proto"
 	"strings"
 )
@@ -45,18 +46,21 @@ func LoginHandler(c iface.IConnection, message proto.Message) {
 			c.SendMsg(pb.MsgID_PlayerLogin_Res, res)
 			return
 		}
-		res.Register = proto.Int32(register)
 
 	default:
 		res.Result = proto.Int32(modules.ErrLoginTypeIllegal)
 		c.SendMsg(pb.MsgID_PlayerLogin_Res, res)
 		return
 	}
+	res.Register = proto.Int32(register)
+	random, _ := uuid.NewRandom()
+	res.RandomSeed = proto.Uint32(random.ID())
 
 	// 初始化玩家数据
 	player := logic.GetPlayer(c)
-	player.Initialization()
+	player.InitializationSaveData()
 	player.SetPlayerData(account.UserID, user)
+	player.RandomSeed = random.ID()
 	// 读取缓存数据覆盖初始化数据
 	if redis.Redis.GetPlayerInfo(uint32(user.ID), player.Data) != nil {
 		res.Result = proto.Int32(modules.ErrPlayerInfoFetchFailed)

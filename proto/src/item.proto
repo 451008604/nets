@@ -9,6 +9,9 @@ message PBItemSpaceData {
 message PBItemData {
     optional uint32 ItemID = 1;
     optional uint32 UnLocked = 2;
+    optional uint32 CDEndTime = 3; // 冷却结束时间
+    optional uint32 ProduceRemainNum = 4;
+    optional uint32 ProduceCycle = 5;
 }
 
 // 道具生产请求
@@ -18,9 +21,9 @@ message ItemProduceReq {
     optional uint32 ProduceItemIdx = 3;     // 产出的道具Idx
     optional uint32 OverItemID = 4;         // 产量耗尽后变成的道具ID
     optional uint32 OverItemIdx = 5;        // 产量耗尽后变成的道具Idx
-    optional uint32 ProductionCycle = 6;    // 生产周期
-    optional uint32 ProductionCount = 7;    // 当前周期生产次数
-    optional uint32 ProductionNextTime = 8; // 下次可生产时间
+    optional uint32 ProduceCycle = 6;       // 生产周期
+    optional uint32 ProduceRemainNum = 7;   // 当前周期剩余生产次数
+    optional uint32 ProduceNextTime = 8;    // 下次可生产时间
     optional uint32 CurStrength = 9;        // 当前体力值
 }
 

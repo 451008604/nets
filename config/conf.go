@@ -3,12 +3,11 @@ package config
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
-
 	"github.com/451008604/socketServerFrame/logs"
 )
 
-var configPath string // 配置的文件夹路径
+var jsonsPath = "./config/jsons/"
+var configPath = "./config/"
 
 type GlobalObj struct {
 	Debug            bool   // 是否Debug模式
@@ -30,10 +29,10 @@ type GlobalObj struct {
 	RedisPassWord    string // Redis密码
 }
 
-var globalObject *GlobalObj
+var globalObject GlobalObj
 
 func init() {
-	globalObject = &GlobalObj{
+	globalObject = GlobalObj{
 		Debug:            false,
 		Name:             "MyProject",
 		Version:          "v0.1",
@@ -45,7 +44,7 @@ func init() {
 		ProtocolIsJson:   true,
 	}
 
-	globalObject.Reload()
+	getConfigDataToBytes(configPath, "config.json", &globalObject)
 	logs.SetPrintMode(globalObject.Debug)
 
 	str, _ := json.Marshal(globalObject)
@@ -54,17 +53,5 @@ func init() {
 
 // GetGlobalObject 获取全局配置对象
 func GetGlobalObject() GlobalObj {
-	return *globalObject
-}
-
-func (o *GlobalObj) Reload() {
-	err := json.Unmarshal(getConfigDataToBytes("./config/", "config.json"), &globalObject)
-	logs.PrintLogErr(err)
-}
-
-// 获取配置数据到字节
-func getConfigDataToBytes(configPath string, configName string) []byte {
-	bytes, err := ioutil.ReadFile(configPath + configName)
-	logs.PrintLogPanic(err)
-	return bytes
+	return globalObject
 }

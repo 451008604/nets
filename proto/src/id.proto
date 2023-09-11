@@ -8,8 +8,8 @@ enum MsgID {
     PlayerInfo_Notify = 1003;   // PlayerInfoNotify 玩家信息通知
     HeartBeat_Req = 1004;       // HeartBeatReq 心跳请求
     HeartBeat_Res = 1005;       // HeartBeatRes 心跳响应
-    ItemCombine_Req = 1006;     // ItemCombineReq 道具合成请求
-    ItemCombine_Res = 1007;     // ItemCombineRes 道具合成回应
-    ItemProduce_Req = 1008;     // ItemProduceReq 道具生产请求
-    ItemProduce_Res = 1009;     // ItemProduceRes 道具生产回应
+    ItemProduce_Req = 1006;     // ItemProduceReq 道具生产请求
+    ItemProduce_Res = 1007;     // ItemProduceRes 道具生产回应
+    ItemCombine_Req = 1008;     // ItemCombineReq 道具合成请求
+    ItemCombine_Res = 1009;     // ItemCombineRes 道具合成回应
 }

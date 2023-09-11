@@ -11,11 +11,12 @@ import (
 type Player struct {
 	Conn          iface.IConnection
 	Data          *pb.PBPlayerData
+	RandomSeed    uint32
 	itemSpaceSize [2]uint32 // 道具空间大小 [宽, 高]
 }
 
 // 初始化玩家默认数据结构
-func (p *Player) Initialization() *pb.PBPlayerData {
+func (p *Player) InitializationSaveData() *pb.PBPlayerData {
 	// 初始化缓存变量
 	p.Data = &pb.PBPlayerData{
 		CommonData: &pb.PBCommonData{},

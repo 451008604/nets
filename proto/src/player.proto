@@ -33,6 +33,7 @@ message PlayerLoginRes {
     optional int32 Result = 1;              // 错误码
     optional PlayerLoginReq ReqData = 2;    // 请求数据
     optional int32 Register = 3;            // 是否新玩家
+    optional uint32 RandomSeed = 4;         // 随机种子
 }
 
 // 玩家信息通知
@@ -47,4 +48,3 @@ message HeartBeatReq {
 // 心跳响应
 message HeartBeatRes {
 }
-

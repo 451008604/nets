@@ -1,9 +1,8 @@
 package config
 
 import (
-	"encoding/json"
-	"github.com/451008604/socketServerFrame/logs"
-	"github.com/451008604/socketServerFrame/modules"
+	"strconv"
+	"strings"
 )
 
 type ItemJson struct {
@@ -77,9 +76,51 @@ type ItemJson struct {
 	BubbleProbability      int    `json:"BubbleProbability"`
 	ImgRightUP             string `json:"ImgRightUP"`
 	CompleteEffect         string `json:"CompleteEffect"`
+
+	serverProduceInterval []int64 // 预解析字段, 产出周期间隔（单位 秒,负数代表预置CD）
+	// MarketPriceList       []MarketPriceTemplate // 服务端自定义字段
 }
+type MarketPriceTemplate struct {
+	Level    uint32
+	Diamonds float32
+}
+
+var itemConfig = map[int]ItemJson{}
+var itemConfigByGroupId = map[int][]ItemJson{}
 
 // 加载道具配置
 func init() {
-	logs.PrintLogPanic(json.Unmarshal(getConfigDataToBytes(modules.ExportJsonPath, "Items.json"), &ItemJson{}))
+	getConfigDataToBytes(jsonsPath, "Items.json", &itemConfig)
+	for _, json := range itemConfig {
+		// 缓存按组Id归类的道具列表
+		if _, ok := itemConfigByGroupId[json.GroupID]; !ok {
+			itemConfigByGroupId[json.GroupID] = []ItemJson{}
+		}
+		itemConfigByGroupId[json.GroupID] = append(itemConfigByGroupId[json.GroupID], json)
+
+		// 预解析生产周期
+		strSplit := strings.Split(json.ProduceInterval, ",")
+		for _, strInterval := range strSplit {
+			interval, _ := strconv.ParseInt(strInterval, 10, 64)
+			json.serverProduceInterval = append(json.serverProduceInterval, interval)
+		}
+
+	}
+}
+
+func GetItemConfig(itemID int) ItemJson {
+	return itemConfig[itemID]
+}
+
+func GetItemConfigByGroupID(groupID int) []ItemJson {
+	return itemConfigByGroupId[groupID]
+}
+
+// 判断预置CD是否为负数
+func (p *ItemJson) IsProduceIntervalMinus() bool {
+	if len(p.serverProduceInterval) < 1 {
+		return false
+	}
+	// 判断是否无限周期
+	return p.serverProduceInterval[0] < 0
 }
