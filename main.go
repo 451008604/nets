@@ -3,9 +3,9 @@ package main
 import (
 	"fmt"
 	_ "github.com/451008604/socketServerFrame/api"
+	"github.com/451008604/socketServerFrame/common"
 	"github.com/451008604/socketServerFrame/logic"
 	"github.com/451008604/socketServerFrame/logs"
-	"github.com/451008604/socketServerFrame/modules"
 	"github.com/451008604/socketServerFrame/network"
 	"runtime"
 	"time"
@@ -23,9 +23,9 @@ func main() {
 	go listenChannelStatus()
 
 	// 注册模块
-	modules.Module.SetServerTCP(network.NewServerTCP())
-	modules.Module.SetServerWS(network.NewServerWS())
-	modules.Module.SetNotify(network.NewNotifyManager())
+	common.Module.SetServerTCP(network.NewServerTCP())
+	common.Module.SetServerWS(network.NewServerWS())
+	common.Module.SetNotify(network.NewNotifyManager())
 	// 注册hook函数
 	network.GetInstanceConnManager().OnConnOpen(logic.OnConnectionOpen)
 	network.GetInstanceConnManager().OnConnClose(logic.OnConnectionClose)
@@ -38,8 +38,8 @@ func main() {
 }
 
 func runServer() {
-	modules.Module.ServerTCP().Listen()
-	modules.Module.ServerWS().Listen()
+	common.Module.ServerTCP().Listen()
+	common.Module.ServerWS().Listen()
 }
 
 func listenChannelStatus() {

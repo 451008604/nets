@@ -1,9 +1,9 @@
 package logic
 
 import (
+	"github.com/451008604/socketServerFrame/common"
 	"github.com/451008604/socketServerFrame/dao/sqlmodel"
 	"github.com/451008604/socketServerFrame/iface"
-	"github.com/451008604/socketServerFrame/modules"
 	pb "github.com/451008604/socketServerFrame/proto/bin"
 	"google.golang.org/protobuf/proto"
 )
@@ -11,31 +11,31 @@ import (
 type Player struct {
 	Conn          iface.IConnection
 	Data          *pb.PBPlayerData
-	RandomSeed    uint32
-	itemSpaceSize [2]uint32 // 道具空间大小 [宽, 高]
+	Random        *common.Random // 随机数工具
+	itemSpaceSize [2]uint32      // 道具空间大小 [宽, 高]
 }
 
 // 初始化玩家默认数据结构
 func (p *Player) InitializationSaveData() *pb.PBPlayerData {
+	// 初始化临时变量
+	p.itemSpaceSize = [2]uint32{common.ItemSpaceWidth, common.ItemSpaceHeight}
+
 	// 初始化缓存变量
 	p.Data = &pb.PBPlayerData{
 		CommonData: &pb.PBCommonData{},
 		ItemSpaceData: &pb.PBItemSpaceData{
-			ItemData: make([]*pb.PBItemData, 0),
+			ItemData: make([]*pb.PBItemData, p.ItemSpaceSize()),
 		},
 	}
-	for i := 0; i < int(p.ItemSpaceSize()); i++ {
-		p.Data.GetItemSpaceData().ItemData = append(p.Data.GetItemSpaceData().ItemData, &pb.PBItemData{})
+	for i := uint32(0); i < p.ItemSpaceSize(); i++ {
+		p.Data.GetItemSpaceData().ItemData[i] = &pb.PBItemData{}
 	}
-
-	// 初始化临时变量
-	p.itemSpaceSize = [2]uint32{modules.ItemSpaceWidth, modules.ItemSpaceHeight}
 
 	return p.Data
 }
 
-func (p *Player) SetPlayerData(userID int32, user *sqlmodel.HouseUser) {
-	p.Data.CommonData.UserID = proto.Uint32(uint32(userID))
+func (p *Player) SetPlayerData(user *sqlmodel.HouseUser) {
+	p.Data.CommonData.UserUniID = proto.Int64(user.UniID)
 	p.Data.CommonData.NickName = proto.String(user.Nickname)
 	p.Data.CommonData.HeadImage = proto.String(user.HeadImage)
 	p.Data.CommonData.RegisterTime = proto.Uint32(uint32(user.RegisterTime))

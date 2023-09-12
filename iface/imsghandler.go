@@ -9,7 +9,7 @@ type IMsgHandler interface {
 	// 异步处理消息
 	DoMsgHandler(request IRequest)
 	// 为消息添加具体的处理逻辑
-	AddRouter(msgId pb.MsgID, msg INewMsgStructTemplate, handler IReceiveMsgHandler)
+	AddRouter(msgId pb.MSG_ID, msg INewMsgStructTemplate, handler IReceiveMsgHandler)
 	// 将消息推入TaskQueue，等待Worker处理
 	SendMsgToTaskQueue(request IRequest)
 }

@@ -28,6 +28,7 @@ func newHouseUser(db *gorm.DB, opts ...gen.DOOption) houseUser {
 	tableName := _houseUser.houseUserDo.TableName()
 	_houseUser.ALL = field.NewAsterisk(tableName)
 	_houseUser.ID = field.NewInt32(tableName, "id")
+	_houseUser.UniID = field.NewInt64(tableName, "uni_id")
 	_houseUser.Nickname = field.NewString(tableName, "nickname")
 	_houseUser.HeadImage = field.NewString(tableName, "head_image")
 	_houseUser.RegisterTime = field.NewInt32(tableName, "register_time")
@@ -41,7 +42,8 @@ type houseUser struct {
 	houseUserDo houseUserDo
 
 	ALL          field.Asterisk
-	ID           field.Int32  // 唯一ID
+	ID           field.Int32  // 自增ID
+	UniID        field.Int64  // 唯一ID
 	Nickname     field.String // 昵称
 	HeadImage    field.String // 头像
 	RegisterTime field.Int32  // 注册时间
@@ -62,6 +64,7 @@ func (h houseUser) As(alias string) *houseUser {
 func (h *houseUser) updateTableName(table string) *houseUser {
 	h.ALL = field.NewAsterisk(table)
 	h.ID = field.NewInt32(table, "id")
+	h.UniID = field.NewInt64(table, "uni_id")
 	h.Nickname = field.NewString(table, "nickname")
 	h.HeadImage = field.NewString(table, "head_image")
 	h.RegisterTime = field.NewInt32(table, "register_time")
@@ -91,8 +94,9 @@ func (h *houseUser) GetFieldByName(fieldName string) (field.OrderExpr, bool) {
 }
 
 func (h *houseUser) fillFieldMap() {
-	h.fieldMap = make(map[string]field.Expr, 4)
+	h.fieldMap = make(map[string]field.Expr, 5)
 	h.fieldMap["id"] = h.ID
+	h.fieldMap["uni_id"] = h.UniID
 	h.fieldMap["nickname"] = h.Nickname
 	h.fieldMap["head_image"] = h.HeadImage
 	h.fieldMap["register_time"] = h.RegisterTime

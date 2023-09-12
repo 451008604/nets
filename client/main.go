@@ -1,8 +1,8 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
+	"github.com/451008604/socketServerFrame/api"
 	"github.com/451008604/socketServerFrame/logs"
 	"github.com/451008604/socketServerFrame/network"
 	pb "github.com/451008604/socketServerFrame/proto/bin"
@@ -20,20 +20,21 @@ var waitGroup = sync.WaitGroup{}
 
 func main() {
 	logs.SetPrintMode(true)
+	api.RegisterRouterClient(network.GetInstanceMsgHandler())
 
-	for i := 0; i < 10; i++ {
-		waitGroup.Add(2)
+	for i := 0; i < 1; i++ {
+		waitGroup.Add(1)
 
-		login, _ := json.Marshal(&pb.PlayerLoginReq{
+		login, _ := proto.Marshal(&pb.PlayerLoginReq{
 			LoginType:   proto.String("quick"),
 			Account:     proto.String("eric" + strconv.Itoa(i)),
-			PassWord:    proto.String("123456789"),
-			ChannelType: proto.Int32(2),
+			PassWord:    proto.String(""),
+			ChannelType: proto.String("2"),
 		})
-		msg := network.NewDataPack().Pack(network.NewMsgPackage(pb.MsgID_PlayerLogin_Req, login))
+		msg := network.NewDataPack().Pack(network.NewMsgPackage(pb.MSG_ID_PlayerLogin_Req, login))
 
-		// go socketClient(msg)
-		go webSocketClient(msg)
+		go socketClient(msg)
+		// go webSocketClient(msg)
 	}
 
 	waitGroup.Wait()
@@ -41,29 +42,39 @@ func main() {
 
 func socketClient(msgByte []byte) {
 	var err error
-	conn, _ := net.Dial("tcp", "127.0.0.1:7001")
+	conn, _ := net.Dial("tcp", "127.0.0.1:25874")
 	go func(dial net.Conn) {
 		for {
 			dp := network.NewDataPack()
 			// 获取消息头信息
 			headData := make([]byte, dp.GetHeadLen())
-			_, err = io.ReadFull(dial, headData)
-			if err == io.EOF {
+			if _, err = io.ReadFull(dial, headData); err != nil {
 				break
 			}
-			// 获取消息body
+			// 通过消息头获取dataLen和Id
 			msgData := dp.Unpack(headData)
+			if msgData == nil {
+				break
+			}
+			// 通过消息头获取消息body
 			if msgData.GetDataLen() > 0 {
 				msgData.SetData(make([]byte, msgData.GetDataLen()))
-				_, _ = io.ReadFull(dial, msgData.GetData())
+				if _, err = io.ReadFull(dial, msgData.GetData()); logs.PrintLogErr(err) {
+					break
+				}
 			}
 
 			if len(msgData.GetData()) == 0 {
 				continue
 			}
 
+			router := network.GetInstanceMsgHandler().Apis[pb.MSG_ID(msgData.GetMsgId())]
+			msg := router.GetNewMsg()
+			if err = proto.Unmarshal(msgData.GetData(), msg); err != nil {
+				println(err.Error())
+			}
 			// 服务器返回的消息
-			logs.PrintLogInfo(fmt.Sprintf("服务器：%v", string(msgData.GetData())))
+			logs.PrintLogInfo(fmt.Sprintf("服务器：msgid:%v,data:%v", msgData.GetMsgId(), msg))
 		}
 	}(conn)
 

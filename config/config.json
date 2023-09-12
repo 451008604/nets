@@ -1,13 +1,13 @@
 {
   "Debug": true,
   "Name": "socketServerFrame",
-  "PortTCP": "7001",
-  "PortWS": "7002",
+  "PortTCP": "25874",
+  "PortWS": "25875",
   "TLSCertPath": "",
   "TLSKeyPath": "",
   "MaxConn": 1000,
   "WorkerPoolSize": 1000,
-  "ProtocolIsJson": true,
+  "ProtocolIsJson": false,
   "RedisAddress": "127.0.0.1:6380",
-  "RedisPassWord": ""
+  "RedisPassWord": "Abc123!@"
 }

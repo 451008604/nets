@@ -1,15 +1,23 @@
 package logic
 
 import (
+	"github.com/451008604/socketServerFrame/common"
 	"github.com/451008604/socketServerFrame/dao/redis"
 	"github.com/451008604/socketServerFrame/iface"
 	"github.com/451008604/socketServerFrame/logs"
-	"github.com/451008604/socketServerFrame/modules"
+	"time"
 )
 
 func init() {
 	// 启动计时器
-	go modules.StartTicker()
+	go common.StartTicker(common.TickerCallback{
+		OnSecond: onSecondTicker,
+		OnMinute: onMinuteTicker,
+		OnHour:   onHourTicker,
+		OnDay:    onDayTicker,
+		OnWeek:   onWeekTicker,
+		OnMonth:  onMonthTicker,
+	})
 }
 
 // 获取连接对应的玩家
@@ -26,6 +34,35 @@ func OnConnectionOpen(conn iface.IConnection) {
 // 断开连接时
 func OnConnectionClose(conn iface.IConnection) {
 	// 缓存玩家数据
-	logs.PrintLogErr(redis.Redis.SetPlayerInfo(GetPlayer(conn).Data.GetCommonData().GetUserID(), GetPlayer(conn).Data), "玩家数据缓存失败")
+	logs.PrintLogErr(redis.Redis.SetPlayerInfo(GetPlayer(conn).Data.GetCommonData().GetUserUniID(), GetPlayer(conn).Data), "玩家数据缓存失败")
+}
+
+// 每秒钟执行
+func onSecondTicker(date time.Time) {
+
+}
+
+// 每分钟执行
+func onMinuteTicker(date time.Time) {
+
+}
+
+// 每小时执行
+func onHourTicker(date time.Time) {
+
+}
+
+// 每天执行
+func onDayTicker(date time.Time) {
+
+}
+
+// 每周执行
+func onWeekTicker(date time.Time) {
+
+}
+
+// 每月执行
+func onMonthTicker(date time.Time) {
 
 }

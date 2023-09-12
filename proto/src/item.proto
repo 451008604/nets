@@ -7,43 +7,42 @@ message PBItemSpaceData {
 }
 
 message PBItemData {
-    optional uint32 ItemID = 1;
-    optional uint32 UnLocked = 2;
-    optional uint32 CDEndTime = 3; // 冷却结束时间
-    optional uint32 ProduceRemainNum = 4;
-    optional uint32 ProduceCycle = 5;
+    optional uint32 ItemID = 1;             // 道具ID
+    optional uint32 UnLocked = 2;           // 是否解锁
+    optional uint32 CDEndTime = 3;          // 冷却结束时间
+    optional uint32 ProduceRemainNum = 4;   // 当前周期剩余生产次数
+    optional uint32 ProduceCycle = 5;       // 生产周期
 }
 
 // 道具生产请求
-message ItemProduceReq {
+message ItemProduceRequest {
     optional uint32 OriginIdx = 1;          // 原始Idx
     optional uint32 ProduceItemID = 2;      // 产出的道具ID
     optional uint32 ProduceItemIdx = 3;     // 产出的道具Idx
     optional uint32 OverItemID = 4;         // 产量耗尽后变成的道具ID
-    optional uint32 OverItemIdx = 5;        // 产量耗尽后变成的道具Idx
-    optional uint32 ProduceCycle = 6;       // 生产周期
-    optional uint32 ProduceRemainNum = 7;   // 当前周期剩余生产次数
-    optional uint32 ProduceNextTime = 8;    // 下次可生产时间
-    optional uint32 CurStrength = 9;        // 当前体力值
+    optional uint32 ProduceCycle = 5;       // 生产周期
+    optional uint32 ProduceRemainNum = 6;   // 当前周期剩余生产次数
+    optional uint32 ProduceNextTime = 7;    // 下次可生产时间
+    optional uint32 CurStrength = 8;        // 当前体力值
 }
 
 // 道具生产回应
-message ItemProduceRes {
+message ItemProduceResponse {
     optional uint32 Result = 1;
 }
 
 // 道具合成请求
-message ItemCombineReq {
+message ItemCombineRequest {
     optional uint32 OriginIdx = 1;      // 原始Idx
-    optional uint32 TargetIdx = 3;      // 目标Idx
-    optional uint32 CombineID = 4;      // 合成的ID
-    optional uint32 CombineIdx = 5;     // 合成的Idx
-    optional uint32 RandomIdx = 6;      // 随机Idx
-    optional uint32 RandomItemID = 7;   // 随机ID
-    optional uint32 UnlockCellIdx = 8;  // 解锁格子Idx
+    optional uint32 TargetIdx = 2;      // 目标Idx
+    optional uint32 CombineID = 3;      // 合成的ID
+    optional uint32 CombineIdx = 4;     // 合成的Idx
+    optional uint32 RandomIdx = 5;      // 随机Idx
+    optional uint32 RandomItemID = 6;   // 随机ID
+    repeated uint32 UnlockCellIdx = 7;  // 解锁格子Idx
 }
 
 // 道具合成回应
-message ItemCombineRes {
+message ItemCombineResponse {
     optional uint32 Result = 1;
 }

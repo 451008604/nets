@@ -1,8 +1,6 @@
-package modules
+package common
 
 import (
-	"github.com/451008604/socketServerFrame/dao/redis"
-	"github.com/451008604/socketServerFrame/dao/sql"
 	"github.com/451008604/socketServerFrame/iface"
 )
 
@@ -12,8 +10,6 @@ type staticModule struct {
 	serverTCP iface.IServer        // 服务进程模块
 	serverWS  iface.IServer        // 服务进程模块
 	notify    iface.INotifyManager // 广播管理模块
-	sql       *sql.Module          // sql模块
-	redis     *redis.Module        // redis模块
 }
 
 func (s *staticModule) ServerTCP() iface.IServer {

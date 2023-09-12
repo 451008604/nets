@@ -2,6 +2,7 @@ package logic
 
 import (
 	"errors"
+	"fmt"
 	"github.com/451008604/socketServerFrame/logs"
 	pb "github.com/451008604/socketServerFrame/proto/bin"
 	"google.golang.org/protobuf/proto"
@@ -12,11 +13,10 @@ func (p *Player) CheckItemIdxIsOK(itemIdx ...uint32) bool {
 	temp := make(map[uint32]struct{})
 	for _, idx := range itemIdx {
 		if _, ok := temp[idx]; ok {
-			logs.PrintLogErr(errors.New(""), "CheckItemIdxIsOK")
 			return false
 		}
 		if idx < 0 || idx >= p.ItemSpaceSize() {
-			logs.PrintLogErr(errors.New(""), "CheckItemIdxIsOK")
+			logs.PrintLogErr(errors.New(fmt.Sprintf("%v", idx)), "CheckItemIdxIsOK：道具索引越界")
 			return false
 		}
 		temp[idx] = struct{}{}

@@ -38,12 +38,12 @@ func (c *ConnectionWS) StartReader() {
 			if !errors.As(err, &io.ErrUnexpectedEOF) {
 				logs.PrintLogErr(err)
 			}
-			return
+			break
 		}
 
 		msgData := c.Server.DataPacket().Unpack(msgByte)
 		if msgData == nil {
-			return
+			break
 		}
 		if msgData.GetDataLen() > 0 {
 			msgData.SetData(msgByte[c.Server.DataPacket().GetHeadLen() : c.Server.DataPacket().GetHeadLen()+int(msgData.GetDataLen())])

@@ -1,15 +1,16 @@
 syntax = "proto2";
-import "item.proto";
 package pb;
 option go_package = "./;pb";
 
+import "item.proto";
+
 message PBPlayerData {
-    optional PBCommonData CommonData = 1;   // 公共数据
-    optional PBItemSpaceData ItemSpaceData = 2;
+    optional PBCommonData CommonData = 1;          // 公共数据
+    optional PBItemSpaceData ItemSpaceData = 2;    // 合成空间数据
 }
 
 message PBCommonData {
-    optional uint32 UserID = 1;         // 用户ID
+    optional int64 UserUniID = 1;       // 用户ID
     optional string NickName = 2;       // 昵称
     optional string HeadImage = 3;      // 头像
     optional uint32 RegisterTime = 4;   // 注册时间
@@ -21,30 +22,30 @@ message PBCommonData {
 }
 
 // 玩家登录请求
-message PlayerLoginReq {
-    optional string LoginType = 1;  // 登录类型
-    optional string Account = 2;    // 用户名
-    optional string PassWord = 3;   // 密码
-    optional int32 ChannelType = 4; // 渠道标识
+message PlayerLoginRequest {
+    optional string LoginType = 1;      // 登录类型(quick)
+    optional string Account = 2;        // 用户名
+    optional string PassWord = 3;       // 密码
+    optional string ChannelType = 4;    // 渠道标识
 }
 
 // 玩家登录回应
-message PlayerLoginRes {
+message PlayerLoginResponse {
     optional int32 Result = 1;              // 错误码
-    optional PlayerLoginReq ReqData = 2;    // 请求数据
-    optional int32 Register = 3;            // 是否新玩家
-    optional uint32 RandomSeed = 4;         // 随机种子
-}
-
-// 玩家信息通知
-message PlayerInfoNotify {
-    optional PBPlayerData PlayerInfo = 1;   // 玩家信息
+    optional PlayerLoginRequest ReqData = 2;// 请求数据
+    optional int64 UserUniID = 3;           // 用户ID
+    optional string Account = 4;            // 账号
+    optional string Password = 5;           // 密码
+    optional uint32 Register = 6;           // 是否新玩家
+    optional uint32 RegisterTime = 7;       // 注册时间
+    optional uint32 RandomSeed = 8;         // 随机种子
 }
 
 // 心跳请求
-message HeartBeatReq {
+message HeartbeatRequest {
 }
 
 // 心跳响应
-message HeartBeatRes {
+message HeartbeatResponse {
+    optional uint32 ServerTime = 1;         // 服务器时间（时间戳，秒）
 }

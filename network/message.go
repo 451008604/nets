@@ -3,33 +3,35 @@ package network
 import pb "github.com/451008604/socketServerFrame/proto/bin"
 
 type Message struct {
-	id      pb.MsgID // 消息ID
-	dataLen uint32   // 消息长度
-	data    []byte   // 消息内容
+	totalLen uint16 // 消息总长度
+	id       uint16 // 消息ID
+	dataLen  uint16 // 消息长度
+	data     []byte // 消息内容
 }
 
 // 新建消息包
-func NewMsgPackage(id pb.MsgID, data []byte) *Message {
+func NewMsgPackage(id pb.MSG_ID, data []byte) *Message {
 	return &Message{
-		id:      id,
-		dataLen: uint32(len(data)),
-		data:    data,
+		id:       uint16(id),
+		dataLen:  uint16(len(data)),
+		data:     data,
+		totalLen: uint16(len(data) + 6),
 	}
 }
 
-func (m *Message) GetDataLen() uint32 {
+func (m *Message) GetDataLen() uint16 {
 	return m.dataLen
 }
 
-func (m *Message) SetDataLen(u uint32) {
+func (m *Message) SetDataLen(u uint16) {
 	m.dataLen = u
 }
 
-func (m *Message) GetMsgId() pb.MsgID {
+func (m *Message) GetMsgId() uint16 {
 	return m.id
 }
 
-func (m *Message) SetMsgId(u pb.MsgID) {
+func (m *Message) SetMsgId(u uint16) {
 	m.id = u
 }
 
@@ -39,4 +41,12 @@ func (m *Message) GetData() []byte {
 
 func (m *Message) SetData(bytes []byte) {
 	m.data = bytes
+}
+
+func (m *Message) GetTotalLen() uint16 {
+	return m.totalLen
+}
+
+func (m *Message) SetTotalLen(totalLen uint16) {
+	m.totalLen = totalLen
 }

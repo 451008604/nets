@@ -1,17 +1,20 @@
 package iface
 
-import pb "github.com/451008604/socketServerFrame/proto/bin"
-
 type IMessage interface {
-	// 获取消息长度
-	GetDataLen() uint32
-	// 设置消息长度
-	SetDataLen(uint32)
+	// 获取消息总长度
+	GetTotalLen() uint16
+	// 设置消息内容
+	SetTotalLen(totalLen uint16)
 
 	// 获取消息ID
-	GetMsgId() pb.MsgID
+	GetMsgId() uint16
 	// 设置消息ID
-	SetMsgId(pb.MsgID)
+	SetMsgId(id uint16)
+
+	// 获取消息长度
+	GetDataLen() uint16
+	// 设置消息长度
+	SetDataLen(uint16)
 
 	// 获取消息内容
 	GetData() []byte

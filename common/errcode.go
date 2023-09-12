@@ -1,4 +1,4 @@
-package modules
+package common
 
 const (
 	ErrSuccess               = 0           // 成功

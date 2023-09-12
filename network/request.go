@@ -21,6 +21,6 @@ func (r *Request) GetData() []byte {
 }
 
 // 获取请求消息的ID
-func (r *Request) GetMsgID() pb.MsgID {
-	return r.msg.GetMsgId()
+func (r *Request) GetMsgID() pb.MSG_ID {
+	return pb.MSG_ID(r.msg.GetMsgId())
 }

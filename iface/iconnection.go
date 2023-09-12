@@ -22,7 +22,7 @@ type IConnection interface {
 	RemoteAddrStr() string
 
 	// 发送消息给客户端
-	SendMsg(msgId pb.MsgID, msgData proto.Message)
+	SendMsg(msgId pb.MSG_ID, msgData proto.Message)
 
 	// 设置连接属性
 	SetProperty(key string, value interface{})
@@ -32,7 +32,7 @@ type IConnection interface {
 	RemoveProperty(key string)
 
 	SetPlayer(player interface{})
-	// Deprecated: 通过`logic.GetPlayer`获取 conn 绑定的 player 实例化对象
+	// Deprecated: 不建议直接调用，应通过`logic.GetPlayer`获取 conn 绑定的 player 实例化对象
 	GetPlayer() interface{}
 
 	// 协议转字节

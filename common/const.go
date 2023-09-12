@@ -1,4 +1,4 @@
-package modules
+package common
 
 // 登录类型
 const (

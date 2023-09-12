@@ -14,5 +14,5 @@ type IRequest interface {
 	// 获取请求消息的数据
 	GetData() []byte
 	// 获取请求消息的ID
-	GetMsgID() pb.MsgID
+	GetMsgID() pb.MSG_ID
 }

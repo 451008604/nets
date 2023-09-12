@@ -11,8 +11,8 @@ import (
 type DataPack struct{}
 
 func (d *DataPack) GetHeadLen() int {
-	// id int(4字节) + dataLen int(4字节)
-	return 8
+	// totalLen(2字节) + id int(2字节) + dataLen int(2字节)
+	return 6
 }
 
 // 新数据包
@@ -24,12 +24,16 @@ func NewDataPack() *DataPack {
 func (d *DataPack) Pack(msg iface.IMessage) []byte {
 	dataBuff := bytes.NewBuffer([]byte{})
 
-	// 写dataLen
-	if logs.PrintLogErr(binary.Write(dataBuff, binary.LittleEndian, msg.GetDataLen())) {
+	// 写totalLen
+	if logs.PrintLogErr(binary.Write(dataBuff, binary.LittleEndian, msg.GetTotalLen())) {
 		return nil
 	}
 	// 写msgId
 	if logs.PrintLogErr(binary.Write(dataBuff, binary.LittleEndian, msg.GetMsgId())) {
+		return nil
+	}
+	// 写dataLen
+	if logs.PrintLogErr(binary.Write(dataBuff, binary.LittleEndian, msg.GetDataLen())) {
 		return nil
 	}
 	// 写data数据
@@ -44,12 +48,16 @@ func (d *DataPack) Unpack(binaryData []byte) iface.IMessage {
 	dataBuff := bytes.NewReader(binaryData)
 	msgData := &Message{}
 
-	// 读dataLen
-	if logs.PrintLogErr(binary.Read(dataBuff, binary.LittleEndian, &msgData.dataLen)) {
+	// 读totalLen
+	if logs.PrintLogErr(binary.Read(dataBuff, binary.LittleEndian, &msgData.totalLen)) {
 		return nil
 	}
 	// 读msgId
 	if logs.PrintLogErr(binary.Read(dataBuff, binary.LittleEndian, &msgData.id)) {
+		return nil
+	}
+	// 读dataLen
+	if logs.PrintLogErr(binary.Read(dataBuff, binary.LittleEndian, &msgData.dataLen)) {
 		return nil
 	}
 	// 检查数据长度是否超出限制

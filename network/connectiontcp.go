@@ -39,18 +39,18 @@ func (c *ConnectionTCP) StartReader() {
 			if err != io.EOF {
 				logs.PrintLogErr(err)
 			}
-			return
+			break
 		}
 		// 通过消息头获取dataLen和Id
 		msgData := c.Server.DataPacket().Unpack(headData)
 		if msgData == nil {
-			return
+			break
 		}
 		// 通过消息头获取消息body
 		if msgData.GetDataLen() > 0 {
 			msgData.SetData(make([]byte, msgData.GetDataLen()))
 			if _, err := io.ReadFull(c.conn, msgData.GetData()); logs.PrintLogErr(err) {
-				return
+				break
 			}
 		}
 
