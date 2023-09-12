@@ -29,7 +29,7 @@ func LoginHandler(c iface.IConnection, message proto.Message) {
 	case common.LoginTypeQuick:
 		if len(res.ReqData.GetAccount()) < 3 || len(res.ReqData.GetAccount()) > 80 {
 			res.Result = proto.Int32(common.ErrAccountLengthErr)
-			c.SendMsg(pb.MSG_ID_ID_S2C_PLAYER_LOGIN, res)
+			c.SendMsg(pb.MSgID_PlayerLogin_Res, res)
 			return
 		}
 		if !strings.HasPrefix(res.ReqData.GetAccount(), res.ReqData.GetLoginType()) {
@@ -43,13 +43,13 @@ func LoginHandler(c iface.IConnection, message proto.Message) {
 			} else {
 				res.Result = proto.Int32(common.ErrRegisterFailed)
 			}
-			c.SendMsg(pb.MSG_ID_ID_S2C_PLAYER_LOGIN, res)
+			c.SendMsg(pb.MSgID_PlayerLogin_Res, res)
 			return
 		}
 
 	default:
 		res.Result = proto.Int32(common.ErrLoginTypeIllegal)
-		c.SendMsg(pb.MSG_ID_ID_S2C_PLAYER_LOGIN, res)
+		c.SendMsg(pb.MSgID_PlayerLogin_Res, res)
 		return
 	}
 	random, _ := uuid.NewRandom()
@@ -68,12 +68,9 @@ func LoginHandler(c iface.IConnection, message proto.Message) {
 	// 读取缓存数据覆盖初始化数据
 	if redis.Redis.GetPlayerInfo(user.UniID, player.Data) != nil {
 		res.Result = proto.Int32(common.ErrPlayerInfoFetchFailed)
-		c.SendMsg(pb.MSG_ID_ID_S2C_PLAYER_LOGIN, res)
+		c.SendMsg(pb.MSgID_PlayerLogin_Res, res)
 		return
 	}
 
-	c.SendMsg(pb.MSG_ID_ID_S2C_PLAYER_LOGIN, res)
-
-	// 推送玩家信息
-	c.SendMsg(pb.MSG_ID_ID_S2C_PLAYER_DATA, player.Data)
+	c.SendMsg(pb.MSgID_PlayerLogin_Res, res)
 }

@@ -2,11 +2,9 @@ syntax = "proto2";
 package pb;
 option go_package = "./;pb";
 
-import "item.proto";
 
 message PBPlayerData {
     optional PBCommonData CommonData = 1;          // 公共数据
-    optional PBItemSpaceData ItemSpaceData = 2;    // 合成空间数据
 }
 
 message PBCommonData {

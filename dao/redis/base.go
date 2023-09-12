@@ -19,7 +19,6 @@ var Redis = newRedisModel()
 
 func newRedisModel() *Module {
 	DB := &Module{}
-	DB.Ctx = context.Background()
 	DB.sql = sql.GetSqlQuery()
 	DB.player = NewPlayerInfo()
 

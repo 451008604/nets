@@ -12,7 +12,7 @@ type INotifyManager interface {
 	// 根据ID删除指定通知
 	DelNotifyGroupByID(notifyID string)
 	// 向通知列表内所有对象广播信息
-	SendNotifyData(notifyID string, msgID pb.MSG_ID, data proto.Message)
+	SendNotifyData(notifyID string, msgID pb.MSgID, data proto.Message)
 }
 
 // 通知

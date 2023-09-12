@@ -10,7 +10,7 @@ type Message struct {
 }
 
 // 新建消息包
-func NewMsgPackage(id pb.MSG_ID, data []byte) *Message {
+func NewMsgPackage(id pb.MSgID, data []byte) *Message {
 	return &Message{
 		id:       uint16(id),
 		dataLen:  uint16(len(data)),

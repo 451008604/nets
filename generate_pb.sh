@@ -1,4 +1,5 @@
-#! /bin/bash
+#!/usr/bin/env sh
+
 # --go_opt=paths=source_relative 使用相对路径生成文件
 # shellcheck disable=SC2035
 cd ./proto/src || exit
@@ -7,7 +8,15 @@ cd ./proto/src || exit
 protoc --go_out=../bin --go_opt=paths=source_relative --go-grpc_out=../bin --go_opt=paths=source_relative *.proto
 
 cd ../bin || exit
+
 # 使用 sed 指令删除所有 'omitempty'
-sed -i -re 's/,omitempty//g' *.pb.go
+OS=$(uname)
+if [ "$OS" = "Darwin" ]; then
+  # Mac OS X
+  sed -i '' "s/,omitempty//g" *.pb.go
+elif [ "$OS" = "Linux" ]; then
+  # GNU/Linux
+  sed -i "s/,omitempty//g" *.pb.go
+fi
 
 cd ../..

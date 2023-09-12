@@ -9,7 +9,7 @@ import (
 func (r *Module) GetAccountInfo(account, password string) (register uint32, accountInfo *sqlmodel.HouseAccount, userInfo *sqlmodel.HouseUser, err error) {
 	accountInfo, _ = r.Query.HouseAccount.WithContext(r.Ctx).Where(
 		r.Query.HouseAccount.Account.Eq(account),
-		r.Query.HouseAccount.Password.Eq(password),
+		r.Query.HouseAccount.Password.Eq(passwordToMd5(password)),
 	).First()
 
 	// 注册新账号
@@ -29,9 +29,7 @@ func (r *Module) GetAccountInfo(account, password string) (register uint32, acco
 
 func (r *Module) createNewAccount(account, password string) (accountData *sqlmodel.HouseAccount, userData *sqlmodel.HouseUser, err error) {
 	rand, _ := uuid.NewRandom()
-	if password == "" {
-		password = rand.String()
-	}
+
 	// 创建事务
 	session := r.Query.Begin()
 	// ===========================================创建玩家关联表数据===========================================

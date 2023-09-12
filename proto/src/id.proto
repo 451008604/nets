@@ -2,17 +2,9 @@ syntax = "proto2";
 package pb;
 option go_package = "./;pb";
 
-enum MSG_ID
-{
-    ID_C2S_PLAYER_LOGIN = 1001;     // PlayerLoginRequest   玩家登录请求
-    ID_S2C_PLAYER_LOGIN = 1002;     // PlayerLoginResponse  玩家登录回应
-    ID_S2C_PLAYER_DATA = 1003;      // PlayerDataNotify     玩家信息通知
-    ID_C2S_HEARTBEAT = 1004;        // HeartbeatRequest     心跳请求
-    ID_S2C_HEARTBEAT = 1005;        // HeartbeatResponse    心跳响应
-    ID_C2S_ITEM_COMBINE = 1006;     // ItemCombineRequest   道具合成请求
-    ID_S2C_ITEM_COMBINE = 1007;     // ItemCombineResponse  道具合成回应
-    ID_C2S_ITEM_PRODUCE = 1008;     // ItemProduceRequest   道具生产请求
-    ID_S2C_ITEM_PRODUCE = 1009;     // ItemProduceResponse  道具生产回应
-    ID_C2S_ITEM_MOVE = 1010;        // ItemMoveRequest      道具移动请求
-    ID_S2C_ITEM_MOVE = 1011;        // ItemMoveResponse     道具移动回应
+enum MSgID {
+    PlayerLogin_Req = 1001;     // PlayerLoginReq  玩家登录请求
+    PlayerLogin_Res = 1002;     // PlayerLoginRes  玩家登录回应
+    Heartbeat_Req = 1003;       // HeartbeatReq    心跳请求
+    Heartbeat_Res = 1004;       // HeartbeatRes    心跳响应
 }

@@ -23,12 +23,6 @@ func (p *Player) InitializationSaveData() *pb.PBPlayerData {
 	// 初始化缓存变量
 	p.Data = &pb.PBPlayerData{
 		CommonData: &pb.PBCommonData{},
-		ItemSpaceData: &pb.PBItemSpaceData{
-			ItemData: make([]*pb.PBItemData, p.ItemSpaceSize()),
-		},
-	}
-	for i := uint32(0); i < p.ItemSpaceSize(); i++ {
-		p.Data.GetItemSpaceData().ItemData[i] = &pb.PBItemData{}
 	}
 
 	return p.Data

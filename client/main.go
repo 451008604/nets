@@ -25,13 +25,13 @@ func main() {
 	for i := 0; i < 1; i++ {
 		waitGroup.Add(1)
 
-		login, _ := proto.Marshal(&pb.PlayerLoginReq{
+		login, _ := proto.Marshal(&pb.PlayerLoginRequest{
 			LoginType:   proto.String("quick"),
 			Account:     proto.String("eric" + strconv.Itoa(i)),
 			PassWord:    proto.String(""),
 			ChannelType: proto.String("2"),
 		})
-		msg := network.NewDataPack().Pack(network.NewMsgPackage(pb.MSG_ID_PlayerLogin_Req, login))
+		msg := network.NewDataPack().Pack(network.NewMsgPackage(pb.MSgID_PlayerLogin_Req, login))
 
 		go socketClient(msg)
 		// go webSocketClient(msg)
@@ -68,7 +68,7 @@ func socketClient(msgByte []byte) {
 				continue
 			}
 
-			router := network.GetInstanceMsgHandler().Apis[pb.MSG_ID(msgData.GetMsgId())]
+			router := network.GetInstanceMsgHandler().Apis[pb.MSgID(msgData.GetMsgId())]
 			msg := router.GetNewMsg()
 			if err = proto.Unmarshal(msgData.GetData(), msg); err != nil {
 				println(err.Error())

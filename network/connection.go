@@ -76,7 +76,7 @@ func (c *Connection) RemoteAddrStr() string {
 }
 
 // 发送消息给客户端
-func (c *Connection) SendMsg(msgId pb.MSG_ID, msgData proto.Message) {
+func (c *Connection) SendMsg(msgId pb.MSgID, msgData proto.Message) {
 	msgByte := c.ProtocolToByte(msgData)
 	if c.isClosed {
 		logs.PrintLogInfo(fmt.Sprintf("连接已关闭导致消息发送失败 -> msgId:%v\tdata:%s", msgId, msgByte))

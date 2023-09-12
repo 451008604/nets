@@ -20,7 +20,7 @@ var SQL = newSqlModel()
 func newSqlModel() *Module {
 	DB := &Module{Ctx: context.Background()}
 
-	db, err := gorm.Open(mysql.Open("root:Guohaoqin123.@tcp(ggghq.cn:6606)/house_new?charset=utf8mb4&parseTime=true&loc=Local"), &gorm.Config{})
+	db, err := gorm.Open(mysql.Open("root:Guohaoqin123.@tcp(127.0.0.1:3306)/house_new?charset=utf8mb4&parseTime=true&loc=Local"), &gorm.Config{})
 	logs.PrintLogPanic(err)
 	// 开启调试模式
 	DB.Query = Use(db)

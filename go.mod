@@ -6,8 +6,8 @@ require (
 	github.com/google/uuid v1.3.1
 	github.com/gorilla/websocket v1.5.0
 	github.com/redis/go-redis/v9 v9.1.0
-	google.golang.org/protobuf v1.28.1
-	gorm.io/driver/mysql v1.5.1-0.20230509030346-3715c134c25b
+	google.golang.org/protobuf v1.31.0
+	gorm.io/driver/mysql v1.5.1
 	gorm.io/gen v0.3.23
 	gorm.io/gorm v1.25.4
 	gorm.io/plugin/dbresolver v1.4.7

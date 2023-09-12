@@ -22,7 +22,7 @@ type IConnection interface {
 	RemoteAddrStr() string
 
 	// 发送消息给客户端
-	SendMsg(msgId pb.MSG_ID, msgData proto.Message)
+	SendMsg(msgId pb.MSgID, msgData proto.Message)
 
 	// 设置连接属性
 	SetProperty(key string, value interface{})
