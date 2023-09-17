@@ -34,13 +34,8 @@ func GetInstanceConnManager() *ConnManager {
 }
 
 func (c *ConnManager) NewConnID() int {
-	c.closeConnIDLock.Lock()
-	defer c.closeConnIDLock.Unlock()
-
-	// 回收列表中存在则取出使用
-	if c.closeConnID.Len() > 0 {
-		connID := c.closeConnID.Remove(c.closeConnID.Front())
-		return connID.(int)
+	if connID := c.getClosingConn(); connID != 0 {
+		return connID
 	}
 	// 回收列表为空时递增ID
 	atomic.AddInt64(&c.connID, 1)
@@ -62,12 +57,12 @@ func (c *ConnManager) Add(conn iface.IConnection) {
 
 // 删除连接
 func (c *ConnManager) Remove(conn iface.IConnection) {
+	c.setClosingConn(conn.GetConnID())
+
 	c.connectionsLock.Lock()
 	defer c.connectionsLock.Unlock()
 
 	delete(c.connections, conn.GetConnID())
-	// 存入回收列表
-	c.closeConnID.PushBack(conn.GetConnID())
 
 	// 调用关闭连接hook函数
 	if c.onConnClose != nil {
@@ -112,4 +107,24 @@ func (c *ConnManager) OnConnOpen(fun func(conn iface.IConnection)) {
 // 连接断开时的Hook函数
 func (c *ConnManager) OnConnClose(fun func(conn iface.IConnection)) {
 	c.onConnClose = fun
+}
+
+func (c *ConnManager) setClosingConn(connID int) {
+	c.closeConnIDLock.Lock()
+	defer c.closeConnIDLock.Unlock()
+
+	// 存入回收列表
+	c.closeConnID.PushBack(connID)
+}
+
+func (c *ConnManager) getClosingConn() int {
+	c.closeConnIDLock.Lock()
+	defer c.closeConnIDLock.Unlock()
+
+	// 回收列表中存在则取出使用
+	if c.closeConnID.Len() > 0 {
+		connID := c.closeConnID.Remove(c.closeConnID.Front())
+		return connID.(int)
+	}
+	return 0
 }
