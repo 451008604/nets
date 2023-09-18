@@ -14,9 +14,9 @@ type ServerTCP struct {
 
 func NewServerTCP() iface.IServer {
 	s := &ServerTCP{}
-	s.serverName = config.GetGlobalObject().Name + "_tcp"
-	s.ip = config.GetGlobalObject().HostTCP
-	s.port = config.GetGlobalObject().PortTCP
+	s.serverName = config.GetGlobalObject().AppName + "_tcp"
+	s.ip = config.GetGlobalObject().ServerTCP.Address
+	s.port = config.GetGlobalObject().ServerTCP.Port
 	s.connMgr = GetInstanceConnManager()
 	s.dataPacket = NewDataPack()
 	return s
@@ -76,7 +76,7 @@ func (s *ServerTCP) Start() {
 }
 
 func (s *ServerTCP) Listen() bool {
-	if config.GetGlobalObject().PortTCP != "" {
+	if config.GetGlobalObject().ServerTCP.Port != "" {
 		go s.Start()
 		s.Server.Start()
 		return true

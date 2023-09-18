@@ -1,57 +1,78 @@
 package config
 
 import (
-	"encoding/json"
+	"bytes"
 	"fmt"
 	"github.com/451008604/socketServerFrame/logs"
+	"github.com/fsnotify/fsnotify"
+	"github.com/spf13/viper"
+	"io/ioutil"
+	"time"
 )
 
 var jsonsPath = "./config/jsons/"
-var configPath = "./config/"
 
-type GlobalObj struct {
-	Debug            bool   // 是否Debug模式
-	Name             string // 当前服务名称
-	Version          string // 当前服务版本号
-	MaxPackSize      int    // 传输数据包最大值
-	MaxConn          int    // 当前服务允许的最大连接数
-	WorkerPoolSize   int    // work池大小
-	WorkerTaskMaxLen int    // work对应的执行队列内任务数量的上限
-	MaxMsgChanLen    int    // 读写消息的通道最大缓冲数
-	ProtocolIsJson   bool   // 是否采用Json协议
-	HostTCP          string // TCP服务地址
-	PortTCP          string // TCP服务端口
-	HostWS           string // WS服务地址
-	PortWS           string // WS服务端口
-	TLSCertPath      string // TLS证书路径
-	TLSKeyPath       string // TLS密钥路径
-	RedisAddress     string // Redis地址
-	RedisPassWord    string // Redis密码
+type GlobalConf struct {
+	Debug            bool
+	AppName          string
+	Version          string
+	MaxPackSize      int
+	MaxConn          int
+	WorkerPoolSize   int
+	WorkerTaskMaxLen int
+	MaxMsgChanLen    int
+	ProtocolIsJson   bool
+	ServerTCP        Server
+	ServerWS         Server
+	Redis            Database
+	Mysql            Database
 }
 
-var globalObject GlobalObj
+type Server struct {
+	Address     string
+	Port        string
+	TLSCertPath string
+	TLSKeyPath  string
+}
+
+type Database struct {
+	Address  string
+	Username string
+	Password string
+}
+
+var conf GlobalConf
 
 func init() {
-	globalObject = GlobalObj{
-		Debug:            false,
-		Name:             "MyProject",
-		Version:          "v0.1",
-		MaxPackSize:      4096,
-		MaxConn:          10,
-		WorkerPoolSize:   1000,
-		WorkerTaskMaxLen: 1000,
-		MaxMsgChanLen:    100,
-		ProtocolIsJson:   true,
-	}
+	viper.SetConfigType("toml")
+	// 注册需要监控的配置文件
+	viper.SetConfigFile("./config.toml")
+	viper.WatchConfig()
+	// 开启监控回调，限制每秒最多执行1次
+	t := time.Now().Unix()
+	viper.OnConfigChange(func(in fsnotify.Event) {
+		now := time.Now().Unix()
+		if in.Has(fsnotify.Write) && now-1 > t {
+			t = now
+			loadServerConfig()
+		}
+	})
 
-	getConfigDataToBytes(configPath, "config.json", &globalObject)
-	logs.SetPrintMode(globalObject.Debug)
+	// 初始化配置内容
+	configByte, err := ioutil.ReadFile("./config.toml")
+	logs.PrintLogPanic(err)
+	logs.PrintLogPanic(viper.ReadConfig(bytes.NewBuffer(configByte)))
+	loadServerConfig()
+}
 
-	str, _ := json.Marshal(globalObject)
-	logs.PrintLogInfo(fmt.Sprintf("服务配置参数：%v", string(str)))
+// 解析配置内容到结构体
+func loadServerConfig() {
+	logs.PrintLogErr(viper.Unmarshal(&conf))
+	logs.SetPrintMode(conf.Debug)
+	logs.PrintLogInfo(fmt.Sprintf("服务配置参数：%v", viper.AllSettings()))
 }
 
 // GetGlobalObject 获取全局配置对象
-func GetGlobalObject() GlobalObj {
-	return globalObject
+func GetGlobalObject() GlobalConf {
+	return conf
 }

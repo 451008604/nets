@@ -1,0 +1,50 @@
+# 是否debug模式
+Debug = true
+# 当前服务名称
+AppName = "socketserverframe"
+# 当前服务版本号
+Version = "v0.1"
+# 传输数据包最大值
+MaxPackSize = 4096
+# 当前服务允许的最大连接数
+MaxConn = 1000
+# work池大小
+WorkerPoolSize = 1000
+# work对应的执行队列内任务数量的上限
+WorkerTaskMaxLen = 1000
+# 读写消息的通道最大缓冲数
+MaxMsgChanLen = 100
+# 是否采用json协议
+ProtocolIsJson = false
+
+# 服务配置
+[ServerTCP]
+# tcp服务地址
+Address = "127.0.0.1"
+# tcp服务端口
+Port = "17001"
+
+[ServerWS]
+# ws服务地址
+Address = "127.0.0.1"
+# ws服务端口
+Port = "17002"
+# tls证书路径
+TLSCertPath = ""
+# tls密钥路径
+TLSKeyPath = ""
+
+# 数据库配置
+[Redis]
+# redis地址
+Address = "127.0.0.1:6380"
+# redis密码
+Password = "Abc123!@"
+
+[Mysql]
+# mysql地址
+Address = ""
+# mysql用户名
+Username = ""
+# mysql密码
+Password = ""

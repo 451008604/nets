@@ -15,9 +15,9 @@ type ServerWS struct {
 
 func NewServerWS() iface.IServer {
 	s := &ServerWS{}
-	s.serverName = config.GetGlobalObject().Name + "_ws"
-	s.ip = config.GetGlobalObject().HostWS
-	s.port = config.GetGlobalObject().PortWS
+	s.serverName = config.GetGlobalObject().AppName + "_ws"
+	s.ip = config.GetGlobalObject().ServerWS.Address
+	s.port = config.GetGlobalObject().ServerWS.Port
 	s.connMgr = GetInstanceConnManager()
 	s.dataPacket = NewDataPack()
 	return s
@@ -58,7 +58,7 @@ func (s *ServerWS) Start() {
 		logs.PrintLogInfo(fmt.Sprintf("成功建立新的客户端连接 -> %v connID - %v", msgConn.RemoteAddrStr(), msgConn.GetConnID()))
 	})
 
-	if certPath, keyPath := config.GetGlobalObject().TLSCertPath, config.GetGlobalObject().TLSKeyPath; certPath != "" && keyPath != "" {
+	if certPath, keyPath := config.GetGlobalObject().ServerWS.TLSCertPath, config.GetGlobalObject().ServerWS.TLSKeyPath; certPath != "" && keyPath != "" {
 		logs.PrintLogErr(http.ListenAndServeTLS(fmt.Sprintf("%s:%s", s.ip, s.port), certPath, keyPath, nil))
 	} else {
 		logs.PrintLogErr(http.ListenAndServe(fmt.Sprintf("%s:%s", s.ip, s.port), nil))
@@ -66,7 +66,7 @@ func (s *ServerWS) Start() {
 }
 
 func (s *ServerWS) Listen() bool {
-	if config.GetGlobalObject().PortWS != "" {
+	if config.GetGlobalObject().ServerWS.Port != "" {
 		go s.Start()
 		s.Server.Start()
 		return true

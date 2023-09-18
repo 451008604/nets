@@ -7,8 +7,7 @@
 ✅ 日志的收集可通过飞书机器人实现 webhook 推送  
 ✅ 广播消息功能，可1对1、1对多、服务端主动进行群广播  
 ✅ 引入 [gorm](https://github.com/go-gorm/gorm) 用于数据库对增、删、改、查  
-📌 引入 [zap](https://github.com/uber-go/zap) 重新设计日志收集系统  
-📌 优化配置文件读取
+✅ 优化配置文件读取
 
 ## 使用 gentool 生成 dao 文件
 ```shell

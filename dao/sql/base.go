@@ -4,6 +4,7 @@ import (
 	"context"
 	"crypto/md5"
 	"fmt"
+	"github.com/451008604/socketServerFrame/config"
 	"github.com/451008604/socketServerFrame/logs"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -20,7 +21,8 @@ var SQL = newSqlModel()
 func newSqlModel() *Module {
 	DB := &Module{Ctx: context.Background()}
 
-	db, err := gorm.Open(mysql.Open("root:Guohaoqin123.@tcp(127.0.0.1:3306)/house_new?charset=utf8mb4&parseTime=true&loc=Local"), &gorm.Config{})
+	sqlConf := config.GetGlobalObject().Mysql
+	db, err := gorm.Open(mysql.Open(fmt.Sprintf("%s:%s@tcp(%s)/house_new?charset=utf8mb4&parseTime=true&loc=Local", sqlConf.Username, sqlConf.Password, sqlConf.Address)), &gorm.Config{})
 	logs.PrintLogPanic(err)
 	// 开启调试模式
 	DB.Query = Use(db)

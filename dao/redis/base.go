@@ -22,9 +22,11 @@ func newRedisModel() *Module {
 	DB.sql = sql.GetSqlQuery()
 	DB.player = NewPlayerInfo()
 
+	redisConf := config.GetGlobalObject().Redis
 	DB.Client = redis.NewClient(&redis.Options{
-		Addr:     config.GetGlobalObject().RedisAddress,
-		Password: config.GetGlobalObject().RedisPassWord,
+		Addr:     redisConf.Address,
+		Username: redisConf.Username,
+		Password: redisConf.Password,
 	})
 	if val, err := DB.Ping(context.Background()).Result(); val != "PONG" {
 		logs.PrintLogPanic(err)
