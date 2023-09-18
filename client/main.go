@@ -42,7 +42,7 @@ func main() {
 
 func socketClient(msgByte []byte) {
 	var err error
-	conn, _ := net.Dial("tcp", "127.0.0.1:25874")
+	conn, _ := net.Dial("tcp", "127.0.0.1:17001")
 	go func(dial net.Conn) {
 		for {
 			dp := network.NewDataPack()
@@ -89,7 +89,7 @@ func socketClient(msgByte []byte) {
 }
 
 func webSocketClient(msgByte []byte) {
-	conn, _, _ := websocket.DefaultDialer.Dial("ws://127.0.0.1:7002", nil)
+	conn, _, _ := websocket.DefaultDialer.Dial("ws://127.0.0.1:17002", nil)
 	go func(c *websocket.Conn) {
 		for {
 			msgType, message, _ := c.ReadMessage()

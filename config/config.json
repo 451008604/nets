@@ -1,8 +1,8 @@
 {
   "Debug": true,
   "Name": "socketServerFrame",
-  "PortTCP": "25874",
-  "PortWS": "25875",
+  "PortTCP": "17001",
+  "PortWS": "17002",
   "TLSCertPath": "",
   "TLSKeyPath": "",
   "MaxConn": 1000,

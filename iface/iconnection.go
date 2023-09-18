@@ -7,7 +7,7 @@ import (
 
 type IConnection interface {
 	// 启动连接
-	Start(writerHandler func(data []byte))
+	Start(readerHandler func(), writerHandler func(data []byte))
 	// 停止连接
 	Stop()
 
@@ -31,8 +31,9 @@ type IConnection interface {
 	// 删除连接属性
 	RemoveProperty(key string)
 
+	// 绑定 conn 对应的 player 对象
 	SetPlayer(player interface{})
-	// Deprecated: 不建议直接调用，应通过`logic.GetPlayer`获取 conn 绑定的 player 实例化对象
+	// Deprecated: 不建议直接调用。应通过`logic.GetPlayer`获取 conn 绑定的 player 对象
 	GetPlayer() interface{}
 
 	// 协议转字节

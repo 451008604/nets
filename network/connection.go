@@ -1,6 +1,7 @@
 package network
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"github.com/451008604/socketServerFrame/config"
@@ -12,61 +13,67 @@ import (
 )
 
 type Connection struct {
-	Server       iface.IServer          // 当前Conn所属的Server
-	ConnID       int                    // 当前连接的ID（SessionID）
-	isClosed     bool                   // 当前连接是否已关闭
-	MsgHandler   iface.IMsgHandler      // 消息管理MsgId和对应处理函数的消息管理模块
-	exitBuffChan chan bool              // 通知该连接已经退出的channel
-	msgBuffChan  chan []byte            // 用于读、写两个goroutine之间的消息通信
-	property     map[string]interface{} // 连接属性
-	propertyLock sync.RWMutex           // 连接属性读写锁
-	player       interface{}            // 玩家数据
+	Server        iface.IServer          // 当前Conn所属的Server
+	ConnID        int                    // 当前连接的ID（SessionID）
+	isClosed      bool                   // 当前连接是否已关闭
+	MsgHandler    iface.IMsgHandler      // 消息管理MsgId和对应处理函数的消息管理模块
+	exitCtx       context.Context        // 管理连接的上下文
+	exitCtxCancel context.CancelFunc     // 连接关闭信号
+	msgBuffChan   chan []byte            // 用于读、写两个goroutine之间的消息通信
+	property      map[string]interface{} // 连接属性
+	propertyLock  sync.RWMutex           // 连接属性读写锁
+	player        interface{}            // 玩家数据
 }
 
-// 启动接收消息协程
-func (c *Connection) StartReader() {
-}
+func (c *Connection) StartReader() {}
 
-// 启动发送消息协程
-func (c *Connection) StartWriter(_ []byte) {
-}
+func (c *Connection) StartWriter(_ []byte) {}
 
-// 启动连接
-func (c *Connection) Start(writerHandler func(data []byte)) {
+func (c *Connection) Start(readerHandler func(), writerHandler func(data []byte)) {
+	defer c.Stop()
 	// 将新建的连接添加到所属Server的连接管理器内
 	c.Server.GetConnMgr().Add(c)
 
+	// 开启读协程
+	go func(c *Connection, readerHandler func()) {
+		for {
+			select {
+			default:
+				// 调用注册方法处理接收到的消息
+				readerHandler()
+			case <-c.exitCtx.Done():
+				return
+			}
+		}
+	}(c, readerHandler)
+
+	// 开启写协程
 	for {
 		select {
 		case data := <-c.msgBuffChan:
 			// 调用注册方法写消息给客户端
 			writerHandler(data)
-
-		case <-c.exitBuffChan:
-			// 在收到退出消息时释放进程
+		case <-c.exitCtx.Done():
 			return
 		}
 	}
 }
 
-// 停止连接
 func (c *Connection) Stop() {
 	if c.isClosed {
 		return
 	}
 	c.isClosed = true
 	// 通知关闭该连接的监听
-	c.exitBuffChan <- true
+	c.exitCtxCancel()
 
 	// 将连接从连接管理器中删除
 	c.Server.GetConnMgr().Remove(c)
 
 	// 关闭该连接管道
-	close(c.exitBuffChan)
 	close(c.msgBuffChan)
 }
 
-// 获取当前连接ID
 func (c *Connection) GetConnID() int {
 	return c.ConnID
 }
@@ -75,7 +82,6 @@ func (c *Connection) RemoteAddrStr() string {
 	return ""
 }
 
-// 发送消息给客户端
 func (c *Connection) SendMsg(msgId pb.MSgID, msgData proto.Message) {
 	msgByte := c.ProtocolToByte(msgData)
 	if c.isClosed {
@@ -92,7 +98,6 @@ func (c *Connection) SendMsg(msgId pb.MSgID, msgData proto.Message) {
 	c.msgBuffChan <- msg
 }
 
-// 设置连接属性
 func (c *Connection) SetProperty(key string, value interface{}) {
 	c.propertyLock.Lock()
 	defer c.propertyLock.Unlock()
@@ -100,7 +105,6 @@ func (c *Connection) SetProperty(key string, value interface{}) {
 	c.property[key] = value
 }
 
-// 获取连接属性
 func (c *Connection) GetProperty(key string) interface{} {
 	c.propertyLock.RLock()
 	defer c.propertyLock.RUnlock()
@@ -112,7 +116,6 @@ func (c *Connection) GetProperty(key string) interface{} {
 	}
 }
 
-// 删除连接属性
 func (c *Connection) RemoveProperty(key string) {
 	c.propertyLock.Lock()
 	defer c.propertyLock.Unlock()

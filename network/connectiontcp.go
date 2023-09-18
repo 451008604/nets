@@ -1,6 +1,7 @@
 package network
 
 import (
+	"context"
 	"github.com/451008604/socketServerFrame/config"
 	"github.com/451008604/socketServerFrame/iface"
 	"github.com/451008604/socketServerFrame/logs"
@@ -22,7 +23,7 @@ func NewConnectionTCP(server iface.IServer, conn *net.TCPConn) *ConnectionTCP {
 	c.ConnID = server.GetConnMgr().NewConnID()
 	c.isClosed = false
 	c.MsgHandler = GetInstanceMsgHandler()
-	c.exitBuffChan = make(chan bool, 1)
+	c.exitCtx, c.exitCtxCancel = context.WithCancel(context.Background())
 	c.msgBuffChan = make(chan []byte, config.GetGlobalObject().MaxMsgChanLen)
 	c.property = make(map[string]interface{})
 	c.propertyLock = sync.RWMutex{}
@@ -30,37 +31,37 @@ func NewConnectionTCP(server iface.IServer, conn *net.TCPConn) *ConnectionTCP {
 }
 
 func (c *ConnectionTCP) StartReader() {
-	defer c.Stop()
+	// 获取客户端的消息头信息
+	packet := c.Server.DataPacket()
+	headData := make([]byte, packet.GetHeadLen())
+	if _, err := io.ReadFull(c.conn, headData); err != nil {
+		if err != io.EOF {
+			logs.PrintLogErr(err)
+		}
+		c.Stop()
+		return
+	}
+	// 通过消息头获取dataLen和Id
+	msgData := packet.Unpack(headData)
+	if msgData == nil {
+		c.Stop()
+		return
+	}
+	// 通过消息头获取消息body
+	if msgData.GetDataLen() > 0 {
+		msgData.SetData(make([]byte, msgData.GetDataLen()))
+		if _, err := io.ReadFull(c.conn, msgData.GetData()); logs.PrintLogErr(err) {
+			c.Stop()
+			return
+		}
+	}
 
-	for {
-		// 获取客户端的消息头信息
-		headData := make([]byte, c.Server.DataPacket().GetHeadLen())
-		if _, err := io.ReadFull(c.conn, headData); err != nil {
-			if err != io.EOF {
-				logs.PrintLogErr(err)
-			}
-			break
-		}
-		// 通过消息头获取dataLen和Id
-		msgData := c.Server.DataPacket().Unpack(headData)
-		if msgData == nil {
-			break
-		}
-		// 通过消息头获取消息body
-		if msgData.GetDataLen() > 0 {
-			msgData.SetData(make([]byte, msgData.GetDataLen()))
-			if _, err := io.ReadFull(c.conn, msgData.GetData()); logs.PrintLogErr(err) {
-				break
-			}
-		}
-
-		// 封装请求数据传入处理函数
-		req := &Request{conn: c, msg: msgData}
-		if config.GetGlobalObject().WorkerPoolSize > 0 {
-			c.MsgHandler.SendMsgToTaskQueue(req)
-		} else {
-			go c.MsgHandler.DoMsgHandler(req)
-		}
+	// 封装请求数据传入处理函数
+	req := &Request{conn: c, msg: msgData}
+	if config.GetGlobalObject().WorkerPoolSize > 0 {
+		c.MsgHandler.SendMsgToTaskQueue(req)
+	} else {
+		go c.MsgHandler.DoMsgHandler(req)
 	}
 }
 
@@ -69,20 +70,15 @@ func (c *ConnectionTCP) StartWriter(data []byte) {
 	logs.PrintLogErr(err, string(data))
 }
 
-func (c *ConnectionTCP) Start(writerHandler func(data []byte)) {
-	// 开启用于读的goroutine
-	go c.StartReader()
-	// 注册用于写的writerHandler
-	c.Connection.Start(writerHandler)
+func (c *ConnectionTCP) Start(readerHandler func(), writerHandler func(data []byte)) {
+	c.Connection.Start(readerHandler, writerHandler)
 }
 
 func (c *ConnectionTCP) Stop() {
 	_ = c.conn.Close()
-
 	c.Connection.Stop()
 }
 
-// 获取客户端地址信息
 func (c *ConnectionTCP) RemoteAddrStr() string {
 	return c.conn.RemoteAddr().String()
 }

@@ -69,7 +69,7 @@ func (s *ServerTCP) Start() {
 
 		// 建立新连接并监听客户端请求的消息
 		msgConn := NewConnectionTCP(s, conn)
-		go msgConn.Start(msgConn.StartWriter)
+		go msgConn.Start(msgConn.StartReader, msgConn.StartWriter)
 		// 建立连接成功
 		logs.PrintLogInfo(fmt.Sprintf("成功建立新的客户端连接 -> %v connID - %v", msgConn.RemoteAddrStr(), msgConn.GetConnID()))
 	}

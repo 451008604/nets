@@ -10,14 +10,14 @@ import (
 
 type DataPack struct{}
 
-func (d *DataPack) GetHeadLen() int {
-	// totalLen(2字节) + id int(2字节) + dataLen int(2字节)
-	return 6
-}
-
 // 新数据包
 func NewDataPack() *DataPack {
 	return &DataPack{}
+}
+
+func (d *DataPack) GetHeadLen() int {
+	// totalLen(2字节) + id int(2字节) + dataLen int(2字节)
+	return 6
 }
 
 // 封包
