@@ -1,5 +1,4 @@
 /.idea/
 /logFiles/
-generate_sql.sh
 /go_build_socketServerFrame.exe
 /go_build_socketServerFrame_client.exe
