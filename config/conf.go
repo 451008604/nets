@@ -2,11 +2,13 @@ package config
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"github.com/451008604/socketServerFrame/logs"
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/viper"
-	"io/ioutil"
+	"io"
+	"net/http"
 	"time"
 )
 
@@ -59,7 +61,7 @@ func init() {
 	})
 
 	// 初始化配置内容
-	configByte, err := ioutil.ReadFile("./config.toml")
+	configByte, err := GetRemoteConfigData("./config.toml")
 	logs.PrintLogPanic(err)
 	logs.PrintLogPanic(viper.ReadConfig(bytes.NewBuffer(configByte)))
 	loadServerConfig()
@@ -75,4 +77,19 @@ func loadServerConfig() {
 // GetGlobalObject 获取全局配置对象
 func GetGlobalObject() GlobalConf {
 	return conf
+}
+
+func GetRemoteConfigData(fileName string) ([]byte, error) {
+	resp, err := http.Get("http://101.43.0.205:6001/configFile?fileName=" + fileName)
+	if err != nil {
+		return nil, err
+	}
+	defer func(Body io.ReadCloser) {
+		_ = Body.Close()
+	}(resp.Body)
+
+	if body, _ := io.ReadAll(resp.Body); len(body) != 0 {
+		return body, nil
+	}
+	return nil, errors.New("文件 " + fileName + " 获取失败")
 }
