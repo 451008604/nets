@@ -74,13 +74,13 @@ func (m *MsgHandler) SendMsgToTaskQueue(request iface.IRequest) {
 		workerID = freeWorkQueueID
 	}
 	// 对工作池进行扩容
-	actual, loaded := m.WorkQueue.LoadOrStore(workerID, make(chan iface.IRequest, config.GetGlobalObject().WorkerTaskMaxLen))
+	workQueue, loaded := m.WorkQueue.LoadOrStore(workerID, make(chan iface.IRequest, config.GetGlobalObject().WorkerTaskMaxLen))
 	if !loaded {
-		go m.StartOneWorker(actual.(chan iface.IRequest))
+		go m.StartOneWorker(workQueue.(chan iface.IRequest))
 	}
 
 	// 将请求推入worker协程
-	actual.(chan iface.IRequest) <- request
+	workQueue.(chan iface.IRequest) <- request
 }
 
 // 启动一个工作协程等待处理接收的请求
