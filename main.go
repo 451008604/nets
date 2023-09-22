@@ -4,6 +4,7 @@ import (
 	"fmt"
 	_ "github.com/451008604/socketServerFrame/api"
 	"github.com/451008604/socketServerFrame/common"
+	"github.com/451008604/socketServerFrame/config"
 	"github.com/451008604/socketServerFrame/logic"
 	"github.com/451008604/socketServerFrame/logs"
 	"github.com/451008604/socketServerFrame/network"
@@ -21,6 +22,8 @@ func main() {
 		}
 	}()
 	go listenChannelStatus()
+	config.SetRemoteConfigAddress("http://101.43.0.205:6001")
+	config.InitServerConfig()
 
 	// 注册模块
 	common.Module.SetServerTCP(network.NewServerTCP())

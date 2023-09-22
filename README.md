@@ -14,29 +14,6 @@
 go install gorm.io/gen/tools/gentool@latest
 ```
 
-在根目录增加yml文件，内容如下
-
-```yaml
-version : "0.1"
-database:
-    dsn              : "root:userName:userPass@tcp(127.0.0.1:3306)/DBName?charset=utf8mb4&parseTime=true&loc=Local"
-    db               : "mysql"
-    withUnitTest     : false
-    fieldNullable    : false
-    fieldWithIndexTag: false
-    fieldWithTypeTag : true
-    modelPkgName     : "sqlmodel"
-#    outPath          : ""
-#    tables           : ""
-#    outFile          : ""
-```
-
-同级目录创建一个 sh 脚本（generate_sqlModel.sh）内容如下
-
-```shell
-gentool -c "./gensql.yml" -outPath "./dao/sql"
-```
-
 ## grpc 配置
 
 - 安装protoc编译器

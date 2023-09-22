@@ -1,0 +1,12 @@
+version: "0.1"
+database:
+  dsn: "root:userName:userPass@tcp(127.0.0.1:3306)/DBName?charset=utf8mb4&parseTime=true&loc=Local"
+  db: "mysql"
+  withUnitTest: false
+  fieldNullable: false
+  fieldWithIndexTag: false
+  fieldWithTypeTag: true
+  modelPkgName: "sqlmodel"
+#    outPath          : ""
+#    tables           : ""
+#    outFile          : ""

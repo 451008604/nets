@@ -9,10 +9,12 @@ import (
 	"github.com/spf13/viper"
 	"io"
 	"net/http"
+	"os"
 	"time"
 )
 
 var jsonsPath = "./config/jsons/"
+var remoteConfigAddress = ""
 
 type GlobalConf struct {
 	Debug            bool
@@ -45,7 +47,7 @@ type Database struct {
 
 var conf GlobalConf
 
-func init() {
+func InitServerConfig() {
 	viper.SetConfigType("toml")
 	// 注册需要监控的配置文件
 	viper.SetConfigFile("./config.toml")
@@ -61,7 +63,13 @@ func init() {
 	})
 
 	// 初始化配置内容
-	configByte, err := GetRemoteConfigData("./config.toml")
+	var configByte []byte
+	var err error
+	if remoteConfigAddress != "" {
+		configByte, err = GetRemoteConfigData("./config.toml")
+	} else {
+		configByte, err = os.ReadFile("./config.toml")
+	}
 	logs.PrintLogPanic(err)
 	logs.PrintLogPanic(viper.ReadConfig(bytes.NewBuffer(configByte)))
 	loadServerConfig()
@@ -79,8 +87,12 @@ func GetGlobalObject() GlobalConf {
 	return conf
 }
 
+func SetRemoteConfigAddress(address string) {
+	remoteConfigAddress = address
+}
+
 func GetRemoteConfigData(fileName string) ([]byte, error) {
-	resp, err := http.Get("http://101.43.0.205:6001/configFile?fileName=" + fileName)
+	resp, err := http.Get(remoteConfigAddress + "/configFile?fileName=" + fileName)
 	if err != nil {
 		return nil, err
 	}
