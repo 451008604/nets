@@ -4,7 +4,6 @@ import (
 	"fmt"
 	_ "github.com/451008604/socketServerFrame/api"
 	"github.com/451008604/socketServerFrame/common"
-	"github.com/451008604/socketServerFrame/config"
 	"github.com/451008604/socketServerFrame/logic"
 	"github.com/451008604/socketServerFrame/logs"
 	"github.com/451008604/socketServerFrame/network"
@@ -22,27 +21,17 @@ func main() {
 		}
 	}()
 	go listenChannelStatus()
-	config.SetRemoteConfigAddress("http://101.43.0.205:6001")
-	config.InitServerConfig()
 
-	// 注册模块
-	common.Module.SetServerTCP(network.NewServerTCP())
-	common.Module.SetServerWS(network.NewServerWS())
-	common.Module.SetNotify(network.NewNotifyManager())
 	// 注册hook函数
 	network.GetInstanceConnManager().OnConnOpen(logic.OnConnectionOpen)
 	network.GetInstanceConnManager().OnConnClose(logic.OnConnectionClose)
 
 	// 开始监听服务
-	runServer()
+	common.GetServerTCP().Listen()
+	common.GetServerWS().Listen()
 
 	// 阻塞主进程
 	network.ServerWaitFlag.Wait()
-}
-
-func runServer() {
-	common.Module.ServerTCP().Listen()
-	common.Module.ServerWS().Listen()
 }
 
 func listenChannelStatus() {

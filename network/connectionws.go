@@ -65,12 +65,19 @@ func (c *ConnectionWS) StartWriter(data []byte) {
 }
 
 func (c *ConnectionWS) Start(readerHandler func(), writerHandler func(data []byte)) {
+	// 将新建的连接添加到所属Server的连接管理器内
+	c.Server.GetConnMgr().Add(c)
 	c.Connection.Start(readerHandler, writerHandler)
 }
 
 func (c *ConnectionWS) Stop() {
-	_ = c.conn.Close()
+	if c.isClosed {
+		return
+	}
 	c.Connection.Stop()
+	_ = c.conn.Close()
+	// 将连接从连接管理器中删除
+	c.Server.GetConnMgr().Remove(c)
 }
 
 func (c *ConnectionWS) RemoteAddrStr() string {

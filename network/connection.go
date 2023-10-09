@@ -31,8 +31,6 @@ func (c *Connection) StartWriter(_ []byte) {}
 
 func (c *Connection) Start(readerHandler func(), writerHandler func(data []byte)) {
 	defer c.Stop()
-	// 将新建的连接添加到所属Server的连接管理器内
-	c.Server.GetConnMgr().Add(c)
 
 	// 开启读协程
 	go func(c *Connection, readerHandler func()) {
@@ -66,9 +64,6 @@ func (c *Connection) Stop() {
 	c.isClosed = true
 	// 通知关闭该连接的监听
 	c.exitCtxCancel()
-
-	// 将连接从连接管理器中删除
-	c.Server.GetConnMgr().Remove(c)
 
 	// 关闭该连接管道
 	close(c.msgBuffChan)

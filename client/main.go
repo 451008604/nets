@@ -20,7 +20,7 @@ var waitGroup = sync.WaitGroup{}
 
 func main() {
 	logs.SetPrintMode(true)
-	api.RegisterRouterClient(network.GetInstanceMsgHandler())
+	api.RegisterRouterClient()
 
 	for i := 0; i < 1; i++ {
 		waitGroup.Add(1)

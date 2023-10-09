@@ -14,7 +14,6 @@ import (
 )
 
 var jsonsPath = "./config/jsons/"
-var remoteConfigAddress = ""
 
 type GlobalConf struct {
 	Debug            bool
@@ -45,9 +44,9 @@ type Database struct {
 	Password string
 }
 
-var conf GlobalConf
+var conf *GlobalConf
 
-func InitServerConfig() {
+func initServerConfig(remoteAddress string) {
 	viper.SetConfigType("toml")
 	// 注册需要监控的配置文件
 	viper.SetConfigFile("./config.toml")
@@ -65,8 +64,8 @@ func InitServerConfig() {
 	// 初始化配置内容
 	var configByte []byte
 	var err error
-	if remoteConfigAddress != "" {
-		configByte, err = GetRemoteConfigData("./config.toml")
+	if remoteAddress != "" {
+		configByte, err = GetRemoteConfigData(remoteAddress, "config.toml")
 	} else {
 		configByte, err = os.ReadFile("./config.toml")
 	}
@@ -84,15 +83,14 @@ func loadServerConfig() {
 
 // GetGlobalObject 获取全局配置对象
 func GetGlobalObject() GlobalConf {
-	return conf
+	if conf == nil {
+		initServerConfig("http://101.43.0.205:6001")
+	}
+	return *conf
 }
 
-func SetRemoteConfigAddress(address string) {
-	remoteConfigAddress = address
-}
-
-func GetRemoteConfigData(fileName string) ([]byte, error) {
-	resp, err := http.Get(remoteConfigAddress + "/configFile?fileName=" + fileName)
+func GetRemoteConfigData(remoteAddress, fileName string) ([]byte, error) {
+	resp, err := http.Get(remoteAddress + "/configFile?fileName=" + fileName)
 	if err != nil {
 		return nil, err
 	}

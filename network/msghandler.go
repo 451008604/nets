@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"github.com/451008604/socketServerFrame/config"
-	"github.com/451008604/socketServerFrame/logic"
 	"sync"
 
 	"github.com/451008604/socketServerFrame/iface"
@@ -16,6 +15,7 @@ type MsgHandler struct {
 	WorkerPoolSize int                        // 工作池的容量
 	WorkQueue      sync.Map                   // 工作池，每个工作队列中存放等待执行的任务
 	Apis           map[pb.MSgID]iface.IRouter // 存放每个MsgId所对应处理方法的map属性
+	Filter         iface.IFilter              // 消息过滤器
 }
 
 var instanceMsgHandler *MsgHandler
@@ -47,8 +47,8 @@ func (m *MsgHandler) DoMsgHandler(request iface.IRequest) {
 		return
 	}
 
-	// 未登录时不处理任何请求
-	if request.GetMsgID() != pb.MSgID_PlayerLogin_Req && logic.GetPlayer(request.GetConnection()).Data == nil {
+	// 过滤器校验
+	if m.Filter != nil && !m.Filter(request, msgData) {
 		return
 	}
 
@@ -100,4 +100,8 @@ func (m *MsgHandler) checkFreeWorkQueue() int {
 		return true
 	})
 	return freeWorkID
+}
+
+func (m *MsgHandler) SetFilter(fun iface.IFilter) {
+	m.Filter = fun
 }

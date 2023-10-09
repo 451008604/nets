@@ -2,6 +2,7 @@ package iface
 
 import (
 	pb "github.com/451008604/socketServerFrame/proto/bin"
+	"google.golang.org/protobuf/proto"
 )
 
 // 消息管理抽象层
@@ -12,4 +13,7 @@ type IMsgHandler interface {
 	AddRouter(msgId pb.MSgID, msg INewMsgStructTemplate, handler IReceiveMsgHandler)
 	// 将消息推入TaskQueue，等待Worker处理
 	SendMsgToTaskQueue(request IRequest)
+	// 设置过滤器
+	SetFilter(fun IFilter)
 }
+type IFilter func(request IRequest, msgData proto.Message) bool

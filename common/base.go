@@ -2,9 +2,10 @@ package common
 
 import (
 	"github.com/451008604/socketServerFrame/iface"
+	"github.com/451008604/socketServerFrame/network"
 )
 
-var Module = &staticModule{}
+var module = &staticModule{}
 
 type staticModule struct {
 	serverTCP iface.IServer        // 服务进程模块
@@ -12,26 +13,20 @@ type staticModule struct {
 	notify    iface.INotifyManager // 广播管理模块
 }
 
-func (s *staticModule) ServerTCP() iface.IServer {
-	return s.serverTCP
+func init() {
+	module.serverTCP = network.NewServerTCP()
+	module.serverWS = network.NewServerWS()
+	module.notify = network.NewNotifyManager()
 }
 
-func (s *staticModule) SetServerTCP(serverTCP iface.IServer) {
-	s.serverTCP = serverTCP
+func GetServerTCP() iface.IServer {
+	return module.serverTCP
 }
 
-func (s *staticModule) ServerWS() iface.IServer {
-	return s.serverWS
+func GetServerWS() iface.IServer {
+	return module.serverWS
 }
 
-func (s *staticModule) SetServerWS(serverWS iface.IServer) {
-	s.serverWS = serverWS
-}
-
-func (s *staticModule) Notify() iface.INotifyManager {
-	return s.notify
-}
-
-func (s *staticModule) SetNotify(notify iface.INotifyManager) {
-	s.notify = notify
+func GetNotify() iface.INotifyManager {
+	return module.notify
 }
