@@ -27,6 +27,7 @@ func NewConnectionTCP(server iface.IServer, conn *net.TCPConn) *ConnectionTCP {
 	c.msgBuffChan = make(chan []byte, config.GetGlobalObject().MaxMsgChanLen)
 	c.property = make(map[string]interface{})
 	c.propertyLock = sync.RWMutex{}
+	c.notifyGroupByID = sync.Map{}
 	return c
 }
 
@@ -73,6 +74,7 @@ func (c *ConnectionTCP) StartWriter(data []byte) {
 func (c *ConnectionTCP) Start(readerHandler func(), writerHandler func(data []byte)) {
 	// 将新建的连接添加到所属Server的连接管理器内
 	c.Server.GetConnMgr().Add(c)
+	c.JoinNotifyGroup(c, GetInstanceNotifyManager().GetGlobalNotify())
 	c.Connection.Start(readerHandler, writerHandler)
 }
 
@@ -84,6 +86,7 @@ func (c *ConnectionTCP) Stop() {
 	_ = c.conn.Close()
 	// 将连接从连接管理器中删除
 	c.Server.GetConnMgr().Remove(c)
+	c.ExitAllNotifyGroup()
 }
 
 func (c *ConnectionTCP) RemoteAddrStr() string {

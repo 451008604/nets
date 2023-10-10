@@ -8,15 +8,13 @@ import (
 var module = &staticModule{}
 
 type staticModule struct {
-	serverTCP iface.IServer        // 服务进程模块
-	serverWS  iface.IServer        // 服务进程模块
-	notify    iface.INotifyManager // 广播管理模块
+	serverTCP iface.IServer // 服务进程模块
+	serverWS  iface.IServer // 服务进程模块
 }
 
 func init() {
 	module.serverTCP = network.NewServerTCP()
 	module.serverWS = network.NewServerWS()
-	module.notify = network.NewNotifyManager()
 }
 
 func GetServerTCP() iface.IServer {
@@ -25,8 +23,4 @@ func GetServerTCP() iface.IServer {
 
 func GetServerWS() iface.IServer {
 	return module.serverWS
-}
-
-func GetNotify() iface.INotifyManager {
-	return module.notify
 }

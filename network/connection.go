@@ -13,16 +13,17 @@ import (
 )
 
 type Connection struct {
-	Server        iface.IServer          // 当前Conn所属的Server
-	ConnID        int                    // 当前连接的ID（SessionID）
-	isClosed      bool                   // 当前连接是否已关闭
-	MsgHandler    iface.IMsgHandler      // 消息管理MsgId和对应处理函数的消息管理模块
-	exitCtx       context.Context        // 管理连接的上下文
-	exitCtxCancel context.CancelFunc     // 连接关闭信号
-	msgBuffChan   chan []byte            // 用于读、写两个goroutine之间的消息通信
-	property      map[string]interface{} // 连接属性
-	propertyLock  sync.RWMutex           // 连接属性读写锁
-	player        interface{}            // 玩家数据
+	Server          iface.IServer          // 当前Conn所属的Server
+	ConnID          int                    // 当前连接的ID（SessionID）
+	isClosed        bool                   // 当前连接是否已关闭
+	MsgHandler      iface.IMsgHandler      // 消息管理MsgId和对应处理函数的消息管理模块
+	exitCtx         context.Context        // 管理连接的上下文
+	exitCtxCancel   context.CancelFunc     // 连接关闭信号
+	msgBuffChan     chan []byte            // 用于读、写两个goroutine之间的消息通信
+	property        map[string]interface{} // 连接属性
+	propertyLock    sync.RWMutex           // 连接属性读写锁
+	player          interface{}            // 玩家数据
+	notifyGroupByID sync.Map               // 通知组ID列表
 }
 
 func (c *Connection) StartReader() {}
@@ -53,6 +54,16 @@ func (c *Connection) Start(readerHandler func(), writerHandler func(data []byte)
 			writerHandler(data)
 		case <-c.exitCtx.Done():
 			return
+		default:
+			// 处理广播消息
+			c.notifyGroupByID.Range(func(key, value any) bool {
+				notify := value.(iface.INotify)
+				if v := notify.GetNotifyCtx().Value("notify"); v != nil {
+					data := v.(*NotifyData)
+					c.SendMsg(data.MsgID, data.MsgData)
+				}
+				return true
+			})
 		}
 	}
 }
@@ -80,7 +91,7 @@ func (c *Connection) RemoteAddrStr() string {
 func (c *Connection) SendMsg(msgId pb.MSgID, msgData proto.Message) {
 	msgByte := c.ProtocolToByte(msgData)
 	if c.isClosed {
-		logs.PrintLogInfo(fmt.Sprintf("连接已关闭导致消息发送失败 -> msgId:%v\tdata:%s", msgId, msgByte))
+		logs.PrintLogInfo(fmt.Sprintf("连接已关闭导致消息发送失败 -> msgId:%v\tdata:%v", msgId, msgByte))
 		return
 	}
 
@@ -124,6 +135,27 @@ func (c *Connection) SetPlayer(player interface{}) {
 
 func (c *Connection) GetPlayer() interface{} {
 	return c.player
+}
+
+func (c *Connection) JoinNotifyGroup(conn iface.IConnection, group iface.INotify) {
+	c.notifyGroupByID.Store(group.GetGroupID(), group)
+	group.SetNotifyTarget(conn)
+}
+
+func (c *Connection) ExitNotifyGroupByID(groupID int64) {
+	if value, loaded := c.notifyGroupByID.LoadAndDelete(groupID); loaded {
+		group := value.(iface.INotify)
+		group.DelNotifyTarget(c.GetConnID())
+	}
+}
+
+func (c *Connection) ExitAllNotifyGroup() {
+	c.notifyGroupByID.Range(func(key, value any) bool {
+		group := value.(iface.INotify)
+		group.DelNotifyTarget(c.GetConnID())
+		return true
+	})
+	c.notifyGroupByID = sync.Map{}
 }
 
 func (c *Connection) ProtocolToByte(str proto.Message) []byte {
