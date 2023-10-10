@@ -1,37 +1,45 @@
 package network
 
-import "github.com/451008604/socketServerFrame/iface"
+import (
+	"github.com/451008604/socketServerFrame/iface"
+	pb "github.com/451008604/socketServerFrame/proto/bin"
+	"github.com/google/uuid"
+	"google.golang.org/protobuf/proto"
+	"sync"
+)
 
 type Notify struct {
-	NotifyID   string
-	targetList []iface.IConnection
+	NotifyID   uint32
+	targetList sync.Map
+}
+
+func NewNotify() iface.INotify {
+	return &Notify{
+		NotifyID:   uuid.New().ID(),
+		targetList: sync.Map{},
+	}
+}
+
+func (n *Notify) GetNotifyID() uint32 {
+	return n.NotifyID
 }
 
 func (n *Notify) SetNotifyTarget(conn iface.IConnection) {
-	if n.HasNotifyTarget(conn) {
-		return
-	}
-	n.targetList = append(n.targetList, conn)
+	n.targetList.Store(conn.GetConnID(), conn)
 }
 
-func (n *Notify) GetNotifyTargets() (connList []iface.IConnection) {
-	return n.targetList
+func (n *Notify) GetNotifyTarget(connID uint32) (iface.IConnection, bool) {
+	value, ok := n.targetList.Load(connID)
+	return value.(iface.IConnection), ok
 }
 
-func (n *Notify) DelNotifyTarget(conn iface.IConnection) {
-	for i := range n.targetList {
-		if n.targetList[i] == conn {
-			n.targetList = append(n.targetList[:i], n.targetList[i+1:]...)
-			return
-		}
-	}
+func (n *Notify) DelNotifyTarget(connID uint32) {
+	n.targetList.Delete(connID)
 }
 
-func (n *Notify) HasNotifyTarget(conn iface.IConnection) bool {
-	for i := range n.targetList {
-		if n.targetList[i] == conn {
-			return true
-		}
-	}
-	return false
+func (n *Notify) NotifyAllTargets(msgID pb.MSgID, data proto.Message) {
+	n.targetList.Range(func(key, value any) bool {
+		value.(iface.IConnection).SendMsg(msgID, data)
+		return true
+	})
 }

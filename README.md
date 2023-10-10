@@ -4,17 +4,16 @@
 
 ✅ 采用工作池模式实现协程复用，用于降低并发下协程创建销毁对性能的开销，支持动态扩容  
 ✅ 使用 protobuf 且兼容 json 进行通讯，支持 grpc  
-✅ 日志的收集可通过飞书机器人实现 webhook 推送  
+✅ 通过飞书机器人实现 webhook 推送错误日志  
 ✅ 广播消息功能，可1对1、1对多、服务端主动进行群广播  
 ✅ 引入 [gorm](https://github.com/go-gorm/gorm) 用于数据库对增、删、改、查  
 ✅ 优化配置文件读取
 
 ## 使用 gentool 生成 dao 文件
-```shell
-go install gorm.io/gen/tools/gentool@latest
-```
 
-## grpc 配置
+> go install gorm.io/gen/tools/gentool@latest
+
+## 使用 protoc 生成 pb文件 和 grpc文件
 
 - 安装protoc编译器
 

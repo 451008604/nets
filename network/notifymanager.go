@@ -4,30 +4,34 @@ import (
 	"github.com/451008604/socketServerFrame/iface"
 	pb "github.com/451008604/socketServerFrame/proto/bin"
 	"google.golang.org/protobuf/proto"
+	"sync"
 )
 
 type NotifyManager struct {
-	notifyList map[string]iface.INotify
+	notifyList sync.Map //  map[string]iface.INotify
 }
 
 func NewNotifyManager() iface.INotifyManager {
 	return &NotifyManager{
-		notifyList: map[string]iface.INotify{},
+		notifyList: sync.Map{},
 	}
 }
 
-func (n *NotifyManager) GetNotifyGroup() map[string]iface.INotify {
-	return n.notifyList
+func (n *NotifyManager) SetNotify(notify iface.INotify) {
+	n.notifyList.Store(notify.GetNotifyID(), notify)
 }
 
-func (n *NotifyManager) DelNotifyGroupByID(notifyID string) {
-	delete(n.notifyList, notifyID)
+func (n *NotifyManager) GetNotify(notifyID uint32) (any, bool) {
+	value, ok := n.notifyList.Load(notifyID)
+	return value.(iface.INotify), ok
 }
 
-func (n *NotifyManager) SendNotifyData(notifyID string, msgID pb.MSgID, data proto.Message) {
-	if notify, ok := n.notifyList[notifyID]; ok {
-		for _, conn := range notify.GetNotifyTargets() {
-			go conn.SendMsg(msgID, data)
-		}
+func (n *NotifyManager) DelNotifyByID(notifyID uint32) {
+	n.notifyList.Delete(notifyID)
+}
+
+func (n *NotifyManager) SendNotifyData(notifyID uint32, msgID pb.MSgID, data proto.Message) {
+	if notify, ok := n.GetNotify(notifyID); ok {
+		notify.(iface.INotify).NotifyAllTargets(msgID, data)
 	}
 }
