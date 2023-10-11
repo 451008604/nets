@@ -36,12 +36,13 @@ type IConnection interface {
 	// Deprecated: 不建议直接调用。应通过`logic.GetPlayer`获取 conn 绑定的 player 对象
 	GetPlayer() interface{}
 
-	// 加入通知组
-	JoinNotifyGroup(conn IConnection, group INotify)
-	// 根据ID退出通知组
-	ExitNotifyGroupByID(groupID int64)
-	// 退出所有通知组
-	ExitAllNotifyGroup()
+	SetNotifyGroupCh(notifyGroupCh IBroadcastData)
+	// 加入广播组
+	JoinBroadcastGroup(conn IConnection, group IBroadcast)
+	// 根据组ID退出广播组
+	ExitBroadcastGroupByID(groupID int64)
+	// 退出所有广播组
+	ExitAllBroadcastGroup()
 
 	// 协议转字节
 	ProtocolToByte(str proto.Message) []byte

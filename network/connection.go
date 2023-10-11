@@ -13,17 +13,18 @@ import (
 )
 
 type Connection struct {
-	Server          iface.IServer          // 当前Conn所属的Server
-	ConnID          int                    // 当前连接的ID（SessionID）
-	isClosed        bool                   // 当前连接是否已关闭
-	MsgHandler      iface.IMsgHandler      // 消息管理MsgId和对应处理函数的消息管理模块
-	exitCtx         context.Context        // 管理连接的上下文
-	exitCtxCancel   context.CancelFunc     // 连接关闭信号
-	msgBuffChan     chan []byte            // 用于读、写两个goroutine之间的消息通信
-	property        map[string]interface{} // 连接属性
-	propertyLock    sync.RWMutex           // 连接属性读写锁
-	player          interface{}            // 玩家数据
-	notifyGroupByID sync.Map               // 通知组ID列表
+	Server             iface.IServer             // 当前Conn所属的Server
+	ConnID             int                       // 当前连接的ID（SessionID）
+	isClosed           bool                      // 当前连接是否已关闭
+	MsgHandler         iface.IMsgHandler         // 消息管理MsgId和对应处理函数的消息管理模块
+	exitCtx            context.Context           // 管理连接的上下文
+	exitCtxCancel      context.CancelFunc        // 连接关闭信号
+	msgBuffChan        chan []byte               // 用于读、写两个goroutine之间的消息通信
+	property           map[string]interface{}    // 连接属性
+	propertyLock       sync.RWMutex              // 连接属性读写锁
+	player             interface{}               // 玩家数据
+	broadcastGroupByID sync.Map                  // 广播组列表
+	broadcastGroupCh   chan iface.IBroadcastData // 广播数据通道
 }
 
 func (c *Connection) StartReader() {}
@@ -52,18 +53,12 @@ func (c *Connection) Start(readerHandler func(), writerHandler func(data []byte)
 		case data := <-c.msgBuffChan:
 			// 调用注册方法写消息给客户端
 			writerHandler(data)
+
+		case data := <-c.broadcastGroupCh:
+			c.SendMsg(data.MsgID(), data.MsgData())
+
 		case <-c.exitCtx.Done():
 			return
-		default:
-			// 处理广播消息
-			c.notifyGroupByID.Range(func(key, value any) bool {
-				notify := value.(iface.INotify)
-				if v := notify.GetNotifyCtx().Value("notify"); v != nil {
-					data := v.(*NotifyData)
-					c.SendMsg(data.MsgID, data.MsgData)
-				}
-				return true
-			})
 		}
 	}
 }
@@ -82,6 +77,10 @@ func (c *Connection) Stop() {
 
 func (c *Connection) GetConnID() int {
 	return c.ConnID
+}
+
+func (c *Connection) SetNotifyGroupCh(broadcastGroupCh iface.IBroadcastData) {
+	c.broadcastGroupCh <- broadcastGroupCh
 }
 
 func (c *Connection) RemoteAddrStr() string {
@@ -137,25 +136,23 @@ func (c *Connection) GetPlayer() interface{} {
 	return c.player
 }
 
-func (c *Connection) JoinNotifyGroup(conn iface.IConnection, group iface.INotify) {
-	c.notifyGroupByID.Store(group.GetGroupID(), group)
-	group.SetNotifyTarget(conn)
+func (c *Connection) JoinBroadcastGroup(conn iface.IConnection, group iface.IBroadcast) {
+	c.broadcastGroupByID.Store(group.GetGroupID(), group)
+	group.SetBroadcastTarget(conn)
 }
 
-func (c *Connection) ExitNotifyGroupByID(groupID int64) {
-	if value, loaded := c.notifyGroupByID.LoadAndDelete(groupID); loaded {
-		group := value.(iface.INotify)
-		group.DelNotifyTarget(c.GetConnID())
+func (c *Connection) ExitBroadcastGroupByID(groupID int64) {
+	if value, loaded := c.broadcastGroupByID.LoadAndDelete(groupID); loaded {
+		value.(iface.IBroadcast).DelBroadcastTarget(c.GetConnID())
 	}
 }
 
-func (c *Connection) ExitAllNotifyGroup() {
-	c.notifyGroupByID.Range(func(key, value any) bool {
-		group := value.(iface.INotify)
-		group.DelNotifyTarget(c.GetConnID())
+func (c *Connection) ExitAllBroadcastGroup() {
+	c.broadcastGroupByID.Range(func(key, value any) bool {
+		value.(iface.IBroadcast).DelBroadcastTarget(c.GetConnID())
 		return true
 	})
-	c.notifyGroupByID = sync.Map{}
+	c.broadcastGroupByID = sync.Map{}
 }
 
 func (c *Connection) ProtocolToByte(str proto.Message) []byte {

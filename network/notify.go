@@ -1,56 +1,67 @@
 package network
 
 import (
-	"context"
 	"github.com/451008604/socketServerFrame/iface"
 	pb "github.com/451008604/socketServerFrame/proto/bin"
 	"google.golang.org/protobuf/proto"
 	"sync"
 )
 
-type NotifyData struct {
-	GroupID int64
-	MsgID   pb.MSgID
-	MsgData proto.Message
+type BroadcastData struct {
+	groupID int64
+	msgID   pb.MSgID
+	msgData proto.Message
 }
 
-type NotifyGroup struct {
+func (b *BroadcastData) GroupID() int64 {
+	return b.groupID
+}
+
+func (b *BroadcastData) SetGroupID(groupID int64) {
+	b.groupID = groupID
+}
+
+func (b *BroadcastData) MsgID() pb.MSgID {
+	return b.msgID
+}
+
+func (b *BroadcastData) SetMsgID(msgID pb.MSgID) {
+	b.msgID = msgID
+}
+
+func (b *BroadcastData) MsgData() proto.Message {
+	return b.msgData
+}
+
+func (b *BroadcastData) SetMsgData(msgData proto.Message) {
+	b.msgData = msgData
+}
+
+type BroadcastGroup struct {
 	groupID    int64
 	targetList sync.Map
-	notifyCtx  context.Context
 }
 
-func (n *NotifyGroup) GetGroupID() int64 {
+func (n *BroadcastGroup) GetGroupID() int64 {
 	return n.groupID
 }
 
-func (n *NotifyGroup) GetNotifyCtx() context.Context {
-	return n.notifyCtx
-}
-
-func (n *NotifyGroup) SetNotifyTarget(conn iface.IConnection) {
+func (n *BroadcastGroup) SetBroadcastTarget(conn iface.IConnection) {
 	n.targetList.Store(conn.GetConnID(), conn)
-
-	n.targetList.Range(func(key, value any) bool {
-		c := value.(iface.IConnection)
-		println(c.RemoteAddrStr())
-		return true
-	})
 }
 
-func (n *NotifyGroup) GetNotifyTarget(connID int) (iface.IConnection, bool) {
+func (n *BroadcastGroup) GetBroadcastTarget(connID int) (iface.IConnection, bool) {
 	value, ok := n.targetList.Load(connID)
 	return value.(iface.IConnection), ok
 }
 
-func (n *NotifyGroup) DelNotifyTarget(connID int) {
+func (n *BroadcastGroup) DelBroadcastTarget(connID int) {
 	n.targetList.Delete(connID)
 }
 
-func (n *NotifyGroup) NotifyAllTargets(msgID pb.MSgID, data proto.Message) {
-	n.notifyCtx = context.WithValue(context.Background(), "notify", &NotifyData{
-		GroupID: n.GetGroupID(),
-		MsgID:   msgID,
-		MsgData: data,
+func (n *BroadcastGroup) BroadcastAllTargets(msgID pb.MSgID, data proto.Message) {
+	n.targetList.Range(func(key, value any) bool {
+		value.(iface.IConnection).SetNotifyGroupCh(&BroadcastData{groupID: n.GetGroupID(), msgID: msgID, msgData: data})
+		return true
 	})
 }

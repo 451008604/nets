@@ -22,7 +22,7 @@ func main() {
 	logs.SetPrintMode(true)
 	api.RegisterRouterClient()
 
-	for i := 0; i < 1; i++ {
+	for i := 0; i < 100; i++ {
 		waitGroup.Add(1)
 
 		login, _ := proto.Marshal(&pb.PlayerLoginRequest{
@@ -81,11 +81,11 @@ func socketClient(msgByte []byte) {
 	// 发送消息
 	_, _ = conn.Write(msgByte)
 
-	rand.Seed(time.Now().UnixNano())
-	randomNumber := rand.Intn(5) + 10
-	time.Sleep(time.Second * time.Duration(randomNumber))
-	_ = conn.Close()
-	waitGroup.Done()
+	// rand.Seed(time.Now().UnixNano())
+	// randomNumber := rand.Intn(5) + 10
+	// time.Sleep(time.Second * time.Duration(randomNumber))
+	// _ = conn.Close()
+	// waitGroup.Done()
 }
 
 func webSocketClient(msgByte []byte) {

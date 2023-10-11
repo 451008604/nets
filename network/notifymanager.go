@@ -1,7 +1,6 @@
 package network
 
 import (
-	"context"
 	"github.com/451008604/socketServerFrame/iface"
 	pb "github.com/451008604/socketServerFrame/proto/bin"
 	"github.com/google/uuid"
@@ -9,50 +8,49 @@ import (
 	"sync"
 )
 
-type NotifyManager struct {
-	notifyList   sync.Map
-	globalNotify iface.INotify // 全局通知组
+type BroadcastManager struct {
+	notifyList      sync.Map
+	globalBroadcast iface.IBroadcast
 }
 
-var instanceNotifyManager *NotifyManager
-var instanceNotifyManagerOnce = sync.Once{}
+var insBroadcastManager *BroadcastManager
+var insBroadcastManagerOnce = sync.Once{}
 
-func GetInstanceNotifyManager() iface.INotifyManager {
-	instanceNotifyManagerOnce.Do(func() {
-		instanceNotifyManager = &NotifyManager{
+func GetInsBroadcastManager() iface.IBroadcastManager {
+	insBroadcastManagerOnce.Do(func() {
+		insBroadcastManager = &BroadcastManager{
 			notifyList: sync.Map{},
 		}
-		instanceNotifyManager.globalNotify = instanceNotifyManager.NewNotifyGroup()
+		insBroadcastManager.globalBroadcast = insBroadcastManager.NewBroadcastGroup()
 	})
-	return instanceNotifyManager
+	return insBroadcastManager
 }
 
-// 新建通知组
-func (n *NotifyManager) NewNotifyGroup() iface.INotify {
-	notify := &NotifyGroup{
+// 新建广播组
+func (n *BroadcastManager) NewBroadcastGroup() iface.IBroadcast {
+	broadcast := &BroadcastGroup{
 		groupID:    int64(10000000000) + int64(uuid.New().ID()),
 		targetList: sync.Map{},
-		notifyCtx:  context.Background(),
 	}
-	n.notifyList.Store(notify.GetGroupID(), notify)
-	return notify
+	n.notifyList.Store(broadcast.GetGroupID(), broadcast)
+	return broadcast
 }
 
-func (n *NotifyManager) GetGlobalNotify() iface.INotify {
-	return n.globalNotify
+func (n *BroadcastManager) GetGlobalBroadcast() iface.IBroadcast {
+	return n.globalBroadcast
 }
 
-func (n *NotifyManager) GetNotify(groupID int64) (any, bool) {
+func (n *BroadcastManager) GetBroadcast(groupID int64) (any, bool) {
 	value, ok := n.notifyList.Load(groupID)
-	return value.(iface.INotify), ok
+	return value.(iface.IBroadcast), ok
 }
 
-func (n *NotifyManager) DelNotifyByID(groupID int64) {
+func (n *BroadcastManager) DelBroadcastByID(groupID int64) {
 	n.notifyList.Delete(groupID)
 }
 
-func (n *NotifyManager) SendNotifyData(groupID int64, msgID pb.MSgID, data proto.Message) {
-	if notify, ok := n.GetNotify(groupID); ok {
-		notify.(iface.INotify).NotifyAllTargets(msgID, data)
+func (n *BroadcastManager) SendBroadcastData(groupID int64, msgID pb.MSgID, data proto.Message) {
+	if broadcast, ok := n.GetBroadcast(groupID); ok {
+		broadcast.(iface.IBroadcast).BroadcastAllTargets(msgID, data)
 	}
 }
