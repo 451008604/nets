@@ -1,0 +1,29 @@
+version: "3"
+
+services:
+  # 配置服务
+  game_server:
+    image: ccr.ccs.tencentyun.com/451008604/game:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "17001:17001"
+      - "17002:17002"
+    environment:
+      # 远程配置服务器地址
+      REMOTE_CONFIG_SERVER_URL: "http://101.43.0.205:6001"
+    volumes:
+      - "~/docker_volumes/game/cert:/app/cert"
+      - "~/docker_volumes/game/config.toml:/app/config.toml"
+    restart: always
+    networks:
+      game_gateway:
+        ipv4_address: 172.60.0.2
+# 网关
+networks:
+  game_gateway:
+    ipam:
+      config:
+        - subnet: 172.60.0.1/16
+          gateway: 172.60.0.1

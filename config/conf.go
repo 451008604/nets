@@ -84,7 +84,8 @@ func loadServerConfig() {
 // GetGlobalObject 获取全局配置对象
 func GetGlobalObject() GlobalConf {
 	if conf == nil {
-		initServerConfig("http://101.43.0.205:6001")
+		serverUrl := os.Getenv("REMOTE_CONFIG_SERVER_URL")
+		initServerConfig(serverUrl)
 	}
 	return *conf
 }
