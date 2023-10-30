@@ -16,7 +16,7 @@ type IBroadcastManager interface {
 	// 根据组ID删除指定广播组
 	DelBroadcastByID(groupID int64)
 	// 向组内所有对象广播信息
-	SendBroadcastData(groupID int64, msgID pb.MSgID, data proto.Message)
+	SendBroadcastData(groupID int64, connID int, msgID pb.MSgID, data proto.Message)
 }
 
 // 广播组
@@ -30,7 +30,7 @@ type IBroadcast interface {
 	// 删除一个广播对象
 	DelBroadcastTarget(connID int)
 	// 广播所有对象
-	BroadcastAllTargets(msgID pb.MSgID, data proto.Message)
+	BroadcastAllTargets(connID int, msgID pb.MSgID, data proto.Message)
 }
 
 // 广播数据

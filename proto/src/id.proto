@@ -7,4 +7,6 @@ enum MSgID {
     PlayerLogin_Res = 1002;     // PlayerLoginRes  玩家登录回应
     Heartbeat_Req = 1003;       // HeartbeatReq    心跳请求
     Heartbeat_Res = 1004;       // HeartbeatRes    心跳响应
+    Broadcast_Req = 1005;       // BroadcastRequest
+    Broadcast_Res = 1006;       // BroadcastResponse
 }

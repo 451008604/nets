@@ -59,8 +59,11 @@ func (n *BroadcastGroup) DelBroadcastTarget(connID int) {
 	n.targetList.Delete(connID)
 }
 
-func (n *BroadcastGroup) BroadcastAllTargets(msgID pb.MSgID, data proto.Message) {
+func (n *BroadcastGroup) BroadcastAllTargets(connID int, msgID pb.MSgID, data proto.Message) {
 	n.targetList.Range(func(key, value any) bool {
+		if connID == key {
+			return true
+		}
 		value.(iface.IConnection).SetNotifyGroupCh(&BroadcastData{groupID: n.GetGroupID(), msgID: msgID, msgData: data})
 		return true
 	})

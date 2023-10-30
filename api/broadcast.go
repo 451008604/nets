@@ -1,0 +1,21 @@
+package api
+
+import (
+	"github.com/451008604/socketServerFrame/iface"
+	"github.com/451008604/socketServerFrame/network"
+	pb "github.com/451008604/socketServerFrame/proto/bin"
+	"google.golang.org/protobuf/proto"
+)
+
+func BroadcastHandler(c iface.IConnection, req proto.Message) {
+	msgReq := req.(*pb.BroadcastRequest)
+	msgRes := &pb.BroadcastResponse{
+		Result: proto.Uint32(0),
+		Str:    proto.String(msgReq.GetStr()),
+	}
+
+	network.GetInsBroadcastManager().GetGlobalBroadcast().BroadcastAllTargets(c.GetConnID(), pb.MSgID_Broadcast_Res, msgRes)
+
+	msgRes.Str = proto.String("广播成功 " + msgRes.GetStr())
+	// c.SendMsg(pb.MSgID_Broadcast_Res, msgRes)
+}

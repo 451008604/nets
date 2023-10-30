@@ -2,9 +2,7 @@ package logic
 
 import (
 	"github.com/451008604/socketServerFrame/common"
-	"github.com/451008604/socketServerFrame/dao/redis"
 	"github.com/451008604/socketServerFrame/iface"
-	"github.com/451008604/socketServerFrame/logs"
 	"time"
 )
 
@@ -22,7 +20,8 @@ func init() {
 
 // 获取连接对应的玩家
 func GetPlayer(conn iface.IConnection) *Player {
-	return conn.GetPlayer().(*Player)
+	player, _ := conn.GetPlayer().(*Player)
+	return player
 }
 
 // 建立连接时
@@ -34,7 +33,7 @@ func OnConnectionOpen(conn iface.IConnection) {
 // 断开连接时
 func OnConnectionClose(conn iface.IConnection) {
 	// 缓存玩家数据
-	logs.PrintLogErr(redis.Redis.SetPlayerInfo(GetPlayer(conn).Data.GetCommonData().GetUserUniID(), GetPlayer(conn).Data), "玩家数据缓存失败")
+	// logs.PrintLogErr(redis.Redis.SetPlayerInfo(GetPlayer(conn).Data.GetCommonData().GetUserUniID(), GetPlayer(conn).Data), "玩家数据缓存失败")
 }
 
 // 每秒钟执行

@@ -47,3 +47,11 @@ message HeartbeatRequest {
 message HeartbeatResponse {
     optional uint32 ServerTime = 1;         // 服务器时间（时间戳，秒）
 }
+
+message BroadcastRequest {
+    optional string Str = 1;
+}
+message BroadcastResponse {
+    optional uint32 Result = 1;
+    optional string Str = 2;
+}

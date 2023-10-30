@@ -441,6 +441,108 @@ func (x *HeartbeatResponse) GetServerTime() uint32 {
 	return 0
 }
 
+type BroadcastRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Str *string `protobuf:"bytes,1,opt,name=Str" json:"Str"`
+}
+
+func (x *BroadcastRequest) Reset() {
+	*x = BroadcastRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_player_proto_msgTypes[6]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *BroadcastRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BroadcastRequest) ProtoMessage() {}
+
+func (x *BroadcastRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_player_proto_msgTypes[6]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BroadcastRequest.ProtoReflect.Descriptor instead.
+func (*BroadcastRequest) Descriptor() ([]byte, []int) {
+	return file_player_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *BroadcastRequest) GetStr() string {
+	if x != nil && x.Str != nil {
+		return *x.Str
+	}
+	return ""
+}
+
+type BroadcastResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Result *uint32 `protobuf:"varint,1,opt,name=Result" json:"Result"`
+	Str    *string `protobuf:"bytes,2,opt,name=Str" json:"Str"`
+}
+
+func (x *BroadcastResponse) Reset() {
+	*x = BroadcastResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_player_proto_msgTypes[7]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *BroadcastResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BroadcastResponse) ProtoMessage() {}
+
+func (x *BroadcastResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_player_proto_msgTypes[7]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BroadcastResponse.ProtoReflect.Descriptor instead.
+func (*BroadcastResponse) Descriptor() ([]byte, []int) {
+	return file_player_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *BroadcastResponse) GetResult() uint32 {
+	if x != nil && x.Result != nil {
+		return *x.Result
+	}
+	return 0
+}
+
+func (x *BroadcastResponse) GetStr() string {
+	if x != nil && x.Str != nil {
+		return *x.Str
+	}
+	return ""
+}
+
 var File_player_proto protoreflect.FileDescriptor
 
 var file_player_proto_rawDesc = []byte{
@@ -498,7 +600,13 @@ var file_player_proto_rawDesc = []byte{
 	0x48, 0x65, 0x61, 0x72, 0x74, 0x62, 0x65, 0x61, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
 	0x65, 0x12, 0x1e, 0x0a, 0x0a, 0x53, 0x65, 0x72, 0x76, 0x65, 0x72, 0x54, 0x69, 0x6d, 0x65, 0x18,
 	0x01, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x0a, 0x53, 0x65, 0x72, 0x76, 0x65, 0x72, 0x54, 0x69, 0x6d,
-	0x65, 0x42, 0x07, 0x5a, 0x05, 0x2e, 0x2f, 0x3b, 0x70, 0x62,
+	0x65, 0x22, 0x24, 0x0a, 0x10, 0x42, 0x72, 0x6f, 0x61, 0x64, 0x63, 0x61, 0x73, 0x74, 0x52, 0x65,
+	0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x10, 0x0a, 0x03, 0x53, 0x74, 0x72, 0x18, 0x01, 0x20, 0x01,
+	0x28, 0x09, 0x52, 0x03, 0x53, 0x74, 0x72, 0x22, 0x3d, 0x0a, 0x11, 0x42, 0x72, 0x6f, 0x61, 0x64,
+	0x63, 0x61, 0x73, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x16, 0x0a, 0x06,
+	0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x06, 0x52, 0x65,
+	0x73, 0x75, 0x6c, 0x74, 0x12, 0x10, 0x0a, 0x03, 0x53, 0x74, 0x72, 0x18, 0x02, 0x20, 0x01, 0x28,
+	0x09, 0x52, 0x03, 0x53, 0x74, 0x72, 0x42, 0x07, 0x5a, 0x05, 0x2e, 0x2f, 0x3b, 0x70, 0x62,
 }
 
 var (
@@ -513,7 +621,7 @@ func file_player_proto_rawDescGZIP() []byte {
 	return file_player_proto_rawDescData
 }
 
-var file_player_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
+var file_player_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
 var file_player_proto_goTypes = []interface{}{
 	(*PBPlayerData)(nil),        // 0: pb.PBPlayerData
 	(*PBCommonData)(nil),        // 1: pb.PBCommonData
@@ -521,6 +629,8 @@ var file_player_proto_goTypes = []interface{}{
 	(*PlayerLoginResponse)(nil), // 3: pb.PlayerLoginResponse
 	(*HeartbeatRequest)(nil),    // 4: pb.HeartbeatRequest
 	(*HeartbeatResponse)(nil),   // 5: pb.HeartbeatResponse
+	(*BroadcastRequest)(nil),    // 6: pb.BroadcastRequest
+	(*BroadcastResponse)(nil),   // 7: pb.BroadcastResponse
 }
 var file_player_proto_depIdxs = []int32{
 	1, // 0: pb.PBPlayerData.CommonData:type_name -> pb.PBCommonData
@@ -610,6 +720,30 @@ func file_player_proto_init() {
 				return nil
 			}
 		}
+		file_player_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*BroadcastRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_player_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*BroadcastResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -617,7 +751,7 @@ func file_player_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_player_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   6,
+			NumMessages:   8,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

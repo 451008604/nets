@@ -28,8 +28,9 @@ func GetInsBroadcastManager() iface.IBroadcastManager {
 
 // 新建广播组
 func (n *BroadcastManager) NewBroadcastGroup() iface.IBroadcast {
+	rand, _ := uuid.NewRandom()
 	broadcast := &BroadcastGroup{
-		groupID:    int64(10000000000) + int64(uuid.New().ID()),
+		groupID:    int64(10000000000) + int64(rand.ID()),
 		targetList: sync.Map{},
 	}
 	n.notifyList.Store(broadcast.GetGroupID(), broadcast)
@@ -49,8 +50,8 @@ func (n *BroadcastManager) DelBroadcastByID(groupID int64) {
 	n.notifyList.Delete(groupID)
 }
 
-func (n *BroadcastManager) SendBroadcastData(groupID int64, msgID pb.MSgID, data proto.Message) {
+func (n *BroadcastManager) SendBroadcastData(groupID int64, connID int, msgID pb.MSgID, data proto.Message) {
 	if broadcast, ok := n.GetBroadcast(groupID); ok {
-		broadcast.(iface.IBroadcast).BroadcastAllTargets(msgID, data)
+		broadcast.(iface.IBroadcast).BroadcastAllTargets(connID, msgID, data)
 	}
 }
