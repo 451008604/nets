@@ -15,7 +15,7 @@ import (
 
 func LoginHandler(c iface.IConnection, message proto.Message) {
 	res := &pb.PlayerLoginResponse{
-		Result:  proto.Int32(common.ErrSuccess),
+		Result:  common.ErrSuccess,
 		ReqData: message.(*pb.PlayerLoginRequest),
 	}
 	var (
@@ -28,37 +28,37 @@ func LoginHandler(c iface.IConnection, message proto.Message) {
 	switch res.ReqData.GetLoginType() {
 	case common.LoginTypeQuick:
 		if len(res.ReqData.GetAccount()) < 3 || len(res.ReqData.GetAccount()) > 80 {
-			res.Result = proto.Int32(common.ErrAccountLengthErr)
+			res.Result = common.ErrAccountLengthErr
 			c.SendMsg(pb.MSgID_PlayerLogin_Res, res)
 			return
 		}
 		if !strings.HasPrefix(res.ReqData.GetAccount(), res.ReqData.GetLoginType()) {
-			res.ReqData.Account = proto.String(res.ReqData.GetLoginType() + "-" + res.ReqData.GetAccount())
+			res.ReqData.Account = res.ReqData.GetLoginType() + "-" + res.ReqData.GetAccount()
 		}
 		// 查询账号信息 or 注册新账号
 		register, account, user, err = sql.SQL.GetAccountInfo(res.ReqData.GetAccount(), res.ReqData.GetPassWord())
 		if err != nil {
 			if register == 0 {
-				res.Result = proto.Int32(common.ErrPlayerInfoFetchFailed)
+				res.Result = common.ErrPlayerInfoFetchFailed
 			} else {
-				res.Result = proto.Int32(common.ErrRegisterFailed)
+				res.Result = common.ErrRegisterFailed
 			}
 			c.SendMsg(pb.MSgID_PlayerLogin_Res, res)
 			return
 		}
 
 	default:
-		res.Result = proto.Int32(common.ErrLoginTypeIllegal)
+		res.Result = common.ErrLoginTypeIllegal
 		c.SendMsg(pb.MSgID_PlayerLogin_Res, res)
 		return
 	}
 	random, _ := uuid.NewRandom()
-	res.Register = proto.Uint32(register)
-	res.UserUniID = proto.Int64(user.UniID)
-	res.Account = proto.String(account.Account)
-	res.Password = proto.String(account.Password)
-	res.RegisterTime = proto.Uint32(uint32(user.RegisterTime))
-	res.RandomSeed = proto.Uint32(random.ID())
+	res.Register = register
+	res.UserUniID = user.UniID
+	res.Account = account.Account
+	res.Password = account.Password
+	res.RegisterTime = uint32(user.RegisterTime)
+	res.RandomSeed = random.ID()
 
 	// 初始化玩家数据
 	player := logic.GetPlayer(c)
@@ -67,7 +67,7 @@ func LoginHandler(c iface.IConnection, message proto.Message) {
 	player.Random = common.NewRandom(int(random.ID()))
 	// 读取缓存数据覆盖初始化数据
 	if redis.Redis.GetPlayerInfo(user.UniID, player.Data) != nil {
-		res.Result = proto.Int32(common.ErrPlayerInfoFetchFailed)
+		res.Result = common.ErrPlayerInfoFetchFailed
 		c.SendMsg(pb.MSgID_PlayerLogin_Res, res)
 		return
 	}

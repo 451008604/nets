@@ -1,42 +1,41 @@
-syntax = "proto2";
+syntax = "proto3";
 package pb;
 option go_package = "./;pb";
-
 
 message PBPlayerData {
     optional PBCommonData CommonData = 1;          // 公共数据
 }
 
 message PBCommonData {
-    optional int64 UserUniID = 1;       // 用户ID
-    optional string NickName = 2;       // 昵称
-    optional string HeadImage = 3;      // 头像
-    optional uint32 RegisterTime = 4;   // 注册时间
-    optional int32 PlayerLevel = 5;     // 等级
-    optional int32 GoldCoin = 6;        // 金币
-    optional int32 Diamond = 7;         // 钻石
-    optional int32 Strength = 8;        // 体力
-    optional int32 Experience = 9;      // 经验
+    int64 UserUniID = 1;       // 用户ID
+    string NickName = 2;       // 昵称
+    string HeadImage = 3;      // 头像
+    uint32 RegisterTime = 4;   // 注册时间
+    int32 PlayerLevel = 5;     // 等级
+    int32 GoldCoin = 6;        // 金币
+    int32 Diamond = 7;         // 钻石
+    int32 Strength = 8;        // 体力
+    int32 Experience = 9;      // 经验
 }
 
 // 玩家登录请求
 message PlayerLoginRequest {
-    optional string LoginType = 1;      // 登录类型(quick)
-    optional string Account = 2;        // 用户名
-    optional string PassWord = 3;       // 密码
-    optional string ChannelType = 4;    // 渠道标识
+    string LoginType = 1;      // 登录类型(quick)
+    string Account = 2;        // 用户名
+    string PassWord = 3;       // 密码
+    string ChannelType = 4;    // 渠道标识
 }
 
 // 玩家登录回应
 message PlayerLoginResponse {
-    optional int32 Result = 1;              // 错误码
-    optional PlayerLoginRequest ReqData = 2;// 请求数据
-    optional int64 UserUniID = 3;           // 用户ID
-    optional string Account = 4;            // 账号
-    optional string Password = 5;           // 密码
-    optional uint32 Register = 6;           // 是否新玩家
-    optional uint32 RegisterTime = 7;       // 注册时间
-    optional uint32 RandomSeed = 8;         // 随机种子
+    int32 Result = 1;              // 错误码
+    PlayerLoginRequest ReqData = 2;// 请求数据
+    int64 UserUniID = 3;           // 用户ID
+    string Account = 4;            // 账号
+    string Password = 5;           // 密码
+    uint32 Register = 6;           // 是否新玩家
+    uint32 RegisterTime = 7;       // 注册时间
+    uint32 RandomSeed = 8;         // 随机种子
 }
 
 // 心跳请求
@@ -45,13 +44,18 @@ message HeartbeatRequest {
 
 // 心跳响应
 message HeartbeatResponse {
-    optional uint32 ServerTime = 1;         // 服务器时间（时间戳，秒）
+    uint32 ServerTime = 1;         // 服务器时间（时间戳，秒）
 }
 
 message BroadcastRequest {
-    optional string Str = 1;
+    string Str = 1;
 }
 message BroadcastResponse {
-    optional uint32 Result = 1;
-    optional string Str = 2;
+    uint32 Result = 1;
+    string Str = 2;
+}
+
+message ServerErrNotify {
+    uint32 ErrCode = 1;
+    string ErrMsg = 2;
 }

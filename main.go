@@ -12,14 +12,6 @@ import (
 )
 
 func main() {
-	// 捕获异常
-	defer func() {
-		if err := recover(); err != nil {
-			logs.PrintLogPanic(fmt.Errorf("%v", err))
-			// 阻塞防止主线程退出中断异步打印日志
-			select {}
-		}
-	}()
 	go listenChannelStatus()
 
 	// 注册hook函数

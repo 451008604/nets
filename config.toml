@@ -37,9 +37,9 @@ TLSKeyPath = ""
 # 数据库配置
 [Redis]
 # redis地址
-Address = "127.0.0.1:6380"
+Address = ""
 # redis密码
-Password = "Abc123!@"
+Password = ""
 
 [Mysql]
 # mysql地址

@@ -16,12 +16,13 @@ type MsgHandler struct {
 	WorkQueue      sync.Map                   // 工作池，每个工作队列中存放等待执行的任务
 	Apis           map[pb.MSgID]iface.IRouter // 存放每个MsgId所对应处理方法的map属性
 	Filter         iface.IFilter              // 消息过滤器
+	ErrCapture     iface.IErrCapture          // 错误捕获器
 }
 
-var instanceMsgHandler *MsgHandler
+var instanceMsgHandler iface.IMsgHandler
 var instanceMsgHandlerOnce = sync.Once{}
 
-func GetInstanceMsgHandler() *MsgHandler {
+func GetInstanceMsgHandler() iface.IMsgHandler {
 	instanceMsgHandlerOnce.Do(func() {
 		instanceMsgHandler = &MsgHandler{
 			WorkerPoolSize: config.GetGlobalObject().WorkerPoolSize,
@@ -34,6 +35,8 @@ func GetInstanceMsgHandler() *MsgHandler {
 
 // 执行路由绑定的处理函数
 func (m *MsgHandler) DoMsgHandler(request iface.IRequest) {
+	defer m.msgErrCapture(request)
+
 	router, ok := m.Apis[request.GetMsgID()]
 	if !ok {
 		logs.PrintLogErr(errors.New(fmt.Sprintf("api msgID %v is not fund", request.GetMsgID())))
@@ -63,6 +66,10 @@ func (m *MsgHandler) AddRouter(msgId pb.MSgID, msg iface.INewMsgStructTemplate, 
 	m.Apis[msgId] = &BaseRouter{}
 	m.Apis[msgId].SetMsg(msg)
 	m.Apis[msgId].SetHandler(handler)
+}
+
+func (m *MsgHandler) GetApis() map[pb.MSgID]iface.IRouter {
+	return m.Apis
 }
 
 // 将消息发送到任务队列
@@ -104,4 +111,17 @@ func (m *MsgHandler) checkFreeWorkQueue() int {
 
 func (m *MsgHandler) SetFilter(fun iface.IFilter) {
 	m.Filter = fun
+}
+
+func (m *MsgHandler) SetErrCapture(fun iface.IErrCapture) {
+	m.ErrCapture = fun
+}
+
+func (m *MsgHandler) msgErrCapture(request iface.IRequest) {
+	if m.ErrCapture == nil {
+		return
+	}
+	if r := recover(); r != nil {
+		m.ErrCapture(request, r)
+	}
 }

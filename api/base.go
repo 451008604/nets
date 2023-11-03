@@ -1,6 +1,7 @@
 package api
 
 import (
+	"fmt"
 	"github.com/451008604/socketServerFrame/iface"
 	"github.com/451008604/socketServerFrame/logic"
 	pb "github.com/451008604/socketServerFrame/proto/bin"
@@ -19,4 +20,11 @@ func MsgFilter(c iface.IRequest, req proto.Message) bool {
 	}
 
 	return true
+}
+
+func MsgErrCapture(request iface.IRequest, r any) {
+	request.GetConnection().SendMsg(pb.MSgID_ServerErr_Notify, &pb.ServerErrNotify{
+		ErrCode: 1,
+		ErrMsg:  fmt.Sprintf("%v", r),
+	})
 }

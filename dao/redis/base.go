@@ -18,11 +18,13 @@ type Module struct {
 var Redis = newRedisModel()
 
 func newRedisModel() *Module {
+	redisConf := config.GetGlobalObject().Redis
+	if redisConf.Address == "" {
+		return nil
+	}
 	DB := &Module{}
 	DB.sql = sql.GetSqlQuery()
 	DB.player = NewPlayerInfo()
-
-	redisConf := config.GetGlobalObject().Redis
 	DB.Client = redis.NewClient(&redis.Options{
 		Addr:     redisConf.Address,
 		Username: redisConf.Username,

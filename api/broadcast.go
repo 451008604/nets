@@ -10,12 +10,12 @@ import (
 func BroadcastHandler(c iface.IConnection, req proto.Message) {
 	msgReq := req.(*pb.BroadcastRequest)
 	msgRes := &pb.BroadcastResponse{
-		Result: proto.Uint32(0),
-		Str:    proto.String(msgReq.GetStr()),
+		Result: 0,
+		Str:    msgReq.GetStr(),
 	}
 
 	network.GetInsBroadcastManager().GetGlobalBroadcast().BroadcastAllTargets(c.GetConnID(), pb.MSgID_Broadcast_Res, msgRes)
 
-	msgRes.Str = proto.String("广播成功 " + msgRes.GetStr())
+	msgRes.Str = "广播成功 " + msgRes.GetStr()
 	// c.SendMsg(pb.MSgID_Broadcast_Res, msgRes)
 }

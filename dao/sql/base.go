@@ -19,9 +19,11 @@ type Module struct {
 var SQL = newSqlModel()
 
 func newSqlModel() *Module {
-	DB := &Module{Ctx: context.Background()}
-
 	sqlConf := config.GetGlobalObject().Mysql
+	if sqlConf.Address == "" {
+		return nil
+	}
+	DB := &Module{Ctx: context.Background()}
 	db, err := gorm.Open(mysql.Open(fmt.Sprintf("%s:%s@tcp(%s)/house_new?charset=utf8mb4&parseTime=true&loc=Local", sqlConf.Username, sqlConf.Password, sqlConf.Address)), &gorm.Config{})
 	logs.PrintLogPanic(err)
 	// 开启调试模式

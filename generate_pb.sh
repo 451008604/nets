@@ -12,10 +12,8 @@ cd ../bin || exit
 # 使用 sed 指令删除所有 'omitempty'
 OS=$(uname)
 if [ "$OS" = "Darwin" ]; then
-  # Mac OS X
   sed -i '' "s/,omitempty//g" *.pb.go
-elif [ "$OS" = "Linux" ]; then
-  # GNU/Linux
+else
   sed -i "s/,omitempty//g" *.pb.go
 fi
 

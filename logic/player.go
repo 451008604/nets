@@ -5,7 +5,6 @@ import (
 	"github.com/451008604/socketServerFrame/dao/sqlmodel"
 	"github.com/451008604/socketServerFrame/iface"
 	pb "github.com/451008604/socketServerFrame/proto/bin"
-	"google.golang.org/protobuf/proto"
 )
 
 type Player struct {
@@ -25,8 +24,8 @@ func (p *Player) InitializationSaveData() *pb.PBPlayerData {
 }
 
 func (p *Player) SetPlayerData(user *sqlmodel.HouseUser) {
-	p.Data.CommonData.UserUniID = proto.Int64(user.UniID)
-	p.Data.CommonData.NickName = proto.String(user.Nickname)
-	p.Data.CommonData.HeadImage = proto.String(user.HeadImage)
-	p.Data.CommonData.RegisterTime = proto.Uint32(uint32(user.RegisterTime))
+	p.Data.CommonData.UserUniID = user.UniID
+	p.Data.CommonData.NickName = user.Nickname
+	p.Data.CommonData.HeadImage = user.HeadImage
+	p.Data.CommonData.RegisterTime = uint32(user.RegisterTime)
 }

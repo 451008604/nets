@@ -22,14 +22,14 @@ func main() {
 	logs.SetPrintMode(true)
 	api.RegisterRouterClient()
 
-	for i := 0; i < 100; i++ {
+	for i := 0; i < 1; i++ {
 		waitGroup.Add(1)
 
 		login, _ := proto.Marshal(&pb.PlayerLoginRequest{
-			LoginType:   proto.String("quick"),
-			Account:     proto.String("eric" + strconv.Itoa(i)),
-			PassWord:    proto.String(""),
-			ChannelType: proto.String("2"),
+			LoginType:   "quick",
+			Account:     "eric" + strconv.Itoa(i),
+			PassWord:    "",
+			ChannelType: "2",
 		})
 		msg := network.NewDataPack().Pack(network.NewMsgPackage(pb.MSgID_PlayerLogin_Req, login))
 
@@ -68,7 +68,7 @@ func socketClient(msgByte []byte) {
 				continue
 			}
 
-			router := network.GetInstanceMsgHandler().Apis[pb.MSgID(msgData.GetMsgId())]
+			router := network.GetInstanceMsgHandler().GetApis()[pb.MSgID(msgData.GetMsgId())]
 			msg := router.GetNewMsg()
 			if err = proto.Unmarshal(msgData.GetData(), msg); err != nil {
 				println(err.Error())

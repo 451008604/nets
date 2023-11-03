@@ -18,10 +18,10 @@ type ConnManager struct {
 	onConnClose     func(connection iface.IConnection) // 该Server连接断开时的Hook函数
 }
 
-var instanceConnManager *ConnManager
+var instanceConnManager iface.IConnManager
 var instanceConnManagerOnce = sync.Once{}
 
-func GetInstanceConnManager() *ConnManager {
+func GetInstanceConnManager() iface.IConnManager {
 	instanceConnManagerOnce.Do(func() {
 		instanceConnManager = &ConnManager{
 			connections:     map[int]iface.IConnection{},
