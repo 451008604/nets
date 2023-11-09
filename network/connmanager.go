@@ -3,7 +3,7 @@ package network
 import (
 	"container/list"
 	"errors"
-	"github.com/451008604/socketServerFrame/iface"
+	"github.com/451008604/nets/iface"
 	"sync"
 	"sync/atomic"
 )

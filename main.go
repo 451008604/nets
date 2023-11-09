@@ -2,11 +2,11 @@ package main
 
 import (
 	"fmt"
-	_ "github.com/451008604/socketServerFrame/api"
-	"github.com/451008604/socketServerFrame/common"
-	"github.com/451008604/socketServerFrame/logic"
-	"github.com/451008604/socketServerFrame/logs"
-	"github.com/451008604/socketServerFrame/network"
+	_ "github.com/451008604/nets/api"
+	"github.com/451008604/nets/common"
+	"github.com/451008604/nets/logic"
+	"github.com/451008604/nets/logs"
+	"github.com/451008604/nets/network"
 	"runtime"
 	"time"
 )

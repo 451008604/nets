@@ -1,8 +1,8 @@
 package network
 
 import (
-	"github.com/451008604/socketServerFrame/iface"
-	pb "github.com/451008604/socketServerFrame/proto/bin"
+	"github.com/451008604/nets/iface"
+	pb "github.com/451008604/nets/proto/bin"
 )
 
 type Request struct {

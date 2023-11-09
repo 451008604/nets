@@ -1,0 +1,15 @@
+<component name="ProjectRunConfigurationManager">
+    <configuration default="false" name="run nets" type="GoApplicationRunConfiguration" factoryName="Go Application">
+        <module name="socketServerFrame"/>
+        <working_directory value="$PROJECT_DIR$"/>
+        <envs>
+            <env name="REMOTE_CONFIG_SERVER_URL" value="http://101.43.0.205:6001"/>
+        </envs>
+        <kind value="PACKAGE"/>
+        <package value="github.com/451008604/nets"/>
+        <directory value="$PROJECT_DIR$"/>
+        <filePath value="$PROJECT_DIR$/main.go"/>
+        <output_directory value="$PROJECT_DIR$"/>
+        <method v="2"/>
+    </configuration>
+</component>

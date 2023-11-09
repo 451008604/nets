@@ -1,13 +1,13 @@
 package api
 
 import (
-	"github.com/451008604/socketServerFrame/common"
-	"github.com/451008604/socketServerFrame/dao/redis"
-	"github.com/451008604/socketServerFrame/dao/sql"
-	"github.com/451008604/socketServerFrame/dao/sqlmodel"
-	"github.com/451008604/socketServerFrame/iface"
-	"github.com/451008604/socketServerFrame/logic"
-	pb "github.com/451008604/socketServerFrame/proto/bin"
+	"github.com/451008604/nets/common"
+	"github.com/451008604/nets/dao/redis"
+	"github.com/451008604/nets/dao/sql"
+	"github.com/451008604/nets/dao/sqlmodel"
+	"github.com/451008604/nets/iface"
+	"github.com/451008604/nets/logic"
+	pb "github.com/451008604/nets/proto/bin"
 	"github.com/google/uuid"
 	"google.golang.org/protobuf/proto"
 	"strings"

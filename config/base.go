@@ -3,15 +3,15 @@ package config
 import (
 	"encoding/json"
 	"errors"
-	"github.com/451008604/socketServerFrame/logs"
-	"io/ioutil"
+	"github.com/451008604/nets/logs"
+	"os"
 	"strconv"
 	"strings"
 )
 
 // 获取配置数据到字节
 func getConfigDataToBytes(configPath string, configName string, configStruct any) any {
-	bytes, err := ioutil.ReadFile(configPath + configName)
+	bytes, err := os.ReadFile(configPath + configName)
 	logs.PrintLogPanic(err)
 	logs.PrintLogErr(json.Unmarshal(bytes, configStruct))
 	return configStruct

@@ -1,7 +1,7 @@
 package network
 
 import (
-	"github.com/451008604/socketServerFrame/iface"
+	"github.com/451008604/nets/iface"
 	"google.golang.org/protobuf/proto"
 )
 

@@ -1,6 +1,6 @@
 package network
 
-import pb "github.com/451008604/socketServerFrame/proto/bin"
+import pb "github.com/451008604/nets/proto/bin"
 
 type Message struct {
 	totalLen uint16 // 消息总长度

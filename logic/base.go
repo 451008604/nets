@@ -1,8 +1,8 @@
 package logic
 
 import (
-	"github.com/451008604/socketServerFrame/common"
-	"github.com/451008604/socketServerFrame/iface"
+	"github.com/451008604/nets/common"
+	"github.com/451008604/nets/iface"
 	"time"
 )
 

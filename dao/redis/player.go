@@ -3,8 +3,8 @@ package redis
 import (
 	"context"
 	"encoding/json"
-	"github.com/451008604/socketServerFrame/logs"
-	pb "github.com/451008604/socketServerFrame/proto/bin"
+	"github.com/451008604/nets/logs"
+	pb "github.com/451008604/nets/proto/bin"
 	"github.com/redis/go-redis/v9"
 	"strconv"
 )

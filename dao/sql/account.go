@@ -1,7 +1,7 @@
 package sql
 
 import (
-	"github.com/451008604/socketServerFrame/dao/sqlmodel"
+	"github.com/451008604/nets/dao/sqlmodel"
 	"github.com/google/uuid"
 	"time"
 )

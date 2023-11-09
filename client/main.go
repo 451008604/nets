@@ -2,10 +2,10 @@ package main
 
 import (
 	"fmt"
-	"github.com/451008604/socketServerFrame/api"
-	"github.com/451008604/socketServerFrame/logs"
-	"github.com/451008604/socketServerFrame/network"
-	pb "github.com/451008604/socketServerFrame/proto/bin"
+	"github.com/451008604/nets/api"
+	"github.com/451008604/nets/logs"
+	"github.com/451008604/nets/network"
+	pb "github.com/451008604/nets/proto/bin"
 	"github.com/gorilla/websocket"
 	"google.golang.org/protobuf/proto"
 	"io"
@@ -105,8 +105,8 @@ func webSocketClient(msgByte []byte) {
 	// 发送消息
 	_ = conn.WriteMessage(websocket.BinaryMessage, msgByte)
 
-	rand.Seed(time.Now().UnixNano())
-	randomNumber := rand.Intn(5) + 10
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+	randomNumber := r.Intn(5) + 10
 	time.Sleep(time.Second * time.Duration(randomNumber))
 	_ = conn.Close()
 	waitGroup.Done()

@@ -1,7 +1,7 @@
 package iface
 
 import (
-	pb "github.com/451008604/socketServerFrame/proto/bin"
+	pb "github.com/451008604/nets/proto/bin"
 	"google.golang.org/protobuf/proto"
 )
 

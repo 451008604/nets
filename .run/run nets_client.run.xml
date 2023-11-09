@@ -1,0 +1,13 @@
+<component name="ProjectRunConfigurationManager">
+    <configuration default="false" name="run nets_client" type="GoApplicationRunConfiguration"
+                   factoryName="Go Application">
+        <module name="socketServerFrame"/>
+        <working_directory value="$PROJECT_DIR$"/>
+        <kind value="PACKAGE"/>
+        <package value="github.com/451008604/nets/client"/>
+        <directory value="$PROJECT_DIR$"/>
+        <filePath value="$PROJECT_DIR$/client/main.go"/>
+        <output_directory value="$PROJECT_DIR$"/>
+        <method v="2"/>
+    </configuration>
+</component>

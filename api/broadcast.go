@@ -1,9 +1,9 @@
 package api
 
 import (
-	"github.com/451008604/socketServerFrame/iface"
-	"github.com/451008604/socketServerFrame/network"
-	pb "github.com/451008604/socketServerFrame/proto/bin"
+	"github.com/451008604/nets/iface"
+	"github.com/451008604/nets/network"
+	pb "github.com/451008604/nets/proto/bin"
 	"google.golang.org/protobuf/proto"
 )
 

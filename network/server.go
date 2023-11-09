@@ -1,8 +1,8 @@
 package network
 
 import (
-	"github.com/451008604/socketServerFrame/iface"
-	"github.com/451008604/socketServerFrame/logs"
+	"github.com/451008604/nets/iface"
+	"github.com/451008604/nets/logs"
 	"sync"
 )
 

@@ -1,10 +1,10 @@
 package logic
 
 import (
-	"github.com/451008604/socketServerFrame/common"
-	"github.com/451008604/socketServerFrame/dao/sqlmodel"
-	"github.com/451008604/socketServerFrame/iface"
-	pb "github.com/451008604/socketServerFrame/proto/bin"
+	"github.com/451008604/nets/common"
+	"github.com/451008604/nets/dao/sqlmodel"
+	"github.com/451008604/nets/iface"
+	pb "github.com/451008604/nets/proto/bin"
 )
 
 type Player struct {

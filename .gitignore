@@ -1,4 +1,6 @@
 /.idea/
 /logFiles/
-/go_build_socketServerFrame.exe
-/go_build_socketServerFrame_client.exe
+/run_nets
+/run_nets.exe
+/run_nets_client
+/run_nets_client.exe

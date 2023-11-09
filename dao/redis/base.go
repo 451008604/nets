@@ -2,9 +2,9 @@ package redis
 
 import (
 	"context"
-	"github.com/451008604/socketServerFrame/config"
-	"github.com/451008604/socketServerFrame/dao/sql"
-	"github.com/451008604/socketServerFrame/logs"
+	"github.com/451008604/nets/config"
+	"github.com/451008604/nets/dao/sql"
+	"github.com/451008604/nets/logs"
 	"github.com/redis/go-redis/v9"
 )
 

@@ -16,7 +16,7 @@ import (
 
 	"gorm.io/plugin/dbresolver"
 
-	"github.com/451008604/socketServerFrame/dao/sqlmodel"
+	"github.com/451008604/nets/dao/sqlmodel"
 )
 
 func newHouseCommon(db *gorm.DB, opts ...gen.DOOption) houseCommon {
