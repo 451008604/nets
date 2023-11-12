@@ -49,6 +49,8 @@ func (c *ConnManager) Add(conn iface.IConnection) {
 
 	c.connections[conn.GetConnID()] = conn
 
+	go conn.Start(conn.StartReader, conn.StartWriter)
+
 	// 调用打开连接hook函数
 	if c.onConnOpen != nil {
 		c.onConnOpen(conn)
@@ -68,6 +70,8 @@ func (c *ConnManager) Remove(conn iface.IConnection) {
 	if c.onConnClose != nil {
 		c.onConnClose(conn)
 	}
+
+	conn.Stop()
 }
 
 // 根据ConnID获取连接
@@ -89,13 +93,9 @@ func (c *ConnManager) Len() int {
 
 // 删除并停止所有连接
 func (c *ConnManager) ClearConn() {
-	c.connectionsLock.Lock()
-	defer c.connectionsLock.Unlock()
-
 	// 清理全部的connections信息
-	for connID, conn := range c.connections {
-		conn.Stop()
-		delete(c.connections, connID)
+	for _, conn := range c.connections {
+		c.Remove(conn)
 	}
 }
 

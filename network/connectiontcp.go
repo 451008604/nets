@@ -20,12 +20,12 @@ func NewConnectionTCP(server iface.IServer, conn *net.TCPConn) *ConnectionTCP {
 	c := &ConnectionTCP{}
 	c.Server = server
 	c.conn = conn
-	c.ConnID = server.GetConnMgr().NewConnID()
+	c.ConnID = GetInstanceConnManager().NewConnID()
 	c.isClosed = false
 	c.MsgHandler = GetInstanceMsgHandler()
 	c.exitCtx, c.exitCtxCancel = context.WithCancel(context.Background())
 	c.msgBuffChan = make(chan []byte, config.GetGlobalObject().MaxMsgChanLen)
-	c.property = make(map[string]interface{})
+	c.property = make(map[string]any)
 	c.propertyLock = sync.RWMutex{}
 	c.broadcastGroupByID = sync.Map{}
 	c.broadcastGroupCh = make(chan iface.IBroadcastData, 1000)
@@ -40,20 +40,20 @@ func (c *ConnectionTCP) StartReader() {
 		if err != io.EOF {
 			logs.PrintLogErr(err)
 		}
-		c.Stop()
+		GetInstanceConnManager().Remove(c)
 		return
 	}
 	// 通过消息头获取dataLen和Id
 	msgData := packet.Unpack(headData)
 	if msgData == nil {
-		c.Stop()
+		GetInstanceConnManager().Remove(c)
 		return
 	}
 	// 通过消息头获取消息body
 	if msgData.GetDataLen() > 0 {
 		msgData.SetData(make([]byte, msgData.GetDataLen()))
 		if _, err := io.ReadFull(c.conn, msgData.GetData()); logs.PrintLogErr(err) {
-			c.Stop()
+			GetInstanceConnManager().Remove(c)
 			return
 		}
 	}
@@ -73,8 +73,6 @@ func (c *ConnectionTCP) StartWriter(data []byte) {
 }
 
 func (c *ConnectionTCP) Start(readerHandler func(), writerHandler func(data []byte)) {
-	// 将新建的连接添加到所属Server的连接管理器内
-	c.Server.GetConnMgr().Add(c)
 	c.JoinBroadcastGroup(c, GetInsBroadcastManager().GetGlobalBroadcast())
 	c.Connection.Start(readerHandler, writerHandler)
 }
@@ -85,8 +83,6 @@ func (c *ConnectionTCP) Stop() {
 	}
 	c.Connection.Stop()
 	_ = c.conn.Close()
-	// 将连接从连接管理器中删除
-	c.Server.GetConnMgr().Remove(c)
 	c.ExitAllBroadcastGroup()
 }
 

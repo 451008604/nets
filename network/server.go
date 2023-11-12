@@ -28,7 +28,7 @@ func (s *Server) Start() {
 func (s *Server) Stop() {
 	logs.PrintLogInfo("服务关闭")
 
-	s.GetConnMgr().ClearConn()
+	GetInstanceConnManager().ClearConn()
 	s.isClose = true
 	ServerWaitFlag.Done()
 }
@@ -36,10 +36,6 @@ func (s *Server) Stop() {
 func (s *Server) Listen() bool {
 	s.isClose = false
 	return false
-}
-
-func (s *Server) GetConnMgr() iface.IConnManager {
-	return s.connMgr
 }
 
 // 获取封包/拆包工具

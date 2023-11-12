@@ -10,8 +10,6 @@ type IServer interface {
 	Stop()
 	// 开启业务服务
 	Listen() bool
-	// 获取连接管理器
-	GetConnMgr() IConnManager
 	// 获取封包/拆包工具
 	DataPacket() IDataPack
 }

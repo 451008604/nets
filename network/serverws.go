@@ -18,7 +18,6 @@ func NewServerWS() iface.IServer {
 	s.serverName = config.GetGlobalObject().AppName + "_ws"
 	s.ip = config.GetGlobalObject().ServerWS.Address
 	s.port = config.GetGlobalObject().ServerWS.Port
-	s.connMgr = GetInstanceConnManager()
 	s.dataPacket = NewDataPack()
 	return s
 }
@@ -47,13 +46,15 @@ func (s *ServerWS) Start() {
 		}
 
 		// 连接数量超过限制后，关闭新建立的连接
-		if s.GetConnMgr().Len() >= config.GetGlobalObject().MaxConn {
+		if GetInstanceConnManager().Len() >= config.GetGlobalObject().MaxConn {
 			_ = conn.Close()
+			return
 		}
 
 		// 建立新连接并监听客户端请求的消息
 		msgConn := NewConnectionWS(s, conn)
-		go msgConn.Start(msgConn.StartReader, msgConn.StartWriter)
+		// 将新建的连接添加到统一的连接管理器内
+		GetInstanceConnManager().Add(msgConn)
 		// 建立连接成功
 		logs.PrintLogInfo(fmt.Sprintf("成功建立新的客户端连接 -> %v connID - %v", msgConn.RemoteAddrStr(), msgConn.GetConnID()))
 	})

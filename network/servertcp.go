@@ -17,7 +17,6 @@ func NewServerTCP() iface.IServer {
 	s.serverName = config.GetGlobalObject().AppName + "_tcp"
 	s.ip = config.GetGlobalObject().ServerTCP.Address
 	s.port = config.GetGlobalObject().ServerTCP.Port
-	s.connMgr = GetInstanceConnManager()
 	s.dataPacket = NewDataPack()
 	return s
 }
@@ -62,14 +61,15 @@ func (s *ServerTCP) Start() {
 		}
 
 		// 连接数量超过限制后，关闭新建立的连接
-		if s.GetConnMgr().Len() >= config.GetGlobalObject().MaxConn {
+		if GetInstanceConnManager().Len() >= config.GetGlobalObject().MaxConn {
 			_ = conn.Close()
 			continue
 		}
 
 		// 建立新连接并监听客户端请求的消息
 		msgConn := NewConnectionTCP(s, conn)
-		go msgConn.Start(msgConn.StartReader, msgConn.StartWriter)
+		// 将新建的连接添加到统一的连接管理器内
+		GetInstanceConnManager().Add(msgConn)
 		// 建立连接成功
 		logs.PrintLogInfo(fmt.Sprintf("成功建立新的客户端连接 -> %v connID - %v", msgConn.RemoteAddrStr(), msgConn.GetConnID()))
 	}

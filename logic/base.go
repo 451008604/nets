@@ -20,14 +20,14 @@ func init() {
 
 // 获取连接对应的玩家
 func GetPlayer(conn iface.IConnection) *Player {
-	player, _ := conn.GetPlayer().(*Player)
+	player, _ := conn.GetProperty("player").(*Player)
 	return player
 }
 
 // 建立连接时
 func OnConnectionOpen(conn iface.IConnection) {
 	// 绑定 Player 和 Conn
-	conn.SetPlayer(&Player{Conn: conn})
+	conn.SetProperty("player", &Player{Conn: conn})
 }
 
 // 断开连接时

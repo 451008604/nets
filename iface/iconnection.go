@@ -25,16 +25,11 @@ type IConnection interface {
 	SendMsg(msgId pb.MSgID, msgData proto.Message)
 
 	// 设置连接属性
-	SetProperty(key string, value interface{})
+	SetProperty(key string, value any)
 	// 获取连接属性
-	GetProperty(key string) (value interface{})
+	GetProperty(key string) (value any)
 	// 删除连接属性
 	RemoveProperty(key string)
-
-	// 绑定 conn 对应的 player 对象
-	SetPlayer(player interface{})
-	// Deprecated: 不建议直接调用。应通过`logic.GetPlayer`获取 conn 绑定的 player 对象
-	GetPlayer() interface{}
 
 	SetNotifyGroupCh(notifyGroupCh IBroadcastData)
 	// 加入广播组

@@ -20,9 +20,8 @@ type Connection struct {
 	exitCtx            context.Context           // 管理连接的上下文
 	exitCtxCancel      context.CancelFunc        // 连接关闭信号
 	msgBuffChan        chan []byte               // 用于读、写两个goroutine之间的消息通信
-	property           map[string]interface{}    // 连接属性
+	property           map[string]any            // 连接属性
 	propertyLock       sync.RWMutex              // 连接属性读写锁
-	player             interface{}               // 玩家数据
 	broadcastGroupByID sync.Map                  // 广播组列表
 	broadcastGroupCh   chan iface.IBroadcastData // 广播数据通道
 }
@@ -103,14 +102,14 @@ func (c *Connection) SendMsg(msgId pb.MSgID, msgData proto.Message) {
 	c.msgBuffChan <- msg
 }
 
-func (c *Connection) SetProperty(key string, value interface{}) {
+func (c *Connection) SetProperty(key string, value any) {
 	c.propertyLock.Lock()
 	defer c.propertyLock.Unlock()
 
 	c.property[key] = value
 }
 
-func (c *Connection) GetProperty(key string) interface{} {
+func (c *Connection) GetProperty(key string) any {
 	c.propertyLock.RLock()
 	defer c.propertyLock.RUnlock()
 
@@ -126,14 +125,6 @@ func (c *Connection) RemoveProperty(key string) {
 	defer c.propertyLock.Unlock()
 
 	delete(c.property, key)
-}
-
-func (c *Connection) SetPlayer(player interface{}) {
-	c.player = player
-}
-
-func (c *Connection) GetPlayer() interface{} {
-	return c.player
 }
 
 func (c *Connection) JoinBroadcastGroup(conn iface.IConnection, group iface.IBroadcast) {

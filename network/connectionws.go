@@ -20,12 +20,12 @@ func NewConnectionWS(server iface.IServer, conn *websocket.Conn) *ConnectionWS {
 	c := &ConnectionWS{}
 	c.Server = server
 	c.conn = conn
-	c.ConnID = server.GetConnMgr().NewConnID()
+	c.ConnID = GetInstanceConnManager().NewConnID()
 	c.isClosed = false
 	c.MsgHandler = GetInstanceMsgHandler()
 	c.exitCtx, c.exitCtxCancel = context.WithCancel(context.Background())
 	c.msgBuffChan = make(chan []byte, config.GetGlobalObject().MaxMsgChanLen)
-	c.property = make(map[string]interface{})
+	c.property = make(map[string]any)
 	c.propertyLock = sync.RWMutex{}
 	c.broadcastGroupByID = sync.Map{}
 	c.broadcastGroupCh = make(chan iface.IBroadcastData, 1000)
@@ -38,14 +38,14 @@ func (c *ConnectionWS) StartReader() {
 		if !errors.As(err, &io.ErrUnexpectedEOF) {
 			logs.PrintLogErr(err)
 		}
-		c.Stop()
+		GetInstanceConnManager().Remove(c)
 		return
 	}
 
 	packet := c.Server.DataPacket()
 	msgData := packet.Unpack(msgByte)
 	if msgData == nil {
-		c.Stop()
+		GetInstanceConnManager().Remove(c)
 		return
 	}
 	if msgData.GetDataLen() > 0 {
@@ -67,8 +67,6 @@ func (c *ConnectionWS) StartWriter(data []byte) {
 }
 
 func (c *ConnectionWS) Start(readerHandler func(), writerHandler func(data []byte)) {
-	// 将新建的连接添加到所属Server的连接管理器内
-	c.Server.GetConnMgr().Add(c)
 	c.JoinBroadcastGroup(c, GetInsBroadcastManager().GetGlobalBroadcast())
 	c.Connection.Start(readerHandler, writerHandler)
 }
@@ -79,8 +77,6 @@ func (c *ConnectionWS) Stop() {
 	}
 	c.Connection.Stop()
 	_ = c.conn.Close()
-	// 将连接从连接管理器中删除
-	c.Server.GetConnMgr().Remove(c)
 	c.ExitAllBroadcastGroup()
 }
 
