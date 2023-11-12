@@ -3,11 +3,8 @@ package network
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"github.com/451008604/nets/config"
 	"github.com/451008604/nets/iface"
-	"github.com/451008604/nets/logs"
-	pb "github.com/451008604/nets/proto/bin"
 	"google.golang.org/protobuf/proto"
 	"sync"
 )
@@ -86,10 +83,9 @@ func (c *Connection) RemoteAddrStr() string {
 	return ""
 }
 
-func (c *Connection) SendMsg(msgId pb.MSgID, msgData proto.Message) {
+func (c *Connection) SendMsg(msgId int32, msgData proto.Message) {
 	msgByte := c.ProtocolToByte(msgData)
 	if c.isClosed {
-		logs.PrintLogInfo(fmt.Sprintf("连接已关闭导致消息发送失败 -> msgId:%v\tdata:%v", msgId, msgByte))
 		return
 	}
 
@@ -157,7 +153,6 @@ func (c *Connection) ProtocolToByte(str proto.Message) []byte {
 	}
 
 	if err != nil {
-		logs.PrintLogErr(err)
 		return []byte{}
 	}
 	return marshal
@@ -173,7 +168,6 @@ func (c *Connection) ByteToProtocol(byte []byte, target proto.Message) error {
 	}
 
 	if err != nil {
-		logs.PrintLogErr(err)
 		return err
 	}
 	return nil

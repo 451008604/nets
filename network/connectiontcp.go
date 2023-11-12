@@ -2,9 +2,9 @@ package network
 
 import (
 	"context"
+	"fmt"
 	"github.com/451008604/nets/config"
 	"github.com/451008604/nets/iface"
-	"github.com/451008604/nets/logs"
 	"io"
 	"net"
 	"sync"
@@ -38,7 +38,7 @@ func (c *ConnectionTCP) StartReader() {
 	headData := make([]byte, packet.GetHeadLen())
 	if _, err := io.ReadFull(c.conn, headData); err != nil {
 		if err != io.EOF {
-			logs.PrintLogErr(err)
+			fmt.Printf("tcp reader err %v\n", err)
 		}
 		GetInstanceConnManager().Remove(c)
 		return
@@ -52,7 +52,7 @@ func (c *ConnectionTCP) StartReader() {
 	// 通过消息头获取消息body
 	if msgData.GetDataLen() > 0 {
 		msgData.SetData(make([]byte, msgData.GetDataLen()))
-		if _, err := io.ReadFull(c.conn, msgData.GetData()); logs.PrintLogErr(err) {
+		if _, err := io.ReadFull(c.conn, msgData.GetData()); err != nil {
 			GetInstanceConnManager().Remove(c)
 			return
 		}
@@ -68,8 +68,9 @@ func (c *ConnectionTCP) StartReader() {
 }
 
 func (c *ConnectionTCP) StartWriter(data []byte) {
-	_, err := c.conn.Write(data)
-	logs.PrintLogErr(err, string(data))
+	if _, err := c.conn.Write(data); err != nil {
+		fmt.Printf("tcp writer err %v data %v\n", err, data)
+	}
 }
 
 func (c *ConnectionTCP) Start(readerHandler func(), writerHandler func(data []byte)) {

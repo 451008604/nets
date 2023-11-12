@@ -3,9 +3,9 @@ package network
 import (
 	"context"
 	"errors"
+	"fmt"
 	"github.com/451008604/nets/config"
 	"github.com/451008604/nets/iface"
-	"github.com/451008604/nets/logs"
 	"github.com/gorilla/websocket"
 	"io"
 	"sync"
@@ -36,7 +36,7 @@ func (c *ConnectionWS) StartReader() {
 	msgType, msgByte, err := c.conn.ReadMessage()
 	if err != nil || msgType != websocket.BinaryMessage {
 		if !errors.As(err, &io.ErrUnexpectedEOF) {
-			logs.PrintLogErr(err)
+			fmt.Printf("ws reader err %v\n", err)
 		}
 		GetInstanceConnManager().Remove(c)
 		return
@@ -62,8 +62,9 @@ func (c *ConnectionWS) StartReader() {
 }
 
 func (c *ConnectionWS) StartWriter(data []byte) {
-	err := c.conn.WriteMessage(websocket.BinaryMessage, data)
-	logs.PrintLogErr(err, string(data))
+	if err := c.conn.WriteMessage(websocket.BinaryMessage, data); err != nil {
+		fmt.Printf("ws writer err %v data %v\n", err, data)
+	}
 }
 
 func (c *ConnectionWS) Start(readerHandler func(), writerHandler func(data []byte)) {

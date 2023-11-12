@@ -2,7 +2,6 @@ package network
 
 import (
 	"github.com/451008604/nets/iface"
-	"github.com/451008604/nets/logs"
 	"sync"
 )
 
@@ -26,8 +25,6 @@ func (s *Server) Start() {
 }
 
 func (s *Server) Stop() {
-	logs.PrintLogInfo("服务关闭")
-
 	GetInstanceConnManager().ClearConn()
 	s.isClose = true
 	ServerWaitFlag.Done()

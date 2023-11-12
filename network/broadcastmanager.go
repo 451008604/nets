@@ -2,13 +2,13 @@ package network
 
 import (
 	"github.com/451008604/nets/iface"
-	pb "github.com/451008604/nets/proto/bin"
-	"github.com/google/uuid"
 	"google.golang.org/protobuf/proto"
 	"sync"
+	"sync/atomic"
 )
 
 type BroadcastManager struct {
+	idFlag          int64
 	notifyList      sync.Map
 	globalBroadcast iface.IBroadcast
 }
@@ -19,6 +19,7 @@ var insBroadcastManagerOnce = sync.Once{}
 func GetInsBroadcastManager() iface.IBroadcastManager {
 	insBroadcastManagerOnce.Do(func() {
 		insBroadcastManager = &BroadcastManager{
+			idFlag:     1000000000,
 			notifyList: sync.Map{},
 		}
 		insBroadcastManager.globalBroadcast = insBroadcastManager.NewBroadcastGroup()
@@ -28,9 +29,9 @@ func GetInsBroadcastManager() iface.IBroadcastManager {
 
 // 新建广播组
 func (n *BroadcastManager) NewBroadcastGroup() iface.IBroadcast {
-	rand, _ := uuid.NewRandom()
+	atomic.AddInt64(&n.idFlag, 1)
 	broadcast := &BroadcastGroup{
-		groupID:    int64(10000000000) + int64(rand.ID()),
+		groupID:    n.idFlag,
 		targetList: sync.Map{},
 	}
 	n.notifyList.Store(broadcast.GetGroupID(), broadcast)
@@ -50,7 +51,7 @@ func (n *BroadcastManager) DelBroadcastByID(groupID int64) {
 	n.notifyList.Delete(groupID)
 }
 
-func (n *BroadcastManager) SendBroadcastData(groupID int64, connID int, msgID pb.MSgID, data proto.Message) {
+func (n *BroadcastManager) SendBroadcastData(groupID int64, connID int, msgID int32, data proto.Message) {
 	if broadcast, ok := n.GetBroadcast(groupID); ok {
 		broadcast.(iface.IBroadcast).BroadcastAllTargets(connID, msgID, data)
 	}

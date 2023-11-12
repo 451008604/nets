@@ -1,7 +1,5 @@
 package network
 
-import pb "github.com/451008604/nets/proto/bin"
-
 type Message struct {
 	totalLen uint16 // 消息总长度
 	id       uint16 // 消息ID
@@ -10,7 +8,7 @@ type Message struct {
 }
 
 // 新建消息包
-func NewMsgPackage(id pb.MSgID, data []byte) *Message {
+func NewMsgPackage(id int32, data []byte) *Message {
 	return &Message{
 		id:       uint16(id),
 		dataLen:  uint16(len(data)),

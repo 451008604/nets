@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/451008604/nets/config"
 	"github.com/451008604/nets/iface"
-	"github.com/451008604/nets/logs"
 	"net"
 )
 
@@ -36,13 +35,15 @@ func (s *ServerTCP) Start() {
 
 	// 1.获取TCP的Address
 	addr, err = net.ResolveTCPAddr("tcp4", fmt.Sprintf("%s:%s", s.ip, s.port))
-	if logs.PrintLogErr(err, "服务启动失败：") {
+	if err != nil {
+		fmt.Printf("service startup failed %v\n", err)
 		return
 	}
 
 	// 2.监听服务地址
 	tcp, err = net.ListenTCP("tcp4", addr)
-	if logs.PrintLogErr(err, "监听服务地址失败：") {
+	if err != nil {
+		fmt.Printf("failed to listen to service address %v\n", err)
 		return
 	}
 
@@ -50,7 +51,8 @@ func (s *ServerTCP) Start() {
 	for {
 		// 等待客户端请求建立连接
 		conn, err = tcp.AcceptTCP()
-		if logs.PrintLogErr(err, "AcceptTCP ERR：") {
+		if err != nil {
+			fmt.Printf("accept tcp err %v\n", err)
 			continue
 		}
 
@@ -70,8 +72,6 @@ func (s *ServerTCP) Start() {
 		msgConn := NewConnectionTCP(s, conn)
 		// 将新建的连接添加到统一的连接管理器内
 		GetInstanceConnManager().Add(msgConn)
-		// 建立连接成功
-		logs.PrintLogInfo(fmt.Sprintf("成功建立新的客户端连接 -> %v connID - %v", msgConn.RemoteAddrStr(), msgConn.GetConnID()))
 	}
 }
 
@@ -79,6 +79,7 @@ func (s *ServerTCP) Listen() bool {
 	if config.GetGlobalObject().ServerTCP.Port != "" {
 		go s.Start()
 		s.Server.Start()
+		fmt.Printf("server start success %v:%v\n", s.serverName, s.port)
 		return true
 	}
 	return false

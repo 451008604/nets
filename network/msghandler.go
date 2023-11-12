@@ -1,22 +1,19 @@
 package network
 
 import (
-	"errors"
 	"fmt"
 	"github.com/451008604/nets/config"
 	"sync"
 
 	"github.com/451008604/nets/iface"
-	"github.com/451008604/nets/logs"
-	pb "github.com/451008604/nets/proto/bin"
 )
 
 type MsgHandler struct {
-	WorkerPoolSize int                        // 工作池的容量
-	WorkQueue      sync.Map                   // 工作池，每个工作队列中存放等待执行的任务
-	Apis           map[pb.MSgID]iface.IRouter // 存放每个MsgId所对应处理方法的map属性
-	Filter         iface.IFilter              // 消息过滤器
-	ErrCapture     iface.IErrCapture          // 错误捕获器
+	WorkerPoolSize int                     // 工作池的容量
+	WorkQueue      sync.Map                // 工作池，每个工作队列中存放等待执行的任务
+	Apis           map[int32]iface.IRouter // 存放每个MsgId所对应处理方法的map属性
+	Filter         iface.IFilter           // 消息过滤器
+	ErrCapture     iface.IErrCapture       // 错误捕获器
 }
 
 var instanceMsgHandler iface.IMsgHandler
@@ -26,7 +23,7 @@ func GetInstanceMsgHandler() iface.IMsgHandler {
 	instanceMsgHandlerOnce.Do(func() {
 		instanceMsgHandler = &MsgHandler{
 			WorkerPoolSize: config.GetGlobalObject().WorkerPoolSize,
-			Apis:           make(map[pb.MSgID]iface.IRouter),
+			Apis:           make(map[int32]iface.IRouter),
 			WorkQueue:      sync.Map{},
 		}
 	})
@@ -39,14 +36,15 @@ func (m *MsgHandler) DoMsgHandler(request iface.IRequest) {
 
 	router, ok := m.Apis[request.GetMsgID()]
 	if !ok {
-		logs.PrintLogErr(errors.New(fmt.Sprintf("api msgID %v is not fund", request.GetMsgID())))
+		fmt.Printf("api msgID is not found %v\n", request.GetMsgID())
 		return
 	}
 
 	// 对应的逻辑处理方法
 	msgData := router.GetNewMsg()
 	err := request.GetConnection().ByteToProtocol(request.GetData(), msgData)
-	if logs.PrintLogErr(err, fmt.Sprintf("api msgID %v parsing msgData:%v", request.GetMsgID(), request.GetData())) {
+	if err != nil {
+		fmt.Printf("api msgID %v parsing %v error %v\n", request.GetMsgID(), request.GetData(), err)
 		return
 	}
 
@@ -59,16 +57,16 @@ func (m *MsgHandler) DoMsgHandler(request iface.IRequest) {
 }
 
 // 添加路由，绑定处理函数
-func (m *MsgHandler) AddRouter(msgId pb.MSgID, msg iface.INewMsgStructTemplate, handler iface.IReceiveMsgHandler) {
+func (m *MsgHandler) AddRouter(msgId int32, msg iface.INewMsgStructTemplate, handler iface.IReceiveMsgHandler) {
 	if _, ok := m.Apis[msgId]; ok {
-		logs.PrintLogPanic(errors.New("消息ID重复绑定Handler"))
+		fmt.Printf("msgId is duplicate %v\n", msgId)
 	}
 	m.Apis[msgId] = &BaseRouter{}
 	m.Apis[msgId].SetMsg(msg)
 	m.Apis[msgId].SetHandler(handler)
 }
 
-func (m *MsgHandler) GetApis() map[pb.MSgID]iface.IRouter {
+func (m *MsgHandler) GetApis() map[int32]iface.IRouter {
 	return m.Apis
 }
 

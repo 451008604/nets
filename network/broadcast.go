@@ -2,14 +2,13 @@ package network
 
 import (
 	"github.com/451008604/nets/iface"
-	pb "github.com/451008604/nets/proto/bin"
 	"google.golang.org/protobuf/proto"
 	"sync"
 )
 
 type BroadcastData struct {
 	groupID int64
-	msgID   pb.MSgID
+	msgID   int32
 	msgData proto.Message
 }
 
@@ -21,11 +20,11 @@ func (b *BroadcastData) SetGroupID(groupID int64) {
 	b.groupID = groupID
 }
 
-func (b *BroadcastData) MsgID() pb.MSgID {
+func (b *BroadcastData) MsgID() int32 {
 	return b.msgID
 }
 
-func (b *BroadcastData) SetMsgID(msgID pb.MSgID) {
+func (b *BroadcastData) SetMsgID(msgID int32) {
 	b.msgID = msgID
 }
 
@@ -59,7 +58,7 @@ func (n *BroadcastGroup) DelBroadcastTarget(connID int) {
 	n.targetList.Delete(connID)
 }
 
-func (n *BroadcastGroup) BroadcastAllTargets(connID int, msgID pb.MSgID, data proto.Message) {
+func (n *BroadcastGroup) BroadcastAllTargets(connID int, msgID int32, data proto.Message) {
 	n.targetList.Range(func(key, value any) bool {
 		if connID == key {
 			return true

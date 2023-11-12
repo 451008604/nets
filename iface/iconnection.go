@@ -1,7 +1,6 @@
 package iface
 
 import (
-	pb "github.com/451008604/nets/proto/bin"
 	"google.golang.org/protobuf/proto"
 )
 
@@ -22,7 +21,7 @@ type IConnection interface {
 	RemoteAddrStr() string
 
 	// 发送消息给客户端
-	SendMsg(msgId pb.MSgID, msgData proto.Message)
+	SendMsg(msgId int32, msgData proto.Message)
 
 	// 设置连接属性
 	SetProperty(key string, value any)

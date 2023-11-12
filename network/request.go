@@ -2,7 +2,6 @@ package network
 
 import (
 	"github.com/451008604/nets/iface"
-	pb "github.com/451008604/nets/proto/bin"
 )
 
 type Request struct {
@@ -21,6 +20,6 @@ func (r *Request) GetData() []byte {
 }
 
 // 获取请求消息的ID
-func (r *Request) GetMsgID() pb.MSgID {
-	return pb.MSgID(r.msg.GetMsgId())
+func (r *Request) GetMsgID() int32 {
+	return int32(r.msg.GetMsgId())
 }
