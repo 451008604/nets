@@ -5,9 +5,9 @@ import (
 )
 
 type IConnection interface {
-	// 启动连接
+	// 启动连接(通过connmanager调用)
 	Start(readerHandler func(), writerHandler func(data []byte))
-	// 停止连接
+	// 停止连接(通过connmanager调用)
 	Stop()
 
 	// 启动接收消息协程

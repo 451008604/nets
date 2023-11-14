@@ -22,7 +22,6 @@ func NewConnectionTCP(server iface.IServer, conn *net.TCPConn) *ConnectionTCP {
 	c.conn = conn
 	c.ConnID = GetInstanceConnManager().NewConnID()
 	c.isClosed = false
-	c.MsgHandler = GetInstanceMsgHandler()
 	c.exitCtx, c.exitCtxCancel = context.WithCancel(context.Background())
 	c.msgBuffChan = make(chan []byte, config.GetGlobalObject().MaxMsgChanLen)
 	c.property = make(map[string]any)
@@ -61,9 +60,9 @@ func (c *ConnectionTCP) StartReader() {
 	// 封装请求数据传入处理函数
 	req := &Request{conn: c, msg: msgData}
 	if config.GetGlobalObject().WorkerPoolSize > 0 {
-		c.MsgHandler.SendMsgToTaskQueue(req)
+		GetInstanceMsgHandler().SendMsgToTaskQueue(req)
 	} else {
-		go c.MsgHandler.DoMsgHandler(req)
+		go GetInstanceMsgHandler().DoMsgHandler(req)
 	}
 }
 

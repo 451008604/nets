@@ -2,14 +2,22 @@ package main
 
 import (
 	"fmt"
+	"github.com/451008604/nets/config"
 	"github.com/451008604/nets/iface"
 	"github.com/451008604/nets/network"
+	"os"
 	"runtime"
 	"time"
 )
 
 func main() {
 	go listenChannelStatus()
+
+	readFile, err := os.ReadFile("conf.json")
+	if err != nil {
+		return
+	}
+	config.InitServerConfig(readFile)
 
 	// 注册hook函数
 	network.GetInstanceConnManager().OnConnOpen(func(conn iface.IConnection) {

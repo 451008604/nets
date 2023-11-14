@@ -2,7 +2,7 @@ package config
 
 import (
 	"encoding/json"
-	"os"
+	"fmt"
 )
 
 type GlobalConf struct {
@@ -24,24 +24,20 @@ type Server struct {
 	TLSKeyPath  string // ssl密钥
 }
 
-var conf GlobalConf
+var DefaultServerConfig GlobalConf
 
-func initServerConfig() {
-	readFile, err := os.ReadFile("conf.json")
-	if err != nil {
-		return
-	}
-
-	err = json.Unmarshal(readFile, &conf)
-	if err != nil {
+// 初始化服务器配置
+func InitServerConfig(readFile []byte) {
+	if err := json.Unmarshal(readFile, &DefaultServerConfig); err != nil {
+		fmt.Printf("server config unmarshal err :%v\n", err)
 		return
 	}
 }
 
 // GetGlobalObject 获取全局配置对象
 func GetGlobalObject() GlobalConf {
-	if conf.AppName == "" {
-		initServerConfig()
+	if DefaultServerConfig.AppName == "" {
+		fmt.Printf("server config not init\n")
 	}
-	return conf
+	return DefaultServerConfig
 }

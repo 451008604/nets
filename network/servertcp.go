@@ -79,7 +79,7 @@ func (s *ServerTCP) Listen() bool {
 	if config.GetGlobalObject().ServerTCP.Port != "" {
 		go s.Start()
 		s.Server.Start()
-		fmt.Printf("server start success %v:%v\n", s.serverName, s.port)
+		fmt.Printf("server starting [ %v:%v ]\n", s.serverName, s.port)
 		return true
 	}
 	return false

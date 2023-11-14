@@ -13,7 +13,6 @@ type Connection struct {
 	Server             iface.IServer             // 当前Conn所属的Server
 	ConnID             int                       // 当前连接的ID（SessionID）
 	isClosed           bool                      // 当前连接是否已关闭
-	MsgHandler         iface.IMsgHandler         // 消息管理MsgId和对应处理函数的消息管理模块
 	exitCtx            context.Context           // 管理连接的上下文
 	exitCtxCancel      context.CancelFunc        // 连接关闭信号
 	msgBuffChan        chan []byte               // 用于读、写两个goroutine之间的消息通信
