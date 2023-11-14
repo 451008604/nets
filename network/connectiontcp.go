@@ -23,7 +23,7 @@ func NewConnectionTCP(server iface.IServer, conn *net.TCPConn) *ConnectionTCP {
 	c.ConnID = GetInstanceConnManager().NewConnID()
 	c.isClosed = false
 	c.exitCtx, c.exitCtxCancel = context.WithCancel(context.Background())
-	c.msgBuffChan = make(chan []byte, config.GetGlobalObject().MaxMsgChanLen)
+	c.msgBuffChan = make(chan []byte, config.GetServerConf().MaxMsgChanLen)
 	c.property = make(map[string]any)
 	c.propertyLock = sync.RWMutex{}
 	c.broadcastGroupByID = sync.Map{}
@@ -59,7 +59,7 @@ func (c *ConnectionTCP) StartReader() {
 
 	// 封装请求数据传入处理函数
 	req := &Request{conn: c, msg: msgData}
-	if config.GetGlobalObject().WorkerPoolSize > 0 {
+	if config.GetServerConf().WorkerPoolSize > 0 {
 		GetInstanceMsgHandler().SendMsgToTaskQueue(req)
 	} else {
 		go GetInstanceMsgHandler().DoMsgHandler(req)

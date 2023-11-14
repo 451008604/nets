@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/451008604/nets/config"
 	"github.com/451008604/nets/iface"
@@ -17,7 +18,8 @@ func main() {
 	if err != nil {
 		return
 	}
-	config.InitServerConfig(readFile)
+	_ = json.Unmarshal(readFile, &config.DefaultServerConfig)
+	config.SetServerConf(config.DefaultServerConfig)
 
 	// 注册hook函数
 	network.GetInstanceConnManager().OnConnOpen(func(conn iface.IConnection) {

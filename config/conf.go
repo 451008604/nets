@@ -1,11 +1,10 @@
 package config
 
 import (
-	"encoding/json"
 	"fmt"
 )
 
-type GlobalConf struct {
+type ServerConf struct {
 	AppName          string // 服务名称
 	MaxPackSize      int    // 数据包最大长度
 	MaxConn          int    // 最大允许连接数
@@ -24,18 +23,15 @@ type Server struct {
 	TLSKeyPath  string // ssl密钥
 }
 
-var DefaultServerConfig GlobalConf
+var DefaultServerConfig ServerConf
 
 // 初始化服务器配置
-func InitServerConfig(readFile []byte) {
-	if err := json.Unmarshal(readFile, &DefaultServerConfig); err != nil {
-		fmt.Printf("server config unmarshal err :%v\n", err)
-		return
-	}
+func SetServerConf(conf ServerConf) {
+	DefaultServerConfig = conf
 }
 
-// GetGlobalObject 获取全局配置对象
-func GetGlobalObject() GlobalConf {
+// 获取全局配置对象
+func GetServerConf() ServerConf {
 	if DefaultServerConfig.AppName == "" {
 		fmt.Printf("server config not init\n")
 	}

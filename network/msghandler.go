@@ -22,7 +22,7 @@ var instanceMsgHandlerOnce = sync.Once{}
 func GetInstanceMsgHandler() iface.IMsgHandler {
 	instanceMsgHandlerOnce.Do(func() {
 		instanceMsgHandler = &MsgHandler{
-			WorkerPoolSize: config.GetGlobalObject().WorkerPoolSize,
+			WorkerPoolSize: config.GetServerConf().WorkerPoolSize,
 			Apis:           make(map[int32]iface.IRouter),
 			WorkQueue:      sync.Map{},
 		}
@@ -79,7 +79,7 @@ func (m *MsgHandler) SendMsgToTaskQueue(request iface.IRequest) {
 		workerID = freeWorkQueueID
 	}
 	// 对工作池进行扩容
-	workQueue, loaded := m.WorkQueue.LoadOrStore(workerID, make(chan iface.IRequest, config.GetGlobalObject().WorkerTaskMaxLen))
+	workQueue, loaded := m.WorkQueue.LoadOrStore(workerID, make(chan iface.IRequest, config.GetServerConf().WorkerTaskMaxLen))
 	if !loaded {
 		go m.startOneWorker(workQueue.(chan iface.IRequest))
 	}

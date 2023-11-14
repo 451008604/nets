@@ -145,7 +145,7 @@ func (c *Connection) ProtocolToByte(str proto.Message) []byte {
 	var err error
 	var marshal []byte
 
-	if config.GetGlobalObject().ProtocolIsJson {
+	if config.GetServerConf().ProtocolIsJson {
 		marshal, err = json.Marshal(str)
 	} else {
 		marshal, err = proto.Marshal(str)
@@ -160,7 +160,7 @@ func (c *Connection) ProtocolToByte(str proto.Message) []byte {
 func (c *Connection) ByteToProtocol(byte []byte, target proto.Message) error {
 	var err error
 
-	if config.GetGlobalObject().ProtocolIsJson {
+	if config.GetServerConf().ProtocolIsJson {
 		err = json.Unmarshal(byte, target)
 	} else {
 		err = proto.Unmarshal(byte, target)

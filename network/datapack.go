@@ -61,8 +61,8 @@ func (d *DataPack) Unpack(binaryData []byte) iface.IMessage {
 		return nil
 	}
 	// 检查数据长度是否超出限制
-	if config.GetGlobalObject().MaxPackSize > 0 && int(msgData.GetDataLen()) > config.GetGlobalObject().MaxPackSize {
-		fmt.Printf("received data length exceeds the limit. MaxPackSize %v, msgDataLen %v\n", config.GetGlobalObject().MaxPackSize, msgData.GetDataLen())
+	if config.GetServerConf().MaxPackSize > 0 && int(msgData.GetDataLen()) > config.GetServerConf().MaxPackSize {
+		fmt.Printf("received data length exceeds the limit. MaxPackSize %v, msgDataLen %v\n", config.GetServerConf().MaxPackSize, msgData.GetDataLen())
 		return nil
 	}
 	return msgData

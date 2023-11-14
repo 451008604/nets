@@ -13,9 +13,9 @@ type ServerTCP struct {
 
 func NewServerTCP() iface.IServer {
 	s := &ServerTCP{}
-	s.serverName = config.GetGlobalObject().AppName + "_tcp"
-	s.ip = config.GetGlobalObject().ServerTCP.Address
-	s.port = config.GetGlobalObject().ServerTCP.Port
+	s.serverName = config.GetServerConf().AppName + "_tcp"
+	s.ip = config.GetServerConf().ServerTCP.Address
+	s.port = config.GetServerConf().ServerTCP.Port
 	s.dataPacket = NewDataPack()
 	return s
 }
@@ -63,7 +63,7 @@ func (s *ServerTCP) Start() {
 		}
 
 		// 连接数量超过限制后，关闭新建立的连接
-		if GetInstanceConnManager().Len() >= config.GetGlobalObject().MaxConn {
+		if GetInstanceConnManager().Len() >= config.GetServerConf().MaxConn {
 			_ = conn.Close()
 			continue
 		}
@@ -76,7 +76,7 @@ func (s *ServerTCP) Start() {
 }
 
 func (s *ServerTCP) Listen() bool {
-	if config.GetGlobalObject().ServerTCP.Port != "" {
+	if config.GetServerConf().ServerTCP.Port != "" {
 		go s.Start()
 		s.Server.Start()
 		fmt.Printf("server starting [ %v:%v ]\n", s.serverName, s.port)

@@ -14,9 +14,9 @@ type ServerWS struct {
 
 func NewServerWS() iface.IServer {
 	s := &ServerWS{}
-	s.serverName = config.GetGlobalObject().AppName + "_ws"
-	s.ip = config.GetGlobalObject().ServerWS.Address
-	s.port = config.GetGlobalObject().ServerWS.Port
+	s.serverName = config.GetServerConf().AppName + "_ws"
+	s.ip = config.GetServerConf().ServerWS.Address
+	s.port = config.GetServerConf().ServerWS.Port
 	s.dataPacket = NewDataPack()
 	return s
 }
@@ -28,8 +28,8 @@ func (s *ServerWS) Start() {
 	}
 
 	var upgrade = websocket.Upgrader{
-		ReadBufferSize:  config.GetGlobalObject().MaxPackSize,
-		WriteBufferSize: config.GetGlobalObject().MaxPackSize,
+		ReadBufferSize:  config.GetServerConf().MaxPackSize,
+		WriteBufferSize: config.GetServerConf().MaxPackSize,
 	}
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		conn, err := upgrade.Upgrade(w, r, nil)
@@ -45,7 +45,7 @@ func (s *ServerWS) Start() {
 		}
 
 		// 连接数量超过限制后，关闭新建立的连接
-		if GetInstanceConnManager().Len() >= config.GetGlobalObject().MaxConn {
+		if GetInstanceConnManager().Len() >= config.GetServerConf().MaxConn {
 			_ = conn.Close()
 			return
 		}
@@ -56,7 +56,7 @@ func (s *ServerWS) Start() {
 		GetInstanceConnManager().Add(msgConn)
 	})
 
-	if certPath, keyPath := config.GetGlobalObject().ServerWS.TLSCertPath, config.GetGlobalObject().ServerWS.TLSKeyPath; certPath != "" && keyPath != "" {
+	if certPath, keyPath := config.GetServerConf().ServerWS.TLSCertPath, config.GetServerConf().ServerWS.TLSKeyPath; certPath != "" && keyPath != "" {
 		fmt.Printf("%v\n", http.ListenAndServeTLS(fmt.Sprintf("%s:%s", s.ip, s.port), certPath, keyPath, nil))
 	} else {
 		fmt.Printf("%v\n", http.ListenAndServe(fmt.Sprintf("%s:%s", s.ip, s.port), nil))
@@ -64,7 +64,7 @@ func (s *ServerWS) Start() {
 }
 
 func (s *ServerWS) Listen() bool {
-	if config.GetGlobalObject().ServerWS.Port != "" {
+	if config.GetServerConf().ServerWS.Port != "" {
 		go s.Start()
 		s.Server.Start()
 		fmt.Printf("server starting [ %v:%v ]\n", s.serverName, s.port)
