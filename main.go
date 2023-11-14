@@ -18,7 +18,7 @@ func main() {
 	if err != nil {
 		return
 	}
-	conf := config.ServerConf{}
+	conf := config.AppConf{}
 	_ = json.Unmarshal(readFile, &conf)
 	config.SetServerConf(conf)
 
