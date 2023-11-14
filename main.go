@@ -18,8 +18,9 @@ func main() {
 	if err != nil {
 		return
 	}
-	_ = json.Unmarshal(readFile, &config.DefaultServerConfig)
-	config.SetServerConf(config.DefaultServerConfig)
+	conf := config.ServerConf{}
+	_ = json.Unmarshal(readFile, &conf)
+	config.SetServerConf(conf)
 
 	// 注册hook函数
 	network.GetInstanceConnManager().OnConnOpen(func(conn iface.IConnection) {

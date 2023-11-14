@@ -23,17 +23,17 @@ type Server struct {
 	TLSKeyPath  string // ssl密钥
 }
 
-var DefaultServerConfig ServerConf
+var serverConf ServerConf
 
 // 初始化服务器配置
 func SetServerConf(conf ServerConf) {
-	DefaultServerConfig = conf
+	serverConf = conf
 }
 
 // 获取全局配置对象
 func GetServerConf() ServerConf {
-	if DefaultServerConfig.AppName == "" {
+	if serverConf.AppName == "" {
 		fmt.Printf("server config not init\n")
 	}
-	return DefaultServerConfig
+	return serverConf
 }
