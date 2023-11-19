@@ -24,8 +24,7 @@ func NewConnectionWS(server iface.IServer, conn *websocket.Conn) *ConnectionWS {
 	c.isClosed = false
 	c.exitCtx, c.exitCtxCancel = context.WithCancel(context.Background())
 	c.msgBuffChan = make(chan []byte, config.GetServerConf().MaxMsgChanLen)
-	c.property = make(map[string]any)
-	c.propertyLock = sync.RWMutex{}
+	c.property = sync.Map{}
 	c.broadcastGroupByID = sync.Map{}
 	c.broadcastGroupCh = make(chan iface.IBroadcastData, 1000)
 	return c
@@ -67,6 +66,8 @@ func (c *ConnectionWS) StartWriter(data []byte) {
 }
 
 func (c *ConnectionWS) Start(readerHandler func(), writerHandler func(data []byte)) {
+	defer GetInstanceConnManager().Remove(c)
+
 	c.JoinBroadcastGroup(c, GetInsBroadcastManager().GetGlobalBroadcast())
 	c.Connection.Start(readerHandler, writerHandler)
 }

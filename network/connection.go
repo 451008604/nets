@@ -16,8 +16,7 @@ type Connection struct {
 	exitCtx            context.Context           // 管理连接的上下文
 	exitCtxCancel      context.CancelFunc        // 连接关闭信号
 	msgBuffChan        chan []byte               // 用于读、写两个goroutine之间的消息通信
-	property           map[string]any            // 连接属性
-	propertyLock       sync.RWMutex              // 连接属性读写锁
+	property           sync.Map                  // 连接属性
 	broadcastGroupByID sync.Map                  // 广播组列表
 	broadcastGroupCh   chan iface.IBroadcastData // 广播数据通道
 }
@@ -27,8 +26,6 @@ func (c *Connection) StartReader() {}
 func (c *Connection) StartWriter(_ []byte) {}
 
 func (c *Connection) Start(readerHandler func(), writerHandler func(data []byte)) {
-	defer c.Stop()
-
 	// 开启读协程
 	go func(c *Connection, readerHandler func()) {
 		for {
@@ -98,17 +95,11 @@ func (c *Connection) SendMsg(msgId int32, msgData proto.Message) {
 }
 
 func (c *Connection) SetProperty(key string, value any) {
-	c.propertyLock.Lock()
-	defer c.propertyLock.Unlock()
-
-	c.property[key] = value
+	c.property.Store(key, value)
 }
 
 func (c *Connection) GetProperty(key string) any {
-	c.propertyLock.RLock()
-	defer c.propertyLock.RUnlock()
-
-	if value, ok := c.property[key]; ok {
+	if value, ok := c.property.Load(key); ok {
 		return value
 	} else {
 		return nil
@@ -116,10 +107,7 @@ func (c *Connection) GetProperty(key string) any {
 }
 
 func (c *Connection) RemoveProperty(key string) {
-	c.propertyLock.Lock()
-	defer c.propertyLock.Unlock()
-
-	delete(c.property, key)
+	c.property.Delete(key)
 }
 
 func (c *Connection) JoinBroadcastGroup(conn iface.IConnection, group iface.IBroadcast) {
