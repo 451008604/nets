@@ -4,7 +4,7 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
-// 消息管理抽象层
+// 消息处理器
 type IMsgHandler interface {
 	// 获取已注册的协议列表
 	GetApis() map[int32]IRouter

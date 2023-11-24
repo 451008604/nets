@@ -4,6 +4,7 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
+// 定义协议路由模板
 type IRouter interface {
 	// 设置消息体
 	SetMsg(msgStructTemplate INewMsgStructTemplate)
@@ -14,9 +15,5 @@ type IRouter interface {
 	// 执行处理函数
 	RunHandler(request IRequest, message proto.Message)
 }
-
-// IReceiveMsgHandler 逻辑处理模板函数
 type IReceiveMsgHandler func(con IConnection, message proto.Message)
-
-// INewMsgStructTemplate 空消息结构体模版
 type INewMsgStructTemplate func() proto.Message

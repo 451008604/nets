@@ -2,15 +2,20 @@ package network
 
 import (
 	"errors"
+	"fmt"
 	"github.com/451008604/nets/config"
 	"github.com/451008604/nets/iface"
+	"os"
+	"os/signal"
 	"sync"
 	"sync/atomic"
+	"syscall"
 )
 
 type ConnManager struct {
 	connID      int64                              // 用于客户端连接的自增ID
 	connections sync.Map                           // 管理的连接信息
+	signalCh    chan os.Signal                     // 处理系统信号
 	closeConnID chan int                           // 已关闭的连接ID集合
 	len         uint32                             // 连接数量
 	onConnOpen  func(connection iface.IConnection) // 该Server连接创建时的Hook函数
@@ -116,4 +121,18 @@ func (c *ConnManager) getClosingConn() int {
 	default:
 		return 0
 	}
+}
+
+func (c *ConnManager) OperatingSystemSignalHandler() {
+	if c.signalCh != nil {
+		return
+	}
+	c.signalCh = make(chan os.Signal, 1)
+	signal.Notify(c.signalCh, syscall.SIGINT, syscall.SIGTERM, syscall.SIGHUP, syscall.SIGQUIT, syscall.SIGKILL)
+	go func() {
+		sig := <-c.signalCh
+		fmt.Printf("Received signal: %v\n", sig)
+		c.ClearConn()
+		os.Exit(0)
+	}()
 }

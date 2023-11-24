@@ -1,5 +1,6 @@
 package iface
 
+// 定义消息模板
 type IMessage interface {
 	// 获取消息总长度
 	GetTotalLen() uint16
