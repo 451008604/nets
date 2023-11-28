@@ -1,15 +1,16 @@
 package network
 
-type Message struct {
+import "github.com/451008604/nets/iface"
+
+type message struct {
 	totalLen uint16 // 消息总长度
 	id       uint16 // 消息ID
 	dataLen  uint16 // 消息长度
 	data     []byte // 消息内容
 }
 
-// 新建消息包
-func NewMsgPackage(id int32, data []byte) *Message {
-	return &Message{
+func NewMsgPackage(id int32, data []byte) iface.IMessage {
+	return &message{
 		id:       uint16(id),
 		dataLen:  uint16(len(data)),
 		data:     data,
@@ -17,34 +18,34 @@ func NewMsgPackage(id int32, data []byte) *Message {
 	}
 }
 
-func (m *Message) GetDataLen() uint16 {
+func (m *message) GetDataLen() uint16 {
 	return m.dataLen
 }
 
-func (m *Message) SetDataLen(u uint16) {
+func (m *message) SetDataLen(u uint16) {
 	m.dataLen = u
 }
 
-func (m *Message) GetMsgId() uint16 {
+func (m *message) GetMsgId() uint16 {
 	return m.id
 }
 
-func (m *Message) SetMsgId(u uint16) {
+func (m *message) SetMsgId(u uint16) {
 	m.id = u
 }
 
-func (m *Message) GetData() []byte {
+func (m *message) GetData() []byte {
 	return m.data
 }
 
-func (m *Message) SetData(bytes []byte) {
+func (m *message) SetData(bytes []byte) {
 	m.data = bytes
 }
 
-func (m *Message) GetTotalLen() uint16 {
+func (m *message) GetTotalLen() uint16 {
 	return m.totalLen
 }
 
-func (m *Message) SetTotalLen(totalLen uint16) {
+func (m *message) SetTotalLen(totalLen uint16) {
 	m.totalLen = totalLen
 }

@@ -12,7 +12,7 @@ import (
 	"syscall"
 )
 
-type ConnManager struct {
+type connManager struct {
 	connID      int64                              // 用于客户端连接的自增ID
 	connections sync.Map                           // 管理的连接信息
 	signalCh    chan os.Signal                     // 处理系统信号
@@ -27,7 +27,7 @@ var instanceConnManagerOnce = sync.Once{}
 
 func GetInstanceConnManager() iface.IConnManager {
 	instanceConnManagerOnce.Do(func() {
-		instanceConnManager = &ConnManager{
+		instanceConnManager = &connManager{
 			connections: sync.Map{},
 			closeConnID: make(chan int, config.GetServerConf().MaxConn),
 		}
@@ -35,7 +35,7 @@ func GetInstanceConnManager() iface.IConnManager {
 	return instanceConnManager
 }
 
-func (c *ConnManager) NewConnID() int {
+func (c *connManager) NewConnID() int {
 	if connID := c.getClosingConn(); connID != 0 {
 		return connID
 	}
@@ -44,8 +44,7 @@ func (c *ConnManager) NewConnID() int {
 	return int(c.connID)
 }
 
-// 添加连接
-func (c *ConnManager) Add(conn iface.IConnection) {
+func (c *connManager) Add(conn iface.IConnection) {
 	c.connections.Store(conn.GetConnID(), conn)
 	atomic.AddUint32(&c.len, 1)
 
@@ -57,8 +56,7 @@ func (c *ConnManager) Add(conn iface.IConnection) {
 	}
 }
 
-// 删除连接
-func (c *ConnManager) Remove(conn iface.IConnection) {
+func (c *connManager) Remove(conn iface.IConnection) {
 	if value, ok := c.connections.Load(conn.GetConnID()); !ok || value != conn {
 		return
 	}
@@ -75,8 +73,7 @@ func (c *ConnManager) Remove(conn iface.IConnection) {
 	c.setClosingConn(conn.GetConnID())
 }
 
-// 根据ConnID获取连接
-func (c *ConnManager) Get(connID int) (iface.IConnection, error) {
+func (c *connManager) Get(connID int) (iface.IConnection, error) {
 	if value, ok := c.connections.Load(connID); ok {
 		return value.(iface.IConnection), nil
 	} else {
@@ -84,13 +81,11 @@ func (c *ConnManager) Get(connID int) (iface.IConnection, error) {
 	}
 }
 
-// 获取当前连接数量
-func (c *ConnManager) Len() int {
+func (c *connManager) Len() int {
 	return int(c.len)
 }
 
-// 删除并停止所有连接
-func (c *ConnManager) ClearConn() {
+func (c *connManager) ClearConn() {
 	// 清理全部的connections信息
 	c.connections.Range(func(key, value any) bool {
 		c.Remove(value.(iface.IConnection))
@@ -98,22 +93,20 @@ func (c *ConnManager) ClearConn() {
 	})
 }
 
-// 连接创建时的Hook函数
-func (c *ConnManager) OnConnOpen(fun func(conn iface.IConnection)) {
+func (c *connManager) OnConnOpen(fun func(conn iface.IConnection)) {
 	c.onConnOpen = fun
 }
 
-// 连接断开时的Hook函数
-func (c *ConnManager) OnConnClose(fun func(conn iface.IConnection)) {
+func (c *connManager) OnConnClose(fun func(conn iface.IConnection)) {
 	c.onConnClose = fun
 }
 
-func (c *ConnManager) setClosingConn(connID int) {
+func (c *connManager) setClosingConn(connID int) {
 	// 存入回收列表
 	c.closeConnID <- connID
 }
 
-func (c *ConnManager) getClosingConn() int {
+func (c *connManager) getClosingConn() int {
 	// 回收列表中存在则取出使用
 	select {
 	case connID := <-c.closeConnID:
@@ -123,7 +116,7 @@ func (c *ConnManager) getClosingConn() int {
 	}
 }
 
-func (c *ConnManager) OperatingSystemSignalHandler() {
+func (c *connManager) OperatingSystemSignalHandler() {
 	if c.signalCh != nil {
 		return
 	}

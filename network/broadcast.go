@@ -6,64 +6,64 @@ import (
 	"sync"
 )
 
-type BroadcastData struct {
+type broadcastData struct {
 	groupID int64
 	msgID   int32
 	msgData proto.Message
 }
 
-func (b *BroadcastData) GroupID() int64 {
+func (b *broadcastData) GroupID() int64 {
 	return b.groupID
 }
 
-func (b *BroadcastData) SetGroupID(groupID int64) {
+func (b *broadcastData) SetGroupID(groupID int64) {
 	b.groupID = groupID
 }
 
-func (b *BroadcastData) MsgID() int32 {
+func (b *broadcastData) MsgID() int32 {
 	return b.msgID
 }
 
-func (b *BroadcastData) SetMsgID(msgID int32) {
+func (b *broadcastData) SetMsgID(msgID int32) {
 	b.msgID = msgID
 }
 
-func (b *BroadcastData) MsgData() proto.Message {
+func (b *broadcastData) MsgData() proto.Message {
 	return b.msgData
 }
 
-func (b *BroadcastData) SetMsgData(msgData proto.Message) {
+func (b *broadcastData) SetMsgData(msgData proto.Message) {
 	b.msgData = msgData
 }
 
-type BroadcastGroup struct {
+type broadcastGroup struct {
 	groupID    int64
 	targetList sync.Map
 }
 
-func (n *BroadcastGroup) GetGroupID() int64 {
+func (n *broadcastGroup) GetGroupID() int64 {
 	return n.groupID
 }
 
-func (n *BroadcastGroup) SetBroadcastTarget(conn iface.IConnection) {
+func (n *broadcastGroup) SetBroadcastTarget(conn iface.IConnection) {
 	n.targetList.Store(conn.GetConnID(), conn)
 }
 
-func (n *BroadcastGroup) GetBroadcastTarget(connID int) (iface.IConnection, bool) {
+func (n *broadcastGroup) GetBroadcastTarget(connID int) (iface.IConnection, bool) {
 	value, ok := n.targetList.Load(connID)
 	return value.(iface.IConnection), ok
 }
 
-func (n *BroadcastGroup) DelBroadcastTarget(connID int) {
+func (n *broadcastGroup) DelBroadcastTarget(connID int) {
 	n.targetList.Delete(connID)
 }
 
-func (n *BroadcastGroup) BroadcastAllTargets(connID int, msgID int32, data proto.Message) {
+func (n *broadcastGroup) BroadcastAllTargets(connID int, msgID int32, data proto.Message) {
 	n.targetList.Range(func(key, value any) bool {
 		if connID == key {
 			return true
 		}
-		value.(iface.IConnection).SetNotifyGroupCh(&BroadcastData{groupID: n.GetGroupID(), msgID: msgID, msgData: data})
+		value.(iface.IConnection).SetNotifyGroupCh(&broadcastData{groupID: n.GetGroupID(), msgID: msgID, msgData: data})
 		return true
 	})
 }

@@ -8,12 +8,12 @@ import (
 	"net/http"
 )
 
-type ServerWS struct {
-	Server
+type serverWS struct {
+	server
 }
 
 func NewServerWS() iface.IServer {
-	s := &ServerWS{}
+	s := &serverWS{}
 	s.serverName = config.GetServerConf().AppName + "_ws"
 	s.ip = config.GetServerConf().ServerWS.Address
 	s.port = config.GetServerConf().ServerWS.Port
@@ -21,7 +21,7 @@ func NewServerWS() iface.IServer {
 	return s
 }
 
-func (s *ServerWS) Start() {
+func (s *serverWS) Start() {
 	if s.isClose {
 		s.isClose = false
 		return
@@ -63,10 +63,10 @@ func (s *ServerWS) Start() {
 	}
 }
 
-func (s *ServerWS) Listen() bool {
+func (s *serverWS) Listen() bool {
 	if config.GetServerConf().ServerWS.Port != "" {
 		go s.Start()
-		s.Server.Start()
+		s.server.Start()
 		fmt.Printf("server starting [ %v:%v ]\n", s.serverName, s.port)
 		return true
 	}

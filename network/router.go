@@ -5,24 +5,23 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
-// router基类
-type BaseRouter struct {
-	Message iface.INewMsgStructTemplate
-	Handler iface.IReceiveMsgHandler
+type baseRouter struct {
+	message iface.INewMsgStructTemplate
+	handler iface.IReceiveMsgHandler
 }
 
-func (b *BaseRouter) SetMsg(msgStructTemplate iface.INewMsgStructTemplate) {
-	b.Message = msgStructTemplate
+func (b *baseRouter) SetMsg(msgStructTemplate iface.INewMsgStructTemplate) {
+	b.message = msgStructTemplate
 }
 
-func (b *BaseRouter) GetNewMsg() proto.Message {
-	return b.Message()
+func (b *baseRouter) GetNewMsg() proto.Message {
+	return b.message()
 }
 
-func (b *BaseRouter) SetHandler(req iface.IReceiveMsgHandler) {
-	b.Handler = req
+func (b *baseRouter) SetHandler(req iface.IReceiveMsgHandler) {
+	b.handler = req
 }
 
-func (b *BaseRouter) RunHandler(request iface.IRequest, message proto.Message) {
-	b.Handler(request.GetConnection(), message)
+func (b *baseRouter) RunHandler(request iface.IRequest, message proto.Message) {
+	b.handler(request.GetConnection(), message)
 }

@@ -8,20 +8,18 @@ import (
 	"github.com/451008604/nets/iface"
 )
 
-type DataPack struct{}
+type dataPack struct{}
 
-// 新数据包
-func NewDataPack() *DataPack {
-	return &DataPack{}
+func NewDataPack() iface.IDataPack {
+	return &dataPack{}
 }
 
-func (d *DataPack) GetHeadLen() int {
+func (d *dataPack) GetHeadLen() int {
 	// totalLen(2字节) + id int(2字节) + dataLen int(2字节)
 	return 6
 }
 
-// 封包
-func (d *DataPack) Pack(msg iface.IMessage) []byte {
+func (d *dataPack) Pack(msg iface.IMessage) []byte {
 	dataBuff := bytes.NewBuffer([]byte{})
 
 	// 写totalLen
@@ -43,10 +41,9 @@ func (d *DataPack) Pack(msg iface.IMessage) []byte {
 	return dataBuff.Bytes()
 }
 
-// 拆包(只获取到包头Id,dataLen)
-func (d *DataPack) Unpack(binaryData []byte) iface.IMessage {
+func (d *dataPack) Unpack(binaryData []byte) iface.IMessage {
 	dataBuff := bytes.NewReader(binaryData)
-	msgData := &Message{}
+	msgData := &message{}
 
 	// 读totalLen
 	if binary.Read(dataBuff, binary.LittleEndian, &msgData.totalLen) != nil {

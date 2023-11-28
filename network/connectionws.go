@@ -11,16 +11,16 @@ import (
 	"sync"
 )
 
-type ConnectionWS struct {
-	Connection
+type connectionWS struct {
+	connection
 	conn *websocket.Conn
 }
 
-func NewConnectionWS(server iface.IServer, conn *websocket.Conn) *ConnectionWS {
-	c := &ConnectionWS{}
-	c.Server = server
+func NewConnectionWS(server iface.IServer, conn *websocket.Conn) iface.IConnection {
+	c := &connectionWS{}
+	c.server = server
 	c.conn = conn
-	c.ConnID = GetInstanceConnManager().NewConnID()
+	c.connID = GetInstanceConnManager().NewConnID()
 	c.isClosed = false
 	c.exitCtx, c.exitCtxCancel = context.WithCancel(context.Background())
 	c.msgBuffChan = make(chan []byte, config.GetServerConf().MaxMsgChanLen)
@@ -30,7 +30,7 @@ func NewConnectionWS(server iface.IServer, conn *websocket.Conn) *ConnectionWS {
 	return c
 }
 
-func (c *ConnectionWS) StartReader() {
+func (c *connectionWS) StartReader() {
 	msgType, msgByte, err := c.conn.ReadMessage()
 	if err != nil || msgType != websocket.BinaryMessage {
 		if !errors.As(err, &io.ErrUnexpectedEOF) {
@@ -40,7 +40,7 @@ func (c *ConnectionWS) StartReader() {
 		return
 	}
 
-	packet := c.Server.DataPacket()
+	packet := c.server.DataPacket()
 	msgData := packet.Unpack(msgByte)
 	if msgData == nil {
 		GetInstanceConnManager().Remove(c)
@@ -51,7 +51,7 @@ func (c *ConnectionWS) StartReader() {
 	}
 
 	// 封装请求数据传入处理函数
-	req := &Request{conn: c, msg: msgData}
+	req := &request{conn: c, msg: msgData}
 	if config.GetServerConf().WorkerPoolSize > 0 {
 		GetInstanceMsgHandler().SendMsgToTaskQueue(req)
 	} else {
@@ -59,28 +59,28 @@ func (c *ConnectionWS) StartReader() {
 	}
 }
 
-func (c *ConnectionWS) StartWriter(data []byte) {
+func (c *connectionWS) StartWriter(data []byte) {
 	if err := c.conn.WriteMessage(websocket.BinaryMessage, data); err != nil {
 		fmt.Printf("ws writer err %v data %v\n", err, data)
 	}
 }
 
-func (c *ConnectionWS) Start(readerHandler func(), writerHandler func(data []byte)) {
+func (c *connectionWS) Start(readerHandler func(), writerHandler func(data []byte)) {
 	defer GetInstanceConnManager().Remove(c)
 
 	c.JoinBroadcastGroup(c, GetInsBroadcastManager().GetGlobalBroadcast())
-	c.Connection.Start(readerHandler, writerHandler)
+	c.connection.Start(readerHandler, writerHandler)
 }
 
-func (c *ConnectionWS) Stop() {
+func (c *connectionWS) Stop() {
 	if c.isClosed {
 		return
 	}
-	c.Connection.Stop()
+	c.connection.Stop()
 	_ = c.conn.Close()
 	c.ExitAllBroadcastGroup()
 }
 
-func (c *ConnectionWS) RemoteAddrStr() string {
+func (c *connectionWS) RemoteAddrStr() string {
 	return c.conn.RemoteAddr().String()
 }

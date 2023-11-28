@@ -5,7 +5,7 @@ import (
 	"sync"
 )
 
-type Server struct {
+type server struct {
 	serverName string             // 服务器名称
 	ip         string             // IP地址
 	port       string             // 服务端口
@@ -16,26 +16,25 @@ type Server struct {
 
 var ServerWaitFlag = &sync.WaitGroup{}
 
-func (s *Server) GetServerName() string {
+func (s *server) GetServerName() string {
 	return s.serverName
 }
 
-func (s *Server) Start() {
+func (s *server) Start() {
 	ServerWaitFlag.Add(1)
 }
 
-func (s *Server) Stop() {
+func (s *server) Stop() {
 	GetInstanceConnManager().ClearConn()
 	s.isClose = true
 	ServerWaitFlag.Done()
 }
 
-func (s *Server) Listen() bool {
+func (s *server) Listen() bool {
 	s.isClose = false
 	return false
 }
 
-// 获取封包/拆包工具
-func (s *Server) DataPacket() iface.IDataPack {
+func (s *server) DataPacket() iface.IDataPack {
 	return s.dataPacket
 }

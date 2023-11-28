@@ -7,12 +7,12 @@ import (
 	"net"
 )
 
-type ServerTCP struct {
-	Server
+type serverTCP struct {
+	server
 }
 
 func NewServerTCP() iface.IServer {
-	s := &ServerTCP{}
+	s := &serverTCP{}
 	s.serverName = config.GetServerConf().AppName + "_tcp"
 	s.ip = config.GetServerConf().ServerTCP.Address
 	s.port = config.GetServerConf().ServerTCP.Port
@@ -20,7 +20,7 @@ func NewServerTCP() iface.IServer {
 	return s
 }
 
-func (s *ServerTCP) Start() {
+func (s *serverTCP) Start() {
 	if s.isClose {
 		s.isClose = false
 		return
@@ -75,10 +75,10 @@ func (s *ServerTCP) Start() {
 	}
 }
 
-func (s *ServerTCP) Listen() bool {
+func (s *serverTCP) Listen() bool {
 	if config.GetServerConf().ServerTCP.Port != "" {
 		go s.Start()
-		s.Server.Start()
+		s.server.Start()
 		fmt.Printf("server starting [ %v:%v ]\n", s.serverName, s.port)
 		return true
 	}

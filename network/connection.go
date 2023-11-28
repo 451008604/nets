@@ -9,9 +9,9 @@ import (
 	"sync"
 )
 
-type Connection struct {
-	Server             iface.IServer             // 当前Conn所属的Server
-	ConnID             int                       // 当前连接的ID（SessionID）
+type connection struct {
+	server             iface.IServer             // 当前Conn所属的Server
+	connID             int                       // 当前连接的ID（SessionID）
 	isClosed           bool                      // 当前连接是否已关闭
 	exitCtx            context.Context           // 管理连接的上下文
 	exitCtxCancel      context.CancelFunc        // 连接关闭信号
@@ -21,13 +21,13 @@ type Connection struct {
 	broadcastGroupCh   chan iface.IBroadcastData // 广播数据通道
 }
 
-func (c *Connection) StartReader() {}
+func (c *connection) StartReader() {}
 
-func (c *Connection) StartWriter(_ []byte) {}
+func (c *connection) StartWriter(_ []byte) {}
 
-func (c *Connection) Start(readerHandler func(), writerHandler func(data []byte)) {
+func (c *connection) Start(readerHandler func(), writerHandler func(data []byte)) {
 	// 开启读协程
-	go func(c *Connection, readerHandler func()) {
+	go func(c *connection, readerHandler func()) {
 		for {
 			select {
 			default:
@@ -55,7 +55,7 @@ func (c *Connection) Start(readerHandler func(), writerHandler func(data []byte)
 	}
 }
 
-func (c *Connection) Stop() {
+func (c *connection) Stop() {
 	if c.isClosed {
 		return
 	}
@@ -67,26 +67,26 @@ func (c *Connection) Stop() {
 	close(c.msgBuffChan)
 }
 
-func (c *Connection) GetConnID() int {
-	return c.ConnID
+func (c *connection) GetConnID() int {
+	return c.connID
 }
 
-func (c *Connection) SetNotifyGroupCh(broadcastGroupCh iface.IBroadcastData) {
+func (c *connection) SetNotifyGroupCh(broadcastGroupCh iface.IBroadcastData) {
 	c.broadcastGroupCh <- broadcastGroupCh
 }
 
-func (c *Connection) RemoteAddrStr() string {
+func (c *connection) RemoteAddrStr() string {
 	return ""
 }
 
-func (c *Connection) SendMsg(msgId int32, msgData proto.Message) {
+func (c *connection) SendMsg(msgId int32, msgData proto.Message) {
 	msgByte := c.ProtocolToByte(msgData)
 	if c.isClosed {
 		return
 	}
 
 	// 将消息数据封包
-	msg := c.Server.DataPacket().Pack(NewMsgPackage(msgId, msgByte))
+	msg := c.server.DataPacket().Pack(NewMsgPackage(msgId, msgByte))
 	if msg == nil {
 		return
 	}
@@ -94,11 +94,11 @@ func (c *Connection) SendMsg(msgId int32, msgData proto.Message) {
 	c.msgBuffChan <- msg
 }
 
-func (c *Connection) SetProperty(key string, value any) {
+func (c *connection) SetProperty(key string, value any) {
 	c.property.Store(key, value)
 }
 
-func (c *Connection) GetProperty(key string) any {
+func (c *connection) GetProperty(key string) any {
 	if value, ok := c.property.Load(key); ok {
 		return value
 	} else {
@@ -106,22 +106,22 @@ func (c *Connection) GetProperty(key string) any {
 	}
 }
 
-func (c *Connection) RemoveProperty(key string) {
+func (c *connection) RemoveProperty(key string) {
 	c.property.Delete(key)
 }
 
-func (c *Connection) JoinBroadcastGroup(conn iface.IConnection, group iface.IBroadcast) {
+func (c *connection) JoinBroadcastGroup(conn iface.IConnection, group iface.IBroadcast) {
 	c.broadcastGroupByID.Store(group.GetGroupID(), group)
 	group.SetBroadcastTarget(conn)
 }
 
-func (c *Connection) ExitBroadcastGroupByID(groupID int64) {
+func (c *connection) ExitBroadcastGroupByID(groupID int64) {
 	if value, loaded := c.broadcastGroupByID.LoadAndDelete(groupID); loaded {
 		value.(iface.IBroadcast).DelBroadcastTarget(c.GetConnID())
 	}
 }
 
-func (c *Connection) ExitAllBroadcastGroup() {
+func (c *connection) ExitAllBroadcastGroup() {
 	c.broadcastGroupByID.Range(func(key, value any) bool {
 		value.(iface.IBroadcast).DelBroadcastTarget(c.GetConnID())
 		return true
@@ -129,7 +129,7 @@ func (c *Connection) ExitAllBroadcastGroup() {
 	c.broadcastGroupByID = sync.Map{}
 }
 
-func (c *Connection) ProtocolToByte(str proto.Message) []byte {
+func (c *connection) ProtocolToByte(str proto.Message) []byte {
 	var err error
 	var marshal []byte
 
@@ -145,7 +145,7 @@ func (c *Connection) ProtocolToByte(str proto.Message) []byte {
 	return marshal
 }
 
-func (c *Connection) ByteToProtocol(byte []byte, target proto.Message) error {
+func (c *connection) ByteToProtocol(byte []byte, target proto.Message) error {
 	var err error
 
 	if config.GetServerConf().ProtocolIsJson {

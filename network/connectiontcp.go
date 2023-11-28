@@ -10,17 +10,16 @@ import (
 	"sync"
 )
 
-type ConnectionTCP struct {
-	Connection
+type connectionTCP struct {
+	connection
 	conn *net.TCPConn // 当前连接对象
 }
 
-// 新建连接
-func NewConnectionTCP(server iface.IServer, conn *net.TCPConn) *ConnectionTCP {
-	c := &ConnectionTCP{}
-	c.Server = server
+func NewConnectionTCP(server iface.IServer, conn *net.TCPConn) iface.IConnection {
+	c := &connectionTCP{}
+	c.server = server
 	c.conn = conn
-	c.ConnID = GetInstanceConnManager().NewConnID()
+	c.connID = GetInstanceConnManager().NewConnID()
 	c.isClosed = false
 	c.exitCtx, c.exitCtxCancel = context.WithCancel(context.Background())
 	c.msgBuffChan = make(chan []byte, config.GetServerConf().MaxMsgChanLen)
@@ -30,9 +29,9 @@ func NewConnectionTCP(server iface.IServer, conn *net.TCPConn) *ConnectionTCP {
 	return c
 }
 
-func (c *ConnectionTCP) StartReader() {
+func (c *connectionTCP) StartReader() {
 	// 获取客户端的消息头信息
-	packet := c.Server.DataPacket()
+	packet := c.server.DataPacket()
 	headData := make([]byte, packet.GetHeadLen())
 	if _, err := io.ReadFull(c.conn, headData); err != nil {
 		if err != io.EOF {
@@ -57,7 +56,7 @@ func (c *ConnectionTCP) StartReader() {
 	}
 
 	// 封装请求数据传入处理函数
-	req := &Request{conn: c, msg: msgData}
+	req := &request{conn: c, msg: msgData}
 	if config.GetServerConf().WorkerPoolSize > 0 {
 		GetInstanceMsgHandler().SendMsgToTaskQueue(req)
 	} else {
@@ -65,28 +64,28 @@ func (c *ConnectionTCP) StartReader() {
 	}
 }
 
-func (c *ConnectionTCP) StartWriter(data []byte) {
+func (c *connectionTCP) StartWriter(data []byte) {
 	if _, err := c.conn.Write(data); err != nil {
 		fmt.Printf("tcp writer err %v data %v\n", err, data)
 	}
 }
 
-func (c *ConnectionTCP) Start(readerHandler func(), writerHandler func(data []byte)) {
+func (c *connectionTCP) Start(readerHandler func(), writerHandler func(data []byte)) {
 	defer GetInstanceConnManager().Remove(c)
 
 	c.JoinBroadcastGroup(c, GetInsBroadcastManager().GetGlobalBroadcast())
-	c.Connection.Start(readerHandler, writerHandler)
+	c.connection.Start(readerHandler, writerHandler)
 }
 
-func (c *ConnectionTCP) Stop() {
+func (c *connectionTCP) Stop() {
 	if c.isClosed {
 		return
 	}
-	c.Connection.Stop()
+	c.connection.Stop()
 	_ = c.conn.Close()
 	c.ExitAllBroadcastGroup()
 }
 
-func (c *ConnectionTCP) RemoteAddrStr() string {
+func (c *connectionTCP) RemoteAddrStr() string {
 	return c.conn.RemoteAddr().String()
 }
