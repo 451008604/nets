@@ -3,9 +3,8 @@ package network
 import (
 	"fmt"
 	"github.com/451008604/nets/config"
-	"sync"
-
 	"github.com/451008604/nets/iface"
+	"sync"
 )
 
 type msgHandler struct {
@@ -69,15 +68,11 @@ func (m *msgHandler) GetApis() map[int32]iface.IRouter {
 }
 
 func (m *msgHandler) SendMsgToTaskQueue(request iface.IRequest) {
-	// 根据connID平均分配至对应worker
+	// 根据连接ID对工作队列进行负载均衡，通过连接ID复用实现协程复用。保证每个用户单独一个worker协程
 	workerID := request.GetConnection().GetConnID() % m.workerPoolSize
-	freeWorkQueueID := m.checkFreeWorkQueue()
-	if _, ok := m.workQueue.Load(workerID); !ok && freeWorkQueueID != 0 {
-		workerID = freeWorkQueueID
-	}
-	// 对工作池进行扩容
 	workQueue, loaded := m.workQueue.LoadOrStore(workerID, make(chan iface.IRequest, config.GetServerConf().WorkerTaskMaxLen))
 	if !loaded {
+		// 对工作池进行扩容
 		go m.startOneWorker(workQueue.(chan iface.IRequest))
 	}
 
@@ -86,21 +81,9 @@ func (m *msgHandler) SendMsgToTaskQueue(request iface.IRequest) {
 }
 
 func (m *msgHandler) startOneWorker(workQueue chan iface.IRequest) {
-	for request := range workQueue {
-		m.DoMsgHandler(request)
+	for req := range workQueue {
+		m.DoMsgHandler(req)
 	}
-}
-
-func (m *msgHandler) checkFreeWorkQueue() int {
-	freeWorkID := 0
-	m.workQueue.Range(func(key, value any) bool {
-		if len(value.(chan iface.IRequest)) == 0 {
-			freeWorkID = key.(int)
-			return false
-		}
-		return true
-	})
-	return freeWorkID
 }
 
 func (m *msgHandler) SetFilter(fun iface.IFilter) {
