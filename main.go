@@ -23,12 +23,8 @@ func main() {
 	config.SetServerConf(conf)
 
 	// 注册hook函数
-	network.GetInstanceConnManager().OnConnOpen(func(conn iface.IConnection) {
-
-	})
-	network.GetInstanceConnManager().OnConnClose(func(conn iface.IConnection) {
-
-	})
+	network.GetInstanceConnManager().OnConnOpen(func(conn iface.IConnection) {})
+	network.GetInstanceConnManager().OnConnClose(func(conn iface.IConnection) {})
 
 	// 开始监听服务
 	serverTCP := network.NewServerTCP()
@@ -39,6 +35,7 @@ func main() {
 
 	// 阻塞主进程
 	network.ServerWaitFlag.Wait()
+	network.GetInstanceConnManager().ClearConn()
 }
 
 func listenChannelStatus() {
@@ -46,7 +43,7 @@ func listenChannelStatus() {
 	for range time.Tick(time.Second * 1) {
 		if temp := runtime.NumGoroutine(); temp != goroutineNum {
 			goroutineNum = temp
-			fmt.Printf("当前线程数：%v\t当前连接数量：%v\n", goroutineNum, network.GetInstanceConnManager().Len())
+			fmt.Printf("currentNumberOfThreads: %v\tcurrentNumberOfConnections: %v\n", goroutineNum, network.GetInstanceConnManager().Len())
 		}
 	}
 }

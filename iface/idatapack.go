@@ -4,8 +4,8 @@ package iface
 type IDataPack interface {
 	// 获取包头长度
 	GetHeadLen() int
-	// 消息拆包
-	Pack(msg IMessage) []byte
 	// 消息封包
-	Unpack([]byte) IMessage
+	Pack(msg IMessage) []byte
+	// 消息拆包
+	UnPack([]byte) IMessage
 }

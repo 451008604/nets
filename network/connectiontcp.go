@@ -34,14 +34,11 @@ func (c *connectionTCP) StartReader() {
 	packet := c.server.DataPacket()
 	headData := make([]byte, packet.GetHeadLen())
 	if _, err := io.ReadFull(c.conn, headData); err != nil {
-		if err != io.EOF {
-			fmt.Printf("tcp reader err %v\n", err)
-		}
 		GetInstanceConnManager().Remove(c)
 		return
 	}
 	// 通过消息头获取dataLen和Id
-	msgData := packet.Unpack(headData)
+	msgData := packet.UnPack(headData)
 	if msgData == nil {
 		GetInstanceConnManager().Remove(c)
 		return

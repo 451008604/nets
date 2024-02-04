@@ -34,7 +34,6 @@ func (s *serverWS) Start() {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		conn, err := upgrade.Upgrade(w, r, nil)
 		if err != nil {
-			fmt.Println(err)
 			return
 		}
 

@@ -34,7 +34,6 @@ func (m *msgHandler) DoMsgHandler(request iface.IRequest) {
 
 	router, ok := m.apis[request.GetMsgID()]
 	if !ok {
-		fmt.Printf("api msgID is not found %v\n", request.GetMsgID())
 		return
 	}
 

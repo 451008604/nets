@@ -2,12 +2,10 @@ package network
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"github.com/451008604/nets/config"
 	"github.com/451008604/nets/iface"
 	"github.com/gorilla/websocket"
-	"io"
 	"sync"
 )
 
@@ -33,15 +31,12 @@ func NewConnectionWS(server iface.IServer, conn *websocket.Conn) iface.IConnecti
 func (c *connectionWS) StartReader() {
 	msgType, msgByte, err := c.conn.ReadMessage()
 	if err != nil || msgType != websocket.BinaryMessage {
-		if !errors.As(err, &io.ErrUnexpectedEOF) {
-			fmt.Printf("ws reader err %v\n", err)
-		}
 		GetInstanceConnManager().Remove(c)
 		return
 	}
 
 	packet := c.server.DataPacket()
-	msgData := packet.Unpack(msgByte)
+	msgData := packet.UnPack(msgByte)
 	if msgData == nil {
 		GetInstanceConnManager().Remove(c)
 		return

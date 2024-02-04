@@ -3,18 +3,16 @@ package network
 import "github.com/451008604/nets/iface"
 
 type message struct {
-	totalLen uint16 // 消息总长度
-	id       uint16 // 消息ID
-	dataLen  uint16 // 消息长度
-	data     []byte // 消息内容
+	id      uint16 // 消息ID
+	dataLen uint16 // 消息长度
+	data    []byte // 消息内容
 }
 
 func NewMsgPackage(id int32, data []byte) iface.IMessage {
 	return &message{
-		id:       uint16(id),
-		dataLen:  uint16(len(data)),
-		data:     data,
-		totalLen: uint16(len(data) + 6),
+		id:      uint16(id),
+		dataLen: uint16(len(data)),
+		data:    data,
 	}
 }
 
@@ -40,12 +38,4 @@ func (m *message) GetData() []byte {
 
 func (m *message) SetData(bytes []byte) {
 	m.data = bytes
-}
-
-func (m *message) GetTotalLen() uint16 {
-	return m.totalLen
-}
-
-func (m *message) SetTotalLen(totalLen uint16) {
-	m.totalLen = totalLen
 }

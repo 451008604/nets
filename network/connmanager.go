@@ -62,22 +62,21 @@ func (c *connManager) Remove(conn iface.IConnection) {
 	}
 	c.connections.Delete(conn.GetConnID())
 	atomic.AddUint32(&c.len, ^uint32(0))
+	c.setClosingConn(conn.GetConnID())
+
+	conn.Stop()
 
 	// 调用关闭连接hook函数
 	if c.onConnClose != nil {
 		c.onConnClose(conn)
 	}
-
-	conn.Stop()
-
-	c.setClosingConn(conn.GetConnID())
 }
 
 func (c *connManager) Get(connID int) (iface.IConnection, error) {
 	if value, ok := c.connections.Load(connID); ok {
 		return value.(iface.IConnection), nil
 	} else {
-		return nil, errors.New("未获取到绑定的conn")
+		return nil, errors.New("UnableToObtainBoundConnection")
 	}
 }
 

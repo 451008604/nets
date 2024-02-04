@@ -15,17 +15,13 @@ func NewDataPack() iface.IDataPack {
 }
 
 func (d *dataPack) GetHeadLen() int {
-	// totalLen(2字节) + id int(2字节) + dataLen int(2字节)
-	return 6
+	// id int(2字节) + dataLen int(2字节)
+	return 4
 }
 
 func (d *dataPack) Pack(msg iface.IMessage) []byte {
 	dataBuff := bytes.NewBuffer([]byte{})
 
-	// 写totalLen
-	if binary.Write(dataBuff, binary.LittleEndian, msg.GetTotalLen()) != nil {
-		return nil
-	}
 	// 写msgId
 	if binary.Write(dataBuff, binary.LittleEndian, msg.GetMsgId()) != nil {
 		return nil
@@ -41,14 +37,10 @@ func (d *dataPack) Pack(msg iface.IMessage) []byte {
 	return dataBuff.Bytes()
 }
 
-func (d *dataPack) Unpack(binaryData []byte) iface.IMessage {
+func (d *dataPack) UnPack(binaryData []byte) iface.IMessage {
 	dataBuff := bytes.NewReader(binaryData)
 	msgData := &message{}
 
-	// 读totalLen
-	if binary.Read(dataBuff, binary.LittleEndian, &msgData.totalLen) != nil {
-		return nil
-	}
 	// 读msgId
 	if binary.Read(dataBuff, binary.LittleEndian, &msgData.id) != nil {
 		return nil
