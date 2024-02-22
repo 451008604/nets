@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/451008604/nets/config"
-	"github.com/451008604/nets/iface"
 	"github.com/451008604/nets/network"
 	"os"
 	"runtime"
@@ -21,10 +20,6 @@ func main() {
 	conf := config.AppConf{}
 	_ = json.Unmarshal(readFile, &conf)
 	config.SetServerConf(conf)
-
-	// 注册hook函数
-	network.GetInstanceConnManager().OnConnOpen(func(conn iface.IConnection) {})
-	network.GetInstanceConnManager().OnConnClose(func(conn iface.IConnection) {})
 
 	// 开始监听服务
 	serverTCP := network.NewServerTCP()

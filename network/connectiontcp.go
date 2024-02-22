@@ -2,7 +2,6 @@ package network
 
 import (
 	"context"
-	"fmt"
 	"github.com/451008604/nets/config"
 	"github.com/451008604/nets/iface"
 	"io"
@@ -63,7 +62,8 @@ func (c *connectionTCP) StartReader() {
 
 func (c *connectionTCP) StartWriter(data []byte) {
 	if _, err := c.conn.Write(data); err != nil {
-		fmt.Printf("tcp writer err %v data %v\n", err, data)
+		GetInstanceConnManager().Remove(c)
+		return
 	}
 }
 

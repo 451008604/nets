@@ -2,7 +2,6 @@ package network
 
 import (
 	"context"
-	"fmt"
 	"github.com/451008604/nets/config"
 	"github.com/451008604/nets/iface"
 	"github.com/gorilla/websocket"
@@ -56,7 +55,8 @@ func (c *connectionWS) StartReader() {
 
 func (c *connectionWS) StartWriter(data []byte) {
 	if err := c.conn.WriteMessage(websocket.BinaryMessage, data); err != nil {
-		fmt.Printf("ws writer err %v data %v\n", err, data)
+		GetInstanceConnManager().Remove(c)
+		return
 	}
 }
 
