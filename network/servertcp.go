@@ -46,13 +46,16 @@ func (s *serverTCP) Start() {
 		fmt.Printf("failed to listen to service address %v\n", err)
 		return
 	}
-
+	defer func(tcp *net.TCPListener) {
+		_ = tcp.Close()
+	}(tcp)
 	// 3.启动server网络连接业务
 	for {
 		// 等待客户端请求建立连接
 		conn, err = tcp.AcceptTCP()
 		if err != nil {
 			fmt.Printf("accept tcp err %v\n", err)
+			_ = conn.Close()
 			continue
 		}
 

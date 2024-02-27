@@ -57,10 +57,12 @@ func (c *connManager) Add(conn iface.IConnection) {
 }
 
 func (c *connManager) Remove(conn iface.IConnection) {
-	if value, ok := c.connections.Load(conn.GetConnID()); !ok || value != conn {
+	if value, ok := c.connections.LoadAndDelete(conn.GetConnID()); !ok {
+		return
+	} else if value != conn {
+		c.connections.Store(conn.GetConnID(), value)
 		return
 	}
-	c.connections.Delete(conn.GetConnID())
 	atomic.AddUint32(&c.len, ^uint32(0))
 	c.setClosingConn(conn.GetConnID())
 
