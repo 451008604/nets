@@ -31,8 +31,12 @@ func (c *connection) Start(readerHandler func(), writerHandler func(data []byte)
 		for {
 			select {
 			default:
+				if c.isClosed {
+					return
+				}
 				// 调用注册方法处理接收到的消息
 				readerHandler()
+
 			case <-c.exitCtx.Done():
 				return
 			}
@@ -43,6 +47,9 @@ func (c *connection) Start(readerHandler func(), writerHandler func(data []byte)
 	for {
 		select {
 		case data := <-c.msgBuffChan:
+			if c.isClosed {
+				return
+			}
 			// 调用注册方法写消息给客户端
 			writerHandler(data)
 
@@ -80,11 +87,10 @@ func (c *connection) RemoteAddrStr() string {
 }
 
 func (c *connection) SendMsg(msgId int32, msgData proto.Message) {
-	msgByte := c.ProtocolToByte(msgData)
 	if c.isClosed {
 		return
 	}
-
+	msgByte := c.ProtocolToByte(msgData)
 	// 将消息数据封包
 	msg := c.server.DataPacket().Pack(NewMsgPackage(msgId, msgByte))
 	if msg == nil {
