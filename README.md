@@ -1,4 +1,4 @@
-<div style="text-align: center;font-size: xxx-large"> <img src="./assets/logo.webp" alt="" width="200"/> </div>
+<div style="text-align: center;width: 100vw"> <img src="./assets/logo.webp" alt="" width="200"/> </div>
 
 # NETS
 
@@ -6,9 +6,9 @@
 
 现已支持：目前支持 TCP、WS(S) 协议
 
-### 宗旨：
+## 宗旨：
 
 - 不炫技，只提供最简洁实用的功能
 - 保证代码首先要人能读懂，其次再保证机器运行正常
 
-
+<img src="./assets/DesignDiagram.drawio.svg">
