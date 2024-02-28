@@ -55,7 +55,6 @@ func (s *serverTCP) Start() {
 		conn, err = tcp.AcceptTCP()
 		if err != nil {
 			fmt.Printf("accept tcp err %v\n", err)
-			_ = conn.Close()
 			continue
 		}
 
