@@ -1,5 +1,14 @@
-<div style="text-align: center;font-size: xxx-large"> nets </div>
+<div style="text-align: center;font-size: xxx-large"> <img src="./assets/logo.webp" alt="" width="200"/> </div>
 
-一个追求轻量、性能、便捷、支持多端口服务的网络框架
+# NETS
 
-现已支持 TCP、WS(S) 协议
+一个追求轻量、性能、便捷、可同时使用多个端口提供服务的网络框架
+
+现已支持：目前支持 TCP、WS(S) 协议
+
+### 宗旨：
+
+- 不炫技，只提供最简洁实用的功能
+- 保证代码首先要人能读懂，其次再保证机器运行正常
+
+
