@@ -1,9 +1,60 @@
-<mxfile host="app.diagrams.net" modified="2024-02-28T16:16:03.165Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36 Edg/112.0.1722.48" version="23.1.7" etag="3OWo-RGwc69H70FhXrXU" type="github">
+<mxfile host="app.diagrams.net" modified="2024-02-28T17:26:24.955Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36 Edg/112.0.1722.48" etag="e3baKP7KsJkAM6tJjjXC" version="23.1.7" type="github">
   <diagram name="第 1 页" id="nSOitCVyQOVlCl4Sjz1o">
-    <mxGraphModel>
+    <mxGraphModel dx="2420" dy="1209" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
+        <mxCell id="BVacuyv5O_MLZGJECpan-25" style="edgeStyle=orthogonalEdgeStyle;rounded=0;sketch=1;hachureGap=4;jiggle=2;curveFitting=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;curved=1;" edge="1" parent="1" source="BVacuyv5O_MLZGJECpan-14" target="BVacuyv5O_MLZGJECpan-19">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="BVacuyv5O_MLZGJECpan-14" value="connmanager" style="whiteSpace=wrap;html=1;hachureGap=4;fontSize=25;fontStyle=1;labelPosition=center;verticalLabelPosition=top;align=center;verticalAlign=bottom;shadow=0;labelBackgroundColor=none;sketch=1;curveFitting=1;jiggle=2;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="830" y="290" width="230" height="470" as="geometry" />
+        </mxCell>
+        <mxCell id="BVacuyv5O_MLZGJECpan-17" value="" style="group;shadow=0;labelBackgroundColor=none;sketch=1;curveFitting=1;jiggle=2;rounded=1;" vertex="1" connectable="0" parent="1">
+          <mxGeometry x="220" y="560" width="280" height="440" as="geometry" />
+        </mxCell>
+        <mxCell id="BVacuyv5O_MLZGJECpan-8" value="servers" style="hachureGap=4;shadow=0;glass=0;labelPosition=center;verticalLabelPosition=top;align=center;verticalAlign=bottom;whiteSpace=wrap;html=1;fontSize=25;fontStyle=1;labelBackgroundColor=none;sketch=1;curveFitting=1;jiggle=2;rounded=1;" vertex="1" parent="BVacuyv5O_MLZGJECpan-17">
+          <mxGeometry width="280" height="440" as="geometry" />
+        </mxCell>
+        <mxCell id="BVacuyv5O_MLZGJECpan-10" value="TCP" style="rounded=1;whiteSpace=wrap;html=1;hachureGap=4;flipH=1;flipV=0;labelBackgroundColor=none;sketch=1;curveFitting=1;jiggle=2;" vertex="1" parent="BVacuyv5O_MLZGJECpan-17">
+          <mxGeometry x="70" y="40" width="140" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="BVacuyv5O_MLZGJECpan-11" value="WebSocket(s)" style="rounded=1;whiteSpace=wrap;html=1;hachureGap=4;flipH=1;flipV=0;labelBackgroundColor=none;sketch=1;curveFitting=1;jiggle=2;" vertex="1" parent="BVacuyv5O_MLZGJECpan-17">
+          <mxGeometry x="70" y="170" width="140" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="BVacuyv5O_MLZGJECpan-12" value="......" style="rounded=1;whiteSpace=wrap;html=1;hachureGap=4;flipH=1;flipV=0;labelBackgroundColor=none;sketch=1;curveFitting=1;jiggle=2;" vertex="1" parent="BVacuyv5O_MLZGJECpan-17">
+          <mxGeometry x="70" y="300" width="140" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="BVacuyv5O_MLZGJECpan-2" value="Actor" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;locked=0;connectable=1;labelBackgroundColor=none;sketch=1;curveFitting=1;jiggle=2;rounded=1;container=0;" vertex="1" parent="1">
+          <mxGeometry x="-150" y="230" width="30" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="BVacuyv5O_MLZGJECpan-3" value="Actor" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;locked=0;connectable=1;labelBackgroundColor=none;sketch=1;curveFitting=1;jiggle=2;rounded=1;container=0;" vertex="1" parent="1">
+          <mxGeometry x="-150" y="313" width="30" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="BVacuyv5O_MLZGJECpan-4" value="Actor" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;locked=0;connectable=1;labelBackgroundColor=none;sketch=1;curveFitting=1;jiggle=2;rounded=1;container=0;" vertex="1" parent="1">
+          <mxGeometry x="-150" y="397" width="30" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="BVacuyv5O_MLZGJECpan-5" value="Actor" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;locked=0;connectable=1;labelBackgroundColor=none;sketch=1;curveFitting=1;jiggle=2;rounded=1;container=0;" vertex="1" parent="1">
+          <mxGeometry x="-150" y="480" width="30" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="BVacuyv5O_MLZGJECpan-23" value="" style="group" vertex="1" connectable="0" parent="1">
+          <mxGeometry x="1380" y="670" width="230" height="350" as="geometry" />
+        </mxCell>
+        <mxCell id="BVacuyv5O_MLZGJECpan-19" value="connection" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;hachureGap=4;jiggle=2;curveFitting=1;fontSize=25;fontStyle=1;labelPosition=center;verticalLabelPosition=top;align=center;verticalAlign=bottom;" vertex="1" parent="BVacuyv5O_MLZGJECpan-23">
+          <mxGeometry width="230" height="350" as="geometry" />
+        </mxCell>
+        <mxCell id="BVacuyv5O_MLZGJECpan-20" value="tcp_connection" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;hachureGap=4;jiggle=2;curveFitting=1;" vertex="1" parent="BVacuyv5O_MLZGJECpan-23">
+          <mxGeometry x="55" y="40" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="BVacuyv5O_MLZGJECpan-21" value="ws_connection" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;hachureGap=4;jiggle=2;curveFitting=1;" vertex="1" parent="BVacuyv5O_MLZGJECpan-23">
+          <mxGeometry x="55" y="140" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="BVacuyv5O_MLZGJECpan-22" value="......" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;hachureGap=4;jiggle=2;curveFitting=1;" vertex="1" parent="BVacuyv5O_MLZGJECpan-23">
+          <mxGeometry x="55" y="240" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="BVacuyv5O_MLZGJECpan-24" style="edgeStyle=orthogonalEdgeStyle;rounded=0;sketch=1;hachureGap=4;jiggle=2;curveFitting=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;shadow=0;strokeColor=default;curved=1;" edge="1" parent="1" source="BVacuyv5O_MLZGJECpan-8" target="BVacuyv5O_MLZGJECpan-14">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
       </root>
     </mxGraphModel>
   </diagram>
