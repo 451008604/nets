@@ -31,6 +31,7 @@ func GetInstanceConnManager() iface.IConnManager {
 			connections: sync.Map{},
 			closeConnID: make(chan int, config.GetServerConf().MaxConn),
 		}
+		instanceConnManager.OperatingSystemSignalHandler()
 	})
 	return instanceConnManager
 }
