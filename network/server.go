@@ -6,12 +6,11 @@ import (
 )
 
 type server struct {
-	serverName string             // 服务器名称
-	ip         string             // IP地址
-	port       string             // 服务端口
-	isClose    bool               // 服务是否已关闭
-	connMgr    iface.IConnManager // 当前Server的连接管理器
-	dataPacket iface.IDataPack    // 数据拆包/封包工具
+	serverName string          // 服务器名称
+	ip         string          // IP地址
+	port       string          // 服务端口
+	isClose    bool            // 服务是否已关闭
+	dataPacket iface.IDataPack // 数据拆包/封包工具
 }
 
 var ServerWaitFlag = &sync.WaitGroup{}
@@ -25,6 +24,7 @@ func (s *server) Start() {
 }
 
 func (s *server) Stop() {
+	GetInstanceConnManager().ClearConn()
 	s.isClose = true
 	ServerWaitFlag.Done()
 }
