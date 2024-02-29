@@ -10,16 +10,14 @@ import (
 func main() {
 	go listenChannelStatus()
 
-	// 开始监听服务
+	// 启动TCP服务
 	serverTCP := network.NewServerTCP(nil)
 	serverTCP.Listen()
-
+	// 启动WebSocket服务
 	serverWS := network.NewServerWS(nil)
 	serverWS.Listen()
-
 	// 阻塞主进程
 	network.ServerWaitFlag.Wait()
-	network.GetInstanceConnManager().ClearConn()
 }
 
 func listenChannelStatus() {
