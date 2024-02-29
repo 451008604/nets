@@ -3,7 +3,6 @@ package network
 import (
 	"context"
 	"encoding/json"
-	"github.com/451008604/nets/config"
 	"github.com/451008604/nets/iface"
 	"google.golang.org/protobuf/proto"
 	"sync"
@@ -92,7 +91,7 @@ func (c *connection) SendMsg(msgId int32, msgData proto.Message) {
 	}
 	msgByte := c.ProtocolToByte(msgData)
 	// 将消息数据封包
-	msg := c.server.DataPacket().Pack(NewMsgPackage(msgId, msgByte))
+	msg := defaultServer.DataPacket.Pack(NewMsgPackage(msgId, msgByte))
 	if msg == nil {
 		return
 	}
@@ -139,7 +138,7 @@ func (c *connection) ProtocolToByte(str proto.Message) []byte {
 	var err error
 	var marshal []byte
 
-	if config.GetServerConf().ProtocolIsJson {
+	if defaultServer.AppConf.ProtocolIsJson {
 		marshal, err = json.Marshal(str)
 	} else {
 		marshal, err = proto.Marshal(str)
@@ -154,7 +153,7 @@ func (c *connection) ProtocolToByte(str proto.Message) []byte {
 func (c *connection) ByteToProtocol(byte []byte, target proto.Message) error {
 	var err error
 
-	if config.GetServerConf().ProtocolIsJson {
+	if defaultServer.AppConf.ProtocolIsJson {
 		err = json.Unmarshal(byte, target)
 	} else {
 		err = proto.Unmarshal(byte, target)

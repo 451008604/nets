@@ -2,7 +2,6 @@ package network
 
 import (
 	"fmt"
-	"github.com/451008604/nets/config"
 	"github.com/451008604/nets/iface"
 	"net"
 )
@@ -11,12 +10,14 @@ type serverTCP struct {
 	server
 }
 
-func NewServerTCP() iface.IServer {
+func NewServerTCP(customData *CustomServer) iface.IServer {
+	if customData != nil {
+		setCustomServer(customData)
+	}
 	s := &serverTCP{}
-	s.serverName = config.GetServerConf().AppName + "_tcp"
-	s.ip = config.GetServerConf().ServerTCP.Address
-	s.port = config.GetServerConf().ServerTCP.Port
-	s.dataPacket = NewDataPack()
+	s.serverName = defaultServer.AppConf.AppName + "_tcp"
+	s.ip = defaultServer.AppConf.ServerTCP.Address
+	s.port = defaultServer.AppConf.ServerTCP.Port
 	return s
 }
 
@@ -65,7 +66,7 @@ func (s *serverTCP) Start() {
 		}
 
 		// 连接数量超过限制后，关闭新建立的连接
-		if GetInstanceConnManager().Len() >= config.GetServerConf().MaxConn {
+		if GetInstanceConnManager().Len() >= defaultServer.AppConf.MaxConn {
 			_ = conn.Close()
 			continue
 		}
@@ -78,7 +79,7 @@ func (s *serverTCP) Start() {
 }
 
 func (s *serverTCP) Listen() bool {
-	if config.GetServerConf().ServerTCP.Port != "" {
+	if defaultServer.AppConf.ServerTCP.Port != "" {
 		go s.Start()
 		s.server.Start()
 		fmt.Printf("server starting [ %v:%v ]\n", s.serverName, s.port)

@@ -1,16 +1,14 @@
 package network
 
 import (
-	"github.com/451008604/nets/iface"
 	"sync"
 )
 
 type server struct {
-	serverName string          // 服务器名称
-	ip         string          // IP地址
-	port       string          // 服务端口
-	isClose    bool            // 服务是否已关闭
-	dataPacket iface.IDataPack // 数据拆包/封包工具
+	serverName string // 服务器名称
+	ip         string // IP地址
+	port       string // 服务端口
+	isClose    bool   // 服务是否已关闭
 }
 
 var ServerWaitFlag = &sync.WaitGroup{}
@@ -32,8 +30,4 @@ func (s *server) Stop() {
 func (s *server) Listen() bool {
 	s.isClose = false
 	return false
-}
-
-func (s *server) DataPacket() iface.IDataPack {
-	return s.dataPacket
 }

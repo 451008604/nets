@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/binary"
 	"fmt"
-	"github.com/451008604/nets/config"
 	"github.com/451008604/nets/iface"
 )
 
@@ -50,8 +49,8 @@ func (d *dataPack) UnPack(binaryData []byte) iface.IMessage {
 		return nil
 	}
 	// 检查数据长度是否超出限制
-	if config.GetServerConf().MaxPackSize > 0 && int(msgData.GetDataLen()) > config.GetServerConf().MaxPackSize {
-		fmt.Printf("received data length exceeds the limit. MaxPackSize %v, msgDataLen %v\n", config.GetServerConf().MaxPackSize, msgData.GetDataLen())
+	if defaultServer.AppConf.MaxPackSize > 0 && int(msgData.GetDataLen()) > defaultServer.AppConf.MaxPackSize {
+		fmt.Printf("received data length exceeds the limit. MaxPackSize %v, msgDataLen %v\n", defaultServer.AppConf.MaxPackSize, msgData.GetDataLen())
 		return nil
 	}
 	return msgData

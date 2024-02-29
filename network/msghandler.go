@@ -2,7 +2,6 @@ package network
 
 import (
 	"fmt"
-	"github.com/451008604/nets/config"
 	"github.com/451008604/nets/iface"
 	"sync"
 )
@@ -21,7 +20,7 @@ var instanceMsgHandlerOnce = sync.Once{}
 func GetInstanceMsgHandler() iface.IMsgHandler {
 	instanceMsgHandlerOnce.Do(func() {
 		instanceMsgHandler = &msgHandler{
-			workerPoolSize: config.GetServerConf().WorkerPoolSize,
+			workerPoolSize: defaultServer.AppConf.WorkerPoolSize,
 			apis:           make(map[int32]iface.IRouter),
 			workQueue:      sync.Map{},
 		}
@@ -69,7 +68,7 @@ func (m *msgHandler) GetApis() map[int32]iface.IRouter {
 func (m *msgHandler) SendMsgToTaskQueue(request iface.IRequest) {
 	// 根据连接ID对工作队列进行负载均衡，通过连接ID复用实现协程复用。保证每个用户单独一个worker协程
 	workerID := request.GetConnection().GetConnID() % m.workerPoolSize
-	workQueue, loaded := m.workQueue.LoadOrStore(workerID, make(chan iface.IRequest, config.GetServerConf().WorkerTaskMaxLen))
+	workQueue, loaded := m.workQueue.LoadOrStore(workerID, make(chan iface.IRequest, defaultServer.AppConf.WorkerTaskMaxLen))
 	if !loaded {
 		// 对工作池进行扩容
 		go m.startOneWorker(workQueue.(chan iface.IRequest))

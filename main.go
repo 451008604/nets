@@ -1,11 +1,8 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
-	"github.com/451008604/nets/config"
 	"github.com/451008604/nets/network"
-	"os"
 	"runtime"
 	"time"
 )
@@ -13,19 +10,11 @@ import (
 func main() {
 	go listenChannelStatus()
 
-	readFile, err := os.ReadFile("conf.json")
-	if err != nil {
-		return
-	}
-	conf := config.AppConf{}
-	_ = json.Unmarshal(readFile, &conf)
-	config.SetServerConf(conf)
-
 	// 开始监听服务
-	serverTCP := network.NewServerTCP()
+	serverTCP := network.NewServerTCP(nil)
 	serverTCP.Listen()
 
-	serverWS := network.NewServerWS()
+	serverWS := network.NewServerWS(nil)
 	serverWS.Listen()
 
 	// 阻塞主进程

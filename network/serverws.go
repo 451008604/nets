@@ -2,7 +2,6 @@ package network
 
 import (
 	"fmt"
-	"github.com/451008604/nets/config"
 	"github.com/451008604/nets/iface"
 	"github.com/gorilla/websocket"
 	"net/http"
@@ -12,12 +11,14 @@ type serverWS struct {
 	server
 }
 
-func NewServerWS() iface.IServer {
+func NewServerWS(customData *CustomServer) iface.IServer {
+	if customData != nil {
+		setCustomServer(customData)
+	}
 	s := &serverWS{}
-	s.serverName = config.GetServerConf().AppName + "_ws"
-	s.ip = config.GetServerConf().ServerWS.Address
-	s.port = config.GetServerConf().ServerWS.Port
-	s.dataPacket = NewDataPack()
+	s.serverName = defaultServer.AppConf.AppName + "_ws"
+	s.ip = defaultServer.AppConf.ServerWS.Address
+	s.port = defaultServer.AppConf.ServerWS.Port
 	return s
 }
 
@@ -28,8 +29,8 @@ func (s *serverWS) Start() {
 	}
 
 	var upgrade = websocket.Upgrader{
-		ReadBufferSize:  config.GetServerConf().MaxPackSize,
-		WriteBufferSize: config.GetServerConf().MaxPackSize,
+		ReadBufferSize:  defaultServer.AppConf.MaxPackSize,
+		WriteBufferSize: defaultServer.AppConf.MaxPackSize,
 	}
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		conn, err := upgrade.Upgrade(w, r, nil)
@@ -44,7 +45,7 @@ func (s *serverWS) Start() {
 		}
 
 		// 连接数量超过限制后，关闭新建立的连接
-		if GetInstanceConnManager().Len() >= config.GetServerConf().MaxConn {
+		if GetInstanceConnManager().Len() >= defaultServer.AppConf.MaxConn {
 			_ = conn.Close()
 			return
 		}
@@ -55,7 +56,7 @@ func (s *serverWS) Start() {
 		GetInstanceConnManager().Add(msgConn)
 	})
 
-	if certPath, keyPath := config.GetServerConf().ServerWS.TLSCertPath, config.GetServerConf().ServerWS.TLSKeyPath; certPath != "" && keyPath != "" {
+	if certPath, keyPath := defaultServer.AppConf.ServerWS.TLSCertPath, defaultServer.AppConf.ServerWS.TLSKeyPath; certPath != "" && keyPath != "" {
 		fmt.Printf("%v\n", http.ListenAndServeTLS(fmt.Sprintf("%s:%s", s.ip, s.port), certPath, keyPath, nil))
 	} else {
 		fmt.Printf("%v\n", http.ListenAndServe(fmt.Sprintf("%s:%s", s.ip, s.port), nil))
@@ -63,7 +64,7 @@ func (s *serverWS) Start() {
 }
 
 func (s *serverWS) Listen() bool {
-	if config.GetServerConf().ServerWS.Port != "" {
+	if defaultServer.AppConf.ServerWS.Port != "" {
 		go s.Start()
 		s.server.Start()
 		fmt.Printf("server starting [ %v:%v ]\n", s.serverName, s.port)

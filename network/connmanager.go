@@ -3,7 +3,6 @@ package network
 import (
 	"errors"
 	"fmt"
-	"github.com/451008604/nets/config"
 	"github.com/451008604/nets/iface"
 	"os"
 	"os/signal"
@@ -29,7 +28,7 @@ func GetInstanceConnManager() iface.IConnManager {
 	instanceConnManagerOnce.Do(func() {
 		instanceConnManager = &connManager{
 			connections: sync.Map{},
-			closeConnID: make(chan int, config.GetServerConf().MaxConn),
+			closeConnID: make(chan int, defaultServer.AppConf.MaxConn),
 		}
 		instanceConnManager.OperatingSystemSignalHandler()
 	})

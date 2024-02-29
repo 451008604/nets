@@ -2,7 +2,6 @@ package network
 
 import (
 	"context"
-	"github.com/451008604/nets/config"
 	"github.com/451008604/nets/iface"
 	"github.com/gorilla/websocket"
 	"sync"
@@ -20,7 +19,7 @@ func NewConnectionWS(server iface.IServer, conn *websocket.Conn) iface.IConnecti
 	c.connID = GetInstanceConnManager().NewConnID()
 	c.isClosed = false
 	c.exitCtx, c.exitCtxCancel = context.WithCancel(context.Background())
-	c.msgBuffChan = make(chan []byte, config.GetServerConf().MaxMsgChanLen)
+	c.msgBuffChan = make(chan []byte, defaultServer.AppConf.MaxMsgChanLen)
 	c.property = sync.Map{}
 	c.broadcastGroupByID = sync.Map{}
 	c.broadcastGroupCh = make(chan iface.IBroadcastData, 1000)
@@ -34,19 +33,18 @@ func (c *connectionWS) StartReader() {
 		return
 	}
 
-	packet := c.server.DataPacket()
-	msgData := packet.UnPack(msgByte)
+	msgData := defaultServer.DataPacket.UnPack(msgByte)
 	if msgData == nil {
 		GetInstanceConnManager().Remove(c)
 		return
 	}
 	if msgData.GetDataLen() > 0 {
-		msgData.SetData(msgByte[packet.GetHeadLen() : packet.GetHeadLen()+int(msgData.GetDataLen())])
+		msgData.SetData(msgByte[defaultServer.DataPacket.GetHeadLen() : defaultServer.DataPacket.GetHeadLen()+int(msgData.GetDataLen())])
 	}
 
 	// 封装请求数据传入处理函数
 	req := &request{conn: c, msg: msgData}
-	if config.GetServerConf().WorkerPoolSize > 0 {
+	if defaultServer.AppConf.WorkerPoolSize > 0 {
 		GetInstanceMsgHandler().SendMsgToTaskQueue(req)
 	} else {
 		go GetInstanceMsgHandler().DoMsgHandler(req)
