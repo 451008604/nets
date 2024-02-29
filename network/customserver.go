@@ -3,6 +3,7 @@ package network
 import (
 	"github.com/451008604/nets/config"
 	"github.com/451008604/nets/iface"
+	"reflect"
 )
 
 var defaultServer *CustomServer
@@ -13,6 +14,7 @@ type CustomServer struct {
 	DataPacket iface.IDataPack // 编码/解码器
 }
 
+// 初始化各组件
 func init() {
 	defaultServer = &CustomServer{
 		AppConf:    config.GetServerConf(),
@@ -21,10 +23,30 @@ func init() {
 }
 
 func setCustomServer(custom *CustomServer) {
-	if custom.AppConf != nil {
-		defaultServer.AppConf = custom.AppConf
-	}
+	defaultServer.AppConf = MergeStructValues(defaultServer.AppConf, custom.AppConf)
+
 	if custom.DataPacket != nil {
 		defaultServer.DataPacket = custom.DataPacket
 	}
+}
+
+// 将 defaultData 与 customData 进行合并，相同字段赋值优先使用 customData
+func MergeStructValues[T any](defaultData, customData *T) *T {
+	resultData := new(T)
+	v1 := reflect.ValueOf(defaultData).Elem()
+	v2 := reflect.ValueOf(customData).Elem()
+	v3 := reflect.ValueOf(resultData).Elem()
+
+	for i := 0; i < v1.NumField(); i++ {
+		fieldValue1 := v1.Field(i)
+		fieldValue2 := v2.Field(i)
+
+		// 如果 customData 中的字段有值则使用它；否则使用 defaultData 中的对应字段值
+		if !fieldValue2.IsZero() {
+			v3.Field(i).Set(fieldValue2)
+		} else {
+			v3.Field(i).Set(fieldValue1)
+		}
+	}
+	return resultData
 }
