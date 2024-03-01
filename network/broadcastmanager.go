@@ -13,18 +13,19 @@ type broadcastManager struct {
 	globalBroadcast iface.IBroadcast
 }
 
-var insBroadcastManager *broadcastManager
-var insBroadcastManagerOnce = sync.Once{}
+var instanceBroadcastManager *broadcastManager
+var instanceBroadcastManagerOnce = sync.Once{}
 
-func GetInsBroadcastManager() iface.IBroadcastManager {
-	insBroadcastManagerOnce.Do(func() {
-		insBroadcastManager = &broadcastManager{
+// 全局唯一广播管理器
+func GetInstanceBroadcastManager() iface.IBroadcastManager {
+	instanceBroadcastManagerOnce.Do(func() {
+		instanceBroadcastManager = &broadcastManager{
 			idFlag:     1000000000,
 			notifyList: sync.Map{},
 		}
-		insBroadcastManager.globalBroadcast = insBroadcastManager.NewBroadcastGroup()
+		instanceBroadcastManager.globalBroadcast = instanceBroadcastManager.NewBroadcastGroup()
 	})
-	return insBroadcastManager
+	return instanceBroadcastManager
 }
 
 func (n *broadcastManager) NewBroadcastGroup() iface.IBroadcast {

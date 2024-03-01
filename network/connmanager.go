@@ -24,6 +24,7 @@ type connManager struct {
 var instanceConnManager iface.IConnManager
 var instanceConnManagerOnce = sync.Once{}
 
+// 全局唯一连接管理器
 func GetInstanceConnManager() iface.IConnManager {
 	instanceConnManagerOnce.Do(func() {
 		instanceConnManager = &connManager{

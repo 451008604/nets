@@ -17,6 +17,7 @@ type msgHandler struct {
 var instanceMsgHandler iface.IMsgHandler
 var instanceMsgHandlerOnce = sync.Once{}
 
+// 全局唯一消息处理器
 func GetInstanceMsgHandler() iface.IMsgHandler {
 	instanceMsgHandlerOnce.Do(func() {
 		instanceMsgHandler = &msgHandler{
