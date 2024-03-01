@@ -2,13 +2,24 @@ package main
 
 import (
 	"fmt"
+	"github.com/451008604/nets/iface"
 	"github.com/451008604/nets/network"
-	"runtime"
-	"time"
+	pb "github.com/451008604/nets/proto/bin"
+	"google.golang.org/protobuf/proto"
 )
 
 func main() {
-	go listenChannelStatus()
+	// broadcastManager := network.GetInstanceBroadcastManager()
+	connManager := network.GetInstanceConnManager()
+	connManager.OnConnOpen(func(conn iface.IConnection) {
+		fmt.Println(conn.GetConnID())
+	})
+	connManager.OnConnClose(func(conn iface.IConnection) {
+		fmt.Println(conn.GetConnID())
+	})
+
+	msgHandler := network.GetInstanceMsgHandler()
+	msgHandler.AddRouter(int32(pb.MSgID_PlayerLogin_Req), func() proto.Message { return &pb.PlayerLoginRequest{} }, func(con iface.IConnection, message proto.Message) {})
 
 	// 启动TCP服务
 	serverTCP := network.NewServerTCP(nil)
@@ -20,12 +31,12 @@ func main() {
 	network.ServerWaitFlag.Wait()
 }
 
-func listenChannelStatus() {
-	goroutineNum := 0
-	for range time.Tick(time.Second * 1) {
-		if temp := runtime.NumGoroutine(); temp != goroutineNum {
-			goroutineNum = temp
-			fmt.Printf("currentNumberOfThreads: %v\tcurrentNumberOfConnections: %v\n", goroutineNum, network.GetInstanceConnManager().Len())
-		}
-	}
-}
+// func listenChannelStatus() {
+// 	goroutineNum := 0
+// 	for range time.Tick(time.Second * 1) {
+// 		if temp := runtime.NumGoroutine(); temp != goroutineNum {
+// 			goroutineNum = temp
+// 			fmt.Printf("currentNumberOfThreads: %v\tcurrentNumberOfConnections: %v\n", goroutineNum, network.GetInstanceConnManager().Len())
+// 		}
+// 	}
+// }

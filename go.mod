@@ -1,6 +1,6 @@
 module github.com/451008604/nets
 
-go 1.21
+go 1.18
 
 require (
 	github.com/gorilla/websocket v1.5.1
