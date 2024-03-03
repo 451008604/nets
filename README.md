@@ -1,12 +1,12 @@
-<p align="center;"><img src="./assets/logo2.webp" alt="" width="200"/></p>
+<p align="center"><img src="./assets/logo2.webp" alt="" width="200"/></p>
 
-<div align="center;">
+<div align="center">
 <img src="https://img.shields.io/github/license/451008604/nets.svg" alt="license"/>
 <img src="https://img.shields.io/github/issues/451008604/nets.svg" alt="issues"/>
 <img src="https://img.shields.io/github/issues-pr/451008604/nets.svg" alt="issues"/>
 <img src="https://img.shields.io/github/contributors/451008604/nets.svg" alt="contributors"/>
 </div>
-<div align="center;">
+<div align="center">
 <img src="https://img.shields.io/github/watchers/451008604/nets.svg?label=Watch" alt="watchers"/>
 <img src="https://img.shields.io/github/forks/451008604/nets.svg?label=fork" alt="forks"/>
 <img src="https://img.shields.io/github/stars/451008604/nets.svg?label=star" alt="stars"/>
