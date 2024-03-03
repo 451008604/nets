@@ -3,7 +3,7 @@ package network
 import "github.com/451008604/nets/iface"
 
 type message struct {
-	id      uint16 // 消息ID
+	id      uint16 // 消息Id
 	dataLen uint16 // 消息长度
 	data    []byte // 消息内容
 }

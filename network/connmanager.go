@@ -12,10 +12,10 @@ import (
 )
 
 type connManager struct {
-	connID      int64                              // 用于客户端连接的自增ID
+	connId      int64                              // 用于客户端连接的自增Id
 	connections sync.Map                           // 管理的连接信息
 	signalCh    chan os.Signal                     // 处理系统信号
-	closeConnID chan int                           // 已关闭的连接ID集合
+	closeConnId chan int                           // 已关闭的连接Id集合
 	len         uint32                             // 连接数量
 	onConnOpen  func(connection iface.IConnection) // 该Server连接创建时的Hook函数
 	onConnClose func(connection iface.IConnection) // 该Server连接断开时的Hook函数
@@ -29,24 +29,24 @@ func GetInstanceConnManager() iface.IConnManager {
 	instanceConnManagerOnce.Do(func() {
 		instanceConnManager = &connManager{
 			connections: sync.Map{},
-			closeConnID: make(chan int, defaultServer.AppConf.MaxConn),
+			closeConnId: make(chan int, defaultServer.AppConf.MaxConn),
 		}
 		instanceConnManager.OperatingSystemSignalHandler()
 	})
 	return instanceConnManager
 }
 
-func (c *connManager) NewConnID() int {
-	if connID := c.getClosingConn(); connID != 0 {
-		return connID
+func (c *connManager) NewConnId() int {
+	if connId := c.getClosingConn(); connId != 0 {
+		return connId
 	}
-	// 回收列表为空时递增ID
-	atomic.AddInt64(&c.connID, 1)
-	return int(c.connID)
+	// 回收列表为空时递增Id
+	atomic.AddInt64(&c.connId, 1)
+	return int(c.connId)
 }
 
 func (c *connManager) Add(conn iface.IConnection) {
-	c.connections.Store(conn.GetConnID(), conn)
+	c.connections.Store(conn.GetConnId(), conn)
 	atomic.AddUint32(&c.len, 1)
 
 	go conn.Start(conn.StartReader, conn.StartWriter)
@@ -58,14 +58,14 @@ func (c *connManager) Add(conn iface.IConnection) {
 }
 
 func (c *connManager) Remove(conn iface.IConnection) {
-	if value, ok := c.connections.LoadAndDelete(conn.GetConnID()); !ok {
+	if value, ok := c.connections.LoadAndDelete(conn.GetConnId()); !ok {
 		return
 	} else if value != conn {
-		c.connections.Store(conn.GetConnID(), value)
+		c.connections.Store(conn.GetConnId(), value)
 		return
 	}
 	atomic.AddUint32(&c.len, ^uint32(0))
-	c.setClosingConn(conn.GetConnID())
+	c.setClosingConn(conn.GetConnId())
 
 	conn.Stop()
 
@@ -75,8 +75,8 @@ func (c *connManager) Remove(conn iface.IConnection) {
 	}
 }
 
-func (c *connManager) Get(connID int) (iface.IConnection, error) {
-	if value, ok := c.connections.Load(connID); ok {
+func (c *connManager) Get(connId int) (iface.IConnection, error) {
+	if value, ok := c.connections.Load(connId); ok {
 		return value.(iface.IConnection), nil
 	} else {
 		return nil, errors.New("UnableToObtainBoundConnection")
@@ -103,16 +103,16 @@ func (c *connManager) OnConnClose(fun func(conn iface.IConnection)) {
 	c.onConnClose = fun
 }
 
-func (c *connManager) setClosingConn(connID int) {
+func (c *connManager) setClosingConn(connId int) {
 	// 存入回收列表
-	c.closeConnID <- connID
+	c.closeConnId <- connId
 }
 
 func (c *connManager) getClosingConn() int {
 	// 回收列表中存在则取出使用
 	select {
-	case connID := <-c.closeConnID:
-		return connID
+	case connId := <-c.closeConnId:
+		return connId
 	default:
 		return 0
 	}

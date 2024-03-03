@@ -17,13 +17,12 @@ func NewConnectionTCP(server iface.IServer, conn *net.TCPConn) iface.IConnection
 	c := &connectionTCP{}
 	c.server = server
 	c.conn = conn
-	c.connID = GetInstanceConnManager().NewConnID()
+	c.connId = GetInstanceConnManager().NewConnId()
 	c.isClosed = false
 	c.exitCtx, c.exitCtxCancel = context.WithCancel(context.Background())
 	c.msgBuffChan = make(chan []byte, defaultServer.AppConf.MaxMsgChanLen)
 	c.property = sync.Map{}
-	c.broadcastGroupByID = sync.Map{}
-	c.broadcastGroupCh = make(chan iface.IBroadcastData, 1000)
+	c.broadcastGroupById = sync.Map{}
 	return c
 }
 
@@ -68,7 +67,7 @@ func (c *connectionTCP) StartWriter(data []byte) {
 func (c *connectionTCP) Start(readerHandler func(), writerHandler func(data []byte)) {
 	defer GetInstanceConnManager().Remove(c)
 
-	c.JoinBroadcastGroup(c, GetInstanceBroadcastManager().GetGlobalBroadcast())
+	c.JoinBroadcastGroup(c, GetInstanceBroadcastManager().GetGlobalBroadcastGroup().GetGroupId())
 	c.connection.Start(readerHandler, writerHandler)
 }
 

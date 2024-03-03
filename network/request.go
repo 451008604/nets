@@ -17,6 +17,6 @@ func (r *request) GetData() []byte {
 	return r.msg.GetData()
 }
 
-func (r *request) GetMsgID() int32 {
+func (r *request) GetMsgId() int32 {
 	return int32(r.msg.GetMsgId())
 }

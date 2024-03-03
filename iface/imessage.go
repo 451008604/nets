@@ -2,9 +2,9 @@ package iface
 
 // 定义消息模板
 type IMessage interface {
-	// 获取消息ID
+	// 获取消息Id
 	GetMsgId() uint16
-	// 设置消息ID
+	// 设置消息Id
 	SetMsgId(id uint16)
 
 	// 获取消息长度

@@ -32,7 +32,7 @@ func GetInstanceMsgHandler() iface.IMsgHandler {
 func (m *msgHandler) DoMsgHandler(request iface.IRequest) {
 	defer m.msgErrCapture(request)
 
-	router, ok := m.apis[request.GetMsgID()]
+	router, ok := m.apis[request.GetMsgId()]
 	if !ok {
 		return
 	}
@@ -41,7 +41,7 @@ func (m *msgHandler) DoMsgHandler(request iface.IRequest) {
 	msgData := router.GetNewMsg()
 	err := request.GetConnection().ByteToProtocol(request.GetData(), msgData)
 	if err != nil {
-		fmt.Printf("api msgID %v parsing %v error %v\n", request.GetMsgID(), request.GetData(), err)
+		fmt.Printf("api msgId %v parsing %v error %v\n", request.GetMsgId(), request.GetData(), err)
 		return
 	}
 
@@ -67,9 +67,9 @@ func (m *msgHandler) GetApis() map[int32]iface.IRouter {
 }
 
 func (m *msgHandler) SendMsgToTaskQueue(request iface.IRequest) {
-	// 根据连接ID对工作队列进行负载均衡，通过连接ID复用实现协程复用。保证每个用户单独一个worker协程
-	workerID := request.GetConnection().GetConnID() % m.workerPoolSize
-	workQueue, loaded := m.workQueue.LoadOrStore(workerID, make(chan iface.IRequest, defaultServer.AppConf.WorkerTaskMaxLen))
+	// 根据连接Id对工作队列进行负载均衡，通过连接Id复用实现协程复用。保证每个用户单独一个worker协程
+	workerId := request.GetConnection().GetConnId() % m.workerPoolSize
+	workQueue, loaded := m.workQueue.LoadOrStore(workerId, make(chan iface.IRequest, defaultServer.AppConf.WorkerTaskMaxLen))
 	if !loaded {
 		// 对工作池进行扩容
 		go m.startOneWorker(workQueue.(chan iface.IRequest))

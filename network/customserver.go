@@ -22,6 +22,7 @@ func init() {
 	}
 }
 
+// 设置自定义服务器参数
 func SetCustomServer(custom *CustomServer) {
 	defaultServer.AppConf = MergeStructValues(defaultServer.AppConf, custom.AppConf)
 

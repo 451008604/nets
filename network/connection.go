@@ -9,15 +9,14 @@ import (
 )
 
 type connection struct {
-	server             iface.IServer             // 当前Conn所属的Server
-	connID             int                       // 当前连接的ID（SessionID）
-	isClosed           bool                      // 当前连接是否已关闭
-	exitCtx            context.Context           // 管理连接的上下文
-	exitCtxCancel      context.CancelFunc        // 连接关闭信号
-	msgBuffChan        chan []byte               // 用于读、写两个goroutine之间的消息通信
-	property           sync.Map                  // 连接属性
-	broadcastGroupByID sync.Map                  // 广播组列表
-	broadcastGroupCh   chan iface.IBroadcastData // 广播数据通道
+	server             iface.IServer      // 当前Conn所属的Server
+	connId             int                // 当前连接的Id（SessionId）
+	isClosed           bool               // 当前连接是否已关闭
+	exitCtx            context.Context    // 管理连接的上下文
+	exitCtxCancel      context.CancelFunc // 连接关闭信号
+	msgBuffChan        chan []byte        // 用于读、写两个goroutine之间的消息通信
+	property           sync.Map           // 连接属性
+	broadcastGroupById sync.Map           // 广播组列表Id
 }
 
 func (c *connection) StartReader() {}
@@ -52,9 +51,6 @@ func (c *connection) Start(readerHandler func(), writerHandler func(data []byte)
 			// 调用注册方法写消息给客户端
 			writerHandler(data)
 
-		case data := <-c.broadcastGroupCh:
-			c.SendMsg(data.MsgID(), data.MsgData())
-
 		case <-c.exitCtx.Done():
 			return
 		}
@@ -73,12 +69,8 @@ func (c *connection) Stop() {
 	close(c.msgBuffChan)
 }
 
-func (c *connection) GetConnID() int {
-	return c.connID
-}
-
-func (c *connection) SetNotifyGroupCh(broadcastGroupCh iface.IBroadcastData) {
-	c.broadcastGroupCh <- broadcastGroupCh
+func (c *connection) GetConnId() int {
+	return c.connId
 }
 
 func (c *connection) RemoteAddrStr() string {
@@ -115,23 +107,29 @@ func (c *connection) RemoveProperty(key string) {
 	c.property.Delete(key)
 }
 
-func (c *connection) JoinBroadcastGroup(conn iface.IConnection, group iface.IBroadcast) {
-	c.broadcastGroupByID.Store(group.GetGroupID(), group)
-	group.SetBroadcastTarget(conn)
+func (c *connection) JoinBroadcastGroup(conn iface.IConnection, groupId int64) {
+	c.broadcastGroupById.Store(groupId, 1)
+	if groupById, b := GetInstanceBroadcastManager().GetBroadcastGroupById(groupId); b {
+		groupById.SetBroadcastTarget(conn.GetConnId())
+	}
 }
 
-func (c *connection) ExitBroadcastGroupByID(groupID int64) {
-	if value, loaded := c.broadcastGroupByID.LoadAndDelete(groupID); loaded {
-		value.(iface.IBroadcast).DelBroadcastTarget(c.GetConnID())
+func (c *connection) ExitBroadcastGroup(groupId int64) {
+	if _, loaded := c.broadcastGroupById.LoadAndDelete(groupId); loaded {
+		if groupById, b := GetInstanceBroadcastManager().GetBroadcastGroupById(groupId); b {
+			groupById.DelBroadcastTarget(c.GetConnId())
+		}
 	}
 }
 
 func (c *connection) ExitAllBroadcastGroup() {
-	c.broadcastGroupByID.Range(func(key, value any) bool {
-		value.(iface.IBroadcast).DelBroadcastTarget(c.GetConnID())
+	c.broadcastGroupById.Range(func(key, value any) bool {
+		if groupById, b := GetInstanceBroadcastManager().GetBroadcastGroupById(value.(int64)); b {
+			groupById.DelBroadcastTarget(c.GetConnId())
+		}
 		return true
 	})
-	c.broadcastGroupByID = sync.Map{}
+	c.broadcastGroupById = sync.Map{}
 }
 
 func (c *connection) ProtocolToByte(str proto.Message) []byte {

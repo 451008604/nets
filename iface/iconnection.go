@@ -15,8 +15,8 @@ type IConnection interface {
 	// 启动发送消息协程
 	StartWriter(data []byte)
 
-	// 获取当前连接ID
-	GetConnID() int
+	// 获取当前连接Id
+	GetConnId() int
 	// 获取客户端地址信息
 	RemoteAddrStr() string
 
@@ -30,16 +30,15 @@ type IConnection interface {
 	// 删除连接属性
 	RemoveProperty(key string)
 
-	SetNotifyGroupCh(notifyGroupCh IBroadcastData)
 	// 加入广播组
-	JoinBroadcastGroup(conn IConnection, group IBroadcast)
-	// 根据组ID退出广播组
-	ExitBroadcastGroupByID(groupID int64)
+	JoinBroadcastGroup(conn IConnection, groupId int64)
+	// 根据组Id退出广播组
+	ExitBroadcastGroup(groupId int64)
 	// 退出所有广播组
 	ExitAllBroadcastGroup()
 
-	// 协议转字节
+	// 序列化
 	ProtocolToByte(str proto.Message) []byte
-	// 字节转协议
+	// 反序列化
 	ByteToProtocol(byte []byte, target proto.Message) error
 }
