@@ -10,10 +10,7 @@ type serverTCP struct {
 	server
 }
 
-func NewServerTCP(customData *CustomServer) iface.IServer {
-	if customData != nil {
-		setCustomServer(customData)
-	}
+func NewServerTCP() iface.IServer {
 	s := &serverTCP{}
 	s.serverName = defaultServer.AppConf.AppName + "_tcp"
 	s.ip = defaultServer.AppConf.ServerTCP.Address

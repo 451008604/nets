@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"github.com/451008604/nets/iface"
 	"github.com/451008604/nets/network"
 	pb "github.com/451008604/nets/proto/bin"
@@ -21,11 +20,12 @@ func main() {
 	msgHandler := network.GetInstanceMsgHandler()
 	msgHandler.AddRouter(int32(pb.MSgID_PlayerLogin_Req), func() proto.Message { return &pb.PlayerLoginRequest{} }, func(con iface.IConnection, message proto.Message) {})
 
+	network.SetCustomServer(&network.CustomServer{})
 	// 启动TCP服务
-	serverTCP := network.NewServerTCP(nil)
+	serverTCP := network.NewServerTCP()
 	serverTCP.Listen()
 	// 启动WebSocket服务
-	serverWS := network.NewServerWS(nil)
+	serverWS := network.NewServerWS()
 	serverWS.Listen()
 	// 阻塞主进程
 	network.ServerWaitFlag.Wait()

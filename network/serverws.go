@@ -11,10 +11,7 @@ type serverWS struct {
 	server
 }
 
-func NewServerWS(customData *CustomServer) iface.IServer {
-	if customData != nil {
-		setCustomServer(customData)
-	}
+func NewServerWS() iface.IServer {
 	s := &serverWS{}
 	s.serverName = defaultServer.AppConf.AppName + "_ws"
 	s.ip = defaultServer.AppConf.ServerWS.Address

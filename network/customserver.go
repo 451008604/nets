@@ -22,7 +22,7 @@ func init() {
 	}
 }
 
-func setCustomServer(custom *CustomServer) {
+func SetCustomServer(custom *CustomServer) {
 	defaultServer.AppConf = MergeStructValues(defaultServer.AppConf, custom.AppConf)
 
 	if custom.DataPacket != nil {
@@ -32,7 +32,19 @@ func setCustomServer(custom *CustomServer) {
 
 // 将 defaultData 与 customData 进行合并，相同字段赋值优先使用 customData
 func MergeStructValues[T any](defaultData, customData *T) *T {
+	if customData == nil {
+		if defaultData != nil {
+			return defaultData
+		}
+		return new(T)
+	} else if defaultData == nil {
+		if customData != nil {
+			return customData
+		}
+		return new(T)
+	}
 	resultData := new(T)
+
 	v1 := reflect.ValueOf(defaultData).Elem()
 	v2 := reflect.ValueOf(customData).Elem()
 	v3 := reflect.ValueOf(resultData).Elem()
