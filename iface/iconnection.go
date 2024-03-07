@@ -30,13 +30,6 @@ type IConnection interface {
 	// 删除连接属性
 	RemoveProperty(key string)
 
-	// 加入广播组
-	JoinBroadcastGroup(conn IConnection, groupId int64)
-	// 根据组Id退出广播组
-	ExitBroadcastGroup(groupId int64)
-	// 退出所有广播组
-	ExitAllBroadcastGroup()
-
 	// 序列化
 	ProtocolToByte(str proto.Message) []byte
 	// 反序列化

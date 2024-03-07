@@ -7,9 +7,10 @@ import (
 )
 
 type broadcastManager struct {
-	idFlag               int64
-	broadcastGroupList   sync.Map
-	globalBroadcastGroup iface.IBroadcastGroup
+	idFlag                  int64
+	broadcastGroupByGroupId sync.Map // 广播组(根据组Id)
+	broadcastGroupByConnId  sync.Map // 广播组(根据连接Id)
+	globalBroadcastGroup    iface.IBroadcastGroup
 }
 
 var instanceBroadcastManager *broadcastManager
@@ -19,8 +20,9 @@ var instanceBroadcastManagerOnce = sync.Once{}
 func GetInstanceBroadcastManager() iface.IBroadcastManager {
 	instanceBroadcastManagerOnce.Do(func() {
 		instanceBroadcastManager = &broadcastManager{
-			idFlag:             1000000000,
-			broadcastGroupList: sync.Map{},
+			idFlag:                  1000000000,
+			broadcastGroupByGroupId: sync.Map{},
+			broadcastGroupByConnId:  sync.Map{},
 		}
 		instanceBroadcastManager.globalBroadcastGroup = instanceBroadcastManager.NewBroadcastGroup()
 	})
@@ -33,7 +35,8 @@ func (n *broadcastManager) NewBroadcastGroup() iface.IBroadcastGroup {
 		groupId:    n.idFlag,
 		targetList: sync.Map{},
 	}
-	n.broadcastGroupList.Store(broadcast.GetGroupId(), broadcast)
+
+	n.broadcastGroupByGroupId.Store(broadcast.GetGroupId(), broadcast)
 	return broadcast
 }
 
@@ -42,14 +45,38 @@ func (n *broadcastManager) GetGlobalBroadcastGroup() iface.IBroadcastGroup {
 }
 
 func (n *broadcastManager) GetBroadcastGroupById(groupId int64) (iface.IBroadcastGroup, bool) {
-	value, ok := n.broadcastGroupList.Load(groupId)
+	value, ok := n.broadcastGroupByGroupId.Load(groupId)
 	return value.(iface.IBroadcastGroup), ok
 }
 
 func (n *broadcastManager) DelBroadcastGroupById(groupId int64) {
-	if broadcast, ok := n.GetBroadcastGroupById(groupId); ok {
-		broadcast.ClearAllBroadcastTarget()
-	}
+	n.broadcastGroupByGroupId.Delete(groupId)
+}
 
-	n.broadcastGroupList.Delete(groupId)
+func (n *broadcastManager) GetBroadcastGroupByConnId(connId int) ([]iface.IBroadcastGroup, bool) {
+	value, ok := n.broadcastGroupByConnId.Load(connId)
+	return value.([]iface.IBroadcastGroup), ok
+}
+
+func (n *broadcastManager) SetBroadcastGroupByConnId(connId int, broadcastGroup iface.IBroadcastGroup) {
+	store, loaded := n.broadcastGroupByConnId.LoadOrStore(connId, []iface.IBroadcastGroup{broadcastGroup})
+	if loaded {
+		temp := store.([]iface.IBroadcastGroup)
+		temp = append(temp, broadcastGroup)
+		n.broadcastGroupByConnId.Store(connId, temp)
+	}
+}
+
+func (n *broadcastManager) DelBroadcastGroupByConnId(connId int, broadcastGroup iface.IBroadcastGroup) {
+	n.broadcastGroupByConnId.Delete(connId)
+	groups, b := n.GetBroadcastGroupByConnId(connId)
+	if b {
+		for i, group := range groups {
+			if group.GetGroupId() == broadcastGroup.GetGroupId() {
+				groups = append(groups[:i], groups[i+1:]...)
+				n.broadcastGroupByConnId.Store(connId, groups)
+				break
+			}
+		}
+	}
 }

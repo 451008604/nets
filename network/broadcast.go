@@ -16,6 +16,7 @@ func (n *broadcastGroup) GetGroupId() int64 {
 
 func (n *broadcastGroup) SetBroadcastTarget(connId int) {
 	n.targetList.Store(connId, 1)
+	GetInstanceBroadcastManager().SetBroadcastGroupByConnId(connId, n)
 }
 
 func (n *broadcastGroup) GetBroadcastTarget(connId int) bool {
@@ -25,13 +26,12 @@ func (n *broadcastGroup) GetBroadcastTarget(connId int) bool {
 
 func (n *broadcastGroup) DelBroadcastTarget(connId int) {
 	n.targetList.Delete(connId)
+	GetInstanceBroadcastManager().DelBroadcastGroupByConnId(connId, n)
 }
 
 func (n *broadcastGroup) ClearAllBroadcastTarget() {
 	n.targetList.Range(func(key, value any) bool {
-		if conn, err := GetInstanceConnManager().Get(value.(int)); err != nil {
-			conn.ExitBroadcastGroup(n.GetGroupId())
-		}
+		n.DelBroadcastTarget(key.(int))
 		return true
 	})
 }

@@ -10,7 +10,7 @@ import (
 
 type connection struct {
 	server             iface.IServer      // 当前Conn所属的Server
-	connId             int                // 当前连接的Id（SessionId）
+	connId             int                // 当前连接的Id(SessionId)
 	isClosed           bool               // 当前连接是否已关闭
 	exitCtx            context.Context    // 管理连接的上下文
 	exitCtxCancel      context.CancelFunc // 连接关闭信号
@@ -62,6 +62,14 @@ func (c *connection) Stop() {
 		return
 	}
 	c.isClosed = true
+
+	// 退出所在的广播组 TODO 此处调用会导致closeHook函数内无法获取所在组列表，无法持久化存储
+	if groups, b := GetInstanceBroadcastManager().GetBroadcastGroupByConnId(c.GetConnId()); b {
+		for _, group := range groups {
+			GetInstanceBroadcastManager().DelBroadcastGroupByConnId(c.GetConnId(), group)
+		}
+	}
+
 	// 通知关闭该连接的监听
 	c.exitCtxCancel()
 
@@ -105,31 +113,6 @@ func (c *connection) GetProperty(key string) any {
 
 func (c *connection) RemoveProperty(key string) {
 	c.property.Delete(key)
-}
-
-func (c *connection) JoinBroadcastGroup(conn iface.IConnection, groupId int64) {
-	c.broadcastGroupById.Store(groupId, 1)
-	if groupById, b := GetInstanceBroadcastManager().GetBroadcastGroupById(groupId); b {
-		groupById.SetBroadcastTarget(conn.GetConnId())
-	}
-}
-
-func (c *connection) ExitBroadcastGroup(groupId int64) {
-	if _, loaded := c.broadcastGroupById.LoadAndDelete(groupId); loaded {
-		if groupById, b := GetInstanceBroadcastManager().GetBroadcastGroupById(groupId); b {
-			groupById.DelBroadcastTarget(c.GetConnId())
-		}
-	}
-}
-
-func (c *connection) ExitAllBroadcastGroup() {
-	c.broadcastGroupById.Range(func(key, value any) bool {
-		if groupById, b := GetInstanceBroadcastManager().GetBroadcastGroupById(value.(int64)); b {
-			groupById.DelBroadcastTarget(c.GetConnId())
-		}
-		return true
-	})
-	c.broadcastGroupById = sync.Map{}
 }
 
 func (c *connection) ProtocolToByte(str proto.Message) []byte {

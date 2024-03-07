@@ -67,7 +67,7 @@ func (c *connectionTCP) StartWriter(data []byte) {
 func (c *connectionTCP) Start(readerHandler func(), writerHandler func(data []byte)) {
 	defer GetInstanceConnManager().Remove(c)
 
-	c.JoinBroadcastGroup(c, GetInstanceBroadcastManager().GetGlobalBroadcastGroup().GetGroupId())
+	GetInstanceBroadcastManager().GetGlobalBroadcastGroup().SetBroadcastTarget(c.GetConnId())
 	c.connection.Start(readerHandler, writerHandler)
 }
 
@@ -77,7 +77,6 @@ func (c *connectionTCP) Stop() {
 	}
 	c.connection.Stop()
 	_ = c.conn.Close()
-	c.ExitAllBroadcastGroup()
 }
 
 func (c *connectionTCP) RemoteAddrStr() string {

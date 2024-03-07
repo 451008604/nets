@@ -10,10 +10,16 @@ type IBroadcastManager interface {
 	NewBroadcastGroup() IBroadcastGroup
 	// 获取全局广播组
 	GetGlobalBroadcastGroup() IBroadcastGroup
-	// 获取广播组
+	// 根据组Id获取广播组
 	GetBroadcastGroupById(groupId int64) (IBroadcastGroup, bool)
-	// 根据组Id删除指定广播组
+	// 根据组Id删除广播组(解散广播组)
 	DelBroadcastGroupById(groupId int64)
+	// 根据连接Id获取广播组
+	GetBroadcastGroupByConnId(connId int) ([]IBroadcastGroup, bool)
+	// 根据连接Id设置广播组(加入广播组)
+	SetBroadcastGroupByConnId(connId int, broadcastGroup IBroadcastGroup)
+	// 根据连接Id删除广播组(退出广播组)
+	DelBroadcastGroupByConnId(connId int, broadcastGroup IBroadcastGroup)
 }
 
 // 广播组

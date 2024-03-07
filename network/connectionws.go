@@ -60,7 +60,7 @@ func (c *connectionWS) StartWriter(data []byte) {
 func (c *connectionWS) Start(readerHandler func(), writerHandler func(data []byte)) {
 	defer GetInstanceConnManager().Remove(c)
 
-	c.JoinBroadcastGroup(c, GetInstanceBroadcastManager().GetGlobalBroadcastGroup().GetGroupId())
+	GetInstanceBroadcastManager().GetGlobalBroadcastGroup().SetBroadcastTarget(c.GetConnId())
 	c.connection.Start(readerHandler, writerHandler)
 }
 
@@ -70,7 +70,6 @@ func (c *connectionWS) Stop() {
 	}
 	c.connection.Stop()
 	_ = c.conn.Close()
-	c.ExitAllBroadcastGroup()
 }
 
 func (c *connectionWS) RemoteAddrStr() string {
