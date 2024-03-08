@@ -1,46 +1,38 @@
 package network
 
-import (
-	"google.golang.org/protobuf/proto"
-	"sync"
-)
+import "sync"
 
 type broadcastGroup struct {
-	groupId    int64
-	targetList sync.Map
+	mu  sync.Mutex
+	arr []int
 }
 
-func (n *broadcastGroup) GetGroupId() int64 {
-	return n.groupId
+func (b *broadcastGroup) Append(id int) {
+	b.mu.Lock()
+	defer b.mu.Unlock()
+
+	b.arr = append(b.arr, id)
+	return
 }
 
-func (n *broadcastGroup) SetBroadcastTarget(connId int) {
-	n.targetList.Store(connId, 1)
-	GetInstanceBroadcastManager().SetBroadcastGroupByConnId(connId, n)
-}
+func (b *broadcastGroup) Remove(id int) {
+	b.mu.Lock()
+	defer b.mu.Unlock()
 
-func (n *broadcastGroup) GetBroadcastTarget(connId int) bool {
-	_, ok := n.targetList.Load(connId)
-	return ok
-}
-
-func (n *broadcastGroup) DelBroadcastTarget(connId int) {
-	n.targetList.Delete(connId)
-	GetInstanceBroadcastManager().DelBroadcastGroupByConnId(connId, n)
-}
-
-func (n *broadcastGroup) ClearAllBroadcastTarget() {
-	n.targetList.Range(func(key, value any) bool {
-		n.DelBroadcastTarget(key.(int))
-		return true
-	})
-}
-
-func (n *broadcastGroup) BroadcastAllTargets(msgId int32, data proto.Message) {
-	n.targetList.Range(func(key, value any) bool {
-		if conn, err := GetInstanceConnManager().Get(value.(int)); err != nil {
-			conn.SendMsg(msgId, data)
+	// 原地修改arr并过滤id
+	n := 0
+	for _, i := range b.arr {
+		if i != id {
+			b.arr[n] = i
+			n++
 		}
-		return true
-	})
+	}
+	b.arr = b.arr[:n]
+}
+
+func (b *broadcastGroup) GetArray() []int {
+	b.mu.Lock()
+	defer b.mu.Unlock()
+
+	return b.arr
 }

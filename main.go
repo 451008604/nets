@@ -1,20 +1,21 @@
 package main
 
 import (
+	"fmt"
 	"github.com/451008604/nets/iface"
 	"github.com/451008604/nets/network"
 	pb "github.com/451008604/nets/proto/bin"
 	"google.golang.org/protobuf/proto"
+	"runtime"
+	"time"
 )
 
 func main() {
+	go listenChannelStatus()
+
 	// ===========广播管理器===========
 	broadcastManager := network.GetInstanceBroadcastManager()
 	broadcastManager.GetGlobalBroadcastGroup()
-
-	broadcastGroup := broadcastManager.NewBroadcastGroup()
-	broadcastGroup.SetBroadcastTarget(0)
-	broadcastGroup.DelBroadcastTarget(iface.IConnection.GetConnId(nil))
 
 	// ===========连接管理器===========
 	connManager := network.GetInstanceConnManager()
@@ -54,12 +55,12 @@ func main() {
 	network.ServerWaitFlag.Wait()
 }
 
-// func listenChannelStatus() {
-// 	goroutineNum := 0
-// 	for range time.Tick(time.Second * 1) {
-// 		if temp := runtime.NumGoroutine(); temp != goroutineNum {
-// 			goroutineNum = temp
-// 			fmt.Printf("currentNumberOfThreads: %v\tcurrentNumberOfConnections: %v\n", goroutineNum, network.GetInstanceConnManager().Len())
-// 		}
-// 	}
-// }
+func listenChannelStatus() {
+	goroutineNum := 0
+	for range time.Tick(time.Second * 1) {
+		if temp := runtime.NumGoroutine(); temp != goroutineNum {
+			goroutineNum = temp
+			fmt.Printf("currentNumberOfThreads: %v\tcurrentNumberOfConnections: %v\n", goroutineNum, network.GetInstanceConnManager().Len())
+		}
+	}
+}

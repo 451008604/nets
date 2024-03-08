@@ -64,9 +64,11 @@ func (c *connection) Stop() {
 	c.isClosed = true
 
 	// 退出所在的广播组 TODO 此处调用会导致closeHook函数内无法获取所在组列表，无法持久化存储
+	GetInstanceBroadcastManager().GetGlobalBroadcastGroup().Remove(c.GetConnId())
 	if groups, b := GetInstanceBroadcastManager().GetBroadcastGroupByConnId(c.GetConnId()); b {
-		for _, group := range groups {
-			GetInstanceBroadcastManager().DelBroadcastGroupByConnId(c.GetConnId(), group)
+		array := groups.GetArray()
+		for _, groupId := range array {
+			GetInstanceBroadcastManager().ExitBroadcastGroup(groupId, c.GetConnId())
 		}
 	}
 

@@ -1,7 +1,6 @@
 package network
 
 import (
-	"errors"
 	"fmt"
 	"github.com/451008604/nets/iface"
 	"os"
@@ -75,12 +74,9 @@ func (c *connManager) Remove(conn iface.IConnection) {
 	}
 }
 
-func (c *connManager) Get(connId int) (iface.IConnection, error) {
-	if value, ok := c.connections.Load(connId); ok {
-		return value.(iface.IConnection), nil
-	} else {
-		return nil, errors.New("UnableToObtainBoundConnection")
-	}
+func (c *connManager) Get(connId int) (iface.IConnection, bool) {
+	value, ok := c.connections.Load(connId)
+	return value.(iface.IConnection), ok
 }
 
 func (c *connManager) Len() int {

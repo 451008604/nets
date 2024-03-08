@@ -60,7 +60,7 @@ func (c *connectionWS) StartWriter(data []byte) {
 func (c *connectionWS) Start(readerHandler func(), writerHandler func(data []byte)) {
 	defer GetInstanceConnManager().Remove(c)
 
-	GetInstanceBroadcastManager().GetGlobalBroadcastGroup().SetBroadcastTarget(c.GetConnId())
+	GetInstanceBroadcastManager().GetGlobalBroadcastGroup().Append(c.GetConnId())
 	c.connection.Start(readerHandler, writerHandler)
 }
 
