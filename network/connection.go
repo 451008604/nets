@@ -9,14 +9,13 @@ import (
 )
 
 type connection struct {
-	server             iface.IServer      // 当前Conn所属的Server
-	connId             int                // 当前连接的Id(SessionId)
-	isClosed           bool               // 当前连接是否已关闭
-	exitCtx            context.Context    // 管理连接的上下文
-	exitCtxCancel      context.CancelFunc // 连接关闭信号
-	msgBuffChan        chan []byte        // 用于读、写两个goroutine之间的消息通信
-	property           sync.Map           // 连接属性
-	broadcastGroupById sync.Map           // 广播组列表Id
+	server        iface.IServer      // 当前Conn所属的Server
+	connId        int                // 当前连接的Id(SessionId)
+	isClosed      bool               // 当前连接是否已关闭
+	exitCtx       context.Context    // 管理连接的上下文
+	exitCtxCancel context.CancelFunc // 连接关闭信号
+	msgBuffChan   chan []byte        // 用于读、写两个goroutine之间的消息通信
+	property      sync.Map           // 连接属性
 }
 
 func (c *connection) StartReader() {}

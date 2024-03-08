@@ -21,7 +21,6 @@ func NewConnectionWS(server iface.IServer, conn *websocket.Conn) iface.IConnecti
 	c.exitCtx, c.exitCtxCancel = context.WithCancel(context.Background())
 	c.msgBuffChan = make(chan []byte, defaultServer.AppConf.MaxMsgChanLen)
 	c.property = sync.Map{}
-	c.broadcastGroupById = sync.Map{}
 	return c
 }
 
