@@ -72,13 +72,19 @@ func (n *broadcastManager) SendBroadcastAllTargets(groupId int, msgId int32, dat
 }
 
 func (n *broadcastManager) GetBroadcastGroupByGroupId(groupId int) (iface.IMutexArray, bool) {
-	value, ok := n.broadcastGroupByGroupId.Load(groupId)
-	return value.(iface.IMutexArray), ok
+	if value, ok := n.broadcastGroupByGroupId.Load(groupId); ok {
+		return value.(iface.IMutexArray), ok
+	} else {
+		return nil, false
+	}
 }
 
 func (n *broadcastManager) GetBroadcastGroupByConnId(connId int) (iface.IMutexArray, bool) {
-	value, ok := n.broadcastGroupByConnId.Load(connId)
-	return value.(iface.IMutexArray), ok
+	if value, ok := n.broadcastGroupByConnId.Load(connId); ok {
+		return value.(iface.IMutexArray), ok
+	} else {
+		return nil, false
+	}
 }
 
 func (n *broadcastManager) autoClearEmptyBroadcastGroup() {
