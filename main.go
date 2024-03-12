@@ -29,8 +29,10 @@ func main() {
 	// ===========消息处理器===========
 	msgHandler := network.GetInstanceMsgHandler()
 	// 添加一个路由
-	msgHandler.AddRouter(int32(pb.MSgID_PlayerLogin_Req), func() proto.Message { return &pb.PlayerLoginRequest{} }, func(con iface.IConnection, message proto.Message) {
+	msgHandler.AddRouter(int32(pb.MSgID_Echo_Req), func() proto.Message { return &pb.PlayerLoginRequest{} }, func(con iface.IConnection, message proto.Message) {
 		// do something ...
+
+		con.SendMsg(int32(pb.MSgID_Echo_Res), message)
 	})
 
 	// 自定义消息过滤器
