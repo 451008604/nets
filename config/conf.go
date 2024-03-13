@@ -26,9 +26,9 @@ func init() {
 	appConf = &AppConf{
 		AppName:          "nets",
 		MaxPackSize:      4096,
-		MaxConn:          1000,
-		WorkerPoolSize:   1000,
-		WorkerTaskMaxLen: 1000,
+		MaxConn:          100000,
+		WorkerPoolSize:   10000,
+		WorkerTaskMaxLen: 100,
 		MaxMsgChanLen:    100,
 		ProtocolIsJson:   false,
 		ServerTCP: ServerConf{

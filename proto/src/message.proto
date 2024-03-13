@@ -1,0 +1,41 @@
+syntax = "proto3";
+package pb;
+option go_package = "./;pb";
+
+enum MsgId {
+    None = 0;
+    Heartbeat_Req = 1001;       // HeartbeatReq    心跳请求
+    Heartbeat_Res = 1002;       // HeartbeatRes    心跳响应
+    Broadcast_Req = 1003;       // BroadcastRequest
+    Broadcast_Res = 1004;       // BroadcastResponse
+    Echo_Req = 1005;
+    Echo_Res = 1006;
+}
+
+// ==========================================
+
+// 心跳请求
+message HeartbeatRequest {
+}
+
+// 心跳响应
+message HeartbeatResponse {
+    uint32 ServerTime = 1;         // 服务器时间（时间戳，秒）
+}
+
+message BroadcastRequest {
+    string Str = 1;
+}
+message BroadcastResponse {
+    uint32 Result = 1;
+    string Str = 2;
+}
+
+message EchoRequest {
+    MsgId MsgId = 1;
+    string Message = 2;
+}
+
+message EchoResponse {
+    string Message = 1;
+}
