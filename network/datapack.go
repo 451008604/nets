@@ -53,5 +53,6 @@ func (d *dataPack) UnPack(binaryData []byte) iface.IMessage {
 		fmt.Printf("received data length exceeds the limit. MaxPackSize %v, msgDataLen %v\n", defaultServer.AppConf.MaxPackSize, msgData.GetDataLen())
 		return nil
 	}
+	msgData.SetData(binaryData[d.GetHeadLen() : d.GetHeadLen()+int(msgData.GetDataLen())])
 	return msgData
 }

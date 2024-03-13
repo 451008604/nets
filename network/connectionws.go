@@ -36,9 +36,6 @@ func (c *connectionWS) StartReader() {
 		GetInstanceConnManager().Remove(c)
 		return
 	}
-	if msgData.GetDataLen() > 0 {
-		msgData.SetData(msgByte[defaultServer.DataPacket.GetHeadLen() : defaultServer.DataPacket.GetHeadLen()+int(msgData.GetDataLen())])
-	}
 
 	// 封装请求数据传入处理函数
 	req := &request{conn: c, msg: msgData}

@@ -32,19 +32,11 @@ func (c *connectionTCP) StartReader() {
 		GetInstanceConnManager().Remove(c)
 		return
 	}
-	// 通过消息头获取dataLen和Id
+
 	msgData := defaultServer.DataPacket.UnPack(headData)
 	if msgData == nil {
 		GetInstanceConnManager().Remove(c)
 		return
-	}
-	// 通过消息头获取消息body
-	if msgData.GetDataLen() > 0 {
-		msgData.SetData(make([]byte, msgData.GetDataLen()))
-		if _, err := io.ReadFull(c.conn, msgData.GetData()); err != nil {
-			GetInstanceConnManager().Remove(c)
-			return
-		}
 	}
 
 	// 封装请求数据传入处理函数
