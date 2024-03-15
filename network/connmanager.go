@@ -57,9 +57,11 @@ func (c *connManager) Add(conn iface.IConnection) {
 }
 
 func (c *connManager) Remove(conn iface.IConnection) {
-	if value, ok := c.connections.LoadAndDelete(conn.GetConnId()); !ok {
+	value, ok := c.connections.LoadAndDelete(conn.GetConnId())
+	if !ok {
 		return
-	} else if value != conn {
+	}
+	if value != conn {
 		c.connections.Store(conn.GetConnId(), value)
 		return
 	}

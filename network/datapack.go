@@ -13,7 +13,7 @@ func NewDataPack() iface.IDataPack {
 	return &dataPack{}
 }
 
-func (d *dataPack) GetHeadLen() int {
+func (d *dataPack) getHeadLen() int {
 	// id int(2字节) + dataLen int(2字节)
 	return 4
 }
@@ -36,10 +36,9 @@ func (d *dataPack) Pack(msg iface.IMessage) []byte {
 	return dataBuff.Bytes()
 }
 
-func (d *dataPack) UnPack(binaryData []byte) iface.IMessage {
+func (d *dataPack) UnPack(binaryData []byte) (result []iface.IMessage) {
 	dataBuff := bytes.NewReader(binaryData)
 	msgData := &message{}
-
 	// 读msgId
 	if binary.Read(dataBuff, binary.LittleEndian, &msgData.id) != nil {
 		return nil
@@ -53,6 +52,19 @@ func (d *dataPack) UnPack(binaryData []byte) iface.IMessage {
 		fmt.Printf("received data length exceeds the limit. MaxPackSize %v, msgDataLen %v\n", defaultServer.AppConf.MaxPackSize, msgData.GetDataLen())
 		return nil
 	}
-	msgData.SetData(binaryData[d.GetHeadLen() : d.GetHeadLen()+int(msgData.GetDataLen())])
-	return msgData
+	totalLen := d.getHeadLen() + int(msgData.GetDataLen())
+	if len(binaryData) < totalLen {
+		return nil
+	}
+	msgData.SetData(binaryData[d.getHeadLen():totalLen])
+	result = append(result, msgData)
+
+	// 处理粘包数据
+	if len(binaryData) > totalLen {
+		if r := d.UnPack(binaryData[totalLen:]); r != nil {
+			result = append(result, r...)
+		}
+		return
+	}
+	return
 }

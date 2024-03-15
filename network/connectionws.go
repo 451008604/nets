@@ -37,12 +37,14 @@ func (c *connectionWS) StartReader() {
 		return
 	}
 
-	// 封装请求数据传入处理函数
-	req := &request{conn: c, msg: msgData}
-	if defaultServer.AppConf.WorkerPoolSize > 0 {
-		GetInstanceMsgHandler().SendMsgToTaskQueue(req)
-	} else {
-		go GetInstanceMsgHandler().DoMsgHandler(req)
+	for _, data := range msgData {
+		// 封装请求数据传入处理函数
+		req := &request{conn: c, msg: data}
+		if defaultServer.AppConf.WorkerPoolSize > 0 {
+			GetInstanceMsgHandler().SendMsgToTaskQueue(req)
+		} else {
+			go GetInstanceMsgHandler().DoMsgHandler(req)
+		}
 	}
 }
 

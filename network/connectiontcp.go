@@ -3,7 +3,6 @@ package network
 import (
 	"context"
 	"github.com/451008604/nets/iface"
-	"io"
 	"net"
 	"sync"
 )
@@ -26,25 +25,36 @@ func NewConnectionTCP(server iface.IServer, conn *net.TCPConn) iface.IConnection
 }
 
 func (c *connectionTCP) StartReader() {
-	// 获取客户端的消息头信息
-	headData := make([]byte, defaultServer.DataPacket.GetHeadLen())
-	if _, err := io.ReadFull(c.conn, headData); err != nil {
-		GetInstanceConnManager().Remove(c)
-		return
+	var msgByte []byte
+	// 将连接内的数据流全部读取出来
+	for {
+		b := make([]byte, 512)
+		if read, err := c.conn.Read(b); err != nil {
+			GetInstanceConnManager().Remove(c)
+			return
+		} else {
+			msgByte = append(msgByte, b[:read]...)
+			if read < len(b) {
+				break
+			}
+		}
 	}
 
-	msgData := defaultServer.DataPacket.UnPack(headData)
+	// 将所有的内容分割成不同的消息，处理粘包
+	msgData := defaultServer.DataPacket.UnPack(msgByte)
 	if msgData == nil {
 		GetInstanceConnManager().Remove(c)
 		return
 	}
 
-	// 封装请求数据传入处理函数
-	req := &request{conn: c, msg: msgData}
-	if defaultServer.AppConf.WorkerPoolSize > 0 {
-		GetInstanceMsgHandler().SendMsgToTaskQueue(req)
-	} else {
-		go GetInstanceMsgHandler().DoMsgHandler(req)
+	for _, data := range msgData {
+		// 封装请求数据传入处理函数
+		req := &request{conn: c, msg: data}
+		if defaultServer.AppConf.WorkerPoolSize > 0 {
+			GetInstanceMsgHandler().SendMsgToTaskQueue(req)
+		} else {
+			go GetInstanceMsgHandler().DoMsgHandler(req)
+		}
 	}
 }
 
