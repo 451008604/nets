@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"github.com/451008604/nets/network"
 	pb "github.com/451008604/nets/proto/bin"
 	"github.com/gorilla/websocket"
@@ -28,20 +27,20 @@ func sendWebSocketMessage(data []byte) {
 	}
 
 	go func(c *websocket.Conn) {
-		for {
-			_, message, e := c.ReadMessage()
-			if e == nil {
-				if len(message) != 0 {
-					unPack := network.NewDataPack().UnPack(message)
-					body := &pb.EchoResponse{}
-					_ = proto.Unmarshal(unPack.GetData(), body)
-					fmt.Printf("服务器：%v - %s\n", unPack.GetMsgId(), body.Message)
-				}
-			} else {
-				_ = c.Close()
-				break
-			}
-		}
+		// for {
+		// _, message, e := c.ReadMessage()
+		// if e == nil {
+		// 	if len(message) != 0 {
+		// 		unPack := network.NewDataPack().UnPack(message)
+		// 		body := &pb.EchoResponse{}
+		// 		_ = proto.Unmarshal(unPack.(), body)
+		// 		fmt.Printf("服务器：%v - %s\n", unPack.GetMsgId(), body.Message)
+		// 	}
+		// } else {
+		// 	_ = c.Close()
+		// 	break
+		// }
+		// }
 	}(conn)
 
 	// 发送消息

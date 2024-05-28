@@ -11,13 +11,13 @@ import (
 )
 
 type connManager struct {
-	connId      int64                              // 用于客户端连接的自增Id
-	connections sync.Map                           // 管理的连接信息
-	signalCh    chan os.Signal                     // 处理系统信号
-	closeConnId chan int                           // 已关闭的连接Id集合
-	len         uint32                             // 连接数量
-	onConnOpen  func(connection iface.IConnection) // 该Server连接创建时的Hook函数
-	onConnClose func(connection iface.IConnection) // 该Server连接断开时的Hook函数
+	connId      int64                                     // 用于客户端连接的自增Id
+	connections ConcurrentMap[Integer, iface.IConnection] // 管理的连接信息
+	signalCh    chan os.Signal                            // 处理系统信号
+	closeConnId chan int                                  // 已关闭的连接Id集合
+	len         uint32                                    // 连接数量
+	onConnOpen  func(connection iface.IConnection)        // 该Server连接创建时的Hook函数
+	onConnClose func(connection iface.IConnection)        // 该Server连接断开时的Hook函数
 }
 
 var instanceConnManager iface.IConnManager
@@ -27,7 +27,7 @@ var instanceConnManagerOnce = sync.Once{}
 func GetInstanceConnManager() iface.IConnManager {
 	instanceConnManagerOnce.Do(func() {
 		instanceConnManager = &connManager{
-			connections: sync.Map{},
+			connections: NewConcurrentStringer[Integer, iface.IConnection](),
 			closeConnId: make(chan int, defaultServer.AppConf.MaxConn),
 		}
 		instanceConnManager.OperatingSystemSignalHandler()
