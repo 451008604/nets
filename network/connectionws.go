@@ -4,7 +4,6 @@ import (
 	"context"
 	"github.com/451008604/nets/iface"
 	"github.com/gorilla/websocket"
-	"sync"
 )
 
 type connectionWS struct {
@@ -20,7 +19,7 @@ func NewConnectionWS(server iface.IServer, conn *websocket.Conn) iface.IConnecti
 	c.isClosed = false
 	c.exitCtx, c.exitCtxCancel = context.WithCancel(context.Background())
 	c.msgBuffChan = make(chan []byte, defaultServer.AppConf.MaxMsgChanLen)
-	c.property = sync.Map{}
+	c.property = NewConcurrentMap[any]()
 	return c
 }
 

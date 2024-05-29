@@ -7,11 +7,11 @@ import (
 )
 
 type msgHandler struct {
-	workerPoolSize int                     // 工作池的容量
-	workQueue      sync.Map                // 工作池，每个工作队列中存放等待执行的任务
-	apis           map[int32]iface.IRouter // 存放每个MsgId所对应处理方法的map属性
-	filter         iface.IFilter           // 消息过滤器
-	errCapture     iface.IErrCapture       // 错误捕获器
+	workerPoolSize int                                         // 工作池的容量
+	workQueue      ConcurrentMap[Integer, chan iface.IRequest] // 工作池，每个工作队列中存放等待执行的任务
+	apis           map[int32]iface.IRouter                     // 存放每个MsgId所对应处理方法的map属性
+	filter         iface.IFilter                               // 消息过滤器
+	errCapture     iface.IErrCapture                           // 错误捕获器
 }
 
 var instanceMsgHandler iface.IMsgHandler
@@ -23,7 +23,7 @@ func GetInstanceMsgHandler() iface.IMsgHandler {
 		instanceMsgHandler = &msgHandler{
 			workerPoolSize: defaultServer.AppConf.WorkerPoolSize,
 			apis:           make(map[int32]iface.IRouter),
-			workQueue:      sync.Map{},
+			workQueue:      NewConcurrentStringer[Integer, chan iface.IRequest](),
 		}
 	})
 	return instanceMsgHandler
@@ -69,14 +69,16 @@ func (m *msgHandler) GetApis() map[int32]iface.IRouter {
 func (m *msgHandler) SendMsgToTaskQueue(request iface.IRequest) {
 	// 根据连接Id对工作队列进行负载均衡，通过连接Id复用实现协程复用。保证每个用户单独一个worker协程
 	workerId := request.GetConnection().GetConnId() % m.workerPoolSize
-	workQueue, loaded := m.workQueue.LoadOrStore(workerId, make(chan iface.IRequest, defaultServer.AppConf.WorkerTaskMaxLen))
-	if !loaded {
+	workQueue, ok := m.workQueue.Get(Integer(workerId))
+	if !ok {
+		workQueue = make(chan iface.IRequest, defaultServer.AppConf.WorkerTaskMaxLen)
+		m.workQueue.Set(Integer(workerId), workQueue)
 		// 对工作池进行扩容
-		go m.startOneWorker(workQueue.(chan iface.IRequest))
+		go m.startOneWorker(workQueue)
 	}
 
 	// 将请求推入worker协程
-	workQueue.(chan iface.IRequest) <- request
+	workQueue <- request
 }
 
 func (m *msgHandler) startOneWorker(workQueue chan iface.IRequest) {

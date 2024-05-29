@@ -15,7 +15,6 @@ type connManager struct {
 	connections ConcurrentMap[Integer, iface.IConnection] // 管理的连接信息
 	signalCh    chan os.Signal                            // 处理系统信号
 	closeConnId chan int                                  // 已关闭的连接Id集合
-	len         uint32                                    // 连接数量
 	onConnOpen  func(connection iface.IConnection)        // 该Server连接创建时的Hook函数
 	onConnClose func(connection iface.IConnection)        // 该Server连接断开时的Hook函数
 }
@@ -45,8 +44,7 @@ func (c *connManager) NewConnId() int {
 }
 
 func (c *connManager) Add(conn iface.IConnection) {
-	c.connections.Store(conn.GetConnId(), conn)
-	atomic.AddUint32(&c.len, 1)
+	c.connections.Set(Integer(conn.GetConnId()), conn)
 
 	go conn.Start(conn.StartReader, conn.StartWriter)
 
@@ -57,17 +55,16 @@ func (c *connManager) Add(conn iface.IConnection) {
 }
 
 func (c *connManager) Remove(conn iface.IConnection) {
-	value, ok := c.connections.LoadAndDelete(conn.GetConnId())
-	if !ok {
+	value, ok := c.connections.Get(Integer(conn.GetConnId()))
+	// 如果不存在，或者指针不同
+	if !ok || value != conn {
 		return
 	}
-	if value != conn {
-		c.connections.Store(conn.GetConnId(), value)
-		return
-	}
-	atomic.AddUint32(&c.len, ^uint32(0))
+	// 删除连接
+	c.connections.Remove(Integer(conn.GetConnId()))
+	// 回收连接Id
 	c.setClosingConn(conn.GetConnId())
-
+	// 关闭连接
 	conn.Stop()
 
 	// 调用关闭连接hook函数
@@ -77,20 +74,19 @@ func (c *connManager) Remove(conn iface.IConnection) {
 }
 
 func (c *connManager) Get(connId int) (iface.IConnection, bool) {
-	value, ok := c.connections.Load(connId)
+	value, ok := c.connections.Get(Integer(connId))
 	return value.(iface.IConnection), ok
 }
 
 func (c *connManager) Len() int {
-	return int(c.len)
+	return c.connections.Count()
 }
 
 func (c *connManager) ClearConn() {
 	// 清理全部的connections信息
-	c.connections.Range(func(key, value any) bool {
-		c.Remove(value.(iface.IConnection))
-		return true
-	})
+	for _, v := range c.connections.Items() {
+		c.Remove(v)
+	}
 }
 
 func (c *connManager) OnConnOpen(fun func(conn iface.IConnection)) {

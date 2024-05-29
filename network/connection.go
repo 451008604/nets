@@ -5,17 +5,16 @@ import (
 	"encoding/json"
 	"github.com/451008604/nets/iface"
 	"google.golang.org/protobuf/proto"
-	"sync"
 )
 
 type connection struct {
-	server        iface.IServer      // 当前Conn所属的Server
-	connId        int                // 当前连接的Id(SessionId)
-	isClosed      bool               // 当前连接是否已关闭
-	exitCtx       context.Context    // 管理连接的上下文
-	exitCtxCancel context.CancelFunc // 连接关闭信号
-	msgBuffChan   chan []byte        // 用于读、写两个goroutine之间的消息通信
-	property      sync.Map           // 连接属性
+	server        iface.IServer              // 当前Conn所属的Server
+	connId        int                        // 当前连接的Id(SessionId)
+	isClosed      bool                       // 当前连接是否已关闭
+	exitCtx       context.Context            // 管理连接的上下文
+	exitCtxCancel context.CancelFunc         // 连接关闭信号
+	msgBuffChan   chan []byte                // 用于读、写两个goroutine之间的消息通信
+	property      ConcurrentMap[string, any] // 连接属性
 }
 
 func (c *connection) StartReader() {}
@@ -101,11 +100,11 @@ func (c *connection) SendMsg(msgId int32, msgData proto.Message) {
 }
 
 func (c *connection) SetProperty(key string, value any) {
-	c.property.Store(key, value)
+	c.property.Set(key, value)
 }
 
 func (c *connection) GetProperty(key string) any {
-	if value, ok := c.property.Load(key); ok {
+	if value, ok := c.property.Get(key); ok {
 		return value
 	} else {
 		return nil
@@ -113,7 +112,7 @@ func (c *connection) GetProperty(key string) any {
 }
 
 func (c *connection) RemoveProperty(key string) {
-	c.property.Delete(key)
+	c.property.Remove(key)
 }
 
 func (c *connection) ProtocolToByte(str proto.Message) []byte {

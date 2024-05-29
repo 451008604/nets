@@ -4,7 +4,6 @@ import (
 	"context"
 	"github.com/451008604/nets/iface"
 	"net"
-	"sync"
 )
 
 type connectionTCP struct {
@@ -20,7 +19,7 @@ func NewConnectionTCP(server iface.IServer, conn *net.TCPConn) iface.IConnection
 	c.isClosed = false
 	c.exitCtx, c.exitCtxCancel = context.WithCancel(context.Background())
 	c.msgBuffChan = make(chan []byte, defaultServer.AppConf.MaxMsgChanLen)
-	c.property = sync.Map{}
+	c.property = NewConcurrentMap[any]()
 	return c
 }
 
