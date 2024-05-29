@@ -75,7 +75,7 @@ func (c *connManager) Remove(conn iface.IConnection) {
 
 func (c *connManager) Get(connId int) (iface.IConnection, bool) {
 	value, ok := c.connections.Get(Integer(connId))
-	return value.(iface.IConnection), ok
+	return value, ok
 }
 
 func (c *connManager) Len() int {

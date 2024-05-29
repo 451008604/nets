@@ -30,7 +30,7 @@ func init() {
 		WorkerPoolSize:   10000,
 		WorkerTaskMaxLen: 100,
 		MaxMsgChanLen:    100,
-		ProtocolIsJson:   false,
+		ProtocolIsJson:   true,
 		ServerTCP: ServerConf{
 			Port: "17001",
 		},
