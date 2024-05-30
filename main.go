@@ -10,6 +10,30 @@ import (
 	"runtime"
 )
 
+// 服务指标监控
+func listenChannelStatus() {
+	serveMux := http.NewServeMux()
+	server := &http.Server{Addr: ":17000", Handler: serveMux}
+	serveMux.HandleFunc("/state", func(w http.ResponseWriter, r *http.Request) {
+		var memStats runtime.MemStats
+		runtime.ReadMemStats(&memStats)
+
+		var mapping [][]any
+		mapping = append(mapping, []any{"GO_ROOT", runtime.GOROOT()})
+		mapping = append(mapping, []any{"SYS_CPU_NUM", runtime.NumCPU()})
+		mapping = append(mapping, []any{"TOTAL_ALLOCATED_MEMORY", fmt.Sprintf("%v KB", memStats.TotalAlloc/1024)})
+		mapping = append(mapping, []any{"CGOCALL_NUM", runtime.NumCgoCall()})
+		mapping = append(mapping, []any{"GOROUTINE_NUM", runtime.NumGoroutine()})
+
+		str := ""
+		for _, v := range mapping {
+			str += fmt.Sprintf("%v：%v\n", v[0], v[1])
+		}
+		_, _ = w.Write([]byte(str))
+	})
+	fmt.Printf("%v\n", server.ListenAndServe())
+}
+
 func main() {
 	go listenChannelStatus()
 
@@ -32,7 +56,7 @@ func main() {
 	msgHandler.AddRouter(int32(pb.MsgId_Echo_Req), func() proto.Message { return &pb.EchoRequest{} }, func(con iface.IConnection, message proto.Message) {
 		// do something ...
 		req := message.(*pb.EchoRequest)
-		fmt.Println(req.GetMsgId().Number(), req.GetMessage())
+		fmt.Println(req.GetMessage())
 		res := &pb.EchoResponse{
 			Message: req.Message,
 		}
@@ -59,33 +83,4 @@ func main() {
 	serverWS.Listen()
 	// 阻塞主进程
 	network.ServerWaitFlag.Wait()
-}
-
-// 服务指标监控
-func listenChannelStatus() {
-	serveMux := http.NewServeMux()
-	server := &http.Server{Addr: ":17000", Handler: serveMux}
-	serveMux.HandleFunc("/state", func(w http.ResponseWriter, r *http.Request) {
-		var memStats runtime.MemStats
-		runtime.ReadMemStats(&memStats)
-
-		var mapping [][]any
-		mapping = append(mapping, []any{"GO_VERSION", runtime.Version()})
-		mapping = append(mapping, []any{"GO_ROOT", runtime.GOROOT()})
-		mapping = append(mapping, []any{"SYS_CPU_NUM", runtime.NumCPU()})
-		mapping = append(mapping, []any{"Allocated memory", fmt.Sprintf("%v KB", memStats.Alloc/1024)})
-		mapping = append(mapping, []any{"Total allocated memory", fmt.Sprintf("%v KB", memStats.TotalAlloc/1024)})
-		mapping = append(mapping, []any{"Heap allocated memory", fmt.Sprintf("%v KB", memStats.HeapAlloc/1024)})
-		mapping = append(mapping, []any{"Heap system memory", fmt.Sprintf("%v KB", memStats.HeapSys/1024)})
-		mapping = append(mapping, []any{"Heap system Frees", fmt.Sprintf("%v KB", memStats.Frees/1024)})
-		mapping = append(mapping, []any{"CGOCALL_NUM", runtime.NumCgoCall()})
-		mapping = append(mapping, []any{"GOROUTINE_NUM", runtime.NumGoroutine()})
-
-		str := ""
-		for _, v := range mapping {
-			str += fmt.Sprintf("%v：\t%v\n", v[0], v[1])
-		}
-		_, _ = w.Write([]byte(str))
-	})
-	fmt.Printf("%v\n", server.ListenAndServe())
 }

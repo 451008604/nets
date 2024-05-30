@@ -32,7 +32,6 @@ message BroadcastResponse {
 }
 
 message EchoRequest {
-    MsgId MsgId = 1;
     string Message = 2;
 }
 

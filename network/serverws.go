@@ -20,11 +20,6 @@ func NewServerWS() iface.IServer {
 }
 
 func (s *serverWS) Start() {
-	if s.isClose {
-		s.isClose = false
-		return
-	}
-
 	var upgrade = websocket.Upgrader{
 		ReadBufferSize:  defaultServer.AppConf.MaxPackSize,
 		WriteBufferSize: defaultServer.AppConf.MaxPackSize,
@@ -62,6 +57,7 @@ func (s *serverWS) Start() {
 
 func (s *serverWS) Listen() bool {
 	if defaultServer.AppConf.ServerWS.Port != "" {
+		s.server.Listen()
 		go s.Start()
 		s.server.Start()
 		fmt.Printf("server starting [ %v:%v ]\n", s.serverName, s.port)

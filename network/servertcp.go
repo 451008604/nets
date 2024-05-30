@@ -19,11 +19,6 @@ func NewServerTCP() iface.IServer {
 }
 
 func (s *serverTCP) Start() {
-	if s.isClose {
-		s.isClose = false
-		return
-	}
-
 	var (
 		addr *net.TCPAddr
 		tcp  *net.TCPListener
@@ -77,6 +72,7 @@ func (s *serverTCP) Start() {
 
 func (s *serverTCP) Listen() bool {
 	if defaultServer.AppConf.ServerTCP.Port != "" {
+		s.server.Listen()
 		go s.Start()
 		s.server.Start()
 		fmt.Printf("server starting [ %v:%v ]\n", s.serverName, s.port)
