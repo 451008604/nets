@@ -4,6 +4,8 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
+type IConnProperty string
+
 type IConnection interface {
 	// 启动连接(通过connmanager调用)
 	Start(readerHandler func(), writerHandler func(data []byte))
@@ -19,16 +21,18 @@ type IConnection interface {
 	GetConnId() int
 	// 获取客户端地址信息
 	RemoteAddrStr() string
+	// 获取连接状态
+	GetIsClosed() bool
 
 	// 发送消息给客户端
 	SendMsg(msgId int32, msgData proto.Message)
 
 	// 设置连接属性
-	SetProperty(key string, value any)
+	SetProperty(key IConnProperty, value any)
 	// 获取连接属性
-	GetProperty(key string) (value any)
+	GetProperty(key IConnProperty) (value any)
 	// 删除连接属性
-	RemoveProperty(key string)
+	RemoveProperty(key IConnProperty)
 
 	// 序列化
 	ProtocolToByte(str proto.Message) []byte

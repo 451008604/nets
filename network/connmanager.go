@@ -15,8 +15,9 @@ type connManager struct {
 	connections ConcurrentMap[Integer, iface.IConnection] // 管理的连接信息
 	signalCh    chan os.Signal                            // 处理系统信号
 	closeConnId chan int                                  // 已关闭的连接Id集合
-	onConnOpen  func(connection iface.IConnection)        // 该Server连接创建时的Hook函数
-	onConnClose func(connection iface.IConnection)        // 该Server连接断开时的Hook函数
+	onConnOpen  func(connection iface.IConnection)        // 连接建立时的Hook函数
+	onConnClose func(connection iface.IConnection)        // 连接断开时的Hook函数
+	removeList  chan iface.IConnection                    // 等待关闭的连接列表
 }
 
 var instanceConnManager iface.IConnManager
@@ -25,11 +26,13 @@ var instanceConnManagerOnce = sync.Once{}
 // 全局唯一连接管理器
 func GetInstanceConnManager() iface.IConnManager {
 	instanceConnManagerOnce.Do(func() {
-		instanceConnManager = &connManager{
+		manager := &connManager{
 			connections: NewConcurrentStringer[Integer, iface.IConnection](),
 			closeConnId: make(chan int, defaultServer.AppConf.MaxConn),
 		}
-		instanceConnManager.OperatingSystemSignalHandler()
+		operatingSystemSignalHandler(manager)
+		onConnRemoveList(manager)
+		instanceConnManager = manager
 	})
 	return instanceConnManager
 }
@@ -46,31 +49,13 @@ func (c *connManager) NewConnId() int {
 func (c *connManager) Add(conn iface.IConnection) {
 	c.connections.Set(Integer(conn.GetConnId()), conn)
 
+	conn.SetProperty(SysPropertyConnOpened, c.onConnOpen)
+	conn.SetProperty(SysPropertyConnClosed, c.onConnClose)
 	go conn.Start(conn.StartReader, conn.StartWriter)
-
-	// 调用打开连接hook函数
-	if c.onConnOpen != nil {
-		c.onConnOpen(conn)
-	}
 }
 
 func (c *connManager) Remove(conn iface.IConnection) {
-	value, ok := c.connections.Get(Integer(conn.GetConnId()))
-	// 如果不存在，或者指针不同
-	if !ok || value != conn {
-		return
-	}
-	// 删除连接
-	c.connections.Remove(Integer(conn.GetConnId()))
-	// 回收连接Id
-	c.setClosingConn(conn.GetConnId())
-	// 关闭连接
-	conn.Stop()
-
-	// 调用关闭连接hook函数
-	if c.onConnClose != nil {
-		c.onConnClose(conn)
-	}
+	c.removeList <- conn
 }
 
 func (c *connManager) Get(connId int) (iface.IConnection, bool) {
@@ -112,7 +97,24 @@ func (c *connManager) getClosingConn() int {
 	}
 }
 
-func (c *connManager) OperatingSystemSignalHandler() {
+func onConnRemoveList(c *connManager) {
+	for {
+		select {
+		case conn := <-c.removeList:
+			if conn.GetIsClosed() {
+				break
+			}
+			// 关闭连接
+			conn.Stop()
+			// 删除连接
+			c.connections.Remove(Integer(conn.GetConnId()))
+			// 回收连接Id
+			c.setClosingConn(conn.GetConnId())
+		}
+	}
+}
+
+func operatingSystemSignalHandler(c *connManager) {
 	if c.signalCh != nil {
 		return
 	}

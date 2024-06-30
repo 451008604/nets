@@ -18,6 +18,4 @@ type IConnManager interface {
 	OnConnOpen(fun func(conn IConnection))
 	// 连接断开时的Hook函数
 	OnConnClose(fun func(conn IConnection))
-	// 监听并处理操作系统信号
-	OperatingSystemSignalHandler()
 }

@@ -1,20 +1,17 @@
 package network
 
 import (
-	"context"
 	"encoding/json"
 	"github.com/451008604/nets/iface"
 	"google.golang.org/protobuf/proto"
 )
 
 type connection struct {
-	server        iface.IServer              // 当前Conn所属的Server
-	connId        int                        // 当前连接的Id(SessionId)
-	isClosed      bool                       // 当前连接是否已关闭
-	exitCtx       context.Context            // 管理连接的上下文
-	exitCtxCancel context.CancelFunc         // 连接关闭信号
-	msgBuffChan   chan []byte                // 用于读、写两个goroutine之间的消息通信
-	property      ConcurrentMap[string, any] // 连接属性
+	server      iface.IServer              // 当前Conn所属的Server
+	connId      int                        // 当前连接的Id(SessionId)
+	msgBuffChan chan []byte                // 用于读、写两个goroutine之间的消息通信
+	property    ConcurrentMap[string, any] // 连接属性
+	isClosed    bool                       // 当前连接是否已关闭
 }
 
 func (c *connection) StartReader() {}
@@ -22,6 +19,18 @@ func (c *connection) StartReader() {}
 func (c *connection) StartWriter(_ []byte) {}
 
 func (c *connection) Start(readerHandler func(), writerHandler func(data []byte)) {
+	// 连接关闭时
+	defer func() {
+		if fun := c.GetProperty(SysPropertyConnClosed); fun != nil {
+			fun.(func(connection iface.IConnection))(c)
+		}
+	}()
+
+	// 连接建立时
+	if fun := c.GetProperty(SysPropertyConnOpened); fun != nil {
+		fun.(func(connection iface.IConnection))(c)
+	}
+
 	// 开启读协程
 	go func(c *connection, readerHandler func()) {
 		for {
@@ -32,9 +41,6 @@ func (c *connection) Start(readerHandler func(), writerHandler func(data []byte)
 				}
 				// 调用注册方法处理接收到的消息
 				readerHandler()
-
-			case <-c.exitCtx.Done():
-				return
 			}
 		}
 	}(c, readerHandler)
@@ -48,9 +54,6 @@ func (c *connection) Start(readerHandler func(), writerHandler func(data []byte)
 			}
 			// 调用注册方法写消息给客户端
 			writerHandler(data)
-
-		case <-c.exitCtx.Done():
-			return
 		}
 	}
 }
@@ -70,9 +73,6 @@ func (c *connection) Stop() {
 		}
 	}
 
-	// 通知关闭该连接的监听
-	c.exitCtxCancel()
-
 	// 关闭该连接管道
 	close(c.msgBuffChan)
 }
@@ -83,6 +83,10 @@ func (c *connection) GetConnId() int {
 
 func (c *connection) RemoteAddrStr() string {
 	return ""
+}
+
+func (c *connection) GetIsClosed() bool {
+	return c.isClosed
 }
 
 func (c *connection) SendMsg(msgId int32, msgData proto.Message) {
@@ -99,20 +103,25 @@ func (c *connection) SendMsg(msgId int32, msgData proto.Message) {
 	c.msgBuffChan <- msg
 }
 
-func (c *connection) SetProperty(key string, value any) {
-	c.property.Set(key, value)
+const (
+	SysPropertyConnOpened iface.IConnProperty = "SysPropertyConnOpened" // 连接建立时
+	SysPropertyConnClosed iface.IConnProperty = "SysPropertyConnClosed" // 连接关闭时
+)
+
+func (c *connection) SetProperty(key iface.IConnProperty, value any) {
+	c.property.Set(string(key), value)
 }
 
-func (c *connection) GetProperty(key string) any {
-	if value, ok := c.property.Get(key); ok {
+func (c *connection) GetProperty(key iface.IConnProperty) any {
+	if value, ok := c.property.Get(string(key)); ok {
 		return value
 	} else {
 		return nil
 	}
 }
 
-func (c *connection) RemoveProperty(key string) {
-	c.property.Remove(key)
+func (c *connection) RemoveProperty(key iface.IConnProperty) {
+	c.property.Remove(string(key))
 }
 
 func (c *connection) ProtocolToByte(str proto.Message) []byte {
