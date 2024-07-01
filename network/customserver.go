@@ -33,19 +33,16 @@ func SetCustomServer(custom *CustomServer) {
 
 // 将 defaultData 与 customData 进行合并，相同字段赋值优先使用 customData
 func MergeStructValues[T any](defaultData, customData *T) *T {
-	if customData == nil {
-		if defaultData != nil {
-			return defaultData
-		}
-		return new(T)
-	} else if defaultData == nil {
-		if customData != nil {
-			return customData
-		}
+	if customData == nil && defaultData == nil {
 		return new(T)
 	}
-	resultData := new(T)
+	if customData == nil {
+		return defaultData
+	} else if defaultData == nil {
+		return customData
+	}
 
+	resultData := new(T)
 	v1 := reflect.ValueOf(defaultData).Elem()
 	v2 := reflect.ValueOf(customData).Elem()
 	v3 := reflect.ValueOf(resultData).Elem()
