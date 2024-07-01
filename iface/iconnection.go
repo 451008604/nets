@@ -8,14 +8,14 @@ type IConnProperty string
 
 type IConnection interface {
 	// 启动连接(通过connmanager调用)
-	Start(readerHandler func(), writerHandler func(data []byte))
+	Start(readerHandler func() bool, writerHandler func(data []byte) bool)
 	// 停止连接(通过connmanager调用)
 	Stop()
 
 	// 启动接收消息协程
-	StartReader()
+	StartReader() bool
 	// 启动发送消息协程
-	StartWriter(data []byte)
+	StartWriter(data []byte) bool
 
 	// 获取当前连接Id
 	GetConnId() int

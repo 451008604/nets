@@ -22,17 +22,17 @@ func NewConnectionWS(server iface.IServer, conn *websocket.Conn) iface.IConnecti
 	return c
 }
 
-func (c *connectionWS) StartReader() {
+func (c *connectionWS) StartReader() bool {
 	msgType, msgByte, err := c.conn.ReadMessage()
 	if err != nil || msgType != websocket.BinaryMessage {
 		GetInstanceConnManager().Remove(c)
-		return
+		return false
 	}
 
 	msgData := defaultServer.DataPacket.UnPack(msgByte)
 	if msgData == nil {
 		GetInstanceConnManager().Remove(c)
-		return
+		return false
 	}
 
 	for _, data := range msgData {
@@ -44,16 +44,18 @@ func (c *connectionWS) StartReader() {
 			go GetInstanceMsgHandler().DoMsgHandler(req)
 		}
 	}
+	return true
 }
 
-func (c *connectionWS) StartWriter(data []byte) {
+func (c *connectionWS) StartWriter(data []byte) bool {
 	if err := c.conn.WriteMessage(websocket.BinaryMessage, data); err != nil {
 		GetInstanceConnManager().Remove(c)
-		return
+		return false
 	}
+	return true
 }
 
-func (c *connectionWS) Start(readerHandler func(), writerHandler func(data []byte)) {
+func (c *connectionWS) Start(readerHandler func() bool, writerHandler func(data []byte) bool) {
 	defer GetInstanceConnManager().Remove(c)
 
 	GetInstanceBroadcastManager().GetGlobalBroadcastGroup().Append(c.GetConnId())

@@ -101,7 +101,7 @@ func (c *connManager) getClosingConn() int {
 func onConnRemoveList(c *connManager) {
 	for conn := range c.removeList {
 		if conn.GetIsClosed() {
-			break
+			continue
 		}
 		// 关闭连接
 		conn.Stop()

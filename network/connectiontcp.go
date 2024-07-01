@@ -22,14 +22,14 @@ func NewConnectionTCP(server iface.IServer, conn *net.TCPConn) iface.IConnection
 	return c
 }
 
-func (c *connectionTCP) StartReader() {
+func (c *connectionTCP) StartReader() bool {
 	var msgByte []byte
 	// 将连接内的数据流全部读取出来
 	for {
 		b := make([]byte, 512)
 		if read, err := c.conn.Read(b); err != nil {
 			GetInstanceConnManager().Remove(c)
-			return
+			return false
 		} else {
 			msgByte = append(msgByte, b[:read]...)
 			if read < len(b) {
@@ -42,7 +42,7 @@ func (c *connectionTCP) StartReader() {
 	msgData := defaultServer.DataPacket.UnPack(msgByte)
 	if msgData == nil {
 		GetInstanceConnManager().Remove(c)
-		return
+		return false
 	}
 
 	for _, data := range msgData {
@@ -54,16 +54,18 @@ func (c *connectionTCP) StartReader() {
 			go GetInstanceMsgHandler().DoMsgHandler(req)
 		}
 	}
+	return true
 }
 
-func (c *connectionTCP) StartWriter(data []byte) {
+func (c *connectionTCP) StartWriter(data []byte) bool {
 	if _, err := c.conn.Write(data); err != nil {
 		GetInstanceConnManager().Remove(c)
-		return
+		return false
 	}
+	return false
 }
 
-func (c *connectionTCP) Start(readerHandler func(), writerHandler func(data []byte)) {
+func (c *connectionTCP) Start(readerHandler func() bool, writerHandler func(data []byte) bool) {
 	defer GetInstanceConnManager().Remove(c)
 
 	GetInstanceBroadcastManager().GetGlobalBroadcastGroup().Append(c.GetConnId())

@@ -15,11 +15,11 @@ type connection struct {
 	workId      int                        // 工作池Id
 }
 
-func (c *connection) StartReader() {}
+func (c *connection) StartReader() bool { return true }
 
-func (c *connection) StartWriter(_ []byte) {}
+func (c *connection) StartWriter(_ []byte) bool { return false }
 
-func (c *connection) Start(readerHandler func(), writerHandler func(data []byte)) {
+func (c *connection) Start(readerHandler func() bool, writerHandler func(data []byte) bool) {
 	// 连接关闭时
 	defer func() {
 		if fun, ok := c.GetProperty(SysPropertyConnClosed).(func(connection iface.IConnection)); ok {
@@ -33,13 +33,15 @@ func (c *connection) Start(readerHandler func(), writerHandler func(data []byte)
 	}
 
 	// 开启读协程
-	go func(c *connection, readerHandler func()) {
+	go func(c *connection, readerHandler func() bool) {
 		for {
 			if c.isClosed {
 				return
 			}
 			// 调用注册方法处理接收到的消息
-			readerHandler()
+			if !readerHandler() {
+				return
+			}
 		}
 	}(c, readerHandler)
 
@@ -49,7 +51,9 @@ func (c *connection) Start(readerHandler func(), writerHandler func(data []byte)
 			return
 		}
 		// 调用注册方法写消息给客户端
-		writerHandler(data)
+		if !writerHandler(data) {
+			return
+		}
 	}
 }
 
