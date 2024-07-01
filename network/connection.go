@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"github.com/451008604/nets/iface"
 	"google.golang.org/protobuf/proto"
+	"sync/atomic"
 )
 
 type connection struct {
@@ -22,6 +23,7 @@ func (c *connection) StartWriter(_ []byte) bool { return false }
 func (c *connection) Start(readerHandler func() bool, writerHandler func(data []byte) bool) {
 	// 连接关闭时
 	defer func() {
+		atomic.AddUint32(&Flag5, 1)
 		if fun, ok := c.GetProperty(SysPropertyConnClosed).(func(connection iface.IConnection)); ok {
 			fun(c)
 		}
@@ -63,7 +65,8 @@ func (c *connection) Stop() {
 	}
 	c.isClosed = true
 
-	// 退出所在的广播组 TODO 此处调用会导致closeHook函数内无法获取所在组列表，无法持久化存储
+	atomic.AddUint32(&Flag4, 1)
+	// 退出所在的广播组
 	GetInstanceBroadcastManager().GetGlobalBroadcastGroup().Remove(c.GetConnId())
 	if groups, b := GetInstanceBroadcastManager().GetBroadcastGroupByConnId(c.GetConnId()); b {
 		array := groups.GetArray()

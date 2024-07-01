@@ -8,6 +8,7 @@ import (
 	"google.golang.org/protobuf/proto"
 	"net/http"
 	"runtime"
+	"sync/atomic"
 )
 
 // 服务指标监控
@@ -24,6 +25,12 @@ func listenChannelStatus() {
 		mapping = append(mapping, []any{"TOTAL_ALLOCATED_MEMORY", fmt.Sprintf("%v KB", memStats.TotalAlloc/1024)})
 		mapping = append(mapping, []any{"CGOCALL_NUM", runtime.NumCgoCall()})
 		mapping = append(mapping, []any{"GOROUTINE_NUM", runtime.NumGoroutine()})
+		mapping = append(mapping, []any{"Flag1", network.Flag1})
+		mapping = append(mapping, []any{"Flag2", network.Flag2})
+		mapping = append(mapping, []any{"Flag3", network.Flag3})
+		mapping = append(mapping, []any{"Flag4", network.Flag4})
+		mapping = append(mapping, []any{"Flag5", network.Flag5})
+		mapping = append(mapping, []any{"Flag6", network.Flag6})
 
 		str := ""
 		for _, v := range mapping {
@@ -37,18 +44,20 @@ func listenChannelStatus() {
 func main() {
 	go listenChannelStatus()
 
-	// // ===========广播管理器===========
+	// ===========广播管理器===========
 	// broadcastManager := network.GetInstanceBroadcastManager()
 	// broadcastManager.GetGlobalBroadcastGroup()
-	//
-	// // ===========连接管理器===========
-	// connManager := network.GetInstanceConnManager()
-	// connManager.OnConnOpen(func(conn iface.IConnection) {
-	// 	// do something ...
-	// })
-	// connManager.OnConnClose(func(conn iface.IConnection) {
-	// 	// do something ...
-	// })
+
+	// ===========连接管理器===========
+	connManager := network.GetInstanceConnManager()
+	connManager.OnConnOpen(func(conn iface.IConnection) {
+		// do something ...
+		println("连接建立", conn.GetConnId())
+	})
+	connManager.OnConnClose(func(conn iface.IConnection) {
+		// do something ...
+		atomic.AddUint32(&network.Flag6, 1)
+	})
 
 	// ===========消息处理器===========
 	msgHandler := network.GetInstanceMsgHandler()
@@ -56,23 +65,23 @@ func main() {
 	msgHandler.AddRouter(int32(pb.MsgId_Echo_Req), func() proto.Message { return &pb.EchoRequest{} }, func(con iface.IConnection, message proto.Message) {
 		// do something ...
 		req := message.(*pb.EchoRequest)
-		fmt.Println(req.GetMessage())
+		// fmt.Println(req.GetMessage())
 		res := &pb.EchoResponse{
 			Message: req.Message,
 		}
 		con.SendMsg(int32(pb.MsgId_Echo_Res), res)
 	})
 
-	// // 自定义消息过滤器
-	// msgHandler.SetFilter(func(request iface.IRequest, msgData proto.Message) bool {
-	// 	// do something ...
-	// 	return true
-	// })
-	//
-	// // 自定义panic捕获
-	// msgHandler.SetErrCapture(func(request iface.IRequest, r any) {
-	// 	// do something ...
-	// })
+	// 自定义消息过滤器
+	msgHandler.SetFilter(func(request iface.IRequest, msgData proto.Message) bool {
+		// do something ...
+		return true
+	})
+
+	// 自定义panic捕获
+	msgHandler.SetErrCapture(func(request iface.IRequest, r any) {
+		// do something ...
+	})
 
 	network.SetCustomServer(&network.CustomServer{})
 	// 启动TCP服务

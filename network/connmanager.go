@@ -10,6 +10,17 @@ import (
 	"syscall"
 )
 
+var (
+	Flag1 = uint32(0)
+	Flag2 = uint32(0)
+	Flag3 = uint32(0)
+	Flag4 = uint32(0)
+	Flag5 = uint32(0)
+	Flag6 = uint32(0)
+	Flag7 = uint32(0)
+	Flag8 = uint32(0)
+)
+
 type connManager struct {
 	connId      int64                                     // 用于客户端连接的自增Id
 	connections ConcurrentMap[Integer, iface.IConnection] // 管理的连接信息
@@ -56,6 +67,7 @@ func (c *connManager) Add(conn iface.IConnection) {
 }
 
 func (c *connManager) Remove(conn iface.IConnection) {
+	atomic.AddUint32(&Flag2, 1)
 	c.removeList <- conn
 }
 
@@ -103,6 +115,7 @@ func onConnRemoveList(c *connManager) {
 		if conn.GetIsClosed() {
 			continue
 		}
+		atomic.AddUint32(&Flag3, 1)
 		// 关闭连接
 		conn.Stop()
 		// 删除连接

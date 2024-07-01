@@ -2,44 +2,42 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/451008604/nets/network"
 	pb "github.com/451008604/nets/proto/bin"
 	"github.com/gorilla/websocket"
-	"sync/atomic"
 )
 
+/*
+测试1:
+5千tcp连接、5千websocket连接
+*/
+
 func main() {
-	msg, _ := json.Marshal(&pb.EchoRequest{
-		Message: "hello",
-	})
+	msg, _ := json.Marshal(&pb.EchoRequest{Message: "hello"})
 	data := network.NewDataPack().Pack(network.NewMsgPackage(int32(pb.MsgId_Echo_Req), msg))
 
-	for i := 0; i < 1000; i++ {
-		go sendWebSocketMessage(data)
+	for i := 0; i < 30000; i++ {
+		sendWebSocketMessage(data)
 	}
 
 	select {}
 }
 
-var n = uint32(0)
-
 func sendWebSocketMessage(data []byte) {
 	conn, _, err := websocket.DefaultDialer.Dial("ws://127.0.0.1:17002", nil)
 	if err != nil {
+		println(err.Error())
 		return
 	}
 
 	go func(c *websocket.Conn) {
 		for {
-			_, message, e := c.ReadMessage()
-			if e == nil {
+			if _, message, e := c.ReadMessage(); e == nil {
 				if len(message) != 0 {
-					unPacks := network.NewDataPack().UnPack(message)
-					atomic.AddUint32(&n, 1)
-					for _, pack := range unPacks {
-						fmt.Printf("%v - 服务器：%v - %s\n", n, pack.GetMsgId(), pack.GetData())
-					}
+					// unPacks := network.NewDataPack().UnPack(message)
+					// for _, pack := range unPacks {
+					// fmt.Printf("服务器：%v - %s\n", pack.GetMsgId(), pack.GetData())
+					// }
 				}
 			} else {
 				_ = c.Close()
