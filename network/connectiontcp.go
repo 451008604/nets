@@ -18,6 +18,7 @@ func NewConnectionTCP(server iface.IServer, conn *net.TCPConn) iface.IConnection
 	c.isClosed = false
 	c.msgBuffChan = make(chan []byte, defaultServer.AppConf.MaxMsgChanLen)
 	c.property = NewConcurrentMap[any]()
+	c.workId = c.connId % defaultServer.AppConf.WorkerPoolSize
 	return c
 }
 

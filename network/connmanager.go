@@ -29,9 +29,10 @@ func GetInstanceConnManager() iface.IConnManager {
 		manager := &connManager{
 			connections: NewConcurrentStringer[Integer, iface.IConnection](),
 			closeConnId: make(chan int, defaultServer.AppConf.MaxConn),
+			removeList:  make(chan iface.IConnection, defaultServer.AppConf.MaxConn),
 		}
 		operatingSystemSignalHandler(manager)
-		onConnRemoveList(manager)
+		go onConnRemoveList(manager)
 		instanceConnManager = manager
 	})
 	return instanceConnManager
@@ -98,19 +99,16 @@ func (c *connManager) getClosingConn() int {
 }
 
 func onConnRemoveList(c *connManager) {
-	for {
-		select {
-		case conn := <-c.removeList:
-			if conn.GetIsClosed() {
-				break
-			}
-			// 关闭连接
-			conn.Stop()
-			// 删除连接
-			c.connections.Remove(Integer(conn.GetConnId()))
-			// 回收连接Id
-			c.setClosingConn(conn.GetConnId())
+	for conn := range c.removeList {
+		if conn.GetIsClosed() {
+			break
 		}
+		// 关闭连接
+		conn.Stop()
+		// 删除连接
+		c.connections.Remove(Integer(conn.GetConnId()))
+		// 回收连接Id
+		c.setClosingConn(conn.GetConnId())
 	}
 }
 

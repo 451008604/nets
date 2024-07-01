@@ -19,6 +19,8 @@ type IConnection interface {
 
 	// 获取当前连接Id
 	GetConnId() int
+	// 获取当前工作池Id
+	GetWorkId() int
 	// 获取客户端地址信息
 	RemoteAddrStr() string
 	// 获取连接状态

@@ -12,6 +12,7 @@ type connection struct {
 	msgBuffChan chan []byte                // 用于读、写两个goroutine之间的消息通信
 	property    ConcurrentMap[string, any] // 连接属性
 	isClosed    bool                       // 当前连接是否已关闭
+	workId      int                        // 工作池Id
 }
 
 func (c *connection) StartReader() {}
@@ -21,40 +22,34 @@ func (c *connection) StartWriter(_ []byte) {}
 func (c *connection) Start(readerHandler func(), writerHandler func(data []byte)) {
 	// 连接关闭时
 	defer func() {
-		if fun := c.GetProperty(SysPropertyConnClosed); fun != nil {
-			fun.(func(connection iface.IConnection))(c)
+		if fun, ok := c.GetProperty(SysPropertyConnClosed).(func(connection iface.IConnection)); ok {
+			fun(c)
 		}
 	}()
 
 	// 连接建立时
-	if fun := c.GetProperty(SysPropertyConnOpened); fun != nil {
-		fun.(func(connection iface.IConnection))(c)
+	if fun, ok := c.GetProperty(SysPropertyConnOpened).(func(connection iface.IConnection)); ok {
+		fun(c)
 	}
 
 	// 开启读协程
 	go func(c *connection, readerHandler func()) {
 		for {
-			select {
-			default:
-				if c.isClosed {
-					return
-				}
-				// 调用注册方法处理接收到的消息
-				readerHandler()
+			if c.isClosed {
+				return
 			}
+			// 调用注册方法处理接收到的消息
+			readerHandler()
 		}
 	}(c, readerHandler)
 
 	// 开启写协程
-	for {
-		select {
-		case data := <-c.msgBuffChan:
-			if c.isClosed {
-				return
-			}
-			// 调用注册方法写消息给客户端
-			writerHandler(data)
+	for data := range c.msgBuffChan {
+		if c.isClosed {
+			return
 		}
+		// 调用注册方法写消息给客户端
+		writerHandler(data)
 	}
 }
 
@@ -79,6 +74,10 @@ func (c *connection) Stop() {
 
 func (c *connection) GetConnId() int {
 	return c.connId
+}
+
+func (c *connection) GetWorkId() int {
+	return c.workId
 }
 
 func (c *connection) RemoteAddrStr() string {

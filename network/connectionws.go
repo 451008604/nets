@@ -18,6 +18,7 @@ func NewConnectionWS(server iface.IServer, conn *websocket.Conn) iface.IConnecti
 	c.isClosed = false
 	c.msgBuffChan = make(chan []byte, defaultServer.AppConf.MaxMsgChanLen)
 	c.property = NewConcurrentMap[any]()
+	c.workId = c.connId % defaultServer.AppConf.WorkerPoolSize
 	return c
 }
 
