@@ -24,7 +24,7 @@ func (s *server) Start() {
 func (s *server) Stop() {
 	GetInstanceConnManager().ClearConn()
 	s.isClose = true
-	ServerWaitFlag.Done()
+	// ServerWaitFlag.Done()
 }
 
 func (s *server) Listen() bool {

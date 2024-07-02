@@ -22,8 +22,10 @@ func listenChannelStatus() {
 		var mapping [][]any
 		mapping = append(mapping, []any{"GO_ROOT", runtime.GOROOT()})
 		mapping = append(mapping, []any{"SYS_CPU_NUM", runtime.NumCPU()})
-		mapping = append(mapping, []any{"TOTAL_ALLOCATED_MEMORY", fmt.Sprintf("%v KB", memStats.TotalAlloc/1024)})
-		mapping = append(mapping, []any{"CGOCALL_NUM", runtime.NumCgoCall()})
+		mapping = append(mapping, []any{"ALLOC", fmt.Sprintf("%v MB", memStats.Alloc/1024/1024)})
+		mapping = append(mapping, []any{"HEAP_ALLOC", fmt.Sprintf("%v MB", memStats.HeapAlloc/1024/1024)})
+		mapping = append(mapping, []any{"TOTAL_ALLOC", fmt.Sprintf("%v MB", memStats.TotalAlloc/1024/1024)})
+		mapping = append(mapping, []any{"CGO_CALL_NUM", runtime.NumCgoCall()})
 		mapping = append(mapping, []any{"GOROUTINE_NUM", runtime.NumGoroutine()})
 		mapping = append(mapping, []any{"Flag1", network.Flag1})
 		mapping = append(mapping, []any{"Flag2", network.Flag2})
@@ -57,6 +59,7 @@ func main() {
 	connManager.OnConnClose(func(conn iface.IConnection) {
 		// do something ...
 		atomic.AddUint32(&network.Flag6, 1)
+		fmt.Printf("%v\t", network.Flag6)
 	})
 
 	// ===========消息处理器===========
@@ -85,11 +88,9 @@ func main() {
 
 	network.SetCustomServer(&network.CustomServer{})
 	// 启动TCP服务
-	serverTCP := network.NewServerTCP()
-	serverTCP.Listen()
+	network.GetServerTCP().Listen()
 	// 启动WebSocket服务
-	serverWS := network.NewServerWS()
-	serverWS.Listen()
+	network.GetServerWS().Listen()
 	// 阻塞主进程
 	network.ServerWaitFlag.Wait()
 }

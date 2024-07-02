@@ -134,7 +134,9 @@ func operatingSystemSignalHandler(c *connManager) {
 	go func() {
 		sig := <-c.signalCh
 		fmt.Printf("Received signal: %v\n", sig)
-		c.ClearConn()
+		// TODO 关闭服务，然后通过管道方式等待所有连接调用hook结束后再退出程序。
+		GetServerWS().Stop()
+		GetServerTCP().Stop()
 		os.Exit(0)
 	}()
 }

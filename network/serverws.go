@@ -11,7 +11,16 @@ type serverWS struct {
 	server
 }
 
-func NewServerWS() iface.IServer {
+var serverWs iface.IServer
+
+func GetServerWS() iface.IServer {
+	if serverWs == nil {
+		serverWs = newServerWS()
+	}
+	return serverWs
+}
+
+func newServerWS() iface.IServer {
 	s := &serverWS{}
 	s.serverName = defaultServer.AppConf.AppName + "_ws"
 	s.ip = defaultServer.AppConf.ServerWS.Address

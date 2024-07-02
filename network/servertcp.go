@@ -10,7 +10,16 @@ type serverTCP struct {
 	server
 }
 
-func NewServerTCP() iface.IServer {
+var serverTcp iface.IServer
+
+func GetServerTCP() iface.IServer {
+	if serverTcp == nil {
+		serverTcp = newServerTCP()
+	}
+	return serverTcp
+}
+
+func newServerTCP() iface.IServer {
 	s := &serverTCP{}
 	s.serverName = defaultServer.AppConf.AppName + "_tcp"
 	s.ip = defaultServer.AppConf.ServerTCP.Address
