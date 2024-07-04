@@ -36,6 +36,9 @@ type IConnection interface {
 	// 删除连接属性
 	RemoveProperty(key IConnProperty)
 
+	// 限流控制
+	FlowControl() bool
+
 	// 序列化
 	ProtocolToByte(str proto.Message) []byte
 	// 反序列化

@@ -35,11 +35,14 @@ func (m *msgHandler) DoMsgHandler(request iface.IRequest) {
 		return
 	}
 
-	// 对应的逻辑处理方法
 	msgData := router.GetNewMsg()
-	err := request.GetConnection().ByteToProtocol(request.GetData(), msgData)
-	if err != nil {
+	if err := request.GetConnection().ByteToProtocol(request.GetData(), msgData); err != nil {
 		fmt.Printf("api msgId %v parsing %v error %v\n", request.GetMsgId(), request.GetData(), err)
+		return
+	}
+
+	if request.GetConnection().FlowControl() {
+		fmt.Printf("flowControl RemoteAddress: %v, GetMsgId: %v, GetData: %v", request.GetConnection().RemoteAddrStr(), request.GetMsgId(), request.GetData())
 		return
 	}
 
@@ -48,6 +51,7 @@ func (m *msgHandler) DoMsgHandler(request iface.IRequest) {
 		return
 	}
 
+	// 对应的逻辑处理方法
 	router.RunHandler(request, msgData)
 }
 

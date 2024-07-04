@@ -4,16 +4,21 @@ import (
 	"encoding/json"
 	"github.com/451008604/nets/iface"
 	"google.golang.org/protobuf/proto"
+	"sync"
 	"sync/atomic"
+	"time"
 )
 
 type connection struct {
-	server      iface.IServer              // 当前Conn所属的Server
-	connId      int                        // 当前连接的Id(SessionId)
-	msgBuffChan chan []byte                // 用于读、写两个goroutine之间的消息通信
-	property    ConcurrentMap[string, any] // 连接属性
-	isClosed    bool                       // 当前连接是否已关闭
-	workId      int                        // 工作池Id
+	server        iface.IServer              // 当前Conn所属的Server
+	connId        int                        // 当前连接的Id(SessionId)
+	msgBuffChan   chan []byte                // 用于读、写两个goroutine之间的消息通信
+	property      ConcurrentMap[string, any] // 连接属性
+	isClosed      bool                       // 当前连接是否已关闭
+	workId        int                        // 工作池Id
+	limitingCount int64                      // 限流计数
+	limitingTimer int64                      // 限流计时
+	limitingMutex sync.Mutex                 // 限流锁
 }
 
 func (c *connection) StartReader() bool { return true }
@@ -128,6 +133,31 @@ func (c *connection) GetProperty(key iface.IConnProperty) any {
 
 func (c *connection) RemoveProperty(key iface.IConnProperty) {
 	c.property.Remove(string(key))
+}
+
+func (c *connection) FlowControl() bool {
+	if defaultServer.AppConf.MaxFlowSecond == 0 {
+		return false
+	}
+	defer c.limitingMutex.Unlock()
+	c.limitingMutex.Lock()
+
+	count, interval := int64(defaultServer.AppConf.MaxFlowSecond), int64(1000)
+	if c.limitingTimer == 0 {
+		c.limitingTimer = time.Now().UnixMilli()
+	}
+	c.limitingCount++
+	if c.limitingCount < count {
+		return false
+	}
+	c.limitingCount = 0
+	now := time.Now().UnixMilli()
+	if now-c.limitingTimer < interval {
+		c.limitingTimer = now
+		return true
+	}
+	c.limitingTimer = now
+	return false
 }
 
 func (c *connection) ProtocolToByte(str proto.Message) []byte {

@@ -5,11 +5,12 @@ import (
 	"github.com/451008604/nets/network"
 	pb "github.com/451008604/nets/proto/bin"
 	"github.com/gorilla/websocket"
+	"math/rand"
+	"time"
 )
 
 /*
-测试1:
-5千tcp连接、5千websocket连接
+测试1
 */
 
 func main() {
@@ -55,12 +56,11 @@ func sendWebSocketMessage(data []byte) {
 	// }
 	// }(conn)
 
-	// go func(c *websocket.Conn) {
-	// 	intn := rand.Intn(10)
-	// 	time.Sleep(time.Second * time.Duration(5+intn))
-	// 	_ = conn.Close()
-	//
-	// 	// time.Sleep(time.Second * time.Duration(intn))
-	// 	sendWebSocketMessage(data)
-	// }(conn)
+	go func(c *websocket.Conn) {
+		time.Sleep(time.Second * time.Duration(1+rand.Intn(3)))
+		_ = conn.Close()
+
+		// time.Sleep(time.Second * time.Duration(intn))
+		sendWebSocketMessage(data)
+	}(conn)
 }
