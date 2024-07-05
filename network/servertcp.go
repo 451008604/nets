@@ -28,6 +28,13 @@ func newServerTCP() iface.IServer {
 }
 
 func (s *serverTCP) Start() {
+	if s.port == "" {
+		return
+	}
+
+	s.server.Start()
+	fmt.Printf("server starting [ %v:%v ]\n", s.serverName, s.port)
+
 	var (
 		addr *net.TCPAddr
 		tcp  *net.TCPListener
@@ -61,7 +68,7 @@ func (s *serverTCP) Start() {
 		}
 
 		// 服务关闭状态
-		if s.isClose {
+		if s.IsClose() {
 			_ = conn.Close()
 			continue
 		}
@@ -77,15 +84,4 @@ func (s *serverTCP) Start() {
 		// 将新建的连接添加到统一的连接管理器内
 		GetInstanceConnManager().Add(msgConn)
 	}
-}
-
-func (s *serverTCP) Listen() bool {
-	if defaultServer.AppConf.ServerTCP.Port != "" {
-		s.server.Listen()
-		go s.Start()
-		s.server.Start()
-		fmt.Printf("server starting [ %v:%v ]\n", s.serverName, s.port)
-		return true
-	}
-	return false
 }

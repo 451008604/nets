@@ -47,19 +47,23 @@ func (c *connection) Start(readerHandler func() bool, writerHandler func(data []
 			}
 			// 调用注册方法处理接收到的消息
 			if !readerHandler() {
+				GetInstanceConnManager().Remove(c)
 				return
 			}
 		}
 	}(c, readerHandler)
 
 	// 开启写协程
-	for data := range c.msgBuffChan {
+	for {
 		if c.isClosed {
 			return
 		}
-		// 调用注册方法写消息给客户端
-		if !writerHandler(data) {
-			return
+		if data, ok := <-c.msgBuffChan; ok {
+			// 调用注册方法写消息给客户端
+			if !writerHandler(data) {
+				GetInstanceConnManager().Remove(c)
+				return
+			}
 		}
 	}
 }
@@ -96,14 +100,11 @@ func (c *connection) RemoteAddrStr() string {
 	return ""
 }
 
-func (c *connection) GetIsClosed() bool {
+func (c *connection) IsClose() bool {
 	return c.isClosed
 }
 
 func (c *connection) SendMsg(msgId int32, msgData proto.Message) {
-	if c.isClosed {
-		return
-	}
 	msgByte := c.ProtocolToByte(msgData)
 	// 将消息数据封包
 	msg := defaultServer.DataPacket.Pack(NewMsgPackage(msgId, msgByte))

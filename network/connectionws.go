@@ -27,13 +27,11 @@ func (c *connectionWS) StartReader() bool {
 	msgType, msgByte, err := c.conn.ReadMessage()
 	if err != nil || msgType != websocket.BinaryMessage {
 		atomic.AddUint32(&Flag1, 1)
-		GetInstanceConnManager().Remove(c)
 		return false
 	}
 
 	msgData := defaultServer.DataPacket.UnPack(msgByte)
 	if msgData == nil {
-		GetInstanceConnManager().Remove(c)
 		return false
 	}
 
@@ -51,7 +49,6 @@ func (c *connectionWS) StartReader() bool {
 
 func (c *connectionWS) StartWriter(data []byte) bool {
 	if err := c.conn.WriteMessage(websocket.BinaryMessage, data); err != nil {
-		GetInstanceConnManager().Remove(c)
 		return false
 	}
 	return true

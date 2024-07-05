@@ -23,8 +23,8 @@ type IConnection interface {
 	GetWorkId() int
 	// 获取客户端地址信息
 	RemoteAddrStr() string
-	// 获取连接状态
-	GetIsClosed() bool
+	// 获取连接是否已关闭
+	IsClose() bool
 
 	// 发送消息给客户端
 	SendMsg(msgId int32, msgData proto.Message)

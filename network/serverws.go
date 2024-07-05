@@ -29,6 +29,13 @@ func newServerWS() iface.IServer {
 }
 
 func (s *serverWS) Start() {
+	if s.port == "" {
+		return
+	}
+
+	s.server.Start()
+	fmt.Printf("server starting [ %v:%v ]\n", s.serverName, s.port)
+
 	var upgrade = websocket.Upgrader{
 		ReadBufferSize:  defaultServer.AppConf.MaxPackSize,
 		WriteBufferSize: defaultServer.AppConf.MaxPackSize,
@@ -40,7 +47,7 @@ func (s *serverWS) Start() {
 		}
 
 		// 服务关闭状态
-		if s.isClose {
+		if s.IsClose() {
 			_ = conn.Close()
 			return
 		}
@@ -62,15 +69,4 @@ func (s *serverWS) Start() {
 	} else {
 		fmt.Printf("%v\n", http.ListenAndServe(fmt.Sprintf("%s:%s", s.ip, s.port), nil))
 	}
-}
-
-func (s *serverWS) Listen() bool {
-	if defaultServer.AppConf.ServerWS.Port != "" {
-		s.server.Listen()
-		go s.Start()
-		s.server.Start()
-		fmt.Printf("server starting [ %v:%v ]\n", s.serverName, s.port)
-		return true
-	}
-	return false
 }

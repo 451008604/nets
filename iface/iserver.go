@@ -8,6 +8,6 @@ type IServer interface {
 	Start()
 	// 停止服务器
 	Stop()
-	// 开启业务服务
-	Listen() bool
+	// 服务是否已关闭
+	IsClose() bool
 }

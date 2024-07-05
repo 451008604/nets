@@ -18,7 +18,7 @@ type broadcastManager struct {
 var instanceBroadcastManager *broadcastManager
 var instanceBroadcastManagerOnce = sync.Once{}
 
-// 全局唯一广播管理器
+// 广播管理器
 func GetInstanceBroadcastManager() iface.IBroadcastManager {
 	instanceBroadcastManagerOnce.Do(func() {
 		instanceBroadcastManager = &broadcastManager{

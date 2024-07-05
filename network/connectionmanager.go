@@ -1,13 +1,9 @@
 package network
 
 import (
-	"fmt"
 	"github.com/451008604/nets/iface"
-	"os"
-	"os/signal"
 	"sync"
 	"sync/atomic"
-	"syscall"
 )
 
 var (
@@ -21,35 +17,33 @@ var (
 	Flag8 = uint32(0)
 )
 
-type connManager struct {
+type connectionManager struct {
 	connId      int64                                     // 用于客户端连接的自增Id
 	connections ConcurrentMap[Integer, iface.IConnection] // 管理的连接信息
-	signalCh    chan os.Signal                            // 处理系统信号
 	closeConnId chan int                                  // 已关闭的连接Id集合
 	onConnOpen  func(connection iface.IConnection)        // 连接建立时的Hook函数
 	onConnClose func(connection iface.IConnection)        // 连接断开时的Hook函数
 	removeList  chan iface.IConnection                    // 等待关闭的连接列表
 }
 
-var instanceConnManager iface.IConnManager
+var instanceConnManager iface.IConnectionManager
 var instanceConnManagerOnce = sync.Once{}
 
-// 全局唯一连接管理器
-func GetInstanceConnManager() iface.IConnManager {
+// 连接管理器
+func GetInstanceConnManager() iface.IConnectionManager {
 	instanceConnManagerOnce.Do(func() {
-		manager := &connManager{
+		manager := &connectionManager{
 			connections: NewConcurrentStringer[Integer, iface.IConnection](),
 			closeConnId: make(chan int, defaultServer.AppConf.MaxConn),
 			removeList:  make(chan iface.IConnection, defaultServer.AppConf.MaxConn),
 		}
-		operatingSystemSignalHandler(manager)
 		go onConnRemoveList(manager)
 		instanceConnManager = manager
 	})
 	return instanceConnManager
 }
 
-func (c *connManager) NewConnId() int {
+func (c *connectionManager) NewConnId() int {
 	if connId := c.getClosingConn(); connId != 0 {
 		return connId
 	}
@@ -58,7 +52,7 @@ func (c *connManager) NewConnId() int {
 	return int(c.connId)
 }
 
-func (c *connManager) Add(conn iface.IConnection) {
+func (c *connectionManager) Add(conn iface.IConnection) {
 	c.connections.Set(Integer(conn.GetConnId()), conn)
 
 	conn.SetProperty(SysPropertyConnOpened, c.onConnOpen)
@@ -66,41 +60,41 @@ func (c *connManager) Add(conn iface.IConnection) {
 	go conn.Start(conn.StartReader, conn.StartWriter)
 }
 
-func (c *connManager) Remove(conn iface.IConnection) {
+func (c *connectionManager) Remove(conn iface.IConnection) {
 	atomic.AddUint32(&Flag2, 1)
 	c.removeList <- conn
 }
 
-func (c *connManager) Get(connId int) (iface.IConnection, bool) {
+func (c *connectionManager) Get(connId int) (iface.IConnection, bool) {
 	value, ok := c.connections.Get(Integer(connId))
 	return value, ok
 }
 
-func (c *connManager) Len() int {
+func (c *connectionManager) Len() int {
 	return c.connections.Count()
 }
 
-func (c *connManager) ClearConn() {
+func (c *connectionManager) ClearConn() {
 	// 清理全部的connections信息
 	for _, v := range c.connections.Items() {
 		c.Remove(v)
 	}
 }
 
-func (c *connManager) OnConnOpen(fun func(conn iface.IConnection)) {
+func (c *connectionManager) OnConnOpen(fun func(conn iface.IConnection)) {
 	c.onConnOpen = fun
 }
 
-func (c *connManager) OnConnClose(fun func(conn iface.IConnection)) {
+func (c *connectionManager) OnConnClose(fun func(conn iface.IConnection)) {
 	c.onConnClose = fun
 }
 
-func (c *connManager) setClosingConn(connId int) {
+func (c *connectionManager) setClosingConn(connId int) {
 	// 存入回收列表
 	c.closeConnId <- connId
 }
 
-func (c *connManager) getClosingConn() int {
+func (c *connectionManager) getClosingConn() int {
 	// 回收列表中存在则取出使用
 	select {
 	case connId := <-c.closeConnId:
@@ -110,9 +104,9 @@ func (c *connManager) getClosingConn() int {
 	}
 }
 
-func onConnRemoveList(c *connManager) {
+func onConnRemoveList(c *connectionManager) {
 	for conn := range c.removeList {
-		if conn.GetIsClosed() {
+		if conn.IsClose() {
 			continue
 		}
 		atomic.AddUint32(&Flag3, 1)
@@ -123,20 +117,4 @@ func onConnRemoveList(c *connManager) {
 		// 回收连接Id
 		c.setClosingConn(conn.GetConnId())
 	}
-}
-
-func operatingSystemSignalHandler(c *connManager) {
-	if c.signalCh != nil {
-		return
-	}
-	c.signalCh = make(chan os.Signal, 1)
-	signal.Notify(c.signalCh, syscall.SIGINT, syscall.SIGTERM, syscall.SIGHUP, syscall.SIGQUIT, syscall.SIGKILL)
-	go func() {
-		sig := <-c.signalCh
-		fmt.Printf("Received signal: %v\n", sig)
-		// TODO 关闭服务，然后通过管道方式等待所有连接调用hook结束后再退出程序。
-		GetServerWS().Stop()
-		GetServerTCP().Stop()
-		os.Exit(0)
-	}()
 }

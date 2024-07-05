@@ -1,7 +1,7 @@
 package iface
 
 // 连接管理器
-type IConnManager interface {
+type IConnectionManager interface {
 	// 生成一个新的连接Id
 	NewConnId() int
 	// 添加连接

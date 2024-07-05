@@ -51,12 +51,11 @@ func main() {
 	// broadcastManager.GetGlobalBroadcastGroup()
 
 	// ===========连接管理器===========
-	connManager := network.GetInstanceConnManager()
-	connManager.OnConnOpen(func(conn iface.IConnection) {
+	network.GetInstanceConnManager().OnConnOpen(func(conn iface.IConnection) {
 		// do something ...
 		println("连接建立", conn.GetConnId())
 	})
-	connManager.OnConnClose(func(conn iface.IConnection) {
+	network.GetInstanceConnManager().OnConnClose(func(conn iface.IConnection) {
 		// do something ...
 		atomic.AddUint32(&network.Flag6, 1)
 		fmt.Printf("%v\t", network.Flag6)
@@ -87,10 +86,6 @@ func main() {
 	})
 
 	network.SetCustomServer(&network.CustomServer{})
-	// 启动TCP服务
-	network.GetServerTCP().Listen()
-	// 启动WebSocket服务
-	network.GetServerWS().Listen()
-	// 阻塞主进程
-	network.ServerWaitFlag.Wait()
+	// 注册服务
+	network.GetInstanceServerManager().RegisterServer(network.GetServerTCP(), network.GetServerWS())
 }

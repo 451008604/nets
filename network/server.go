@@ -1,9 +1,5 @@
 package network
 
-import (
-	"sync"
-)
-
 type server struct {
 	serverName string // 服务器名称
 	ip         string // IP地址
@@ -11,23 +7,18 @@ type server struct {
 	isClose    bool   // 服务是否已关闭
 }
 
-var ServerWaitFlag = &sync.WaitGroup{}
-
 func (s *server) GetServerName() string {
 	return s.serverName
 }
 
 func (s *server) Start() {
-	ServerWaitFlag.Add(1)
+	s.isClose = false
 }
 
 func (s *server) Stop() {
-	GetInstanceConnManager().ClearConn()
 	s.isClose = true
-	// ServerWaitFlag.Done()
 }
 
-func (s *server) Listen() bool {
-	s.isClose = false
-	return false
+func (s *server) IsClose() bool {
+	return s.isClose
 }

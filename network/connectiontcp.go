@@ -28,7 +28,6 @@ func (c *connectionTCP) StartReader() bool {
 	for {
 		b := make([]byte, 512)
 		if read, err := c.conn.Read(b); err != nil {
-			GetInstanceConnManager().Remove(c)
 			return false
 		} else {
 			msgByte = append(msgByte, b[:read]...)
@@ -41,7 +40,6 @@ func (c *connectionTCP) StartReader() bool {
 	// 将所有的内容分割成不同的消息，处理粘包
 	msgData := defaultServer.DataPacket.UnPack(msgByte)
 	if msgData == nil {
-		GetInstanceConnManager().Remove(c)
 		return false
 	}
 
@@ -59,7 +57,6 @@ func (c *connectionTCP) StartReader() bool {
 
 func (c *connectionTCP) StartWriter(data []byte) bool {
 	if _, err := c.conn.Write(data); err != nil {
-		GetInstanceConnManager().Remove(c)
 		return false
 	}
 	return false
