@@ -6,9 +6,11 @@ import (
 	"github.com/451008604/nets/network"
 	pb "github.com/451008604/nets/proto/bin"
 	"google.golang.org/protobuf/proto"
+	"math/rand"
 	"net/http"
 	"runtime"
 	"sync/atomic"
+	"time"
 )
 
 // 服务指标监控
@@ -16,31 +18,35 @@ func listenChannelStatus() {
 	serveMux := http.NewServeMux()
 	server := &http.Server{Addr: ":17000", Handler: serveMux}
 	serveMux.HandleFunc("/state", func(w http.ResponseWriter, r *http.Request) {
-		var memStats runtime.MemStats
-		runtime.ReadMemStats(&memStats)
 
-		var mapping [][]any
-		mapping = append(mapping, []any{"GO_ROOT", runtime.GOROOT()})
-		mapping = append(mapping, []any{"SYS_CPU_NUM", runtime.NumCPU()})
-		mapping = append(mapping, []any{"ALLOC", fmt.Sprintf("%v MB", memStats.Alloc/1024/1024)})
-		mapping = append(mapping, []any{"HEAP_ALLOC", fmt.Sprintf("%v MB", memStats.HeapAlloc/1024/1024)})
-		mapping = append(mapping, []any{"TOTAL_ALLOC", fmt.Sprintf("%v MB", memStats.TotalAlloc/1024/1024)})
-		mapping = append(mapping, []any{"CGO_CALL_NUM", runtime.NumCgoCall()})
-		mapping = append(mapping, []any{"GOROUTINE_NUM", runtime.NumGoroutine()})
-		mapping = append(mapping, []any{"Flag1", network.Flag1})
-		mapping = append(mapping, []any{"Flag2", network.Flag2})
-		mapping = append(mapping, []any{"Flag3", network.Flag3})
-		mapping = append(mapping, []any{"Flag4", network.Flag4})
-		mapping = append(mapping, []any{"Flag5", network.Flag5})
-		mapping = append(mapping, []any{"Flag6", network.Flag6})
-
-		str := ""
-		for _, v := range mapping {
-			str += fmt.Sprintf("%v：%v\n", v[0], v[1])
-		}
-		_, _ = w.Write([]byte(str))
+		_, _ = w.Write([]byte(info()))
 	})
 	fmt.Printf("%v\n", server.ListenAndServe())
+}
+
+func info() string {
+	var memStats runtime.MemStats
+	runtime.ReadMemStats(&memStats)
+	var mapping [][]any
+	mapping = append(mapping, []any{"GO_ROOT", runtime.GOROOT()})
+	mapping = append(mapping, []any{"SYS_CPU_NUM", runtime.NumCPU()})
+	mapping = append(mapping, []any{"ALLOC", fmt.Sprintf("%v MB", memStats.Alloc/1024/1024)})
+	mapping = append(mapping, []any{"HEAP_ALLOC", fmt.Sprintf("%v MB", memStats.HeapAlloc/1024/1024)})
+	mapping = append(mapping, []any{"TOTAL_ALLOC", fmt.Sprintf("%v MB", memStats.TotalAlloc/1024/1024)})
+	mapping = append(mapping, []any{"CGO_CALL_NUM", runtime.NumCgoCall()})
+	mapping = append(mapping, []any{"GOROUTINE_NUM", runtime.NumGoroutine()})
+	mapping = append(mapping, []any{"Flag1", network.Flag1})
+	mapping = append(mapping, []any{"Flag2", network.Flag2})
+	mapping = append(mapping, []any{"Flag3", network.Flag3})
+	mapping = append(mapping, []any{"Flag4", network.Flag4})
+	mapping = append(mapping, []any{"Flag5", network.Flag5})
+	mapping = append(mapping, []any{"Flag6", network.Flag6})
+
+	str := ""
+	for _, v := range mapping {
+		str += fmt.Sprintf("%v：%v\n", v[0], v[1])
+	}
+	return str
 }
 
 func main() {
@@ -57,6 +63,8 @@ func main() {
 	})
 	network.GetInstanceConnManager().OnConnClose(func(conn iface.IConnection) {
 		// do something ...
+
+		time.Sleep(time.Second * time.Duration(3+rand.Intn(2)))
 		atomic.AddUint32(&network.Flag6, 1)
 		fmt.Printf("%v\t", network.Flag6)
 	})
@@ -88,4 +96,7 @@ func main() {
 	network.SetCustomServer(&network.CustomServer{})
 	// 注册服务
 	network.GetInstanceServerManager().RegisterServer(network.GetServerTCP(), network.GetServerWS())
+
+	time.Sleep(time.Second * time.Duration(3))
+	println(info())
 }

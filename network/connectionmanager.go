@@ -62,6 +62,7 @@ func (c *connectionManager) Add(conn iface.IConnection) {
 
 func (c *connectionManager) Remove(conn iface.IConnection) {
 	atomic.AddUint32(&Flag2, 1)
+	GetInstanceServerManager().WaitGroupAdd(1)
 	c.removeList <- conn
 }
 
@@ -106,15 +107,18 @@ func (c *connectionManager) getClosingConn() int {
 
 func onConnRemoveList(c *connectionManager) {
 	for conn := range c.removeList {
-		if conn.IsClose() {
-			continue
-		}
-		atomic.AddUint32(&Flag3, 1)
-		// 关闭连接
-		conn.Stop()
-		// 删除连接
-		c.connections.Remove(Integer(conn.GetConnId()))
-		// 回收连接Id
-		c.setClosingConn(conn.GetConnId())
+		func(conn iface.IConnection) {
+			defer GetInstanceServerManager().WaitGroupDone()
+			if conn.IsClose() {
+				return
+			}
+			atomic.AddUint32(&Flag3, 1)
+			// 关闭连接
+			conn.Stop()
+			// 删除连接
+			c.connections.Remove(Integer(conn.GetConnId()))
+			// 回收连接Id
+			c.setClosingConn(conn.GetConnId())
+		}(conn)
 	}
 }

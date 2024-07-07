@@ -8,7 +8,9 @@ import (
 )
 
 type serverWS struct {
-	server
+	serverName string // 服务器名称
+	ip         string // IP地址
+	port       string // 服务端口
 }
 
 var serverWs iface.IServer
@@ -28,12 +30,14 @@ func newServerWS() iface.IServer {
 	return s
 }
 
+func (s *serverWS) GetServerName() string {
+	return s.serverName
+}
+
 func (s *serverWS) Start() {
 	if s.port == "" {
 		return
 	}
-
-	s.server.Start()
 	fmt.Printf("server starting [ %v:%v ]\n", s.serverName, s.port)
 
 	var upgrade = websocket.Upgrader{
@@ -47,7 +51,7 @@ func (s *serverWS) Start() {
 		}
 
 		// 服务关闭状态
-		if s.IsClose() {
+		if GetInstanceServerManager().IsClose() {
 			_ = conn.Close()
 			return
 		}

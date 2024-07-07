@@ -7,7 +7,9 @@ import (
 )
 
 type serverTCP struct {
-	server
+	serverName string // 服务器名称
+	ip         string // IP地址
+	port       string // 服务端口
 }
 
 var serverTcp iface.IServer
@@ -27,12 +29,14 @@ func newServerTCP() iface.IServer {
 	return s
 }
 
+func (s *serverTCP) GetServerName() string {
+	return s.serverName
+}
+
 func (s *serverTCP) Start() {
 	if s.port == "" {
 		return
 	}
-
-	s.server.Start()
 	fmt.Printf("server starting [ %v:%v ]\n", s.serverName, s.port)
 
 	var (
@@ -68,7 +72,7 @@ func (s *serverTCP) Start() {
 		}
 
 		// 服务关闭状态
-		if s.IsClose() {
+		if GetInstanceServerManager().IsClose() {
 			_ = conn.Close()
 			continue
 		}
