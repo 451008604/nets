@@ -120,6 +120,7 @@ func (c *connection) SendMsg(msgId int32, msgData proto.Message) {
 const (
 	SysPropertyConnOpened iface.IConnProperty = "SysPropertyConnOpened" // 连接建立时
 	SysPropertyConnClosed iface.IConnProperty = "SysPropertyConnClosed" // 连接关闭时
+	SysPropertyLimit      iface.IConnProperty = "SysPropertyLimit"      // 触发限流时
 )
 
 func (c *connection) SetProperty(key iface.IConnProperty, value any) {
@@ -150,15 +151,17 @@ func (c *connection) FlowControl() bool {
 		c.limitingTimer = time.Now().UnixMilli()
 	}
 	c.limitingCount++
-	if c.limitingCount < count {
+	if c.limitingCount <= count {
 		return false
 	}
-	c.limitingCount = 0
 	now := time.Now().UnixMilli()
 	if now-c.limitingTimer < interval {
-		c.limitingTimer = now
+		if fun, ok := c.GetProperty(SysPropertyLimit).(func(connection iface.IConnection)); ok {
+			fun(c)
+		}
 		return true
 	}
+	c.limitingCount = 1
 	c.limitingTimer = now
 	return false
 }

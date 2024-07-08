@@ -7,12 +7,13 @@ import (
 )
 
 type connectionManager struct {
-	connId      int64                                     // 用于客户端连接的自增Id
-	connections ConcurrentMap[Integer, iface.IConnection] // 管理的连接信息
-	closeConnId chan int                                  // 已关闭的连接Id集合
-	onConnOpen  func(connection iface.IConnection)        // 连接建立时的Hook函数
-	onConnClose func(connection iface.IConnection)        // 连接断开时的Hook函数
-	removeList  chan iface.IConnection                    // 等待关闭的连接列表
+	connId            int64                                     // 用于客户端连接的自增Id
+	connections       ConcurrentMap[Integer, iface.IConnection] // 管理的连接信息
+	closeConnId       chan int                                  // 已关闭的连接Id集合
+	removeList        chan iface.IConnection                    // 等待关闭的连接列表
+	connOpenCallBack  func(connection iface.IConnection)        // 连接建立时的Hook函数
+	connCloseCallBack func(connection iface.IConnection)        // 连接断开时的Hook函数
+	limitCallBack     func(connection iface.IConnection)        // 触发限流时的Hook函数
 }
 
 var instanceConnManager iface.IConnectionManager
@@ -44,8 +45,9 @@ func (c *connectionManager) NewConnId() int {
 func (c *connectionManager) Add(conn iface.IConnection) {
 	c.connections.Set(Integer(conn.GetConnId()), conn)
 
-	conn.SetProperty(SysPropertyConnOpened, c.onConnOpen)
-	conn.SetProperty(SysPropertyConnClosed, c.onConnClose)
+	conn.SetProperty(SysPropertyConnOpened, c.connOpenCallBack)
+	conn.SetProperty(SysPropertyConnClosed, c.connCloseCallBack)
+	conn.SetProperty(SysPropertyLimit, c.limitCallBack)
 	go conn.Start(conn.StartReader, conn.StartWriter)
 }
 
@@ -69,12 +71,16 @@ func (c *connectionManager) ClearConn() {
 	}
 }
 
-func (c *connectionManager) OnConnOpen(fun func(conn iface.IConnection)) {
-	c.onConnOpen = fun
+func (c *connectionManager) SetConnOpenCallBack(connOpenCallBack func(connection iface.IConnection)) {
+	c.connOpenCallBack = connOpenCallBack
 }
 
-func (c *connectionManager) OnConnClose(fun func(conn iface.IConnection)) {
-	c.onConnClose = fun
+func (c *connectionManager) SetConnCloseCallBack(connCloseCallBack func(connection iface.IConnection)) {
+	c.connCloseCallBack = connCloseCallBack
+}
+
+func (c *connectionManager) SetLimitCallBack(limitCallBack func(connection iface.IConnection)) {
+	c.limitCallBack = limitCallBack
 }
 
 func (c *connectionManager) setClosingConn(connId int) {

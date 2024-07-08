@@ -50,14 +50,18 @@ func main() {
 	// broadcastManager.GetGlobalBroadcastGroup()
 
 	// ===========连接管理器===========
-	network.GetInstanceConnManager().OnConnOpen(func(conn iface.IConnection) {
+	network.GetInstanceConnManager().SetConnOpenCallBack(func(connection iface.IConnection) {
 		// do something ...
-		println("连接建立", conn.GetConnId())
+		println("连接建立", connection.GetConnId())
 	})
-	network.GetInstanceConnManager().OnConnClose(func(conn iface.IConnection) {
+	network.GetInstanceConnManager().SetConnCloseCallBack(func(connection iface.IConnection) {
 		// do something ...
 
 		time.Sleep(time.Second * time.Duration(3+rand.Intn(2)))
+	})
+	network.GetInstanceConnManager().SetLimitCallBack(func(connection iface.IConnection) {
+		// do something ...
+		println("触发限流", connection.RemoteAddrStr())
 	})
 
 	// ===========消息处理器===========

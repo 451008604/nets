@@ -43,7 +43,7 @@ func (m *msgHandler) DoMsgHandler(request iface.IRequest) {
 
 	// 限流控制
 	if request.GetConnection().FlowControl() {
-		fmt.Printf("flowControl RemoteAddress: %v, GetMsgId: %v, GetData: %v", request.GetConnection().RemoteAddrStr(), request.GetMsgId(), request.GetData())
+		fmt.Printf("flowControl RemoteAddress: %v, GetMsgId: %v, GetData: %v\n", request.GetConnection().RemoteAddrStr(), request.GetMsgId(), request.GetData())
 		return
 	}
 
