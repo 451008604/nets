@@ -5,7 +5,6 @@ import (
 	"github.com/451008604/nets/iface"
 	"google.golang.org/protobuf/proto"
 	"sync"
-	"sync/atomic"
 	"time"
 )
 
@@ -26,14 +25,15 @@ func (c *connection) StartReader() bool { return true }
 func (c *connection) StartWriter(_ []byte) bool { return false }
 
 func (c *connection) Start(readerHandler func() bool, writerHandler func(data []byte) bool) {
+	defer GetInstanceServerManager().WaitGroupDone()
 	// 连接关闭时
 	defer func() {
-		atomic.AddUint32(&Flag5, 1)
 		if fun, ok := c.GetProperty(SysPropertyConnClosed).(func(connection iface.IConnection)); ok {
 			fun(c)
 		}
 	}()
 
+	GetInstanceServerManager().WaitGroupAdd(1)
 	// 连接建立时
 	if fun, ok := c.GetProperty(SysPropertyConnOpened).(func(connection iface.IConnection)); ok {
 		fun(c)
@@ -47,37 +47,7 @@ func (c *connection) Start(readerHandler func() bool, writerHandler func(data []
 			}
 			// 调用注册方法处理接收到的消息
 			if !readerHandler() {
-				go GetInstanceConnManager().Remove(c)
-				go GetInstanceConnManager().Remove(c)
-				go GetInstanceConnManager().Remove(c)
-				go GetInstanceConnManager().Remove(c)
-				go GetInstanceConnManager().Remove(c)
-				go GetInstanceConnManager().Remove(c)
-				go GetInstanceConnManager().Remove(c)
-				go GetInstanceConnManager().Remove(c)
-				go GetInstanceConnManager().Remove(c)
-				go GetInstanceConnManager().Remove(c)
-				go GetInstanceConnManager().Remove(c)
-				go GetInstanceConnManager().Remove(c)
-				go GetInstanceConnManager().Remove(c)
-				go GetInstanceConnManager().Remove(c)
-				go GetInstanceConnManager().Remove(c)
-				go GetInstanceConnManager().Remove(c)
-				go GetInstanceConnManager().Remove(c)
-				go GetInstanceConnManager().Remove(c)
-				go GetInstanceConnManager().Remove(c)
-				go GetInstanceConnManager().Remove(c)
-				go GetInstanceConnManager().Remove(c)
-				go GetInstanceConnManager().Remove(c)
-				go GetInstanceConnManager().Remove(c)
-				go GetInstanceConnManager().Remove(c)
-				go GetInstanceConnManager().Remove(c)
-				go GetInstanceConnManager().Remove(c)
-				go GetInstanceConnManager().Remove(c)
-				go GetInstanceConnManager().Remove(c)
-				go GetInstanceConnManager().Remove(c)
-				go GetInstanceConnManager().Remove(c)
-				go GetInstanceConnManager().Remove(c)
+				GetInstanceConnManager().Remove(c)
 				return
 			}
 		}
@@ -91,37 +61,7 @@ func (c *connection) Start(readerHandler func() bool, writerHandler func(data []
 		if data, ok := <-c.msgBuffChan; ok {
 			// 调用注册方法写消息给客户端
 			if !writerHandler(data) {
-				go GetInstanceConnManager().Remove(c)
-				go GetInstanceConnManager().Remove(c)
-				go GetInstanceConnManager().Remove(c)
-				go GetInstanceConnManager().Remove(c)
-				go GetInstanceConnManager().Remove(c)
-				go GetInstanceConnManager().Remove(c)
-				go GetInstanceConnManager().Remove(c)
-				go GetInstanceConnManager().Remove(c)
-				go GetInstanceConnManager().Remove(c)
-				go GetInstanceConnManager().Remove(c)
-				go GetInstanceConnManager().Remove(c)
-				go GetInstanceConnManager().Remove(c)
-				go GetInstanceConnManager().Remove(c)
-				go GetInstanceConnManager().Remove(c)
-				go GetInstanceConnManager().Remove(c)
-				go GetInstanceConnManager().Remove(c)
-				go GetInstanceConnManager().Remove(c)
-				go GetInstanceConnManager().Remove(c)
-				go GetInstanceConnManager().Remove(c)
-				go GetInstanceConnManager().Remove(c)
-				go GetInstanceConnManager().Remove(c)
-				go GetInstanceConnManager().Remove(c)
-				go GetInstanceConnManager().Remove(c)
-				go GetInstanceConnManager().Remove(c)
-				go GetInstanceConnManager().Remove(c)
-				go GetInstanceConnManager().Remove(c)
-				go GetInstanceConnManager().Remove(c)
-				go GetInstanceConnManager().Remove(c)
-				go GetInstanceConnManager().Remove(c)
-				go GetInstanceConnManager().Remove(c)
-				go GetInstanceConnManager().Remove(c)
+				GetInstanceConnManager().Remove(c)
 				return
 			}
 		}
@@ -134,7 +74,6 @@ func (c *connection) Stop() {
 	}
 	c.isClosed = true
 
-	atomic.AddUint32(&Flag4, 1)
 	// 退出所在的广播组
 	GetInstanceBroadcastManager().GetGlobalBroadcastGroup().Remove(c.GetConnId())
 	if groups, b := GetInstanceBroadcastManager().GetBroadcastGroupByConnId(c.GetConnId()); b {

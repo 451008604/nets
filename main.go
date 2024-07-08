@@ -9,7 +9,6 @@ import (
 	"math/rand"
 	"net/http"
 	"runtime"
-	"sync/atomic"
 	"time"
 )
 
@@ -35,12 +34,6 @@ func info() string {
 	mapping = append(mapping, []any{"TOTAL_ALLOC", fmt.Sprintf("%v MB", memStats.TotalAlloc/1024/1024)})
 	mapping = append(mapping, []any{"CGO_CALL_NUM", runtime.NumCgoCall()})
 	mapping = append(mapping, []any{"GOROUTINE_NUM", runtime.NumGoroutine()})
-	mapping = append(mapping, []any{"Flag1", network.Flag1})
-	mapping = append(mapping, []any{"Flag2", network.Flag2})
-	mapping = append(mapping, []any{"Flag3", network.Flag3})
-	mapping = append(mapping, []any{"Flag4", network.Flag4})
-	mapping = append(mapping, []any{"Flag5", network.Flag5})
-	mapping = append(mapping, []any{"Flag6", network.Flag6})
 
 	str := ""
 	for _, v := range mapping {
@@ -65,8 +58,6 @@ func main() {
 		// do something ...
 
 		time.Sleep(time.Second * time.Duration(3+rand.Intn(2)))
-		atomic.AddUint32(&network.Flag6, 1)
-		fmt.Printf("%v\t", network.Flag6)
 	})
 
 	// ===========消息处理器===========
@@ -97,6 +88,5 @@ func main() {
 	// 注册服务
 	network.GetInstanceServerManager().RegisterServer(network.GetServerTCP(), network.GetServerWS())
 
-	time.Sleep(time.Second * time.Duration(3))
 	println(info())
 }

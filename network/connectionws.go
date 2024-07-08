@@ -3,7 +3,6 @@ package network
 import (
 	"github.com/451008604/nets/iface"
 	"github.com/gorilla/websocket"
-	"sync/atomic"
 )
 
 type connectionWS struct {
@@ -26,7 +25,6 @@ func NewConnectionWS(server iface.IServer, conn *websocket.Conn) iface.IConnecti
 func (c *connectionWS) StartReader() bool {
 	msgType, msgByte, err := c.conn.ReadMessage()
 	if err != nil || msgType != websocket.BinaryMessage {
-		atomic.AddUint32(&Flag1, 1)
 		return false
 	}
 

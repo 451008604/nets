@@ -29,7 +29,7 @@ func GetInstanceServerManager() iface.IServerManager {
 			waitGroup:     sync.WaitGroup{},
 		}
 		instanceServerManager = manager
-		operatingSystemSignalHandler()
+		go operatingSystemSignalHandler()
 	})
 
 	return instanceServerManager
@@ -58,12 +58,12 @@ func (c *serverManager) IsClose() bool {
 	return c.isClosed
 }
 
-func (c *serverManager) WaitGroupDone() {
-	c.waitGroup.Done()
-}
-
 func (c *serverManager) WaitGroupAdd(delta int) {
 	c.waitGroup.Add(delta)
+}
+
+func (c *serverManager) WaitGroupDone() {
+	c.waitGroup.Done()
 }
 
 func (c *serverManager) StopAll() {
@@ -77,9 +77,8 @@ func (c *serverManager) StopAll() {
 func operatingSystemSignalHandler() {
 	signalCh := make(chan os.Signal, 1)
 	signal.Notify(signalCh, syscall.SIGINT, syscall.SIGTERM, syscall.SIGHUP, syscall.SIGQUIT, syscall.SIGKILL)
-	go func() {
-		sig := <-signalCh
-		fmt.Printf("Received signal: %v\n", sig)
-		GetInstanceServerManager().StopAll()
-	}()
+	sig := <-signalCh
+	fmt.Printf("Received signal: %v\n", sig)
+	// 执行进程退出前的处理
+	GetInstanceServerManager().StopAll()
 }

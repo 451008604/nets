@@ -6,17 +6,6 @@ import (
 	"sync/atomic"
 )
 
-var (
-	Flag1 = uint32(0)
-	Flag2 = uint32(0)
-	Flag3 = uint32(0)
-	Flag4 = uint32(0)
-	Flag5 = uint32(0)
-	Flag6 = uint32(0)
-	Flag7 = uint32(0)
-	Flag8 = uint32(0)
-)
-
 type connectionManager struct {
 	connId      int64                                     // 用于客户端连接的自增Id
 	connections ConcurrentMap[Integer, iface.IConnection] // 管理的连接信息
@@ -61,8 +50,6 @@ func (c *connectionManager) Add(conn iface.IConnection) {
 }
 
 func (c *connectionManager) Remove(conn iface.IConnection) {
-	atomic.AddUint32(&Flag2, 1)
-	GetInstanceServerManager().WaitGroupAdd(1)
 	c.removeList <- conn
 }
 
@@ -107,18 +94,14 @@ func (c *connectionManager) getClosingConn() int {
 
 func onConnRemoveList(c *connectionManager) {
 	for conn := range c.removeList {
-		func(conn iface.IConnection) {
-			defer GetInstanceServerManager().WaitGroupDone()
-			if conn.IsClose() {
-				return
-			}
-			atomic.AddUint32(&Flag3, 1)
-			// 关闭连接
-			conn.Stop()
-			// 删除连接
-			c.connections.Remove(Integer(conn.GetConnId()))
-			// 回收连接Id
-			c.setClosingConn(conn.GetConnId())
-		}(conn)
+		if conn.IsClose() {
+			continue
+		}
+		// 关闭连接
+		conn.Stop()
+		// 删除连接
+		c.connections.Remove(Integer(conn.GetConnId()))
+		// 回收连接Id
+		c.setClosingConn(conn.GetConnId())
 	}
 }
