@@ -59,7 +59,7 @@ func (c *connectionTCP) StartWriter(data []byte) bool {
 	if _, err := c.conn.Write(data); err != nil {
 		return false
 	}
-	return false
+	return true
 }
 
 func (c *connectionTCP) Start(readerHandler func() bool, writerHandler func(data []byte) bool) {

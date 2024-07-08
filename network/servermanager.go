@@ -22,16 +22,14 @@ var instanceServerManagerOnce = sync.Once{}
 // 服务管理器
 func GetInstanceServerManager() iface.IServerManager {
 	instanceServerManagerOnce.Do(func() {
-		manager := &serverManager{
+		instanceServerManager = &serverManager{
 			servers:       make([]iface.IServer, 0),
 			isClosed:      false,
 			blockMainChan: make(chan bool),
 			waitGroup:     sync.WaitGroup{},
 		}
-		instanceServerManager = manager
 		go operatingSystemSignalHandler()
 	})
-
 	return instanceServerManager
 }
 

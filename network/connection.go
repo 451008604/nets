@@ -104,6 +104,9 @@ func (c *connection) IsClose() bool {
 }
 
 func (c *connection) SendMsg(msgId int32, msgData proto.Message) {
+	if c.isClosed {
+		return
+	}
 	msgByte := c.ProtocolToByte(msgData)
 	// 将消息数据封包
 	msg := defaultServer.DataPacket.Pack(NewMsgPackage(msgId, msgByte))
