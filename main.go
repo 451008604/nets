@@ -92,5 +92,5 @@ func main() {
 	// 注册服务
 	network.GetInstanceServerManager().RegisterServer(network.GetServerTCP(), network.GetServerWS())
 
-	println(info())
+	fmt.Printf(info())
 }

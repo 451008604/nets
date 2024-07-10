@@ -158,6 +158,7 @@ func (c *connection) FlowControl() bool {
 	if now-c.limitingTimer < interval {
 		if fun, ok := c.GetProperty(SysPropertyLimit).(func(connection iface.IConnection)); ok {
 			fun(c)
+			GetInstanceConnManager().Remove(c)
 		}
 		return true
 	}
