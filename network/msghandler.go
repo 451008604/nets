@@ -30,6 +30,11 @@ func GetInstanceMsgHandler() iface.IMsgHandler {
 func (m *msgHandler) DoMsgHandler(request iface.IRequest) {
 	defer m.msgErrCapture(request)
 
+	// 连接关闭时丢弃后续所有操作
+	if request.GetConnection().IsClose() {
+		return
+	}
+
 	router, ok := m.apis[request.GetMsgId()]
 	if !ok {
 		return
