@@ -7,10 +7,11 @@ import (
 )
 
 type msgHandler struct {
-	workQueue  ConcurrentMap[Integer, chan iface.IRequest] // 工作池，每个工作队列中存放等待执行的任务
-	apis       map[int32]iface.IRouter                     // 存放每个MsgId所对应处理方法的map属性
-	filter     iface.IFilter                               // 消息过滤器
-	errCapture iface.IErrCapture                           // 错误捕获器
+	workQueue   ConcurrentMap[Integer, chan iface.IConnection]           // 工作池，每个工作队列中存放等待执行的任务
+	apis        map[int32]iface.IRouter                                  // 存放每个MsgId所对应处理方法的map属性
+	workerTasks map[iface.WorkerTaskType]func(request iface.IConnection) // 存放所有支持的工作任务类型
+	filter      iface.IFilter                                            // 消息过滤器
+	errCapture  iface.IErrCapture                                        // 错误捕获器
 }
 
 var instanceMsgHandler iface.IMsgHandler
@@ -19,46 +20,51 @@ var instanceMsgHandlerOnce = sync.Once{}
 // 消息处理器
 func GetInstanceMsgHandler() iface.IMsgHandler {
 	instanceMsgHandlerOnce.Do(func() {
-		instanceMsgHandler = &msgHandler{
+		manager := &msgHandler{
 			apis:      make(map[int32]iface.IRouter),
-			workQueue: NewConcurrentStringer[Integer, chan iface.IRequest](),
+			workQueue: NewConcurrentStringer[Integer, chan iface.IConnection](),
 		}
+		manager.RegisterTaskHandler(iface.SysReaderMessage, manager.DoMsgHandler)
+		instanceMsgHandler = manager
 	})
 	return instanceMsgHandler
 }
 
-func (m *msgHandler) DoMsgHandler(request iface.IRequest) {
-	defer m.msgErrCapture(request)
+func (m *msgHandler) DoMsgHandler(conn iface.IConnection) {
+	defer m.msgErrCapture(conn)
 
 	// 连接关闭时丢弃后续所有操作
-	if request.GetConnection().IsClose() {
+	if conn.IsClose() {
 		return
 	}
 
-	router, ok := m.apis[request.GetMsgId()]
+	msgQueue := conn.GetMsgQueue()
+	msg := msgQueue.Remove(msgQueue.Front()).(iface.IMessage)
+
+	router, ok := m.apis[int32(msg.GetMsgId())]
 	if !ok {
 		return
 	}
 
 	msgData := router.GetNewMsg()
-	if err := request.GetConnection().ByteToProtocol(request.GetData(), msgData); err != nil {
-		fmt.Printf("api msgId %v parsing %v error %v\n", request.GetMsgId(), request.GetData(), err)
+	if err := conn.ByteToProtocol(msg.GetData(), msgData); err != nil {
+		fmt.Printf("api msgId %v parsing %v error %v\n", msg.GetMsgId(), msg.GetData(), err)
 		return
 	}
 
 	// 限流控制
-	if request.GetConnection().FlowControl() {
-		fmt.Printf("flowControl RemoteAddress: %v, GetMsgId: %v, GetData: %v\n", request.GetConnection().RemoteAddrStr(), request.GetMsgId(), request.GetData())
+	if conn.FlowControl() {
+		fmt.Printf("flowControl RemoteAddress: %v, GetMsgId: %v, GetData: %v\n", conn.RemoteAddrStr(), request.GetMsgId(), request.GetData())
 		return
 	}
 
 	// 过滤器校验
-	if m.filter != nil && !m.filter(request, msgData) {
+	if m.filter != nil && !m.filter(conn, msgData) {
 		return
 	}
 
 	// 对应的逻辑处理方法
-	router.RunHandler(request, msgData)
+	router.RunHandler(conn, msgData)
 }
 
 func (m *msgHandler) AddRouter(msgId int32, msg iface.INewMsgStructTemplate, handler iface.IReceiveMsgHandler) {
@@ -74,21 +80,25 @@ func (m *msgHandler) GetApis() map[int32]iface.IRouter {
 	return m.apis
 }
 
-func (m *msgHandler) SendMsgToTaskQueue(request iface.IRequest) {
-	workerId := request.GetConnection().GetWorkId()
+func (m *msgHandler) RegisterTaskHandler(taskType iface.WorkerTaskType, handler func(request iface.IConnection)) {
+	m.workerTasks[taskType] = handler
+}
+
+func (m *msgHandler) PushInTaskQueue(taskType iface.WorkerTaskType, conn iface.IConnection) {
+	workerId := conn.GetWorkId()
 	workQueue, ok := m.workQueue.Get(Integer(workerId))
 	if !ok {
-		workQueue = make(chan iface.IRequest, defaultServer.AppConf.WorkerTaskMaxLen)
+		workQueue = make(chan iface.IConnection, defaultServer.AppConf.WorkerTaskMaxLen)
 		m.workQueue.Set(Integer(workerId), workQueue)
 		// 对工作池进行扩容
 		go m.startOneWorker(workQueue)
 	}
 
-	// 将请求推入worker协程
-	workQueue <- request
+	// 推入worker协程
+	workQueue <- conn
 }
 
-func (m *msgHandler) startOneWorker(workQueue chan iface.IRequest) {
+func (m *msgHandler) startOneWorker(workQueue chan iface.IConnection) {
 	for req := range workQueue {
 		m.DoMsgHandler(req)
 	}
@@ -102,11 +112,11 @@ func (m *msgHandler) SetErrCapture(fun iface.IErrCapture) {
 	m.errCapture = fun
 }
 
-func (m *msgHandler) msgErrCapture(request iface.IRequest) {
+func (m *msgHandler) msgErrCapture(conn iface.IConnection) {
 	if m.errCapture == nil {
 		return
 	}
 	if r := recover(); r != nil {
-		m.errCapture(request, r)
+		m.errCapture(conn, r)
 	}
 }

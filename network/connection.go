@@ -1,6 +1,7 @@
 package network
 
 import (
+	"container/list"
 	"encoding/json"
 	"github.com/451008604/nets/iface"
 	"google.golang.org/protobuf/proto"
@@ -11,13 +12,14 @@ import (
 type connection struct {
 	server        iface.IServer              // 当前Conn所属的Server
 	connId        int                        // 当前连接的Id(SessionId)
-	msgBuffChan   chan []byte                // 用于读、写两个goroutine之间的消息通信
+	msgBuffChan   chan []byte                // 用于任务队列与写协程之间的消息通信
 	property      ConcurrentMap[string, any] // 连接属性
 	isClosed      bool                       // 当前连接是否已关闭
 	workId        int                        // 工作池Id
 	limitingCount int64                      // 限流计数
 	limitingTimer int64                      // 限流计时
 	limitingMutex sync.Mutex                 // 限流锁
+	msgQueue      *list.List                 // 接收到的消息队列
 }
 
 func (c *connection) StartReader() bool { return true }
@@ -28,14 +30,14 @@ func (c *connection) Start(readerHandler func() bool, writerHandler func(data []
 	defer GetInstanceServerManager().WaitGroupDone()
 	// 连接关闭时
 	defer func() {
-		if fun, ok := c.GetProperty(SysPropertyConnClosed).(func(connection iface.IConnection)); ok {
+		if fun, ok := c.GetProperty(iface.SysPropertyConnClosed).(func(connection iface.IConnection)); ok {
 			fun(c)
 		}
 	}()
 
 	GetInstanceServerManager().WaitGroupAdd(1)
 	// 连接建立时
-	if fun, ok := c.GetProperty(SysPropertyConnOpened).(func(connection iface.IConnection)); ok {
+	if fun, ok := c.GetProperty(iface.SysPropertyConnOpened).(func(connection iface.IConnection)); ok {
 		fun(c)
 	}
 
@@ -95,6 +97,10 @@ func (c *connection) GetWorkId() int {
 	return c.workId
 }
 
+func (c *connection) GetMsgQueue() *list.List {
+	return c.msgQueue
+}
+
 func (c *connection) RemoteAddrStr() string {
 	return ""
 }
@@ -116,12 +122,6 @@ func (c *connection) SendMsg(msgId int32, msgData proto.Message) {
 	// 写入传输通道发送给客户端
 	c.msgBuffChan <- msg
 }
-
-const (
-	SysPropertyConnOpened iface.IConnProperty = "SysPropertyConnOpened" // 连接建立时
-	SysPropertyConnClosed iface.IConnProperty = "SysPropertyConnClosed" // 连接关闭时
-	SysPropertyLimit      iface.IConnProperty = "SysPropertyLimit"      // 触发限流时
-)
 
 func (c *connection) SetProperty(key iface.IConnProperty, value any) {
 	c.property.Set(string(key), value)
@@ -156,7 +156,7 @@ func (c *connection) FlowControl() bool {
 	}
 	now := time.Now().UnixMilli()
 	if now-c.limitingTimer < interval {
-		if fun, ok := c.GetProperty(SysPropertyLimit).(func(connection iface.IConnection)); ok {
+		if fun, ok := c.GetProperty(iface.SysPropertyLimit).(func(connection iface.IConnection)); ok {
 			fun(c)
 			GetInstanceConnManager().Remove(c)
 		}

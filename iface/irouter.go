@@ -13,7 +13,7 @@ type IRouter interface {
 	// 设置处理函数
 	SetHandler(req IReceiveMsgHandler)
 	// 执行处理函数
-	RunHandler(request IRequest, message proto.Message)
+	RunHandler(conn IConnection, message proto.Message)
 }
-type IReceiveMsgHandler func(con IConnection, message proto.Message)
+type IReceiveMsgHandler func(conn IConnection, message proto.Message)
 type INewMsgStructTemplate func() proto.Message

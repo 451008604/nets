@@ -22,6 +22,6 @@ func (b *baseRouter) SetHandler(req iface.IReceiveMsgHandler) {
 	b.handler = req
 }
 
-func (b *baseRouter) RunHandler(request iface.IRequest, message proto.Message) {
-	b.handler(request.GetConnection(), message)
+func (b *baseRouter) RunHandler(conn iface.IConnection, message proto.Message) {
+	b.handler(conn, message)
 }
