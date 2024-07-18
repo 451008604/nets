@@ -10,10 +10,8 @@ type IMsgHandler interface {
 	GetApis() map[int32]IRouter
 	// 为消息注册解析体和处理函数
 	AddRouter(msgId int32, msg INewMsgStructTemplate, handler IReceiveMsgHandler)
-
-	RegisterTaskHandler(taskType WorkerTaskType, handler func(conn IConnection))
-	// 将消息推入TaskQueue，等待Worker处理
-	PushInTaskQueue(taskType WorkerTaskType, conn IConnection)
+	// 将任务放入执行队列，等待Worker处理
+	PushInTaskQueue(task ITaskTemplate)
 	// 设置过滤器
 	SetFilter(fun IFilter)
 	// 设置错误捕获
@@ -22,9 +20,7 @@ type IMsgHandler interface {
 type IFilter func(conn IConnection, msgData proto.Message) bool
 type IErrCapture func(conn IConnection, r any)
 
-// 工作任务类型
-type WorkerTaskType string
-
-const (
-	SysReaderMessage = "SysReaderMessage" // 接受到数据
-)
+// 任务模版
+type ITaskTemplate interface {
+	TaskHandler(conn IConnection)
+}

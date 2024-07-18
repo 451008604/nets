@@ -7,11 +7,10 @@ import (
 )
 
 type msgHandler struct {
-	workQueue   ConcurrentMap[Integer, chan iface.IConnection]           // 工作池，每个工作队列中存放等待执行的任务
-	apis        map[int32]iface.IRouter                                  // 存放每个MsgId所对应处理方法的map属性
-	workerTasks map[iface.WorkerTaskType]func(request iface.IConnection) // 存放所有支持的工作任务类型
-	filter      iface.IFilter                                            // 消息过滤器
-	errCapture  iface.IErrCapture                                        // 错误捕获器
+	workerPool ConcurrentMap[Integer, chan iface.IConnection] // 工作池，每个工作队列中存放等待执行的任务
+	apis       map[int32]iface.IRouter                        // 存放每个MsgId所对应处理方法的map属性
+	filter     iface.IFilter                                  // 消息过滤器
+	errCapture iface.IErrCapture                              // 错误捕获器
 }
 
 var instanceMsgHandler iface.IMsgHandler
@@ -21,10 +20,9 @@ var instanceMsgHandlerOnce = sync.Once{}
 func GetInstanceMsgHandler() iface.IMsgHandler {
 	instanceMsgHandlerOnce.Do(func() {
 		manager := &msgHandler{
-			apis:      make(map[int32]iface.IRouter),
-			workQueue: NewConcurrentStringer[Integer, chan iface.IConnection](),
+			apis:       make(map[int32]iface.IRouter),
+			workerPool: NewConcurrentStringer[Integer, chan iface.IConnection](),
 		}
-		manager.RegisterTaskHandler(iface.SysReaderMessage, manager.DoMsgHandler)
 		instanceMsgHandler = manager
 	})
 	return instanceMsgHandler
@@ -80,22 +78,18 @@ func (m *msgHandler) GetApis() map[int32]iface.IRouter {
 	return m.apis
 }
 
-func (m *msgHandler) RegisterTaskHandler(taskType iface.WorkerTaskType, handler func(request iface.IConnection)) {
-	m.workerTasks[taskType] = handler
-}
-
-func (m *msgHandler) PushInTaskQueue(taskType iface.WorkerTaskType, conn iface.IConnection) {
+func (m *msgHandler) PushInTaskQueue(task iface.ITaskTemplate) {
 	workerId := conn.GetWorkId()
-	workQueue, ok := m.workQueue.Get(Integer(workerId))
+	taskQueue, ok := m.workerPool.Get(Integer(workerId))
 	if !ok {
-		workQueue = make(chan iface.IConnection, defaultServer.AppConf.WorkerTaskMaxLen)
-		m.workQueue.Set(Integer(workerId), workQueue)
+		taskQueue = make(chan iface.IConnection, defaultServer.AppConf.WorkerTaskMaxLen)
+		m.workerPool.Set(Integer(workerId), taskQueue)
 		// 对工作池进行扩容
-		go m.startOneWorker(workQueue)
+		go m.startOneWorker(taskQueue)
 	}
 
 	// 推入worker协程
-	workQueue <- conn
+	taskQueue <- conn
 }
 
 func (m *msgHandler) startOneWorker(workQueue chan iface.IConnection) {
