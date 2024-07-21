@@ -14,10 +14,19 @@ type IConnectionManager interface {
 	Len() int
 	// 删除并停止所有连接
 	ClearConn()
-	// 连接创建时的Hook函数
-	SetConnOpenCallBack(connOpenCallBack func(connection IConnection))
-	// 连接断开时的Hook函数
-	SetConnCloseCallBack(connCloseCallBack func(connection IConnection))
+
+	// 设置连接创建时的Hook函数
+	SetConnOnOpened(connOpenCallBack func(connection IConnection))
+	// 执行连接创建时的Hook函数
+	ConnOnOpened(connection IConnection)
+
+	// 设置连接断开时的Hook函数
+	SetConnOnClosed(connCloseCallBack func(connection IConnection))
+	// 执行连接断开时的Hook函数
+	ConnOnClosed(connection IConnection)
+
 	// 触发限流时的Hook函数
-	SetLimitCallBack(limitCallBack func(connection IConnection))
+	SetConnOnRateLimiting(limitCallBack func(connection IConnection))
+	// 执行触发限流时的Hook函数
+	ConnRateLimiting(connection IConnection)
 }

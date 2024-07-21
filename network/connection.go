@@ -1,7 +1,6 @@
 package network
 
 import (
-	"container/list"
 	"encoding/json"
 	"github.com/451008604/nets/iface"
 	"google.golang.org/protobuf/proto"
@@ -15,11 +14,10 @@ type connection struct {
 	msgBuffChan   chan []byte                // 用于任务队列与写协程之间的消息通信
 	property      ConcurrentMap[string, any] // 连接属性
 	isClosed      bool                       // 当前连接是否已关闭
-	workId        int                        // 工作池Id
 	limitingCount int64                      // 限流计数
 	limitingTimer int64                      // 限流计时
 	limitingMutex sync.Mutex                 // 限流锁
-	msgQueue      *list.List                 // 接收到的消息队列
+	taskQueue     chan iface.ITaskTemplate   // 等待执行的任务队列
 }
 
 func (c *connection) StartReader() bool { return true }
@@ -28,18 +26,10 @@ func (c *connection) StartWriter(_ []byte) bool { return false }
 
 func (c *connection) Start(readerHandler func() bool, writerHandler func(data []byte) bool) {
 	defer GetInstanceServerManager().WaitGroupDone()
-	// 连接关闭时
-	defer func() {
-		if fun, ok := c.GetProperty(iface.SysPropertyConnClosed).(func(connection iface.IConnection)); ok {
-			fun(c)
-		}
-	}()
+	defer GetInstanceConnManager().ConnOnClosed(c)
 
 	GetInstanceServerManager().WaitGroupAdd(1)
-	// 连接建立时
-	if fun, ok := c.GetProperty(iface.SysPropertyConnOpened).(func(connection iface.IConnection)); ok {
-		fun(c)
-	}
+	GetInstanceConnManager().ConnOnOpened(c)
 
 	// 开启读协程
 	go func(c *connection, readerHandler func() bool) {
@@ -89,16 +79,12 @@ func (c *connection) Stop() {
 	close(c.msgBuffChan)
 }
 
+func (c *connection) PushTaskQueue(task iface.ITaskTemplate) {
+	c.taskQueue <- task
+}
+
 func (c *connection) GetConnId() int {
 	return c.connId
-}
-
-func (c *connection) GetWorkId() int {
-	return c.workId
-}
-
-func (c *connection) GetMsgQueue() *list.List {
-	return c.msgQueue
 }
 
 func (c *connection) RemoteAddrStr() string {
@@ -156,10 +142,8 @@ func (c *connection) FlowControl() bool {
 	}
 	now := time.Now().UnixMilli()
 	if now-c.limitingTimer < interval {
-		if fun, ok := c.GetProperty(iface.SysPropertyLimit).(func(connection iface.IConnection)); ok {
-			fun(c)
-			GetInstanceConnManager().Remove(c)
-		}
+		GetInstanceConnManager().ConnRateLimiting(c)
+		GetInstanceConnManager().Remove(c)
 		return true
 	}
 	c.limitingCount = 1

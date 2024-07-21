@@ -1,7 +1,6 @@
 package network
 
 import (
-	"container/list"
 	"github.com/451008604/nets/iface"
 	"github.com/gorilla/websocket"
 )
@@ -19,11 +18,7 @@ func NewConnectionWS(server iface.IServer, conn *websocket.Conn) iface.IConnecti
 	c.isClosed = false
 	c.msgBuffChan = make(chan []byte, defaultServer.AppConf.MaxMsgChanLen)
 	c.property = NewConcurrentMap[any]()
-	c.workId = c.connId
-	c.msgQueue = list.New()
-	if defaultServer.AppConf.WorkerPoolSize != 0 {
-		c.workId %= defaultServer.AppConf.WorkerPoolSize
-	}
+	c.taskQueue = GetInstanceWorkerManager().BindTaskQueue(c)
 	return c
 }
 
@@ -40,8 +35,7 @@ func (c *connectionWS) StartReader() bool {
 
 	for _, data := range msgData {
 		// 封装请求数据传入处理函数
-		c.msgQueue.PushBack(data)
-		GetInstanceMsgHandler().PushInTaskQueue(iface.SysReaderMessage, c)
+		c.PushTaskQueue(data)
 	}
 	return true
 }

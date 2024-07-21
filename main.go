@@ -50,16 +50,16 @@ func main() {
 	// broadcastManager.GetGlobalBroadcastGroup()
 
 	// ===========连接管理器===========
-	network.GetInstanceConnManager().SetConnOpenCallBack(func(connection iface.IConnection) {
+	network.GetInstanceConnManager().SetConnOnOpened(func(connection iface.IConnection) {
 		// do something ...
 		println("连接建立", connection.GetConnId())
 	})
-	network.GetInstanceConnManager().SetConnCloseCallBack(func(connection iface.IConnection) {
+	network.GetInstanceConnManager().SetConnOnClosed(func(connection iface.IConnection) {
 		// do something ...
 
 		time.Sleep(time.Second * time.Duration(3+rand.Intn(2)))
 	})
-	network.GetInstanceConnManager().SetLimitCallBack(func(connection iface.IConnection) {
+	network.GetInstanceConnManager().SetConnOnRateLimiting(func(connection iface.IConnection) {
 		// do something ...
 		println("触发限流", connection.RemoteAddrStr())
 	})
@@ -78,13 +78,13 @@ func main() {
 	})
 
 	// 自定义消息过滤器
-	msgHandler.SetFilter(func(request iface.IRequest, msgData proto.Message) bool {
+	msgHandler.SetFilter(func(conn iface.IConnection, msgData proto.Message) bool {
 		// do something ...
 		return true
 	})
 
 	// 自定义panic捕获
-	msgHandler.SetErrCapture(func(request iface.IRequest, r any) {
+	msgHandler.SetErrCapture(func(conn iface.IConnection, r any) {
 		// do something ...
 	})
 

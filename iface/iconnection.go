@@ -1,7 +1,6 @@
 package iface
 
 import (
-	"container/list"
 	"google.golang.org/protobuf/proto"
 )
 
@@ -15,13 +14,11 @@ type IConnection interface {
 	StartReader() bool
 	// 启动发送消息协程
 	StartWriter(data []byte) bool
+	// 推入任务队列
+	PushTaskQueue(task ITaskTemplate)
 
 	// 获取当前连接Id
 	GetConnId() int
-	// 获取当前工作池Id
-	GetWorkId() int
-	// 获取接收到的消息队列
-	GetMsgQueue() *list.List
 	// 获取客户端地址信息
 	RemoteAddrStr() string
 	// 获取连接是否已关闭
@@ -48,9 +45,3 @@ type IConnection interface {
 
 // 连接挂载的属性
 type IConnProperty string
-
-const (
-	SysPropertyConnOpened IConnProperty = "SysPropertyConnOpened" // 连接建立时
-	SysPropertyConnClosed IConnProperty = "SysPropertyConnClosed" // 连接关闭时
-	SysPropertyLimit      IConnProperty = "SysPropertyLimit"      // 触发限流时
-)
