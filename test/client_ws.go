@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/451008604/nets/network"
 	pb "github.com/451008604/nets/proto/bin"
 	"github.com/gorilla/websocket"
@@ -15,7 +16,7 @@ func main() {
 	msg, _ := json.Marshal(&pb.EchoRequest{Message: "hello"})
 	data := network.NewDataPack().Pack(network.NewMsgPackage(int32(pb.MsgId_Echo_Req), msg))
 
-	for i := 0; i < 1000; i++ {
+	for i := 0; i < 500; i++ {
 		sendWebSocketMessage(data)
 	}
 
@@ -33,10 +34,10 @@ func sendWebSocketMessage(data []byte) {
 		for {
 			if _, message, e := c.ReadMessage(); e == nil {
 				if len(message) != 0 {
-					// unPacks := network.NewDataPack().UnPack(message)
-					// for _, pack := range unPacks {
-					// fmt.Printf("服务器：%v - %s\n", pack.GetMsgId(), pack.GetData())
-					// }
+					unPacks := network.NewDataPack().UnPack(message)
+					for _, pack := range unPacks {
+						fmt.Printf("服务器：%v - %s\n", pack.GetMsgId(), pack.GetData())
+					}
 				}
 			} else {
 				_ = c.Close()

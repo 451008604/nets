@@ -4,6 +4,8 @@ package iface
 type IConnectionManager interface {
 	// 生成一个新的连接Id
 	NewConnId() int
+	// 遍历所有连接
+	RangeConnections(handler func(conn IConnection))
 	// 添加连接
 	Add(conn IConnection)
 	// 删除连接

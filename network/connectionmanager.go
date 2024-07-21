@@ -11,9 +11,9 @@ type connectionManager struct {
 	connections        ConcurrentMap[Integer, iface.IConnection] // 管理的连接信息
 	closeConnId        chan int                                  // 已关闭的连接Id集合
 	removeList         chan iface.IConnection                    // 等待关闭的连接列表
-	connOnOpened       func(connection iface.IConnection)        // 连接建立时的Hook函数
-	connOnClosed       func(connection iface.IConnection)        // 连接断开时的Hook函数
-	connOnRateLimiting func(connection iface.IConnection)        // 触发限流时的Hook函数
+	connOnOpened       func(conn iface.IConnection)              // 连接建立时的Hook函数
+	connOnClosed       func(conn iface.IConnection)              // 连接断开时的Hook函数
+	connOnRateLimiting func(conn iface.IConnection)              // 触发限流时的Hook函数
 }
 
 var instanceConnManager iface.IConnectionManager
@@ -42,6 +42,12 @@ func (c *connectionManager) NewConnId() int {
 	return int(c.connId)
 }
 
+func (c *connectionManager) RangeConnections(handler func(conn iface.IConnection)) {
+	for _, v := range c.connections.Items() {
+		handler(v)
+	}
+}
+
 func (c *connectionManager) Add(conn iface.IConnection) {
 	c.connections.Set(Integer(conn.GetConnId()), conn)
 
@@ -63,42 +69,40 @@ func (c *connectionManager) Len() int {
 
 func (c *connectionManager) ClearConn() {
 	// 清理全部的connections信息
-	for _, v := range c.connections.Items() {
-		c.Remove(v)
-	}
+	c.RangeConnections(c.Remove)
 }
 
-func (c *connectionManager) SetConnOnOpened(connOpenCallBack func(connection iface.IConnection)) {
+func (c *connectionManager) SetConnOnOpened(connOpenCallBack func(conn iface.IConnection)) {
 	c.connOnOpened = connOpenCallBack
 }
 
-func (c *connectionManager) ConnOnOpened(connection iface.IConnection) {
+func (c *connectionManager) ConnOnOpened(conn iface.IConnection) {
 	if c.connOnOpened == nil {
 		return
 	}
-	c.connOnOpened(connection)
+	c.connOnOpened(conn)
 }
 
-func (c *connectionManager) SetConnOnClosed(connCloseCallBack func(connection iface.IConnection)) {
+func (c *connectionManager) SetConnOnClosed(connCloseCallBack func(conn iface.IConnection)) {
 	c.connOnClosed = connCloseCallBack
 }
 
-func (c *connectionManager) ConnOnClosed(connection iface.IConnection) {
+func (c *connectionManager) ConnOnClosed(conn iface.IConnection) {
 	if c.connOnClosed == nil {
 		return
 	}
-	c.connOnClosed(connection)
+	c.connOnClosed(conn)
 }
 
-func (c *connectionManager) SetConnOnRateLimiting(limitCallBack func(connection iface.IConnection)) {
+func (c *connectionManager) SetConnOnRateLimiting(limitCallBack func(conn iface.IConnection)) {
 	c.connOnRateLimiting = limitCallBack
 }
 
-func (c *connectionManager) ConnRateLimiting(connection iface.IConnection) {
+func (c *connectionManager) ConnRateLimiting(conn iface.IConnection) {
 	if c.connOnRateLimiting == nil {
 		return
 	}
-	c.connOnRateLimiting(connection)
+	c.connOnRateLimiting(conn)
 }
 
 func (c *connectionManager) setClosingConn(connId int) {

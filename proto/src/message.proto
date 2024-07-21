@@ -10,6 +10,7 @@ enum MsgId {
     Broadcast_Res = 1004;       // BroadcastResponse
     Echo_Req = 1005;
     Echo_Res = 1006;
+    CloseConn_Notify = 1007;
 }
 
 // ==========================================
@@ -36,5 +37,9 @@ message EchoRequest {
 }
 
 message EchoResponse {
+    string Message = 1;
+}
+
+message CloseConnNotify {
     string Message = 1;
 }

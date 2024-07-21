@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/451008604/nets/iface"
+	_ "github.com/451008604/nets/module"
 	"github.com/451008604/nets/network"
 	pb "github.com/451008604/nets/proto/bin"
 	"google.golang.org/protobuf/proto"
@@ -49,19 +50,32 @@ func main() {
 	// broadcastManager := network.GetInstanceBroadcastManager()
 	// broadcastManager.GetGlobalBroadcastGroup()
 
+	go func() {
+		time.Sleep(time.Second * 5)
+		go network.GetInstanceConnManager().RangeConnections(func(conn iface.IConnection) {
+			time.Sleep(time.Second)
+			println(fmt.Sprintf("abc -> %v", conn.GetConnId()))
+		})
+
+		go network.GetInstanceConnManager().RangeConnections(func(conn iface.IConnection) {
+			println(fmt.Sprintf("123 -> %v", 100+conn.GetConnId()))
+		})
+	}()
+
 	// ===========连接管理器===========
-	network.GetInstanceConnManager().SetConnOnOpened(func(connection iface.IConnection) {
+	network.GetInstanceConnManager().SetConnOnOpened(func(conn iface.IConnection) {
 		// do something ...
-		println("连接建立", connection.GetConnId())
+		println("连接建立", conn.GetConnId())
 	})
-	network.GetInstanceConnManager().SetConnOnClosed(func(connection iface.IConnection) {
+	network.GetInstanceConnManager().SetConnOnClosed(func(conn iface.IConnection) {
 		// do something ...
 
 		time.Sleep(time.Second * time.Duration(3+rand.Intn(2)))
+		println("连接断开", conn.GetConnId())
 	})
-	network.GetInstanceConnManager().SetConnOnRateLimiting(func(connection iface.IConnection) {
+	network.GetInstanceConnManager().SetConnOnRateLimiting(func(conn iface.IConnection) {
 		// do something ...
-		println("触发限流", connection.RemoteAddrStr())
+		println("触发限流", conn.RemoteAddrStr())
 	})
 
 	// ===========消息处理器===========
