@@ -17,7 +17,7 @@ func NewConnectionTCP(server iface.IServer, conn *net.TCPConn) iface.IConnection
 	c.connId = GetInstanceConnManager().NewConnId()
 	c.isClosed = false
 	c.msgBuffChan = make(chan []byte, defaultServer.AppConf.MaxMsgChanLen)
-	c.property = NewConcurrentMap[any]()
+	c.property = NewConcurrentStringer[iface.IConnProperty, any]()
 	c.taskQueue = GetInstanceWorkerManager().BindTaskQueue(c)
 	return c
 }

@@ -45,3 +45,7 @@ type IConnection interface {
 
 // 连接挂载的属性
 type IConnProperty string
+
+func (i IConnProperty) String() string {
+	return string(i)
+}
