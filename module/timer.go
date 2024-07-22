@@ -1,18 +1,16 @@
 package module
 
 import (
-	"fmt"
 	"github.com/451008604/nets/iface"
 	"github.com/451008604/nets/network"
-	pb "github.com/451008604/nets/proto/bin"
 	"time"
 )
 
 func init() {
-	go ticker()
+	go tick()
 }
 
-func ticker() {
+func tick() {
 	for t := range time.Tick(time.Second) {
 		// 规格化为整秒
 		t = t.Truncate(time.Second)
@@ -53,29 +51,61 @@ func ticker() {
 
 func OnNewSecond(t time.Time) {
 	network.GetInstanceConnManager().RangeConnections(func(conn iface.IConnection) {
-		res := &pb.EchoResponse{
-			Message: fmt.Sprintf("second -> %v\n", conn.GetConnId()),
-		}
-		conn.SendMsg(int32(pb.MsgId_Echo_Res), res)
+		conn.PushTaskQueue(&OnTick{tickType: TickSecond, time: t})
 	})
 }
 
 func OnNewMinute(t time.Time) {
-
+	network.GetInstanceConnManager().RangeConnections(func(conn iface.IConnection) {
+		conn.PushTaskQueue(&OnTick{tickType: TickMinute, time: t})
+	})
 }
 
 func OnNewHour(t time.Time) {
-
+	network.GetInstanceConnManager().RangeConnections(func(conn iface.IConnection) {
+		conn.PushTaskQueue(&OnTick{tickType: TickHour, time: t})
+	})
 }
 
 func OnNewDay(t time.Time) {
-
+	network.GetInstanceConnManager().RangeConnections(func(conn iface.IConnection) {
+		conn.PushTaskQueue(&OnTick{tickType: TickDay, time: t})
+	})
 }
 
 func OnNewWeek(t time.Time) {
-
+	network.GetInstanceConnManager().RangeConnections(func(conn iface.IConnection) {
+		conn.PushTaskQueue(&OnTick{tickType: TickWeek, time: t})
+	})
 }
 
 func OnNewMonth(t time.Time) {
+	network.GetInstanceConnManager().RangeConnections(func(conn iface.IConnection) {
+		conn.PushTaskQueue(&OnTick{tickType: TickMonth, time: t})
+	})
+}
 
+const (
+	TickSecond = iota
+	TickMinute
+	TickHour
+	TickDay
+	TickWeek
+	TickMonth
+)
+
+type OnTick struct {
+	tickType int
+	time     time.Time
+}
+
+func (o *OnTick) TaskHandler(conn iface.IConnection) {
+	switch o.tickType {
+	case TickSecond:
+	case TickMinute:
+	case TickHour:
+	case TickDay:
+	case TickWeek:
+	case TickMonth:
+	}
 }
