@@ -127,6 +127,11 @@ func onConnRemoveList(c *connectionManager) {
 		}
 		// 关闭连接
 		conn.Stop()
+
+		if !c.connections.Has(Integer(conn.GetConnId())) {
+			continue
+		}
+
 		// 删除连接
 		c.connections.Remove(Integer(conn.GetConnId()))
 		// 回收连接Id
