@@ -3,6 +3,7 @@ module github.com/451008604/nets
 go 1.18
 
 require (
+	github.com/golang/mock v1.6.0
 	github.com/gorilla/websocket v1.5.1
 	google.golang.org/protobuf v1.34.1
 )

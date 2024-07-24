@@ -14,7 +14,7 @@ import (
 
 func main() {
 	msg, _ := json.Marshal(&pb.EchoRequest{Message: "hello"})
-	data := network.NewDataPack().Pack(network.NewMsgPackage(int32(pb.MsgId_Echo_Req), msg))
+	data := network.NewDataPack().Pack(network.NewMsgPackage(int32(pb.MsgId_Echo), msg))
 
 	for i := 0; i < 500; i++ {
 		sendWebSocketMessage(data)

@@ -4,13 +4,10 @@ option go_package = "./;pb";
 
 enum MsgId {
     None = 0;
-    Heartbeat_Req = 1001;       // HeartbeatReq    心跳请求
-    Heartbeat_Res = 1002;       // HeartbeatRes    心跳响应
-    Broadcast_Req = 1003;       // BroadcastRequest
-    Broadcast_Res = 1004;       // BroadcastResponse
-    Echo_Req = 1005;
-    Echo_Res = 1006;
-    CloseConn_Notify = 1007;
+    Heartbeat = 1001;       // 心跳
+    Broadcast = 1002;       // 广播
+    Echo = 1003;            // 透传
+    CloseConn = 1004;       // 关闭连接
 }
 
 // ==========================================
