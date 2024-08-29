@@ -81,14 +81,14 @@ func main() {
 	// ===========消息处理器===========
 	msgHandler := network.GetInstanceMsgHandler()
 	// 添加一个路由
-	msgHandler.AddRouter(int32(pb.MsgId_Echo_Req), func() proto.Message { return &pb.EchoRequest{} }, func(con iface.IConnection, message proto.Message) {
+	msgHandler.AddRouter(int32(pb.MsgId_Echo), func() proto.Message { return &pb.EchoRequest{} }, func(con iface.IConnection, message proto.Message) {
 		// do something ...
 		req := message.(*pb.EchoRequest)
 		// fmt.Println(req.GetMessage())
 		res := &pb.EchoResponse{
 			Message: req.Message,
 		}
-		con.SendMsg(int32(pb.MsgId_Echo_Res), res)
+		con.SendMsg(int32(pb.MsgId_Echo), res)
 	})
 
 	// 自定义消息过滤器

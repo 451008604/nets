@@ -41,30 +41,29 @@ func (d *dataPack) UnPack(binaryData []byte) (result []iface.IMessage) {
 	msgData := &message{}
 	// 读msgId
 	if binary.Read(dataBuff, binary.LittleEndian, &msgData.id) != nil {
-		return nil
+		return
 	}
 	// 读dataLen
 	if binary.Read(dataBuff, binary.LittleEndian, &msgData.dataLen) != nil {
-		return nil
+		return
 	}
 	// 检查数据长度是否超出限制
 	if defaultServer.AppConf.MaxPackSize > 0 && int(msgData.GetDataLen()) > defaultServer.AppConf.MaxPackSize {
 		fmt.Printf("received data length exceeds the limit. MaxPackSize %v, msgDataLen %v\n", defaultServer.AppConf.MaxPackSize, msgData.GetDataLen())
-		return nil
+		return
 	}
 	totalLen := d.getHeadLen() + int(msgData.GetDataLen())
 	if len(binaryData) < totalLen {
-		return nil
+		return
 	}
 	msgData.SetData(binaryData[d.getHeadLen():totalLen])
 	result = append(result, msgData)
 
 	// 处理粘包数据
 	if len(binaryData) > totalLen {
-		if r := d.UnPack(binaryData[totalLen:]); r != nil {
+		if r := d.UnPack(binaryData[totalLen:]); len(r) != 0 {
 			result = append(result, r...)
 		}
-		return
 	}
 	return
 }

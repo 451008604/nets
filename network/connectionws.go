@@ -29,7 +29,7 @@ func (c *connectionWS) StartReader() bool {
 	}
 
 	msgData := defaultServer.DataPacket.UnPack(msgByte)
-	if msgData == nil {
+	if len(msgData) == 0 {
 		return false
 	}
 

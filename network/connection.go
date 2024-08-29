@@ -46,6 +46,7 @@ func (c *connection) Start(readerHandler func() bool, writerHandler func(data []
 	}(c, readerHandler)
 
 	// 开启写协程
+	defer close(c.msgBuffChan)
 	for {
 		if c.isClosed {
 			return
@@ -74,9 +75,6 @@ func (c *connection) Stop() {
 			GetInstanceBroadcastManager().ExitBroadcastGroup(groupId, c.GetConnId())
 		}
 	}
-
-	// 关闭该连接管道
-	close(c.msgBuffChan)
 }
 
 func (c *connection) PushTaskQueue(task iface.ITaskTemplate) {
