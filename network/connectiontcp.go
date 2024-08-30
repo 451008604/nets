@@ -60,7 +60,6 @@ func (c *connectionTCP) StartWriter(data []byte) bool {
 func (c *connectionTCP) Start(readerHandler func() bool, writerHandler func(data []byte) bool) {
 	defer GetInstanceConnManager().Remove(c)
 
-	GetInstanceBroadcastManager().GetGlobalBroadcastGroup().Append(c.GetConnId())
 	c.connection.Start(readerHandler, writerHandler)
 }
 

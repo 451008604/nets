@@ -66,15 +66,6 @@ func (c *connection) Stop() {
 		return
 	}
 	c.isClosed = true
-
-	// 退出所在的广播组
-	GetInstanceBroadcastManager().GetGlobalBroadcastGroup().Remove(c.GetConnId())
-	if groups, b := GetInstanceBroadcastManager().GetBroadcastGroupByConnId(c.GetConnId()); b {
-		array := groups.GetArray()
-		for _, groupId := range array {
-			GetInstanceBroadcastManager().ExitBroadcastGroup(groupId, c.GetConnId())
-		}
-	}
 }
 
 func (c *connection) PushTaskQueue(task iface.ITaskTemplate) {

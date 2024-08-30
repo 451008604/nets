@@ -46,10 +46,6 @@ func info() string {
 func main() {
 	go listenChannelStatus()
 
-	// ===========广播管理器===========
-	// broadcastManager := network.GetInstanceBroadcastManager()
-	// broadcastManager.GetGlobalBroadcastGroup()
-
 	go func() {
 		time.Sleep(time.Second * 5)
 		go network.GetInstanceConnManager().RangeConnections(func(conn iface.IConnection) {
