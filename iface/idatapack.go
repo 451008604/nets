@@ -5,5 +5,5 @@ type IDataPack interface {
 	// 消息封包
 	Pack(msg IMessage) []byte
 	// 消息拆包
-	UnPack([]byte) []IMessage
+	UnPack([]byte) IMessage
 }

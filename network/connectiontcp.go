@@ -39,14 +39,26 @@ func (c *connectionTCP) StartReader() bool {
 
 	// 将所有的内容分割成不同的消息，处理粘包
 	msgData := defaultServer.DataPacket.UnPack(msgByte)
-	if len(msgData) == 0 {
+	if msgData == nil {
 		return false
 	}
 
-	for _, data := range msgData {
-		// 封装请求数据传入处理函数
-		c.PushTaskQueue(data)
+	// 解析消息体的内容
+	for {
+		if len(msgData.GetData()) >= int(msgData.GetDataLen()) {
+			break
+		}
+
+		bt := make([]byte, int(msgData.GetDataLen())-len(msgData.GetData()))
+		read, err := c.conn.Read(bt)
+		if err != nil {
+			return false
+		}
+		msgData.SetData(append(msgData.GetData(), bt[:read]...))
 	}
+
+	// 封装请求数据传入处理函数
+	c.PushTaskQueue(msgData)
 	return true
 }
 

@@ -29,14 +29,12 @@ func (c *connectionWS) StartReader() bool {
 	}
 
 	msgData := defaultServer.DataPacket.UnPack(msgByte)
-	if len(msgData) == 0 {
+	if msgData == nil {
 		return false
 	}
 
-	for _, data := range msgData {
-		// 封装请求数据传入处理函数
-		c.PushTaskQueue(data)
-	}
+	// 封装请求数据传入处理函数
+	c.PushTaskQueue(msgData)
 	return true
 }
 
