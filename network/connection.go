@@ -1,6 +1,7 @@
 package network
 
 import (
+	"context"
 	"encoding/json"
 	"github.com/451008604/nets/iface"
 	"google.golang.org/protobuf/proto"
@@ -14,6 +15,8 @@ type connection struct {
 	msgBuffChan   chan []byte                             // 用于任务队列与写协程之间的消息通信
 	property      ConcurrentMap[iface.IConnProperty, any] // 连接属性
 	isClosed      bool                                    // 当前连接是否已关闭
+	exitCtx       context.Context                         // 管理连接的上下文
+	exitCtxCancel context.CancelFunc                      // 连接关闭信号
 	limitingCount int64                                   // 限流计数
 	limitingTimer int64                                   // 限流计时
 	limitingMutex sync.Mutex                              // 限流锁
@@ -34,13 +37,15 @@ func (c *connection) Start(readerHandler func() bool, writerHandler func(data []
 	// 开启读协程
 	go func(c *connection, readerHandler func() bool) {
 		for {
-			if c.isClosed {
+			select {
+			case <-c.exitCtx.Done():
 				return
-			}
-			// 调用注册方法处理接收到的消息
-			if !readerHandler() {
-				GetInstanceConnManager().Remove(c)
-				return
+			default:
+				// 调用注册方法处理接收到的消息
+				if !readerHandler() {
+					GetInstanceConnManager().Remove(c)
+					return
+				}
 			}
 		}
 	}(c, readerHandler)
@@ -48,10 +53,10 @@ func (c *connection) Start(readerHandler func() bool, writerHandler func(data []
 	// 开启写协程
 	defer close(c.msgBuffChan)
 	for {
-		if c.isClosed {
+		select {
+		case <-c.exitCtx.Done():
 			return
-		}
-		if data, ok := <-c.msgBuffChan; ok {
+		case data := <-c.msgBuffChan:
 			// 调用注册方法写消息给客户端
 			if !writerHandler(data) {
 				GetInstanceConnManager().Remove(c)
@@ -66,6 +71,7 @@ func (c *connection) Stop() {
 		return
 	}
 	c.isClosed = true
+	c.exitCtxCancel()
 }
 
 func (c *connection) PushTaskQueue(task iface.ITaskTemplate) {

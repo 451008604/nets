@@ -1,6 +1,7 @@
 package network
 
 import (
+	"context"
 	"github.com/451008604/nets/iface"
 	"net"
 )
@@ -19,6 +20,7 @@ func NewConnectionTCP(server iface.IServer, conn *net.TCPConn) iface.IConnection
 	c.msgBuffChan = make(chan []byte, defaultServer.AppConf.MaxMsgChanLen)
 	c.property = NewConcurrentStringer[iface.IConnProperty, any]()
 	c.taskQueue = GetInstanceWorkerManager().BindTaskQueue(c)
+	c.exitCtx, c.exitCtxCancel = context.WithCancel(context.Background())
 	return c
 }
 

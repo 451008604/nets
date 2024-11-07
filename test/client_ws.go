@@ -16,7 +16,7 @@ func main() {
 	msg, _ := json.Marshal(&pb.EchoRequest{Message: "hello"})
 	data := network.NewDataPack().Pack(network.NewMsgPackage(int32(pb.MsgId_Echo), msg))
 
-	for i := 0; i < 500; i++ {
+	for i := 0; i < 1; i++ {
 		sendWebSocketMessage(data)
 	}
 
@@ -34,10 +34,8 @@ func sendWebSocketMessage(data []byte) {
 		for {
 			if _, message, e := c.ReadMessage(); e == nil {
 				if len(message) != 0 {
-					unPacks := network.NewDataPack().UnPack(message)
-					for _, pack := range unPacks {
-						fmt.Printf("服务器：%v - %s\n", pack.GetMsgId(), pack.GetData())
-					}
+					pack := network.NewDataPack().UnPack(message)
+					fmt.Printf("服务器：%v - %s\n", pack.GetMsgId(), pack.GetData())
 				}
 			} else {
 				_ = c.Close()
