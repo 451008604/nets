@@ -37,6 +37,7 @@ func (c *connection) Start(readerHandler func() bool, writerHandler func(data []
 	// 开启读协程
 	go func(c *connection, readerHandler func() bool) {
 		for {
+			c.exitCtx, c.exitCtxCancel = context.WithTimeout(context.Background(), time.Second*time.Duration(defaultServer.AppConf.ConnRWTimeOut))
 			select {
 			case <-c.exitCtx.Done():
 				return
@@ -53,6 +54,7 @@ func (c *connection) Start(readerHandler func() bool, writerHandler func(data []
 	// 开启写协程
 	defer close(c.msgBuffChan)
 	for {
+		c.exitCtx, c.exitCtxCancel = context.WithTimeout(context.Background(), time.Second*time.Duration(defaultServer.AppConf.ConnRWTimeOut))
 		select {
 		case <-c.exitCtx.Done():
 			return

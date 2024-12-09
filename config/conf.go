@@ -9,6 +9,7 @@ type AppConf struct {
 	MaxMsgChanLen    int        // 读写通道最大限度
 	MaxFlowSecond    int        // 每秒允许的最大请求数量
 	ProtocolIsJson   bool       // 是否使用json协议
+	ConnRWTimeOut    int        // 连接读写超时时间(秒)
 	ServerTCP        ServerConf // tcp服务
 	ServerWS         ServerConf // websocket服务
 }
@@ -33,6 +34,7 @@ func init() {
 		MaxMsgChanLen:    100,
 		MaxFlowSecond:    30,
 		ProtocolIsJson:   true,
+		ConnRWTimeOut:    300,
 		ServerTCP: ServerConf{
 			Port: "17001",
 		},
