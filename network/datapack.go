@@ -13,7 +13,7 @@ func NewDataPack() iface.IDataPack {
 	return &dataPack{}
 }
 
-func (d *dataPack) getHeadLen() int {
+func (d *dataPack) GetHeadLen() int {
 	// id int(2字节) + dataLen int(2字节)
 	return 4
 }
@@ -53,9 +53,9 @@ func (d *dataPack) UnPack(binaryData []byte) iface.IMessage {
 		return nil
 	}
 
-	totalLen := d.getHeadLen() + int(msgData.GetDataLen())
+	totalLen := d.GetHeadLen() + int(msgData.GetDataLen())
 	if len(binaryData) >= totalLen {
-		msgData.SetData(binaryData[d.getHeadLen():totalLen])
+		msgData.SetData(binaryData[d.GetHeadLen():totalLen])
 	}
 	return msgData
 }

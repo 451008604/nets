@@ -25,22 +25,14 @@ func NewConnectionTCP(server iface.IServer, conn *net.TCPConn) iface.IConnection
 }
 
 func (c *connectionTCP) StartReader() bool {
-	var msgByte []byte
-	// 将连接内的数据流全部读取出来
-	for {
-		b := make([]byte, 512)
-		if read, err := c.conn.Read(b); err != nil {
-			return false
-		} else {
-			msgByte = append(msgByte, b[:read]...)
-			if read < len(b) {
-				break
-			}
-		}
+	// 获取消息头信息
+	msgHead := make([]byte, defaultServer.DataPacket.GetHeadLen())
+	if read, err := c.conn.Read(msgHead); err != nil || read < defaultServer.DataPacket.GetHeadLen() {
+		return false
 	}
 
-	// 将所有的内容分割成不同的消息，处理粘包
-	msgData := defaultServer.DataPacket.UnPack(msgByte)
+	// 解析头信息
+	msgData := defaultServer.DataPacket.UnPack(msgHead)
 	if msgData == nil {
 		return false
 	}

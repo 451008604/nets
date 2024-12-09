@@ -7,10 +7,8 @@ import (
 	"github.com/451008604/nets/network"
 	pb "github.com/451008604/nets/proto/bin"
 	"google.golang.org/protobuf/proto"
-	"math/rand"
 	"net/http"
 	"runtime"
-	"time"
 )
 
 // 服务指标监控
@@ -46,18 +44,6 @@ func info() string {
 func main() {
 	go listenChannelStatus()
 
-	go func() {
-		time.Sleep(time.Second * 5)
-		go network.GetInstanceConnManager().RangeConnections(func(conn iface.IConnection) {
-			time.Sleep(time.Second)
-			println(fmt.Sprintf("abc -> %v", conn.GetConnId()))
-		})
-
-		go network.GetInstanceConnManager().RangeConnections(func(conn iface.IConnection) {
-			println(fmt.Sprintf("123 -> %v", 100+conn.GetConnId()))
-		})
-	}()
-
 	// ===========连接管理器===========
 	network.GetInstanceConnManager().SetConnOnOpened(func(conn iface.IConnection) {
 		// do something ...
@@ -65,8 +51,6 @@ func main() {
 	})
 	network.GetInstanceConnManager().SetConnOnClosed(func(conn iface.IConnection) {
 		// do something ...
-
-		time.Sleep(time.Second * time.Duration(3+rand.Intn(2)))
 		println("连接断开", conn.GetConnId())
 	})
 	network.GetInstanceConnManager().SetConnOnRateLimiting(func(conn iface.IConnection) {
