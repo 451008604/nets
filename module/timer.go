@@ -17,95 +17,58 @@ func tick() {
 		s, m, h, d, w := t.Second(), t.Minute(), t.Hour(), t.Day(), t.Weekday()
 
 		// 每秒执行
-		OnNewSecond(t)
+		network.GetInstanceConnManager().RangeConnections(func(conn iface.IConnection) { conn.DoTask(func() { OnNewSecond(conn, t) }) })
 
 		// 每分钟执行
 		if s != 0 {
 			continue
 		}
-		OnNewMinute(t)
+		network.GetInstanceConnManager().RangeConnections(func(conn iface.IConnection) { conn.DoTask(func() { OnNewMinute(conn, t) }) })
 
 		// 每小时执行
 		if m != 0 {
 			continue
 		}
-		OnNewHour(t)
+		network.GetInstanceConnManager().RangeConnections(func(conn iface.IConnection) { conn.DoTask(func() { OnNewHour(conn, t) }) })
 
 		// 每天执行
 		if h != 0 {
 			continue
 		}
-		OnNewDay(t)
+		network.GetInstanceConnManager().RangeConnections(func(conn iface.IConnection) { conn.DoTask(func() { OnNewDay(conn, t) }) })
 
 		// 每周执行(周日=0,周六=6)
 		if w == 1 {
-			OnNewWeek(t)
+			network.GetInstanceConnManager().RangeConnections(func(conn iface.IConnection) { conn.DoTask(func() { OnNewWeek(conn, t) }) })
 		}
 
 		// 每月执行
 		if d == 1 {
-			OnNewMonth(t)
+			network.GetInstanceConnManager().RangeConnections(func(conn iface.IConnection) { conn.DoTask(func() { OnNewMonth(conn, t) }) })
 		}
 	}
 }
 
-func OnNewSecond(t time.Time) {
-	network.GetInstanceConnManager().RangeConnections(func(conn iface.IConnection) {
-		conn.PushTaskQueue(&OnTick{tickType: TickSecond, time: t})
-	})
+func OnNewSecond(c iface.IConnection, t time.Time) {
+
 }
 
-func OnNewMinute(t time.Time) {
-	network.GetInstanceConnManager().RangeConnections(func(conn iface.IConnection) {
-		conn.PushTaskQueue(&OnTick{tickType: TickMinute, time: t})
-	})
+func OnNewMinute(c iface.IConnection, t time.Time) {
+
 }
 
-func OnNewHour(t time.Time) {
-	network.GetInstanceConnManager().RangeConnections(func(conn iface.IConnection) {
-		conn.PushTaskQueue(&OnTick{tickType: TickHour, time: t})
-	})
+func OnNewHour(c iface.IConnection, t time.Time) {
+
 }
 
-func OnNewDay(t time.Time) {
-	network.GetInstanceConnManager().RangeConnections(func(conn iface.IConnection) {
-		conn.PushTaskQueue(&OnTick{tickType: TickDay, time: t})
-	})
+func OnNewDay(c iface.IConnection, t time.Time) {
+
 }
 
-func OnNewWeek(t time.Time) {
-	network.GetInstanceConnManager().RangeConnections(func(conn iface.IConnection) {
-		conn.PushTaskQueue(&OnTick{tickType: TickWeek, time: t})
-	})
+func OnNewWeek(c iface.IConnection, t time.Time) {
+
 }
 
-func OnNewMonth(t time.Time) {
-	network.GetInstanceConnManager().RangeConnections(func(conn iface.IConnection) {
-		conn.PushTaskQueue(&OnTick{tickType: TickMonth, time: t})
-	})
-}
+func OnNewMonth(c iface.IConnection, t time.Time) {
 
-const (
-	TickSecond = iota
-	TickMinute
-	TickHour
-	TickDay
-	TickWeek
-	TickMonth
-)
-
-type OnTick struct {
-	tickType int
-	time     time.Time
-}
-
-func (o *OnTick) TaskHandler(conn iface.IConnection) {
-	switch o.tickType {
-	case TickSecond:
-	case TickMinute:
-	case TickHour:
-	case TickDay:
-	case TickWeek:
-	case TickMonth:
-	}
 }

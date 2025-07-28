@@ -20,7 +20,7 @@ func NewConnectionWS(server iface.IServer, conn *websocket.Conn) iface.IConnecti
 	c.isClosed = false
 	c.msgBuffChan = make(chan []byte, defaultServer.AppConf.MaxMsgChanLen)
 	c.property = NewConcurrentStringer[iface.IConnProperty, any]()
-	c.taskQueue = GetInstanceWorkerManager().BindTaskQueue(c)
+	c.taskQueue = make(chan func(), defaultServer.AppConf.WorkerTaskMaxLen)
 	c.exitCtx, c.exitCtxCancel = context.WithTimeout(context.Background(), time.Second*time.Duration(defaultServer.AppConf.ConnRWTimeOut))
 	return c
 }
@@ -37,7 +37,7 @@ func (c *connectionWS) StartReader() bool {
 	}
 
 	// 封装请求数据传入处理函数
-	c.PushTaskQueue(msgData)
+	c.DoTask(func() { c.readerTaskHandler(msgData) })
 	return true
 }
 

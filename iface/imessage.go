@@ -16,7 +16,4 @@ type IMessage interface {
 	GetData() []byte
 	// 设置消息内容
 	SetData([]byte)
-
-	// 消息处理程序
-	TaskHandler(conn IConnection)
 }

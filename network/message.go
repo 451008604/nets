@@ -1,7 +1,6 @@
 package network
 
 import (
-	"fmt"
 	"github.com/451008604/nets/iface"
 )
 
@@ -41,39 +40,4 @@ func (m *message) GetData() []byte {
 
 func (m *message) SetData(bytes []byte) {
 	m.data = bytes
-}
-
-func (m *message) TaskHandler(conn iface.IConnection) {
-	iMsgHandler := GetInstanceMsgHandler()
-	defer iMsgHandler.GetErrCapture(conn)
-
-	// 连接关闭时丢弃后续所有操作
-	if conn.IsClose() {
-		return
-	}
-
-	router, ok := iMsgHandler.GetApis()[int32(m.GetMsgId())]
-	if !ok {
-		return
-	}
-
-	msgData := router.GetNewMsg()
-	if err := conn.ByteToProtocol(m.GetData(), msgData); err != nil {
-		fmt.Printf("api msgId %v parsing %v error %v\n", m.GetMsgId(), m.GetData(), err)
-		return
-	}
-
-	// 限流控制
-	if conn.FlowControl() {
-		fmt.Printf("flowControl RemoteAddress: %v, GetMsgId: %v, GetData: %v\n", conn.RemoteAddrStr(), m.GetMsgId(), m.GetData())
-		return
-	}
-
-	// 过滤器校验
-	if iMsgHandler.GetFilter() != nil && !iMsgHandler.GetFilter()(conn, msgData) {
-		return
-	}
-
-	// 对应的逻辑处理方法
-	router.RunHandler(conn, msgData)
 }

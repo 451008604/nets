@@ -3,6 +3,7 @@ package network
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"github.com/451008604/nets/iface"
 	"google.golang.org/protobuf/proto"
 	"sync"
@@ -20,7 +21,7 @@ type connection struct {
 	limitingCount int64                                   // 限流计数
 	limitingTimer int64                                   // 限流计时
 	limitingMutex sync.Mutex                              // 限流锁
-	taskQueue     chan iface.ITaskTemplate                // 等待执行的任务队列
+	taskQueue     chan func()                             // 等待执行的任务队列
 }
 
 func (c *connection) StartReader() bool { return true }
@@ -30,9 +31,18 @@ func (c *connection) StartWriter(_ []byte) bool { return false }
 func (c *connection) Start(readerHandler func() bool, writerHandler func(data []byte) bool) {
 	defer GetInstanceServerManager().WaitGroupDone()
 	defer GetInstanceConnManager().ConnOnClosed(c)
+	defer close(c.taskQueue)
+	defer close(c.msgBuffChan)
 
 	GetInstanceServerManager().WaitGroupAdd(1)
 	GetInstanceConnManager().ConnOnOpened(c)
+
+	// 开启任务协程
+	go func(c *connection) {
+		for taskFun := range c.taskQueue {
+			taskFun()
+		}
+	}(c)
 
 	// 开启读协程
 	go func(c *connection, readerHandler func() bool) {
@@ -52,7 +62,6 @@ func (c *connection) Start(readerHandler func() bool, writerHandler func(data []
 	}(c, readerHandler)
 
 	// 开启写协程
-	defer close(c.msgBuffChan)
 	for {
 		c.exitCtx, c.exitCtxCancel = context.WithTimeout(context.Background(), time.Second*time.Duration(defaultServer.AppConf.ConnRWTimeOut))
 		select {
@@ -76,8 +85,43 @@ func (c *connection) Stop() {
 	c.exitCtxCancel()
 }
 
-func (c *connection) PushTaskQueue(task iface.ITaskTemplate) {
+func (c *connection) DoTask(task func()) {
 	c.taskQueue <- task
+}
+
+func (c *connection) readerTaskHandler(m iface.IMessage) {
+	iMsgHandler := GetInstanceMsgHandler()
+	defer iMsgHandler.GetErrCapture(c)
+
+	// 连接关闭时丢弃后续所有操作
+	if c.IsClose() {
+		return
+	}
+
+	router, ok := iMsgHandler.GetApis()[int32(m.GetMsgId())]
+	if !ok {
+		return
+	}
+
+	msgData := router.GetNewMsg()
+	if err := c.ByteToProtocol(m.GetData(), msgData); err != nil {
+		fmt.Printf("api msgId %v parsing %v error %v\n", m.GetMsgId(), m.GetData(), err)
+		return
+	}
+
+	// 限流控制
+	if c.FlowControl() {
+		fmt.Printf("flowControl RemoteAddress: %v, GetMsgId: %v, GetData: %v\n", c.RemoteAddrStr(), m.GetMsgId(), m.GetData())
+		return
+	}
+
+	// 过滤器校验
+	if iMsgHandler.GetFilter() != nil && !iMsgHandler.GetFilter()(c, msgData) {
+		return
+	}
+
+	// 对应的逻辑处理方法
+	router.RunHandler(c, msgData)
 }
 
 func (c *connection) GetConnId() int {

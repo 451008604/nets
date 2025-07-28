@@ -14,8 +14,8 @@ type IConnection interface {
 	StartReader() bool
 	// 启动发送消息协程
 	StartWriter(data []byte) bool
-	// 推入任务队列
-	PushTaskQueue(task ITaskTemplate)
+	// 执行任务
+	DoTask(task func())
 
 	// 获取当前连接Id
 	GetConnId() int
