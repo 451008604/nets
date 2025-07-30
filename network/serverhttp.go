@@ -29,11 +29,11 @@ func newServerHTTP() iface.IServer {
 	return s
 }
 
-func (s serverHTTP) GetServerName() string {
+func (s *serverHTTP) GetServerName() string {
 	return s.serverName
 }
 
-func (s serverHTTP) Start() {
+func (s *serverHTTP) Start() {
 	if s.port == "" {
 		return
 	}
