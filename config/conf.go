@@ -12,6 +12,7 @@ type AppConf struct {
 	ConnRWTimeOut    int        // 连接读写超时时间(秒)
 	ServerTCP        ServerConf // tcp服务
 	ServerWS         ServerConf // websocket服务
+	ServerHTTP       ServerConf // http服务
 }
 
 type ServerConf struct {
@@ -40,6 +41,9 @@ func init() {
 		},
 		ServerWS: ServerConf{
 			Port: "17002",
+		},
+		ServerHTTP: ServerConf{
+			Port: "17003",
 		},
 	}
 }

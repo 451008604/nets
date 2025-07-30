@@ -89,7 +89,7 @@ func (c *connection) DoTask(task func()) {
 	c.taskQueue <- task
 }
 
-func (c *connection) readerTaskHandler(m iface.IMessage) {
+func readerTaskHandler(c iface.IConnection, m iface.IMessage) {
 	iMsgHandler := GetInstanceMsgHandler()
 	defer iMsgHandler.GetErrCapture(c)
 

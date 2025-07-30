@@ -1,10 +1,8 @@
 package network
 
 import (
-	"context"
 	"github.com/451008604/nets/iface"
 	"github.com/gorilla/websocket"
-	"time"
 )
 
 type connectionWS struct {
@@ -21,7 +19,6 @@ func NewConnectionWS(server iface.IServer, conn *websocket.Conn) iface.IConnecti
 	c.msgBuffChan = make(chan []byte, defaultServer.AppConf.MaxMsgChanLen)
 	c.property = NewConcurrentStringer[iface.IConnProperty, any]()
 	c.taskQueue = make(chan func(), defaultServer.AppConf.WorkerTaskMaxLen)
-	c.exitCtx, c.exitCtxCancel = context.WithTimeout(context.Background(), time.Second*time.Duration(defaultServer.AppConf.ConnRWTimeOut))
 	return c
 }
 
@@ -37,7 +34,7 @@ func (c *connectionWS) StartReader() bool {
 	}
 
 	// 封装请求数据传入处理函数
-	c.DoTask(func() { c.readerTaskHandler(msgData) })
+	c.DoTask(func() { readerTaskHandler(c, msgData) })
 	return true
 }
 

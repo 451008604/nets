@@ -43,14 +43,6 @@ func info() string {
 func main() {
 	go listenChannelStatus()
 
-	// ===========连接管理器===========
-	network.GetInstanceConnManager().SetConnOnOpened(func(conn iface.IConnection) {
-		// do something ...
-	})
-	network.GetInstanceConnManager().SetConnOnClosed(func(conn iface.IConnection) {
-		// do something ...
-	})
-
 	// ===========消息处理器===========
 	msgHandler := network.GetInstanceMsgHandler()
 	// 添加一个路由
@@ -65,7 +57,7 @@ func main() {
 	})
 
 	// 注册服务
-	network.GetInstanceServerManager().RegisterServer(network.GetServerTCP(), network.GetServerWS())
+	network.GetInstanceServerManager().RegisterServer(network.GetServerTCP(), network.GetServerWS(), network.GetServerHTTP())
 
 	fmt.Printf(info())
 }

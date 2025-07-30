@@ -44,7 +44,8 @@ func (s *serverWS) Start() {
 		ReadBufferSize:  defaultServer.AppConf.MaxPackSize,
 		WriteBufferSize: defaultServer.AppConf.MaxPackSize,
 	}
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+	wsServer := http.NewServeMux()
+	wsServer.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		conn, err := upgrade.Upgrade(w, r, nil)
 		if err != nil {
 			return
@@ -69,8 +70,8 @@ func (s *serverWS) Start() {
 	})
 
 	if certPath, keyPath := defaultServer.AppConf.ServerWS.TLSCertPath, defaultServer.AppConf.ServerWS.TLSKeyPath; certPath != "" && keyPath != "" {
-		fmt.Printf("%v\n", http.ListenAndServeTLS(fmt.Sprintf("%s:%s", s.ip, s.port), certPath, keyPath, nil))
+		fmt.Printf("%v\n", http.ListenAndServeTLS(fmt.Sprintf("%s:%s", s.ip, s.port), certPath, keyPath, wsServer))
 	} else {
-		fmt.Printf("%v\n", http.ListenAndServe(fmt.Sprintf("%s:%s", s.ip, s.port), nil))
+		fmt.Printf("%v\n", http.ListenAndServe(fmt.Sprintf("%s:%s", s.ip, s.port), wsServer))
 	}
 }
