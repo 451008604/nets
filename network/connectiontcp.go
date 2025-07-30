@@ -11,14 +11,16 @@ type connectionTCP struct {
 }
 
 func NewConnectionTCP(server iface.IServer, conn *net.TCPConn) iface.IConnection {
-	c := &connectionTCP{}
-	c.server = server
-	c.conn = conn
-	c.connId = GetInstanceConnManager().NewConnId()
-	c.isClosed = false
-	c.msgBuffChan = make(chan []byte, defaultServer.AppConf.MaxMsgChanLen)
-	c.property = NewConcurrentStringer[iface.IConnProperty, any]()
-	c.taskQueue = make(chan func(), defaultServer.AppConf.WorkerTaskMaxLen)
+	c := &connectionTCP{
+		connection: connection{
+			server:      server,
+			connId:      GetInstanceConnManager().NewConnId(),
+			msgBuffChan: make(chan []byte, defaultServer.AppConf.MaxMsgChanLen),
+			property:    NewConcurrentStringer[iface.IConnProperty, any](),
+			taskQueue:   make(chan func(), defaultServer.AppConf.WorkerTaskMaxLen),
+		},
+		conn: conn,
+	}
 	return c
 }
 
@@ -62,8 +64,6 @@ func (c *connectionTCP) StartWriter(data []byte) bool {
 }
 
 func (c *connectionTCP) Start(readerHandler func() bool, writerHandler func(data []byte) bool) {
-	defer GetInstanceConnManager().Remove(c)
-
 	c.connection.Start(readerHandler, writerHandler)
 }
 

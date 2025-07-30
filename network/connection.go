@@ -30,6 +30,7 @@ func (c *connection) StartWriter(_ []byte) bool { return false }
 
 func (c *connection) Start(readerHandler func() bool, writerHandler func(data []byte) bool) {
 	defer GetInstanceServerManager().WaitGroupDone()
+	defer GetInstanceConnManager().Remove(c)
 	defer GetInstanceConnManager().ConnOnClosed(c)
 	defer close(c.taskQueue)
 	defer close(c.msgBuffChan)

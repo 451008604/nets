@@ -15,14 +15,16 @@ type connectionHTTP struct {
 }
 
 func NewConnectionHTTP(server iface.IServer, writer http.ResponseWriter, reader *http.Request) iface.IConnection {
-	c := &connectionHTTP{}
-	c.server = server
-	c.writer = writer
-	c.reader = reader
-	c.isClosed = false
-	c.msgBuffChan = make(chan []byte, defaultServer.AppConf.MaxMsgChanLen)
-	c.property = NewConcurrentStringer[iface.IConnProperty, any]()
-	c.taskQueue = make(chan func(), defaultServer.AppConf.WorkerTaskMaxLen)
+	c := &connectionHTTP{
+		connection: connection{
+			server:      server,
+			msgBuffChan: make(chan []byte, defaultServer.AppConf.MaxMsgChanLen),
+			property:    NewConcurrentStringer[iface.IConnProperty, any](),
+			taskQueue:   make(chan func(), defaultServer.AppConf.WorkerTaskMaxLen),
+		},
+		writer: writer,
+		reader: reader,
+	}
 	return c
 }
 

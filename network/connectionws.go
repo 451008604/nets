@@ -11,14 +11,16 @@ type connectionWS struct {
 }
 
 func NewConnectionWS(server iface.IServer, conn *websocket.Conn) iface.IConnection {
-	c := &connectionWS{}
-	c.server = server
-	c.conn = conn
-	c.connId = GetInstanceConnManager().NewConnId()
-	c.isClosed = false
-	c.msgBuffChan = make(chan []byte, defaultServer.AppConf.MaxMsgChanLen)
-	c.property = NewConcurrentStringer[iface.IConnProperty, any]()
-	c.taskQueue = make(chan func(), defaultServer.AppConf.WorkerTaskMaxLen)
+	c := &connectionWS{
+		connection: connection{
+			server:      server,
+			connId:      GetInstanceConnManager().NewConnId(),
+			msgBuffChan: make(chan []byte, defaultServer.AppConf.MaxMsgChanLen),
+			property:    NewConcurrentStringer[iface.IConnProperty, any](),
+			taskQueue:   make(chan func(), defaultServer.AppConf.WorkerTaskMaxLen),
+		},
+		conn: conn,
+	}
 	return c
 }
 
@@ -28,13 +30,16 @@ func (c *connectionWS) StartReader() bool {
 		return false
 	}
 
-	msgData := defaultServer.DataPacket.UnPack(msgByte)
-	if msgData == nil {
-		return false
-	}
+	for len(msgByte) > 0 {
+		msgData := defaultServer.DataPacket.UnPack(msgByte)
+		if msgData == nil {
+			return false
+		}
+		msgByte = msgByte[int(msgData.GetDataLen())+defaultServer.DataPacket.GetHeadLen():]
 
-	// 封装请求数据传入处理函数
-	c.DoTask(func() { readerTaskHandler(c, msgData) })
+		// 封装请求数据传入处理函数
+		c.DoTask(func() { readerTaskHandler(c, msgData) })
+	}
 	return true
 }
 
@@ -46,8 +51,6 @@ func (c *connectionWS) StartWriter(data []byte) bool {
 }
 
 func (c *connectionWS) Start(readerHandler func() bool, writerHandler func(data []byte) bool) {
-	defer GetInstanceConnManager().Remove(c)
-
 	c.connection.Start(readerHandler, writerHandler)
 }
 
