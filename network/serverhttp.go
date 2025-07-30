@@ -16,17 +16,13 @@ var serverHttp iface.IServer
 
 func GetServerHTTP() iface.IServer {
 	if serverHttp == nil {
-		serverHttp = newServerHTTP()
+		serverHttp = &serverHTTP{
+			serverName: defaultServer.AppConf.AppName + "_http",
+			ip:         defaultServer.AppConf.ServerHTTP.Address,
+			port:       defaultServer.AppConf.ServerHTTP.Port,
+		}
 	}
 	return serverHttp
-}
-
-func newServerHTTP() iface.IServer {
-	s := &serverHTTP{}
-	s.serverName = defaultServer.AppConf.AppName + "_http"
-	s.ip = defaultServer.AppConf.ServerHTTP.Address
-	s.port = defaultServer.AppConf.ServerHTTP.Port
-	return s
 }
 
 func (s *serverHTTP) GetServerName() string {

@@ -17,17 +17,13 @@ var serverWs iface.IServer
 
 func GetServerWS() iface.IServer {
 	if serverWs == nil {
-		serverWs = newServerWS()
+		serverWs = &serverWS{
+			serverName: defaultServer.AppConf.AppName + "_ws",
+			ip:         defaultServer.AppConf.ServerWS.Address,
+			port:       defaultServer.AppConf.ServerWS.Port,
+		}
 	}
 	return serverWs
-}
-
-func newServerWS() iface.IServer {
-	s := &serverWS{}
-	s.serverName = defaultServer.AppConf.AppName + "_ws"
-	s.ip = defaultServer.AppConf.ServerWS.Address
-	s.port = defaultServer.AppConf.ServerWS.Port
-	return s
 }
 
 func (s *serverWS) GetServerName() string {

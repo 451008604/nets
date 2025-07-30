@@ -16,17 +16,13 @@ var serverTcp iface.IServer
 
 func GetServerTCP() iface.IServer {
 	if serverTcp == nil {
-		serverTcp = newServerTCP()
+		serverTcp = &serverTCP{
+			serverName: defaultServer.AppConf.AppName + "_tcp",
+			ip:         defaultServer.AppConf.ServerTCP.Address,
+			port:       defaultServer.AppConf.ServerTCP.Port,
+		}
 	}
 	return serverTcp
-}
-
-func newServerTCP() iface.IServer {
-	s := &serverTCP{}
-	s.serverName = defaultServer.AppConf.AppName + "_tcp"
-	s.ip = defaultServer.AppConf.ServerTCP.Address
-	s.port = defaultServer.AppConf.ServerTCP.Port
-	return s
 }
 
 func (s *serverTCP) GetServerName() string {
