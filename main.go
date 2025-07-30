@@ -57,7 +57,12 @@ func main() {
 	})
 
 	// 注册服务
-	network.GetInstanceServerManager().RegisterServer(network.GetServerTCP(), network.GetServerWS(), network.GetServerHTTP())
+	network.GetInstanceServerManager().RegisterServer(
+		network.GetServerTCP(),
+		network.GetServerWS(),
+		network.GetServerHTTP(),
+		network.GetServerKCP(),
+	)
 
 	fmt.Printf(info())
 }

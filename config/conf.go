@@ -13,13 +13,14 @@ type AppConf struct {
 	ServerTCP        ServerConf // tcp服务
 	ServerWS         ServerConf // websocket服务
 	ServerHTTP       ServerConf // http服务
+	ServerKCP        ServerConf // http服务
 }
 
 type ServerConf struct {
 	Address     string // IP地址
 	Port        string // 端口
-	TLSCertPath string // ssl证书
-	TLSKeyPath  string // ssl密钥
+	TLSCertPath string // ssl证书路径
+	TLSKeyPath  string // ssl密钥路径
 }
 
 var appConf *AppConf
@@ -44,6 +45,9 @@ func init() {
 		},
 		ServerHTTP: ServerConf{
 			Port: "17003",
+		},
+		ServerKCP: ServerConf{
+			Port: "17004",
 		},
 	}
 }
