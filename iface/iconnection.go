@@ -27,13 +27,6 @@ type IConnection interface {
 	// 发送消息给客户端
 	SendMsg(msgId int32, msgData proto.Message)
 
-	// 设置连接属性
-	SetProperty(key IConnProperty, value any)
-	// 获取连接属性
-	GetProperty(key IConnProperty) (value any)
-	// 删除连接属性
-	RemoveProperty(key IConnProperty)
-
 	// 限流控制
 	FlowControl() bool
 
@@ -41,11 +34,4 @@ type IConnection interface {
 	ProtocolToByte(str proto.Message) []byte
 	// 反序列化
 	ByteToProtocol(byte []byte, target proto.Message) error
-}
-
-// 连接挂载的属性
-type IConnProperty string
-
-func (i IConnProperty) String() string {
-	return string(i)
 }

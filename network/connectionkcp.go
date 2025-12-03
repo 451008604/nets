@@ -16,8 +16,8 @@ func NewConnectionKCP(server *serverKCP, conn net.Conn) iface.IConnection {
 			server:      server,
 			connId:      GetInstanceConnManager().NewConnId(),
 			msgBuffChan: make(chan []byte, defaultServer.AppConf.MaxMsgChanLen),
-			property:    NewConcurrentStringer[iface.IConnProperty, any](),
 			taskQueue:   make(chan func(), defaultServer.AppConf.WorkerTaskMaxLen),
+			property:    NewConcurrentMap[any](),
 		},
 		conn: conn,
 	}

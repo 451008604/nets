@@ -19,8 +19,8 @@ func NewConnectionHTTP(server iface.IServer, writer http.ResponseWriter, reader 
 		connection: connection{
 			server:      server,
 			msgBuffChan: make(chan []byte, defaultServer.AppConf.MaxMsgChanLen),
-			property:    NewConcurrentStringer[iface.IConnProperty, any](),
 			taskQueue:   make(chan func(), defaultServer.AppConf.WorkerTaskMaxLen),
+			property:    NewConcurrentMap[any](),
 		},
 		writer: writer,
 		reader: reader,

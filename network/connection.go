@@ -4,24 +4,25 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/451008604/nets/iface"
-	"google.golang.org/protobuf/proto"
 	"sync"
 	"time"
+
+	"github.com/451008604/nets/iface"
+	"google.golang.org/protobuf/proto"
 )
 
 type connection struct {
-	server        iface.IServer                           // 当前Conn所属的Server
-	connId        int                                     // 当前连接的Id(SessionId)
-	msgBuffChan   chan []byte                             // 用于任务队列与写协程之间的消息通信
-	property      ConcurrentMap[iface.IConnProperty, any] // 连接属性
-	isClosed      bool                                    // 当前连接是否已关闭
-	exitCtx       context.Context                         // 管理连接的上下文
-	exitCtxCancel context.CancelFunc                      // 连接关闭信号
-	limitingCount int64                                   // 限流计数
-	limitingTimer int64                                   // 限流计时
-	limitingMutex sync.Mutex                              // 限流锁
-	taskQueue     chan func()                             // 等待执行的任务队列
+	server        iface.IServer              // 当前Conn所属的Server
+	connId        int                        // 当前连接的Id(SessionId)
+	msgBuffChan   chan []byte                // 用于任务队列与写协程之间的消息通信
+	property      ConcurrentMap[string, any] // 连接属性
+	isClosed      bool                       // 当前连接是否已关闭
+	exitCtx       context.Context            // 管理连接的上下文
+	exitCtxCancel context.CancelFunc         // 连接关闭信号
+	limitingCount int64                      // 限流计数
+	limitingTimer int64                      // 限流计时
+	limitingMutex sync.Mutex                 // 限流锁
+	taskQueue     chan func()                // 等待执行的任务队列
 }
 
 func (c *connection) StartReader() bool { return true }
@@ -149,22 +150,6 @@ func (c *connection) SendMsg(msgId int32, msgData proto.Message) {
 	c.msgBuffChan <- msg
 }
 
-func (c *connection) SetProperty(key iface.IConnProperty, value any) {
-	c.property.Set(key, value)
-}
-
-func (c *connection) GetProperty(key iface.IConnProperty) any {
-	if value, ok := c.property.Get(key); ok {
-		return value
-	} else {
-		return nil
-	}
-}
-
-func (c *connection) RemoveProperty(key iface.IConnProperty) {
-	c.property.Remove(key)
-}
-
 func (c *connection) FlowControl() bool {
 	if defaultServer.AppConf.MaxFlowSecond == 0 {
 		return false
@@ -220,4 +205,25 @@ func (c *connection) ByteToProtocol(byte []byte, target proto.Message) error {
 		return err
 	}
 	return nil
+}
+
+// 设置连接属性
+func SetConnProperty(c *connection, key string, value any) {
+	c.property.Set(key, value)
+}
+
+// 获取连接属性
+func GetConnProperty[T any](c *connection, key string) T {
+	var t T
+	if value, ok := c.property.Get(key); ok {
+		if v, ok2 := value.(T); ok2 {
+			return v
+		}
+	}
+	return t
+}
+
+// 删除连接属性
+func RemoveConnProperty(c *connection, key string) {
+	c.property.Remove(key)
 }
