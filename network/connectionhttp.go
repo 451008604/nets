@@ -9,14 +9,14 @@ import (
 )
 
 type connectionHTTP struct {
-	connection
+	*connection
 	writer http.ResponseWriter
 	reader *http.Request
 }
 
 func NewConnectionHTTP(server iface.IServer, writer http.ResponseWriter, reader *http.Request) iface.IConnection {
 	c := &connectionHTTP{
-		connection: connection{
+		connection: &connection{
 			server:      server,
 			msgBuffChan: make(chan []byte, defaultServer.AppConf.MaxMsgChanLen),
 			taskQueue:   make(chan func(), defaultServer.AppConf.WorkerTaskMaxLen),
@@ -34,6 +34,9 @@ type httpData struct {
 }
 
 func (c *connectionHTTP) StartReader() bool {
+	xToken := c.reader.Header.Get("Authorization")
+	ConnPropertySet(c.connection, "Authorization", xToken)
+
 	// 解析body结构
 	data, _ := io.ReadAll(c.reader.Body)
 	req := &httpData{}

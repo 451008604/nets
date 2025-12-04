@@ -6,13 +6,13 @@ import (
 )
 
 type connectionKCP struct {
-	connection
+	*connection
 	conn net.Conn
 }
 
 func NewConnectionKCP(server *serverKCP, conn net.Conn) iface.IConnection {
 	c := &connectionKCP{
-		connection: connection{
+		connection: &connection{
 			server:      server,
 			connId:      GetInstanceConnManager().NewConnId(),
 			msgBuffChan: make(chan []byte, defaultServer.AppConf.MaxMsgChanLen),

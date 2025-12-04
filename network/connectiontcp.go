@@ -6,13 +6,13 @@ import (
 )
 
 type connectionTCP struct {
-	connection
+	*connection
 	conn *net.TCPConn // 当前连接对象
 }
 
 func NewConnectionTCP(server iface.IServer, conn *net.TCPConn) iface.IConnection {
 	c := &connectionTCP{
-		connection: connection{
+		connection: &connection{
 			server:      server,
 			connId:      GetInstanceConnManager().NewConnId(),
 			msgBuffChan: make(chan []byte, defaultServer.AppConf.MaxMsgChanLen),

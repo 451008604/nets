@@ -6,13 +6,13 @@ import (
 )
 
 type connectionWS struct {
-	connection
+	*connection
 	conn *websocket.Conn
 }
 
 func NewConnectionWS(server iface.IServer, conn *websocket.Conn) iface.IConnection {
 	c := &connectionWS{
-		connection: connection{
+		connection: &connection{
 			server:      server,
 			connId:      GetInstanceConnManager().NewConnId(),
 			msgBuffChan: make(chan []byte, defaultServer.AppConf.MaxMsgChanLen),
