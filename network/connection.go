@@ -111,7 +111,7 @@ func readerTaskHandler(c iface.IConnection, m iface.IMessage) {
 
 	// 限流控制
 	if c.FlowControl() {
-		fmt.Printf("flowControl RemoteAddress: %v, GetMsgId: %v, GetData: %v\n", c.RemoteAddrStr(), m.GetMsgId(), m.GetData())
+		fmt.Printf("flowControl RemoteAddress: %v, GetMsgId: %v, GetData: %s\n", c.RemoteAddrStr(), m.GetMsgId(), m.GetData())
 		return
 	}
 
@@ -150,14 +150,21 @@ func (c *connection) SendMsg(msgId int32, msgData proto.Message) {
 	c.msgBuffChan <- msg
 }
 
-func (c *connection) FlowControl() bool {
-	if defaultServer.AppConf.MaxFlowSecond == 0 {
-		return false
+func (c *connection) FlowControl() (b bool) {
+	defer func() {
+		if b {
+			GetInstanceConnManager().ConnRateLimiting(c)
+			GetInstanceConnManager().Remove(c)
+		}
+	}()
+
+	count := int64(defaultServer.AppConf.MaxFlowSecond)
+	if count == 0 {
+		return true
 	}
 	defer c.limitingMutex.Unlock()
 	c.limitingMutex.Lock()
 
-	count, interval := int64(defaultServer.AppConf.MaxFlowSecond), int64(1000)
 	if c.limitingTimer == 0 {
 		c.limitingTimer = time.Now().UnixMilli()
 	}
@@ -166,9 +173,7 @@ func (c *connection) FlowControl() bool {
 		return false
 	}
 	now := time.Now().UnixMilli()
-	if now-c.limitingTimer < interval {
-		GetInstanceConnManager().ConnRateLimiting(c)
-		GetInstanceConnManager().Remove(c)
+	if now-c.limitingTimer < int64(1000) {
 		return true
 	}
 	c.limitingCount = 1
