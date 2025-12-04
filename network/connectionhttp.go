@@ -50,7 +50,7 @@ func (c *connectionHTTP) StartReader() bool {
 	msgData := &message{}
 	msgData.SetMsgId(req.MsgID)
 	msgData.SetData([]byte(req.Data))
-	readerTaskHandler(c, msgData)
+	c.DoTask(func() { readerTaskHandler(c, msgData) })
 	return true
 }
 
