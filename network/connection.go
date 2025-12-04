@@ -213,12 +213,12 @@ func (c *connection) ByteToProtocol(byte []byte, target proto.Message) error {
 }
 
 // 设置连接属性
-func SetConnProperty(c *connection, key string, value any) {
+func ConnPropertySet(c *connection, key string, value any) {
 	c.property.Set(key, value)
 }
 
 // 获取连接属性
-func GetConnProperty[T any](c *connection, key string) T {
+func ConnPropertyGet[T any](c *connection, key string) T {
 	var t T
 	if value, ok := c.property.Get(key); ok {
 		if v, ok2 := value.(T); ok2 {
@@ -229,6 +229,6 @@ func GetConnProperty[T any](c *connection, key string) T {
 }
 
 // 删除连接属性
-func RemoveConnProperty(c *connection, key string) {
+func ConnPropertyRemove(c *connection, key string) {
 	c.property.Remove(key)
 }
