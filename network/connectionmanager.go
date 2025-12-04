@@ -27,19 +27,38 @@ func GetInstanceConnManager() iface.IConnectionManager {
 			closeConnId: make(chan int, defaultServer.AppConf.MaxConn),
 			removeList:  make(chan iface.IConnection, defaultServer.AppConf.MaxConn),
 		}
-		go onConnRemoveList(manager)
 		instanceConnManager = manager
+
+		go func(c *connectionManager) {
+			for conn := range c.removeList {
+				if conn.GetConnId() == 0 || conn.IsClose() {
+					continue
+				}
+				// 关闭连接
+				conn.Stop()
+
+				if c.connections.Has(Integer(conn.GetConnId())) {
+					// 删除连接
+					c.connections.Remove(Integer(conn.GetConnId()))
+					// 回收连接Id
+					c.setClosingConn(conn.GetConnId())
+				}
+			}
+		}(manager)
 	})
 	return instanceConnManager
 }
 
 func (c *connectionManager) NewConnId() int {
-	if connId := c.getClosingConn(); connId != 0 {
+	select {
+	case connId := <-c.closeConnId:
+		// 回收列表中存在则取出使用
 		return connId
+	default:
+		// 回收列表为空时递增Id
+		atomic.AddInt64(&c.connId, 1)
+		return int(c.connId)
 	}
-	// 回收列表为空时递增Id
-	atomic.AddInt64(&c.connId, 1)
-	return int(c.connId)
 }
 
 func (c *connectionManager) RangeConnections(handler func(conn iface.IConnection)) {
@@ -108,31 +127,4 @@ func (c *connectionManager) ConnRateLimiting(conn iface.IConnection) {
 func (c *connectionManager) setClosingConn(connId int) {
 	// 存入回收列表
 	c.closeConnId <- connId
-}
-
-func (c *connectionManager) getClosingConn() int {
-	// 回收列表中存在则取出使用
-	select {
-	case connId := <-c.closeConnId:
-		return connId
-	default:
-		return 0
-	}
-}
-
-func onConnRemoveList(c *connectionManager) {
-	for conn := range c.removeList {
-		if conn.IsClose() {
-			continue
-		}
-		// 关闭连接
-		conn.Stop()
-
-		if c.connections.Has(Integer(conn.GetConnId())) {
-			// 删除连接
-			c.connections.Remove(Integer(conn.GetConnId()))
-			// 回收连接Id
-			c.setClosingConn(conn.GetConnId())
-		}
-	}
 }
