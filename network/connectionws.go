@@ -1,18 +1,19 @@
 package network
 
 import (
+	"context"
 	"github.com/451008604/nets/iface"
 	"github.com/gorilla/websocket"
 )
 
 type connectionWS struct {
-	*connection
+	*connectionBase
 	conn *websocket.Conn
 }
 
 func NewConnectionWS(server iface.IServer, conn *websocket.Conn) iface.IConnection {
 	c := &connectionWS{
-		connection: &connection{
+		connectionBase: &connectionBase{
 			server:      server,
 			connId:      GetInstanceConnManager().NewConnId(),
 			msgBuffChan: make(chan []byte, defaultServer.AppConf.MaxMsgChanLen),
@@ -21,6 +22,8 @@ func NewConnectionWS(server iface.IServer, conn *websocket.Conn) iface.IConnecti
 		},
 		conn: conn,
 	}
+	c.exitCtx, c.exitCtxCancel = context.WithCancel(context.Background())
+	c.connectionBase.conn = c
 	return c
 }
 
@@ -50,16 +53,12 @@ func (c *connectionWS) StartWriter(data []byte) bool {
 	return true
 }
 
-func (c *connectionWS) Start(readerHandler func() bool, writerHandler func(data []byte) bool) {
-	c.connection.Start(readerHandler, writerHandler)
-}
-
-func (c *connectionWS) Stop() {
-	if c.isClosed {
-		return
+func (c *connectionWS) Stop() bool {
+	if !c.connectionBase.Stop() {
+		return false
 	}
-	c.connection.Stop()
 	_ = c.conn.Close()
+	return true
 }
 
 func (c *connectionWS) RemoteAddrStr() string {

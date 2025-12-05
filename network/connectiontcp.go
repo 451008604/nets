@@ -1,18 +1,19 @@
 package network
 
 import (
+	"context"
 	"github.com/451008604/nets/iface"
 	"net"
 )
 
 type connectionTCP struct {
-	*connection
+	*connectionBase
 	conn *net.TCPConn // 当前连接对象
 }
 
 func NewConnectionTCP(server iface.IServer, conn *net.TCPConn) iface.IConnection {
 	c := &connectionTCP{
-		connection: &connection{
+		connectionBase: &connectionBase{
 			server:      server,
 			connId:      GetInstanceConnManager().NewConnId(),
 			msgBuffChan: make(chan []byte, defaultServer.AppConf.MaxMsgChanLen),
@@ -21,6 +22,8 @@ func NewConnectionTCP(server iface.IServer, conn *net.TCPConn) iface.IConnection
 		},
 		conn: conn,
 	}
+	c.exitCtx, c.exitCtxCancel = context.WithCancel(context.Background())
+	c.connectionBase.conn = c
 	return c
 }
 
@@ -63,16 +66,12 @@ func (c *connectionTCP) StartWriter(data []byte) bool {
 	return true
 }
 
-func (c *connectionTCP) Start(readerHandler func() bool, writerHandler func(data []byte) bool) {
-	c.connection.Start(readerHandler, writerHandler)
-}
-
-func (c *connectionTCP) Stop() {
-	if c.isClosed {
-		return
+func (c *connectionTCP) Stop() bool {
+	if !c.connectionBase.Stop() {
+		return false
 	}
-	c.connection.Stop()
 	_ = c.conn.Close()
+	return true
 }
 
 func (c *connectionTCP) RemoteAddrStr() string {

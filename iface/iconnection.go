@@ -8,7 +8,7 @@ type IConnection interface {
 	// 启动连接(通过connmanager调用)
 	Start(readerHandler func() bool, writerHandler func(data []byte) bool)
 	// 停止连接(通过connmanager调用)
-	Stop()
+	Stop() bool
 
 	// 启动接收消息协程
 	StartReader() bool

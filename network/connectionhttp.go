@@ -1,6 +1,7 @@
 package network
 
 import (
+	"context"
 	"encoding/json"
 	"github.com/451008604/nets/iface"
 	"google.golang.org/protobuf/proto"
@@ -9,14 +10,14 @@ import (
 )
 
 type connectionHTTP struct {
-	*connection
+	*connectionBase
 	writer http.ResponseWriter
 	reader *http.Request
 }
 
 func NewConnectionHTTP(server iface.IServer, writer http.ResponseWriter, reader *http.Request) iface.IConnection {
 	c := &connectionHTTP{
-		connection: &connection{
+		connectionBase: &connectionBase{
 			server:      server,
 			msgBuffChan: make(chan []byte, defaultServer.AppConf.MaxMsgChanLen),
 			taskQueue:   make(chan func(), defaultServer.AppConf.WorkerTaskMaxLen),
@@ -25,6 +26,8 @@ func NewConnectionHTTP(server iface.IServer, writer http.ResponseWriter, reader 
 		writer: writer,
 		reader: reader,
 	}
+	c.exitCtx, c.exitCtxCancel = context.WithCancel(context.Background())
+	c.connectionBase.conn = c
 	return c
 }
 
@@ -35,7 +38,7 @@ type httpData struct {
 
 func (c *connectionHTTP) StartReader() bool {
 	xToken := c.reader.Header.Get("Authorization")
-	ConnPropertySet(c.connection, "Authorization", xToken)
+	ConnPropertySet(c.connectionBase, "Authorization", xToken)
 
 	// 解析body结构
 	data, _ := io.ReadAll(c.reader.Body)

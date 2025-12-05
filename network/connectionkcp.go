@@ -1,18 +1,19 @@
 package network
 
 import (
+	"context"
 	"github.com/451008604/nets/iface"
 	"net"
 )
 
 type connectionKCP struct {
-	*connection
+	*connectionBase
 	conn net.Conn
 }
 
 func NewConnectionKCP(server *serverKCP, conn net.Conn) iface.IConnection {
 	c := &connectionKCP{
-		connection: &connection{
+		connectionBase: &connectionBase{
 			server:      server,
 			connId:      GetInstanceConnManager().NewConnId(),
 			msgBuffChan: make(chan []byte, defaultServer.AppConf.MaxMsgChanLen),
@@ -21,6 +22,8 @@ func NewConnectionKCP(server *serverKCP, conn net.Conn) iface.IConnection {
 		},
 		conn: conn,
 	}
+	c.exitCtx, c.exitCtxCancel = context.WithCancel(context.Background())
+	c.connectionBase.conn = c
 	return c
 }
 
@@ -63,16 +66,12 @@ func (c *connectionKCP) StartWriter(data []byte) bool {
 	return true
 }
 
-func (c *connectionKCP) Start(readerHandler func() bool, writerHandler func(data []byte) bool) {
-	c.connection.Start(readerHandler, writerHandler)
-}
-
-func (c *connectionKCP) Stop() {
-	if c.isClosed {
-		return
+func (c *connectionKCP) Stop() bool {
+	if !c.connectionBase.Stop() {
+		return false
 	}
-	c.connection.Stop()
 	_ = c.conn.Close()
+	return true
 }
 
 func (c *connectionKCP) RemoteAddrStr() string {
