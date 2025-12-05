@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"github.com/451008604/nets/iface"
-	_ "github.com/451008604/nets/module"
 	"github.com/451008604/nets/network"
 	pb "github.com/451008604/nets/proto/bin"
 	"google.golang.org/protobuf/proto"
