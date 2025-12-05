@@ -36,7 +36,7 @@ func init() {
 		MaxMsgChanLen:    100,
 		MaxFlowSecond:    30,
 		ProtocolIsJson:   true,
-		ConnRWTimeOut:    300,
+		ConnRWTimeOut:    30,
 		ServerTCP: ServerConf{
 			Port: "17001",
 		},
