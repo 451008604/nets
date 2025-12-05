@@ -7,7 +7,6 @@ import (
 	pb "github.com/451008604/nets/proto/bin"
 	"github.com/xtaci/kcp-go"
 	"net"
-	"time"
 )
 
 /*
@@ -19,12 +18,13 @@ func main() {
 	data := network.NewDataPack().Pack(network.NewMsgPackage(int32(pb.MsgId_Echo), msg))
 
 	sendWebSocketMessage := func(data []byte) {
-		conn, err := kcp.Dial("127.0.0.1:17004")
+		conn, err := kcp.DialWithOptions("127.0.0.1:17004", nil, 0, 0)
 		if err != nil {
 			println(err.Error())
 			return
 		}
-		defer conn.Close()
+		// conn.SetNoDelay(1, 10, 2, 1)
+		// defer conn.Close()
 
 		go func(c net.Conn) {
 			for {
@@ -33,17 +33,16 @@ func main() {
 					pack := network.NewDataPack().UnPack(buf[:message])
 					fmt.Printf("服务器：%v - %s\n", pack.GetMsgId(), pack.GetData())
 				} else {
+					fmt.Printf("%v\n", err.Error())
 					break
 				}
 			}
 		}(conn)
 
 		// 发送消息
-		_, _ = conn.Write(append(append(append(append(data, data...), data...), data...), data...))
-		// _, _ = conn.Write(append(data, data...))
-		// _, _ = conn.Write(append(data, data...))
-		// _, _ = conn.Write(append(data, data...))
-		// _, _ = conn.Write(append(data, data...))
+		if _, err := conn.Write(data); err != nil {
+			println(err.Error())
+		}
 
 		// go func(c *websocket.Conn) {
 		// 	time.Sleep(time.Second * time.Duration(3+rand.Intn(2)))
@@ -51,7 +50,7 @@ func main() {
 		// 	sendWebSocketMessage(data)
 		// }(conn)
 
-		time.Sleep(time.Second * 10)
+		select {}
 	}
 
 	for i := 0; i < 1; i++ {

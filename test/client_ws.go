@@ -6,7 +6,6 @@ import (
 	"github.com/451008604/nets/network"
 	pb "github.com/451008604/nets/proto/bin"
 	"github.com/gorilla/websocket"
-	"time"
 )
 
 /*
@@ -47,7 +46,7 @@ func main() {
 		// 	sendWebSocketMessage(data)
 		// }(conn)
 
-		time.Sleep(time.Second * 10)
+		select {}
 	}
 
 	for i := 0; i < 1; i++ {
