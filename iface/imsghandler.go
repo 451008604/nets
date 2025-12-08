@@ -20,4 +20,4 @@ type IMsgHandler interface {
 	GetErrCapture(conn IConnection)
 }
 type IFilter func(conn IConnection, msgData proto.Message) bool
-type IErrCapture func(conn IConnection, r any)
+type IErrCapture func(conn IConnection, panicInfo string)

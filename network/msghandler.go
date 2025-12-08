@@ -3,6 +3,7 @@ package network
 import (
 	"fmt"
 	"github.com/451008604/nets/iface"
+	"runtime/debug"
 	"sync"
 )
 
@@ -55,6 +56,6 @@ func (m *msgHandler) GetErrCapture(conn iface.IConnection) {
 		return
 	}
 	if r := recover(); r != nil {
-		m.errCapture(conn, r)
+		m.errCapture(conn, fmt.Sprintf("%v\n%s", r, debug.Stack()))
 	}
 }
