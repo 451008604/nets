@@ -32,7 +32,6 @@ func (c *connectionBase) Start(readerHandler func() bool, writerHandler func(dat
 	defer GetInstanceConnManager().Remove(c.conn)
 	defer GetInstanceConnManager().ConnOnClosed(c.conn)
 	defer c.exitCtxCancel()
-	defer fmt.Println(time.Now().Unix(), "chan closed by start")
 
 	GetInstanceServerManager().WaitGroupAdd(1)
 	GetInstanceConnManager().ConnOnOpened(c.conn)
@@ -40,7 +39,6 @@ func (c *connectionBase) Start(readerHandler func() bool, writerHandler func(dat
 	// 开启读协程
 	go func(c *connectionBase, readerHandler func() bool) {
 		defer c.exitCtxCancel()
-		defer fmt.Println(time.Now().Unix(), "chan closed by read")
 		for {
 			c.deadTime = time.Now().Unix()
 			select {
@@ -58,7 +56,6 @@ func (c *connectionBase) Start(readerHandler func() bool, writerHandler func(dat
 	// 开启写协程
 	go func(c *connectionBase, writerHandler func(data []byte) bool) {
 		defer c.exitCtxCancel()
-		defer fmt.Println(time.Now().Unix(), "chan closed by write")
 		for {
 			c.deadTime = time.Now().Unix()
 			select {
@@ -76,7 +73,6 @@ func (c *connectionBase) Start(readerHandler func() bool, writerHandler func(dat
 	// 开启任务协程
 	go func(c *connectionBase) {
 		defer c.exitCtxCancel()
-		defer fmt.Println(time.Now().Unix(), "chan closed by task")
 		for {
 			select {
 			case <-c.exitCtx.Done():
@@ -118,7 +114,7 @@ func (c *connectionBase) DoTask(task func()) {
 
 func readerTaskHandler(c iface.IConnection, m iface.IMessage) {
 	iMsgHandler := GetInstanceMsgHandler()
-	defer iMsgHandler.GetErrCapture(c)
+	defer iMsgHandler.GetErrCapture(c, m)
 
 	// 连接关闭时丢弃后续所有操作
 	if c.IsClose() {
@@ -143,7 +139,7 @@ func readerTaskHandler(c iface.IConnection, m iface.IMessage) {
 	}
 
 	// 过滤器校验
-	if iMsgHandler.GetFilter() != nil && !iMsgHandler.GetFilter()(c, msgData) {
+	if iMsgHandler.GetFilter() != nil && !iMsgHandler.GetFilter()(c, m) {
 		return
 	}
 

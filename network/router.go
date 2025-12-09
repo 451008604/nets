@@ -6,20 +6,20 @@ import (
 )
 
 type baseRouter struct {
-	message iface.INewMsgStructTemplate
-	handler iface.IReceiveMsgHandler
+	template iface.INewMsgStructTemplate
+	handler  iface.IReceiveMsgHandler
 }
 
-func (b *baseRouter) SetMsg(msgStructTemplate iface.INewMsgStructTemplate) {
-	b.message = msgStructTemplate
+func (b *baseRouter) SetMsg(msgTemplate iface.INewMsgStructTemplate) {
+	b.template = msgTemplate
 }
 
 func (b *baseRouter) GetNewMsg() proto.Message {
-	return b.message()
+	return b.template()
 }
 
-func (b *baseRouter) SetHandler(req iface.IReceiveMsgHandler) {
-	b.handler = req
+func (b *baseRouter) SetHandler(msgHandler iface.IReceiveMsgHandler) {
+	b.handler = msgHandler
 }
 
 func (b *baseRouter) RunHandler(conn iface.IConnection, message proto.Message) {

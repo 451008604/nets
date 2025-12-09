@@ -36,8 +36,6 @@ func (s *serverKCP) Start() {
 	}
 	fmt.Printf("server starting [ %v:%v ]\n", s.serverName, s.port)
 
-	var conn net.Conn
-
 	listener, err := kcp.Listen(":" + s.port)
 	if err != nil {
 		fmt.Printf("service startup failed %v\n", err)
@@ -47,6 +45,7 @@ func (s *serverKCP) Start() {
 		_ = listener.Close()
 	}(listener)
 
+	var conn net.Conn
 	for {
 		conn, err = listener.Accept()
 		if err != nil {

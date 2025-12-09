@@ -26,13 +26,13 @@ func GetInstanceMsgHandler() iface.IMsgHandler {
 	return instanceMsgHandler
 }
 
-func (m *msgHandler) AddRouter(msgId int32, msg iface.INewMsgStructTemplate, handler iface.IReceiveMsgHandler) {
+func (m *msgHandler) AddRouter(msgId int32, msgTemplate iface.INewMsgStructTemplate, msgHandler iface.IReceiveMsgHandler) {
 	if _, ok := m.apis[msgId]; ok {
 		fmt.Printf("msgId is duplicate %v\n", msgId)
 	}
 	m.apis[msgId] = &baseRouter{}
-	m.apis[msgId].SetMsg(msg)
-	m.apis[msgId].SetHandler(handler)
+	m.apis[msgId].SetMsg(msgTemplate)
+	m.apis[msgId].SetHandler(msgHandler)
 }
 
 func (m *msgHandler) GetApis() map[int32]iface.IRouter {
@@ -51,11 +51,11 @@ func (m *msgHandler) SetErrCapture(fun iface.IErrCapture) {
 	m.errCapture = fun
 }
 
-func (m *msgHandler) GetErrCapture(conn iface.IConnection) {
+func (m *msgHandler) GetErrCapture(conn iface.IConnection, message iface.IMessage) {
 	if m.errCapture == nil {
 		return
 	}
 	if r := recover(); r != nil {
-		m.errCapture(conn, fmt.Sprintf("%v\n%s", r, debug.Stack()))
+		m.errCapture(conn, message, fmt.Sprintf("%v\n%s", r, debug.Stack()))
 	}
 }
