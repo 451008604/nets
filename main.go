@@ -45,14 +45,20 @@ func main() {
 	// ===========消息处理器===========
 	msgHandler := network.GetInstanceMsgHandler()
 	// 添加一个路由
-	msgHandler.AddRouter(int32(pb.MsgId_Echo), func() proto.Message { return &pb.EchoRequest{} }, func(con iface.IConnection, message proto.Message) {
+	msgHandler.AddRouter(int32(pb.MsgId_Echo), func() proto.Message { return &pb.EchoRequest{} }, func(conn iface.IConnection, message proto.Message) {
 		// do something ...
 		req := message.(*pb.EchoRequest)
-		// fmt.Println(req.GetMessage())
-		res := &pb.EchoResponse{
-			Message: req.Message,
+		res := &pb.EchoResponse{Message: req.Message}
+		conn.SendMsg(int32(pb.MsgId_Echo), res)
+	})
+	msgHandler.AddRouter(int32(pb.MsgId_None), func() proto.Message { return &network.Message{} }, func(conn iface.IConnection, message proto.Message) {
+		reader := network.ConnPropertyGet[*http.Request](conn, network.ConnPropertyHttpReader)
+		writer := network.ConnPropertyGet[http.ResponseWriter](conn, network.ConnPropertyHttpWriter)
+		if reader == nil || writer == nil {
+			return
 		}
-		con.SendMsg(int32(pb.MsgId_Echo), res)
+		msgReq := message.(*network.Message)
+		conn.SendMsg(int32(pb.MsgId_None), msgReq)
 	})
 
 	// 注册服务

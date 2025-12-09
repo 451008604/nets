@@ -31,29 +31,26 @@ func NewConnectionHTTP(server iface.IServer, writer http.ResponseWriter, reader 
 	return c
 }
 
-type httpData struct {
-	MsgID uint16 // 消息ID
-	Data  string // 消息内容
-}
+var (
+	ConnPropertyHttpAuthorization = "HttpAuthorization"
+	ConnPropertyHttpReader        = "HttpReader"
+	ConnPropertyHttpWriter        = "HttpWriter"
+)
 
 func (c *connectionHTTP) StartReader() bool {
-	xToken := c.reader.Header.Get("Authorization")
-	ConnPropertySet(c.connectionBase, "Authorization", xToken)
+	xToken := c.reader.Header.Get(ConnPropertyHttpAuthorization)
+	ConnPropertySet(c, ConnPropertyHttpAuthorization, xToken)
 
 	// 解析body结构
 	data, _ := io.ReadAll(c.reader.Body)
-	req := &httpData{}
-	if err := json.Unmarshal(data, req); err != nil {
-		c.writer.WriteHeader(http.StatusBadRequest)
-		_, _ = c.writer.Write([]byte("server is closed"))
-		return false
+	msgData := &Message{}
+	if err := c.ByteToProtocol(data, msgData); err != nil || msgData.GetMsgId() == 0 {
+		msgData.Data = string(data)
+		ConnPropertySet(c, ConnPropertyHttpReader, c.reader)
+		ConnPropertySet(c, ConnPropertyHttpWriter, c.writer)
 	}
 
-	// 写入message
-	msgData := &message{}
-	msgData.SetMsgId(req.MsgID)
-	msgData.SetData([]byte(req.Data))
-	c.DoTask(func() { readerTaskHandler(c, msgData) })
+	readerTaskHandler(c, msgData)
 	return true
 }
 
@@ -73,9 +70,9 @@ func (c *connectionHTTP) SendMsg(msgId int32, msgData proto.Message) {
 	if c.isClosed {
 		return
 	}
-	res := &httpData{
-		MsgID: uint16(msgId),
-		Data:  string(c.ProtocolToByte(msgData)),
+	res := &Message{
+		Id:   uint16(msgId),
+		Data: string(c.ProtocolToByte(msgData)),
 	}
 	bytes, _ := json.Marshal(res)
 	// 发送给客户端

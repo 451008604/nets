@@ -23,6 +23,8 @@ type IConnection interface {
 	RemoteAddrStr() string
 	// 获取连接是否已关闭
 	IsClose() bool
+	// 获取连接绑定的属性列表
+	GetProperty() any
 
 	// 发送消息给客户端
 	SendMsg(msgId int32, msgData proto.Message)

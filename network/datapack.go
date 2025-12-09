@@ -38,13 +38,13 @@ func (d *dataPack) Pack(msg iface.IMessage) []byte {
 
 func (d *dataPack) UnPack(binaryData []byte) iface.IMessage {
 	dataBuff := bytes.NewReader(binaryData)
-	msgData := &message{}
+	msgData := &Message{}
 	// 读msgId
-	if binary.Read(dataBuff, binary.LittleEndian, &msgData.id) != nil {
+	if binary.Read(dataBuff, binary.LittleEndian, &msgData.Id) != nil {
 		return nil
 	}
 	// 读dataLen
-	if binary.Read(dataBuff, binary.LittleEndian, &msgData.dataLen) != nil {
+	if binary.Read(dataBuff, binary.LittleEndian, &msgData.DataLen) != nil {
 		return nil
 	}
 	// 检查数据长度是否超出限制

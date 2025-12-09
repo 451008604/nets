@@ -123,15 +123,19 @@ func readerTaskHandler(c iface.IConnection, m iface.IMessage) {
 
 	router, ok := iMsgHandler.GetApis()[int32(m.GetMsgId())]
 	if !ok {
+		GetInstanceConnManager().Remove(c)
 		return
 	}
 
 	msgData := router.GetNewMsg()
-	if err := c.ByteToProtocol(m.GetData(), msgData); err != nil {
-		fmt.Printf("api msgId %v parsing %v error %v\n", m.GetMsgId(), m.GetData(), err)
-		return
+	if m.GetMsgId() != 0 {
+		if err := c.ByteToProtocol(m.GetData(), msgData); err != nil {
+			fmt.Printf("api msgId %v parsing %s error %v\n", m.GetMsgId(), m.GetData(), err)
+			return
+		}
+	} else {
+		msgData = m.(*Message)
 	}
-
 	// 限流控制
 	if c.FlowControl() {
 		fmt.Printf("flowControl RemoteAddress: %v, GetMsgId: %v, GetData: %s\n", c.RemoteAddrStr(), m.GetMsgId(), m.GetData())
@@ -151,12 +155,12 @@ func (c *connectionBase) GetConnId() int {
 	return c.connId
 }
 
-func (c *connectionBase) RemoteAddrStr() string {
-	return ""
-}
-
 func (c *connectionBase) IsClose() bool {
 	return c.isClosed
+}
+
+func (c *connectionBase) GetProperty() any {
+	return c.property
 }
 
 func (c *connectionBase) SendMsg(msgId int32, msgData proto.Message) {
@@ -237,14 +241,14 @@ func (c *connectionBase) ByteToProtocol(byte []byte, target proto.Message) error
 }
 
 // 设置连接属性
-func ConnPropertySet(c *connectionBase, key string, value any) {
-	c.property.Set(key, value)
+func ConnPropertySet(c iface.IConnection, key string, value any) {
+	c.GetProperty().(ConcurrentMap[string, any]).Set(key, value)
 }
 
 // 获取连接属性
-func ConnPropertyGet[T any](c *connectionBase, key string) T {
+func ConnPropertyGet[T any](c iface.IConnection, key string) T {
 	var t T
-	if value, ok := c.property.Get(key); ok {
+	if value, ok := c.GetProperty().(ConcurrentMap[string, any]).Get(key); ok {
 		if v, ok2 := value.(T); ok2 {
 			return v
 		}
@@ -253,6 +257,6 @@ func ConnPropertyGet[T any](c *connectionBase, key string) T {
 }
 
 // 删除连接属性
-func ConnPropertyRemove(c *connectionBase, key string) {
-	c.property.Remove(key)
+func ConnPropertyRemove(c iface.IConnection, key string) {
+	c.GetProperty().(ConcurrentMap[string, any]).Remove(key)
 }

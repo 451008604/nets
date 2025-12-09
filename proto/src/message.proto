@@ -10,7 +10,7 @@ enum MsgId {
 // ==========================================
 
 message EchoRequest {
-    string Message = 2;
+    string Message = 1;
 }
 
 message EchoResponse {
