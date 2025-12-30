@@ -1,8 +1,7 @@
-package network
+package main
 
 import (
 	"fmt"
-	"github.com/451008604/nets/iface"
 	"net/http"
 )
 
@@ -12,9 +11,9 @@ type serverHTTP struct {
 	port       string
 }
 
-var serverHttp iface.IServer
+var serverHttp IServer
 
-func GetServerHTTP() iface.IServer {
+func GetServerHTTP() IServer {
 	if serverHttp == nil {
 		serverHttp = &serverHTTP{
 			serverName: defaultServer.AppConf.AppName + "_http",

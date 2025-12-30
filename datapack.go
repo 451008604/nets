@@ -1,15 +1,14 @@
-package network
+package main
 
 import (
 	"bytes"
 	"encoding/binary"
 	"fmt"
-	"github.com/451008604/nets/iface"
 )
 
 type dataPack struct{}
 
-func NewDataPack() iface.IDataPack {
+func NewDataPack() IDataPack {
 	return &dataPack{}
 }
 
@@ -18,7 +17,7 @@ func (d *dataPack) GetHeadLen() int {
 	return 4
 }
 
-func (d *dataPack) Pack(msg iface.IMessage) []byte {
+func (d *dataPack) Pack(msg IMessage) []byte {
 	dataBuff := bytes.NewBuffer([]byte{})
 
 	// 写msgId
@@ -36,7 +35,7 @@ func (d *dataPack) Pack(msg iface.IMessage) []byte {
 	return dataBuff.Bytes()
 }
 
-func (d *dataPack) UnPack(binaryData []byte) iface.IMessage {
+func (d *dataPack) UnPack(binaryData []byte) IMessage {
 	dataBuff := bytes.NewReader(binaryData)
 	msgData := &Message{}
 	// 读msgId

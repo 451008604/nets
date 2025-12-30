@@ -1,23 +1,22 @@
-package network
+package main
 
 import (
 	"context"
 	"encoding/json"
-	"github.com/451008604/nets/iface"
 	"google.golang.org/protobuf/proto"
 	"io"
 	"net/http"
 )
 
 type connectionHTTP struct {
-	*connectionBase
+	*ConnectionBase
 	writer http.ResponseWriter
 	reader *http.Request
 }
 
-func NewConnectionHTTP(server iface.IServer, writer http.ResponseWriter, reader *http.Request) iface.IConnection {
+func NewConnectionHTTP(server IServer, writer http.ResponseWriter, reader *http.Request) IConnection {
 	c := &connectionHTTP{
-		connectionBase: &connectionBase{
+		ConnectionBase: &ConnectionBase{
 			server:      server,
 			msgBuffChan: make(chan []byte, defaultServer.AppConf.MaxMsgChanLen),
 			taskQueue:   make(chan func(), defaultServer.AppConf.WorkerTaskMaxLen),
@@ -27,7 +26,7 @@ func NewConnectionHTTP(server iface.IServer, writer http.ResponseWriter, reader 
 		reader: reader,
 	}
 	c.exitCtx, c.exitCtxCancel = context.WithCancel(context.Background())
-	c.connectionBase.conn = c
+	c.ConnectionBase.conn = c
 	return c
 }
 

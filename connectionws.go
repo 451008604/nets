@@ -1,19 +1,18 @@
-package network
+package main
 
 import (
 	"context"
-	"github.com/451008604/nets/iface"
 	"github.com/gorilla/websocket"
 )
 
 type connectionWS struct {
-	*connectionBase
+	*ConnectionBase
 	conn *websocket.Conn
 }
 
-func NewConnectionWS(server iface.IServer, conn *websocket.Conn) iface.IConnection {
+func NewConnectionWS(server IServer, conn *websocket.Conn) IConnection {
 	c := &connectionWS{
-		connectionBase: &connectionBase{
+		ConnectionBase: &ConnectionBase{
 			server:      server,
 			connId:      GetInstanceConnManager().NewConnId(),
 			msgBuffChan: make(chan []byte, defaultServer.AppConf.MaxMsgChanLen),
@@ -23,7 +22,7 @@ func NewConnectionWS(server iface.IServer, conn *websocket.Conn) iface.IConnecti
 		conn: conn,
 	}
 	c.exitCtx, c.exitCtxCancel = context.WithCancel(context.Background())
-	c.connectionBase.conn = c
+	c.ConnectionBase.conn = c
 	return c
 }
 
@@ -34,11 +33,11 @@ func (c *connectionWS) StartReader() bool {
 	}
 
 	for len(msgByte) > 0 {
-		msgData := defaultServer.DataPacket.UnPack(msgByte)
+		msgData := defaultServer.DataPack.UnPack(msgByte)
 		if msgData == nil {
 			return false
 		}
-		msgByte = msgByte[int(msgData.GetDataLen())+defaultServer.DataPacket.GetHeadLen():]
+		msgByte = msgByte[int(msgData.GetDataLen())+defaultServer.DataPack.GetHeadLen():]
 
 		// 封装请求数据传入处理函数
 		c.DoTask(func() { readerTaskHandler(c, msgData) })
@@ -54,7 +53,7 @@ func (c *connectionWS) StartWriter(data []byte) bool {
 }
 
 func (c *connectionWS) Stop() bool {
-	if !c.connectionBase.Stop() {
+	if !c.ConnectionBase.Stop() {
 		return false
 	}
 	_ = c.conn.Close()

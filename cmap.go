@@ -3,7 +3,7 @@ source: https://github.com/orcaman/concurrent-map
 date: 2024年5月28日
 */
 
-package network
+package main
 
 import (
 	"encoding/json"
@@ -24,7 +24,7 @@ func (i Integer) String() string {
 	return strconv.Itoa(int(i))
 }
 
-// ConcurrentMap A "thread" safe map of type string:Anything.
+// A "thread" safe map of type string:Anything.
 // To avoid lock bottlenecks this map is dived to several (SHARD_COUNT) map shards.
 type ConcurrentMap[K comparable, V any] struct {
 	shards   []*ConcurrentMapShared[K, V]
@@ -48,17 +48,17 @@ func create[K comparable, V any](sharding func(key K) uint32) ConcurrentMap[K, V
 	return m
 }
 
-// NewConcurrentMap Creates a new concurrent map.
+// Creates a new concurrent map.
 func NewConcurrentMap[V any]() ConcurrentMap[string, V] {
 	return create[string, V](fnv32)
 }
 
-// NewConcurrentStringer Creates a new concurrent map.
+// Creates a new concurrent map.
 func NewConcurrentStringer[K Stringer, V any]() ConcurrentMap[K, V] {
 	return create[K, V](strfnv32[K])
 }
 
-// NewWithCustomShardingFunction Creates a new concurrent map.
+// Creates a new concurrent map.
 func NewWithCustomShardingFunction[K comparable, V any](sharding func(key K) uint32) ConcurrentMap[K, V] {
 	return create[K, V](sharding)
 }
@@ -86,7 +86,7 @@ func (m ConcurrentMap[K, V]) Set(key K, value V) {
 	shard.Unlock()
 }
 
-// UpsertCb Callback to return new element to be inserted into the map
+// Callback to return new element to be inserted into the map
 // It is called while lock is held, therefore it MUST NOT
 // try to access other keys in same map, as it can lead to deadlock since
 // Go sync.RWLock is not reentrant
@@ -159,11 +159,11 @@ func (m ConcurrentMap[K, V]) Remove(key K) {
 	shard.Unlock()
 }
 
-// RemoveCb is a callback executed in a map.RemoveCb() call, while Lock is held
+// is a callback executed in a map.RemoveCb() call, while Lock is held
 // If returns true, the element will be removed from the map
 type RemoveCb[K any, V any] func(key K, v V, exists bool) bool
 
-// RemoveCb locks the shard containing the key, retrieves its current value and calls the callback with those params
+// locks the shard containing the key, retrieves its current value and calls the callback with those params
 // If callback returns true and element exists, it will remove it from the map
 // Returns the value returned by the callback (even if element was not present in the map)
 func (m ConcurrentMap[K, V]) RemoveCb(key K, cb RemoveCb[K, V]) bool {
@@ -278,13 +278,13 @@ func (m ConcurrentMap[K, V]) Items() map[K]V {
 	return tmp
 }
 
-// IterCb Iterator callbacalled for every key,value found in
+// Iterator callbacalled for every key,value found in
 // maps. RLock is held for all calls for a given shard
 // therefore callback sess consistent view of a shard,
 // but not across the shards
 type IterCb[K comparable, V any] func(key K, v V)
 
-// IterCb Callback based iterator, cheapest way to read
+// Callback based iterator, cheapest way to read
 // all elements in a map.
 func (m ConcurrentMap[K, V]) IterCb(fn IterCb[K, V]) {
 	for idx := range m.shards {

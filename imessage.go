@@ -1,4 +1,4 @@
-package iface
+package main
 
 // 定义消息模板
 type IMessage interface {

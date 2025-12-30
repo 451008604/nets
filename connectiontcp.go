@@ -1,19 +1,18 @@
-package network
+package main
 
 import (
 	"context"
-	"github.com/451008604/nets/iface"
 	"net"
 )
 
-type connectionKCP struct {
-	*connectionBase
-	conn net.Conn
+type connectionTCP struct {
+	*ConnectionBase
+	conn *net.TCPConn // 当前连接对象
 }
 
-func NewConnectionKCP(server *serverKCP, conn net.Conn) iface.IConnection {
-	c := &connectionKCP{
-		connectionBase: &connectionBase{
+func NewConnectionTCP(server IServer, conn *net.TCPConn) IConnection {
+	c := &connectionTCP{
+		ConnectionBase: &ConnectionBase{
 			server:      server,
 			connId:      GetInstanceConnManager().NewConnId(),
 			msgBuffChan: make(chan []byte, defaultServer.AppConf.MaxMsgChanLen),
@@ -23,19 +22,19 @@ func NewConnectionKCP(server *serverKCP, conn net.Conn) iface.IConnection {
 		conn: conn,
 	}
 	c.exitCtx, c.exitCtxCancel = context.WithCancel(context.Background())
-	c.connectionBase.conn = c
+	c.ConnectionBase.conn = c
 	return c
 }
 
-func (c *connectionKCP) StartReader() bool {
+func (c *connectionTCP) StartReader() bool {
 	// 获取消息头信息
-	msgHead := make([]byte, defaultServer.DataPacket.GetHeadLen())
-	if read, err := c.conn.Read(msgHead); err != nil || read < defaultServer.DataPacket.GetHeadLen() {
+	msgHead := make([]byte, defaultServer.DataPack.GetHeadLen())
+	if read, err := c.conn.Read(msgHead); err != nil || read < defaultServer.DataPack.GetHeadLen() {
 		return false
 	}
 
 	// 解析头信息
-	msgData := defaultServer.DataPacket.UnPack(msgHead)
+	msgData := defaultServer.DataPack.UnPack(msgHead)
 	if msgData == nil {
 		return false
 	}
@@ -59,21 +58,21 @@ func (c *connectionKCP) StartReader() bool {
 	return true
 }
 
-func (c *connectionKCP) StartWriter(data []byte) bool {
+func (c *connectionTCP) StartWriter(data []byte) bool {
 	if _, err := c.conn.Write(data); err != nil {
 		return false
 	}
 	return true
 }
 
-func (c *connectionKCP) Stop() bool {
-	if !c.connectionBase.Stop() {
+func (c *connectionTCP) Stop() bool {
+	if !c.ConnectionBase.Stop() {
 		return false
 	}
 	_ = c.conn.Close()
 	return true
 }
 
-func (c *connectionKCP) RemoteAddrStr() string {
+func (c *connectionTCP) RemoteAddrStr() string {
 	return c.conn.RemoteAddr().String()
 }

@@ -1,4 +1,4 @@
-package config
+package main
 
 type AppConf struct {
 	AppName          string     // 服务名称

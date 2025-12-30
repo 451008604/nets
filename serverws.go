@@ -1,8 +1,7 @@
-package network
+package main
 
 import (
 	"fmt"
-	"github.com/451008604/nets/iface"
 	"github.com/gorilla/websocket"
 	"net/http"
 )
@@ -13,9 +12,9 @@ type serverWS struct {
 	port       string // 服务端口
 }
 
-var serverWs iface.IServer
+var serverWs IServer
 
-func GetServerWS() iface.IServer {
+func GetServerWS() IServer {
 	if serverWs == nil {
 		serverWs = &serverWS{
 			serverName: defaultServer.AppConf.AppName + "_ws",

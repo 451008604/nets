@@ -1,8 +1,6 @@
-package network
+package main
 
 import (
-	"github.com/451008604/nets/config"
-	"github.com/451008604/nets/iface"
 	"reflect"
 )
 
@@ -10,15 +8,18 @@ var defaultServer *CustomServer
 
 // 自定义服务器
 type CustomServer struct {
-	AppConf    *config.AppConf // 服务启动配置
-	DataPacket iface.IDataPack // 编码/解码器
+	AppConf  *AppConf                             // 服务启动配置
+	DataPack IDataPack                            // 自定义编码/解码器
+	Message  func(id int32, data []byte) IMessage // 自定消息
+
 }
 
 // 初始化各组件
 func init() {
 	defaultServer = &CustomServer{
-		AppConf:    config.GetServerConf(),
-		DataPacket: NewDataPack(),
+		AppConf:  GetServerConf(),
+		DataPack: NewDataPack(),
+		Message:  NewMsgPackage,
 	}
 }
 
@@ -26,8 +27,12 @@ func init() {
 func SetCustomServer(custom *CustomServer) {
 	defaultServer.AppConf = mergeStructValues(defaultServer.AppConf, custom.AppConf)
 
-	if custom.DataPacket != nil {
-		defaultServer.DataPacket = custom.DataPacket
+	if custom.DataPack != nil {
+		defaultServer.DataPack = custom.DataPack
+	}
+
+	if custom.Message != nil {
+		defaultServer.Message = custom.Message
 	}
 }
 

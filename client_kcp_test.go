@@ -3,8 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/451008604/nets/network"
-	pb "github.com/451008604/nets/proto/bin"
+	pb "github.com/451008604/nets/proto"
 	"github.com/xtaci/kcp-go"
 	"net"
 )
@@ -15,7 +14,7 @@ import (
 
 func main() {
 	msg, _ := json.Marshal(&pb.EchoRequest{Message: "hello"})
-	data := network.NewDataPack().Pack(network.NewMsgPackage(int32(pb.MsgId_Echo), msg))
+	data := NewDataPack().Pack(NewMsgPackage(int32(pb.MsgId_Echo), msg))
 
 	sendWebSocketMessage := func(data []byte) {
 		conn, err := kcp.DialWithOptions("127.0.0.1:17004", nil, 0, 0)
@@ -30,7 +29,7 @@ func main() {
 			for {
 				buf := make([]byte, 4096)
 				if message, e := c.Read(buf); e == nil {
-					pack := network.NewDataPack().UnPack(buf[:message])
+					pack := NewDataPack().UnPack(buf[:message])
 					fmt.Printf("服务器：%v - %s\n", pack.GetMsgId(), pack.GetData())
 				} else {
 					fmt.Printf("%v\n", err.Error())

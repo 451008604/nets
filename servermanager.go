@@ -1,29 +1,28 @@
-package network
+package main
 
 import (
 	"fmt"
-	"github.com/451008604/nets/iface"
 	"os"
 	"os/signal"
 	"sync"
 	"syscall"
 )
 
-type serverManager struct {
-	servers       []iface.IServer
+type ServerManager struct {
+	servers       []IServer
 	isClosed      bool      // 服务是否已关闭
 	blockMainChan chan bool // 服务启动后阻塞主协程
 	waitGroup     sync.WaitGroup
 }
 
-var instanceServerManager iface.IServerManager
+var instanceServerManager *ServerManager
 var instanceServerManagerOnce = sync.Once{}
 
 // 服务管理器
-func GetInstanceServerManager() iface.IServerManager {
+func GetInstanceServerManager() *ServerManager {
 	instanceServerManagerOnce.Do(func() {
-		instanceServerManager = &serverManager{
-			servers:       make([]iface.IServer, 0),
+		instanceServerManager = &ServerManager{
+			servers:       make([]IServer, 0),
 			isClosed:      false,
 			blockMainChan: make(chan bool),
 			waitGroup:     sync.WaitGroup{},
@@ -33,7 +32,7 @@ func GetInstanceServerManager() iface.IServerManager {
 	return instanceServerManager
 }
 
-func (c *serverManager) RegisterServer(server ...iface.IServer) {
+func (c *ServerManager) RegisterServer(server ...IServer) {
 	for _, iServer := range server {
 		c.servers = append(c.servers, iServer)
 		go iServer.Start()
@@ -48,23 +47,23 @@ func (c *serverManager) RegisterServer(server ...iface.IServer) {
 	c.waitGroup.Wait()
 }
 
-func (c *serverManager) Servers() []iface.IServer {
+func (c *ServerManager) Servers() []IServer {
 	return c.servers
 }
 
-func (c *serverManager) IsClose() bool {
+func (c *ServerManager) IsClose() bool {
 	return c.isClosed
 }
 
-func (c *serverManager) WaitGroupAdd(delta int) {
+func (c *ServerManager) WaitGroupAdd(delta int) {
 	c.waitGroup.Add(delta)
 }
 
-func (c *serverManager) WaitGroupDone() {
+func (c *ServerManager) WaitGroupDone() {
 	c.waitGroup.Done()
 }
 
-func (c *serverManager) StopAll() {
+func (c *ServerManager) StopAll() {
 	if c.isClosed {
 		return
 	}

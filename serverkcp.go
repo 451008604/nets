@@ -1,8 +1,7 @@
-package network
+package main
 
 import (
 	"fmt"
-	"github.com/451008604/nets/iface"
 	"github.com/xtaci/kcp-go"
 	"net"
 )
@@ -13,9 +12,9 @@ type serverKCP struct {
 	port       string
 }
 
-var serverKcp iface.IServer
+var serverKcp IServer
 
-func GetServerKCP() iface.IServer {
+func GetServerKCP() IServer {
 	if serverKcp == nil {
 		serverKcp = &serverKCP{
 			serverName: defaultServer.AppConf.AppName + "_kcp",

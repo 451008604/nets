@@ -1,8 +1,7 @@
-package network
+package main
 
 import (
 	"fmt"
-	"github.com/451008604/nets/iface"
 	"net"
 )
 
@@ -12,9 +11,9 @@ type serverTCP struct {
 	port       string // 服务端口
 }
 
-var serverTcp iface.IServer
+var serverTcp IServer
 
-func GetServerTCP() iface.IServer {
+func GetServerTCP() IServer {
 	if serverTcp == nil {
 		serverTcp = &serverTCP{
 			serverName: defaultServer.AppConf.AppName + "_tcp",

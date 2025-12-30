@@ -3,8 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/451008604/nets/network"
-	pb "github.com/451008604/nets/proto/bin"
+	pb "github.com/451008604/nets/proto"
 	"github.com/gorilla/websocket"
 )
 
@@ -14,7 +13,7 @@ import (
 
 func main() {
 	msg, _ := json.Marshal(&pb.EchoRequest{Message: "hello"})
-	data := network.NewDataPack().Pack(network.NewMsgPackage(int32(pb.MsgId_Echo), msg))
+	data := NewDataPack().Pack(NewMsgPackage(int32(pb.MsgId_Echo), msg))
 
 	sendWebSocketMessage := func(data []byte) {
 		conn, _, err := websocket.DefaultDialer.Dial("ws://127.0.0.1:17002", nil)
@@ -28,7 +27,7 @@ func main() {
 			for {
 				if _, message, e := c.ReadMessage(); e == nil {
 					if len(message) != 0 {
-						pack := network.NewDataPack().UnPack(message)
+						pack := NewDataPack().UnPack(message)
 						fmt.Printf("服务器：%v - %s\n", pack.GetMsgId(), pack.GetData())
 					}
 				} else {

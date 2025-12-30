@@ -1,4 +1,4 @@
-package network
+package main
 
 import (
 	"context"
@@ -7,13 +7,12 @@ import (
 	"sync"
 	"time"
 
-	"github.com/451008604/nets/iface"
 	"google.golang.org/protobuf/proto"
 )
 
-type connectionBase struct {
-	server        iface.IServer              // 当前Conn所属的Server
-	conn          iface.IConnection          // 绑定的连接
+type ConnectionBase struct {
+	server        IServer                    // 当前Conn所属的Server
+	conn          IConnection                // 绑定的连接
 	connId        int                        // 当前连接的Id(SessionId)
 	msgBuffChan   chan []byte                // 用于任务队列与写协程之间的消息通信
 	property      ConcurrentMap[string, any] // 连接属性
@@ -27,7 +26,7 @@ type connectionBase struct {
 	taskQueue     chan func()                // 等待执行的任务队列
 }
 
-func (c *connectionBase) Start(readerHandler func() bool, writerHandler func(data []byte) bool) {
+func (c *ConnectionBase) Start(readerHandler func() bool, writerHandler func(data []byte) bool) {
 	defer GetInstanceServerManager().WaitGroupDone()
 	defer GetInstanceConnManager().Remove(c.conn)
 	defer GetInstanceConnManager().ConnOnClosed(c.conn)
@@ -37,7 +36,7 @@ func (c *connectionBase) Start(readerHandler func() bool, writerHandler func(dat
 	GetInstanceConnManager().ConnOnOpened(c.conn)
 
 	// 开启读协程
-	go func(c *connectionBase, readerHandler func() bool) {
+	go func(c *ConnectionBase, readerHandler func() bool) {
 		defer c.exitCtxCancel()
 		for {
 			c.deadTime = time.Now().Unix()
@@ -54,7 +53,7 @@ func (c *connectionBase) Start(readerHandler func() bool, writerHandler func(dat
 	}(c, readerHandler)
 
 	// 开启写协程
-	go func(c *connectionBase, writerHandler func(data []byte) bool) {
+	go func(c *ConnectionBase, writerHandler func(data []byte) bool) {
 		defer c.exitCtxCancel()
 		for {
 			c.deadTime = time.Now().Unix()
@@ -71,7 +70,7 @@ func (c *connectionBase) Start(readerHandler func() bool, writerHandler func(dat
 	}(c, writerHandler)
 
 	// 开启任务协程
-	go func(c *connectionBase) {
+	go func(c *ConnectionBase) {
 		defer c.exitCtxCancel()
 		for {
 			select {
@@ -99,7 +98,7 @@ func (c *connectionBase) Start(readerHandler func() bool, writerHandler func(dat
 	}
 }
 
-func (c *connectionBase) Stop() bool {
+func (c *ConnectionBase) Stop() bool {
 	if c.isClosed {
 		return false
 	}
@@ -108,11 +107,11 @@ func (c *connectionBase) Stop() bool {
 	return true
 }
 
-func (c *connectionBase) DoTask(task func()) {
+func (c *ConnectionBase) DoTask(task func()) {
 	c.taskQueue <- task
 }
 
-func readerTaskHandler(c iface.IConnection, m iface.IMessage) {
+func readerTaskHandler(c IConnection, m IMessage) {
 	iMsgHandler := GetInstanceMsgHandler()
 	defer iMsgHandler.GetErrCapture(c, m)
 
@@ -151,25 +150,25 @@ func readerTaskHandler(c iface.IConnection, m iface.IMessage) {
 	router.RunHandler(c, msgData)
 }
 
-func (c *connectionBase) GetConnId() int {
+func (c *ConnectionBase) GetConnId() int {
 	return c.connId
 }
 
-func (c *connectionBase) IsClose() bool {
+func (c *ConnectionBase) IsClose() bool {
 	return c.isClosed
 }
 
-func (c *connectionBase) GetProperty() any {
+func (c *ConnectionBase) GetProperty() any {
 	return c.property
 }
 
-func (c *connectionBase) SendMsg(msgId int32, msgData proto.Message) {
+func (c *ConnectionBase) SendMsg(msgId int32, msgData proto.Message) {
 	if c.isClosed {
 		return
 	}
 	msgByte := c.ProtocolToByte(msgData)
 	// 将消息数据封包
-	msg := defaultServer.DataPacket.Pack(NewMsgPackage(msgId, msgByte))
+	msg := defaultServer.DataPack.Pack(defaultServer.Message(msgId, msgByte))
 	if msg == nil {
 		return
 	}
@@ -177,7 +176,7 @@ func (c *connectionBase) SendMsg(msgId int32, msgData proto.Message) {
 	c.msgBuffChan <- msg
 }
 
-func (c *connectionBase) FlowControl() (b bool) {
+func (c *ConnectionBase) FlowControl() (b bool) {
 	defer c.limitingMutex.Unlock()
 	c.limitingMutex.Lock()
 
@@ -209,7 +208,7 @@ func (c *connectionBase) FlowControl() (b bool) {
 	return false
 }
 
-func (c *connectionBase) ProtocolToByte(str proto.Message) []byte {
+func (c *ConnectionBase) ProtocolToByte(str proto.Message) []byte {
 	var err error
 	var marshal []byte
 
@@ -225,7 +224,7 @@ func (c *connectionBase) ProtocolToByte(str proto.Message) []byte {
 	return marshal
 }
 
-func (c *connectionBase) ByteToProtocol(byte []byte, target proto.Message) error {
+func (c *ConnectionBase) ByteToProtocol(byte []byte, target proto.Message) error {
 	var err error
 
 	if defaultServer.AppConf.ProtocolIsJson {
@@ -241,12 +240,12 @@ func (c *connectionBase) ByteToProtocol(byte []byte, target proto.Message) error
 }
 
 // 设置连接属性
-func ConnPropertySet(c iface.IConnection, key string, value any) {
+func ConnPropertySet(c IConnection, key string, value any) {
 	c.GetProperty().(ConcurrentMap[string, any]).Set(key, value)
 }
 
 // 获取连接属性
-func ConnPropertyGet[T any](c iface.IConnection, key string) T {
+func ConnPropertyGet[T any](c IConnection, key string) T {
 	var t T
 	if value, ok := c.GetProperty().(ConcurrentMap[string, any]).Get(key); ok {
 		if v, ok2 := value.(T); ok2 {
@@ -257,6 +256,6 @@ func ConnPropertyGet[T any](c iface.IConnection, key string) T {
 }
 
 // 删除连接属性
-func ConnPropertyRemove(c iface.IConnection, key string) {
+func ConnPropertyRemove(c IConnection, key string) {
 	c.GetProperty().(ConcurrentMap[string, any]).Remove(key)
 }

@@ -1,4 +1,4 @@
-package iface
+package main
 
 import (
 	"google.golang.org/protobuf/proto"
