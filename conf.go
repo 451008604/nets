@@ -1,4 +1,4 @@
-package main
+package nets
 
 type AppConf struct {
 	AppName          string     // 服务名称

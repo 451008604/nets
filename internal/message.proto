@@ -1,0 +1,18 @@
+syntax = "proto3";
+package pb;
+option go_package = "./;internal";
+
+enum Test_MsgId {
+    Test_None = 0;
+    Test_Echo = 1001;            // 透传
+}
+
+// ==========================================
+
+message Test_EchoRequest {
+    string Message = 1;
+}
+
+message Test_EchoResponse {
+    string Message = 1;
+}

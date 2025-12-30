@@ -3,7 +3,7 @@ source: https://github.com/orcaman/concurrent-map
 date: 2024年5月28日
 */
 
-package main
+package nets
 
 import (
 	"encoding/json"

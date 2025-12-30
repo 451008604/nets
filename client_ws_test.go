@@ -1,19 +1,20 @@
-package main
+package nets
 
 import (
 	"encoding/json"
 	"fmt"
-	pb "github.com/451008604/nets/proto"
+	"github.com/451008604/nets/internal"
 	"github.com/gorilla/websocket"
+	"testing"
 )
 
 /*
 测试1
 */
 
-func main() {
-	msg, _ := json.Marshal(&pb.EchoRequest{Message: "hello"})
-	data := NewDataPack().Pack(NewMsgPackage(int32(pb.MsgId_Echo), msg))
+func Test_Client_WS(t *testing.T) {
+	msg, _ := json.Marshal(&internal.Test_EchoRequest{Message: "hello"})
+	data := NewDataPack().Pack(NewMsgPackage(int32(internal.Test_MsgId_Test_Echo), msg))
 
 	sendWebSocketMessage := func(data []byte) {
 		conn, _, err := websocket.DefaultDialer.Dial("ws://127.0.0.1:17002", nil)

@@ -1,4 +1,4 @@
-package main
+package nets
 
 // 定义服务器接口
 type IServer interface {

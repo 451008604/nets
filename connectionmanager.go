@@ -1,4 +1,4 @@
-package main
+package nets
 
 import (
 	"sync"
