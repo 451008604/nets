@@ -3,6 +3,7 @@ package nets
 import (
 	"context"
 	"github.com/gorilla/websocket"
+	"sync"
 )
 
 type connectionWS struct {
@@ -13,11 +14,12 @@ type connectionWS struct {
 func NewConnectionWS(server IServer, conn *websocket.Conn) IConnection {
 	c := &connectionWS{
 		ConnectionBase: &ConnectionBase{
-			server:      server,
-			connId:      GetInstanceConnManager().NewConnId(),
-			msgBuffChan: make(chan []byte, defaultServer.AppConf.MaxMsgChanLen),
-			taskQueue:   make(chan func(), defaultServer.AppConf.WorkerTaskMaxLen),
-			property:    NewConcurrentMap[any](),
+			server:        server,
+			connId:        GetInstanceConnManager().NewConnId(),
+			msgBuffChan:   make(chan []byte, defaultServer.AppConf.MaxMsgChanLen),
+			taskQueue:     make(chan func(), defaultServer.AppConf.WorkerTaskMaxLen),
+			property:      map[string]any{},
+			propertyMutex: sync.RWMutex{},
 		},
 		conn: conn,
 	}

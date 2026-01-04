@@ -3,6 +3,7 @@ package nets
 import (
 	"context"
 	"net"
+	"sync"
 )
 
 type connectionTCP struct {
@@ -13,11 +14,12 @@ type connectionTCP struct {
 func NewConnectionTCP(server IServer, conn *net.TCPConn) IConnection {
 	c := &connectionTCP{
 		ConnectionBase: &ConnectionBase{
-			server:      server,
-			connId:      GetInstanceConnManager().NewConnId(),
-			msgBuffChan: make(chan []byte, defaultServer.AppConf.MaxMsgChanLen),
-			taskQueue:   make(chan func(), defaultServer.AppConf.WorkerTaskMaxLen),
-			property:    NewConcurrentMap[any](),
+			server:        server,
+			connId:        GetInstanceConnManager().NewConnId(),
+			msgBuffChan:   make(chan []byte, defaultServer.AppConf.MaxMsgChanLen),
+			taskQueue:     make(chan func(), defaultServer.AppConf.WorkerTaskMaxLen),
+			property:      map[string]any{},
+			propertyMutex: sync.RWMutex{},
 		},
 		conn: conn,
 	}

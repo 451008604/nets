@@ -2,10 +2,10 @@ package nets
 
 import (
 	"context"
-	"encoding/json"
 	"google.golang.org/protobuf/proto"
 	"io"
 	"net/http"
+	"sync"
 )
 
 type connectionHTTP struct {
@@ -17,10 +17,11 @@ type connectionHTTP struct {
 func NewConnectionHTTP(server IServer, writer http.ResponseWriter, reader *http.Request) IConnection {
 	c := &connectionHTTP{
 		ConnectionBase: &ConnectionBase{
-			server:      server,
-			msgBuffChan: make(chan []byte, defaultServer.AppConf.MaxMsgChanLen),
-			taskQueue:   make(chan func(), defaultServer.AppConf.WorkerTaskMaxLen),
-			property:    NewConcurrentMap[any](),
+			server:        server,
+			msgBuffChan:   make(chan []byte, defaultServer.AppConf.MaxMsgChanLen),
+			taskQueue:     make(chan func(), defaultServer.AppConf.WorkerTaskMaxLen),
+			property:      map[string]any{},
+			propertyMutex: sync.RWMutex{},
 		},
 		writer: writer,
 		reader: reader,
@@ -38,15 +39,15 @@ var (
 
 func (c *connectionHTTP) StartReader() bool {
 	xToken := c.reader.Header.Get(ConnPropertyHttpAuthorization)
-	ConnPropertySet(c, ConnPropertyHttpAuthorization, xToken)
+	c.SetProperty(ConnPropertyHttpAuthorization, xToken)
 
 	// 解析body结构
 	data, _ := io.ReadAll(c.reader.Body)
 	msgData := &Message{}
 	if err := c.ByteToProtocol(data, msgData); err != nil || msgData.GetMsgId() == 0 {
-		msgData.Data = string(data)
-		ConnPropertySet(c, ConnPropertyHttpReader, c.reader)
-		ConnPropertySet(c, ConnPropertyHttpWriter, c.writer)
+		msgData.SetData(data)
+		c.SetProperty(ConnPropertyHttpReader, c.reader)
+		c.SetProperty(ConnPropertyHttpWriter, c.writer)
 	}
 
 	readerTaskHandler(c, msgData)
@@ -69,11 +70,6 @@ func (c *connectionHTTP) SendMsg(msgId int32, msgData proto.Message) {
 	if c.isClosed {
 		return
 	}
-	res := &Message{
-		Id:   uint16(msgId),
-		Data: string(c.ProtocolToByte(msgData)),
-	}
-	bytes, _ := json.Marshal(res)
 	// 发送给客户端
-	c.StartWriter(bytes)
+	c.StartWriter(c.ProtocolToByte(msgData))
 }

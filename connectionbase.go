@@ -11,29 +11,31 @@ import (
 )
 
 type ConnectionBase struct {
-	server        IServer                    // 当前Conn所属的Server
-	conn          IConnection                // 绑定的连接
-	connId        int                        // 当前连接的Id(SessionId)
-	msgBuffChan   chan []byte                // 用于任务队列与写协程之间的消息通信
-	property      ConcurrentMap[string, any] // 连接属性
-	isClosed      bool                       // 当前连接是否已关闭
-	exitCtx       context.Context            // 管理连接的上下文
-	exitCtxCancel context.CancelFunc         // 连接关闭信号
-	deadTime      int64                      // 读写超时标记
-	limitingCount int64                      // 限流计数
-	limitingTimer int64                      // 限流计时
-	limitingMutex sync.Mutex                 // 限流锁
-	taskQueue     chan func()                // 等待执行的任务队列
+	server        IServer            // 当前Conn所属的Server
+	conn          IConnection        // 绑定的连接
+	connId        int                // 当前连接的Id(SessionId)
+	msgBuffChan   chan []byte        // 用于任务队列与写协程之间的消息通信
+	property      map[string]any     // 连接属性
+	propertyMutex sync.RWMutex       // 连接属性读写锁
+	isClosed      bool               // 当前连接是否已关闭
+	exitCtx       context.Context    // 管理连接的上下文
+	exitCtxCancel context.CancelFunc // 连接关闭信号
+	deadTime      int64              // 读写超时标记
+	limitingCount int64              // 限流计数
+	limitingTimer int64              // 限流计时
+	limitingMutex sync.Mutex         // 限流锁
+	taskQueue     chan func()        // 等待执行的任务队列
 }
 
 func (c *ConnectionBase) Start(readerHandler func() bool, writerHandler func(data []byte) bool) {
 	defer GetInstanceServerManager().WaitGroupDone()
+	GetInstanceServerManager().WaitGroupAdd(1)
+
 	defer GetInstanceConnManager().Remove(c.conn)
 	defer GetInstanceConnManager().ConnOnClosed(c.conn)
-	defer c.exitCtxCancel()
-
-	GetInstanceServerManager().WaitGroupAdd(1)
 	GetInstanceConnManager().ConnOnOpened(c.conn)
+
+	defer c.exitCtxCancel()
 
 	// 开启读协程
 	go func(c *ConnectionBase, readerHandler func() bool) {
@@ -158,8 +160,19 @@ func (c *ConnectionBase) IsClose() bool {
 	return c.isClosed
 }
 
-func (c *ConnectionBase) GetProperty() any {
-	return c.property
+func (c *ConnectionBase) GetProperty(key string) any {
+	c.propertyMutex.RLock()
+	defer c.propertyMutex.RUnlock()
+	if v, ok := c.property[key]; ok {
+		return v
+	}
+	return nil
+}
+
+func (c *ConnectionBase) SetProperty(key string, value any) {
+	c.propertyMutex.Lock()
+	defer c.propertyMutex.Unlock()
+	c.property[key] = value
 }
 
 func (c *ConnectionBase) SendMsg(msgId int32, msgData proto.Message) {
@@ -237,25 +250,4 @@ func (c *ConnectionBase) ByteToProtocol(byte []byte, target proto.Message) error
 		return err
 	}
 	return nil
-}
-
-// 设置连接属性
-func ConnPropertySet(c IConnection, key string, value any) {
-	c.GetProperty().(ConcurrentMap[string, any]).Set(key, value)
-}
-
-// 获取连接属性
-func ConnPropertyGet[T any](c IConnection, key string) T {
-	var t T
-	if value, ok := c.GetProperty().(ConcurrentMap[string, any]).Get(key); ok {
-		if v, ok2 := value.(T); ok2 {
-			return v
-		}
-	}
-	return t
-}
-
-// 删除连接属性
-func ConnPropertyRemove(c IConnection, key string) {
-	c.GetProperty().(ConcurrentMap[string, any]).Remove(key)
 }
