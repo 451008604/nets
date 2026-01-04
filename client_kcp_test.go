@@ -1,57 +1,36 @@
 package nets
 
 import (
-	"encoding/json"
-	"github.com/451008604/nets/internal"
 	"github.com/xtaci/kcp-go"
 	"net"
+	"sync"
 	"testing"
 )
 
 /*
 测试1
 */
-func Test_Client_KCP(t *testing.T) {
-	msg, _ := json.Marshal(&internal.Test_EchoRequest{Message: "hello"})
-	data := NewDataPack().Pack(NewMsgPackage(int32(internal.Test_MsgId_Test_Echo), msg))
+func ClientKcp(t *testing.T, wg *sync.WaitGroup, data []byte) {
+	conn, err := kcp.DialWithOptions("127.0.0.1:17004", nil, 0, 0)
+	if err != nil {
+		t.Error(err)
+		return
+	}
+	defer func(conn *kcp.UDPSession) {
+		_ = conn.Close()
+		wg.Done()
+	}(conn)
+	// conn.SetNoDelay(1, 10, 2, 1)
 
-	sendWebSocketMessage := func(data []byte) {
-		conn, err := kcp.DialWithOptions("127.0.0.1:17004", nil, 0, 0)
-		if err != nil {
-			println(err.Error())
-			return
-		}
-		// conn.SetNoDelay(1, 10, 2, 1)
-		// defer conn.Close()
-
-		go func(c net.Conn) {
-			for {
-				buf := make([]byte, 4096)
-				if message, e := c.Read(buf); e == nil {
-					pack := NewDataPack().UnPack(buf[:message])
-					t.Logf("服务器：%v - %s\n", pack.GetMsgId(), pack.GetData())
-				} else {
-					t.Logf("%v\n", err.Error())
-					break
-				}
+	go func(c net.Conn) {
+		buf := make([]byte, 4096)
+		if message, _ := c.Read(buf); message != 0 {
+			if pack := NewDataPack().UnPack(buf[:message]); pack != nil {
+				// t.Logf("服务器：%v - %s\n", pack.GetMsgId(), pack.GetData())
 			}
-		}(conn)
-
-		// 发送消息
-		if _, err := conn.Write(append(append(append(append(data, data...), data...), data...), data...)); err != nil {
-			println(err.Error())
 		}
+	}(conn)
 
-		// go func(c *websocket.Conn) {
-		// 	time.Sleep(time.Second * time.Duration(3+rand.Intn(2)))
-		// 	_ = conn.Close()
-		// 	sendWebSocketMessage(data)
-		// }(conn)
-
-		select {}
-	}
-
-	for i := 0; i < 1; i++ {
-		sendWebSocketMessage(data)
-	}
+	// 发送消息
+	_, _ = conn.Write(append(append(append(append(data, data...), data...), data...), data...))
 }
