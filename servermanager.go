@@ -74,6 +74,8 @@ func (c *ServerManager) StopAll() {
 func operatingSystemSignalHandler() {
 	signalCh := make(chan os.Signal, 1)
 	signal.Notify(signalCh, syscall.SIGINT, syscall.SIGTERM, syscall.SIGHUP, syscall.SIGQUIT, syscall.SIGKILL)
+	defer signal.Stop(signalCh)
+
 	sig := <-signalCh
 	fmt.Printf("Received signal: %v\n", sig)
 	// 执行进程退出前的处理
