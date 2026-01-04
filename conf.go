@@ -23,33 +23,29 @@ type ServerConf struct {
 	TLSKeyPath  string // ssl密钥路径
 }
 
-var appConf *AppConf
-
 // 默认配置
-func init() {
-	appConf = &AppConf{
-		AppName:          "nets",
-		MaxPackSize:      4096,
-		MaxConn:          100000,
-		WorkerPoolSize:   10000,
-		WorkerTaskMaxLen: 100,
-		MaxMsgChanLen:    100,
-		MaxFlowSecond:    30,
-		ProtocolIsJson:   true,
-		ConnRWTimeOut:    30,
-		ServerTCP: ServerConf{
-			Port: "17001",
-		},
-		ServerWS: ServerConf{
-			Port: "17002",
-		},
-		ServerHTTP: ServerConf{
-			Port: "17003",
-		},
-		ServerKCP: ServerConf{
-			Port: "17004",
-		},
-	}
+var appConf = &AppConf{
+	AppName:          "nets",
+	MaxPackSize:      4096,
+	MaxConn:          100000,
+	WorkerPoolSize:   10000,
+	WorkerTaskMaxLen: 100,
+	MaxMsgChanLen:    100,
+	MaxFlowSecond:    30,
+	ProtocolIsJson:   true,
+	ConnRWTimeOut:    30,
+	ServerTCP: ServerConf{
+		Port: "17001",
+	},
+	ServerWS: ServerConf{
+		Port: "17002",
+	},
+	ServerHTTP: ServerConf{
+		Port: "17003",
+	},
+	ServerKCP: ServerConf{
+		Port: "17004",
+	},
 }
 
 // 获取默认配置

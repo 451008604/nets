@@ -4,7 +4,11 @@ import (
 	"reflect"
 )
 
-var defaultServer *CustomServer
+var defaultServer = &CustomServer{
+	AppConf:  GetServerConf(),
+	DataPack: NewDataPack(),
+	Message:  NewMsgPackage,
+}
 
 // 自定义服务器
 type CustomServer struct {
@@ -12,15 +16,6 @@ type CustomServer struct {
 	DataPack IDataPack                            // 自定义编码/解码器
 	Message  func(id int32, data []byte) IMessage // 自定消息
 
-}
-
-// 初始化各组件
-func init() {
-	defaultServer = &CustomServer{
-		AppConf:  GetServerConf(),
-		DataPack: NewDataPack(),
-		Message:  NewMsgPackage,
-	}
 }
 
 // 设置自定义服务器参数
