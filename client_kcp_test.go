@@ -2,7 +2,6 @@ package nets
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/451008604/nets/internal"
 	"github.com/xtaci/kcp-go"
 	"net"
@@ -12,7 +11,6 @@ import (
 /*
 测试1
 */
-
 func Test_Client_KCP(t *testing.T) {
 	msg, _ := json.Marshal(&internal.Test_EchoRequest{Message: "hello"})
 	data := NewDataPack().Pack(NewMsgPackage(int32(internal.Test_MsgId_Test_Echo), msg))
@@ -31,16 +29,16 @@ func Test_Client_KCP(t *testing.T) {
 				buf := make([]byte, 4096)
 				if message, e := c.Read(buf); e == nil {
 					pack := NewDataPack().UnPack(buf[:message])
-					fmt.Printf("服务器：%v - %s\n", pack.GetMsgId(), pack.GetData())
+					t.Logf("服务器：%v - %s\n", pack.GetMsgId(), pack.GetData())
 				} else {
-					fmt.Printf("%v\n", err.Error())
+					t.Logf("%v\n", err.Error())
 					break
 				}
 			}
 		}(conn)
 
 		// 发送消息
-		if _, err := conn.Write(data); err != nil {
+		if _, err := conn.Write(append(append(append(append(data, data...), data...), data...), data...)); err != nil {
 			println(err.Error())
 		}
 

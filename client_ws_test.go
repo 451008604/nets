@@ -2,7 +2,6 @@ package nets
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/451008604/nets/internal"
 	"github.com/gorilla/websocket"
 	"testing"
@@ -11,7 +10,6 @@ import (
 /*
 测试1
 */
-
 func Test_Client_WS(t *testing.T) {
 	msg, _ := json.Marshal(&internal.Test_EchoRequest{Message: "hello"})
 	data := NewDataPack().Pack(NewMsgPackage(int32(internal.Test_MsgId_Test_Echo), msg))
@@ -29,7 +27,7 @@ func Test_Client_WS(t *testing.T) {
 				if _, message, e := c.ReadMessage(); e == nil {
 					if len(message) != 0 {
 						pack := NewDataPack().UnPack(message)
-						fmt.Printf("服务器：%v - %s\n", pack.GetMsgId(), pack.GetData())
+						t.Logf("服务器：%v - %s\n", pack.GetMsgId(), pack.GetData())
 					}
 				} else {
 					break
