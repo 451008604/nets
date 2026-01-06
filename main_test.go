@@ -2,9 +2,11 @@ package nets
 
 import (
 	"context"
+	"fmt"
 	"github.com/451008604/nets/internal"
 	"google.golang.org/protobuf/proto"
 	"net/http"
+	"runtime"
 	"sync"
 	"testing"
 	"time"
@@ -34,20 +36,23 @@ func (c *connectionTest) StartReader() bool {
 	c.DoTask(func() {
 		readerTaskHandler(c, NewMsgPackage(int32(internal.Test_MsgId_Test_Echo), []byte(`{"Message":"hello world"}`)))
 	})
+
+	// 这里等待1秒，模拟阻塞接收消息，否则会触发限流
 	time.Sleep(time.Second)
 	return true
 }
 
 func (c *connectionTest) StartWriter(data []byte) bool {
-	if GetInstanceConnManager().Len() == 1 {
-		GetInstanceServerManager().StopAll()
-	}
+
+	wg.Done()
 	return false
 }
 
 func (c *connectionTest) RemoteAddrStr() string {
 	return ""
 }
+
+var wg = sync.WaitGroup{}
 
 func Test_Server(t *testing.T) {
 	// ===========消息处理器===========
@@ -77,9 +82,25 @@ func Test_Server(t *testing.T) {
 	})
 
 	connManager := GetInstanceConnManager()
+	var m runtime.MemStats
+	runtime.ReadMemStats(&m)
+	printMem("start", &m)
+
 	for i := 0; i < 10000; i++ {
-		go connManager.Add(NewConnectionTest())
+		wg.Add(1)
+		connManager.Add(NewConnectionTest())
 	}
 
-	GetInstanceServerManager().RegisterServer()
+	wg.Wait()
+
+	time.Sleep(time.Second * 2)
+	runtime.GC()
+	runtime.ReadMemStats(&m)
+	printMem("end", &m)
+
+}
+
+func printMem(tag string, ms *runtime.MemStats) {
+	fmt.Printf("%s: Alloc = %d KiB, TotalAlloc = %d KiB, Sys = %d KiB, NumGC = %d, NumGoroutine = %d\n",
+		tag, ms.Alloc/1024, ms.TotalAlloc/1024, ms.Sys/1024, ms.NumGC, runtime.NumGoroutine())
 }
