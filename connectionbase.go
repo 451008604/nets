@@ -28,14 +28,17 @@ type ConnectionBase struct {
 }
 
 func (c *ConnectionBase) Start(readerHandler func() bool, writerHandler func(data []byte) bool) {
-	defer GetInstanceServerManager().WaitGroupDone()
+	defer func(c *ConnectionBase) {
+		c.exitCtxCancel()
+		close(c.msgBuffChan)
+		close(c.taskQueue)
+		GetInstanceConnManager().ConnOnClosed(c.conn)
+		GetInstanceConnManager().Remove(c.conn)
+		GetInstanceServerManager().WaitGroupDone()
+	}(c)
+
 	GetInstanceServerManager().WaitGroupAdd(1)
-
-	defer GetInstanceConnManager().Remove(c.conn)
-	defer GetInstanceConnManager().ConnOnClosed(c.conn)
 	GetInstanceConnManager().ConnOnOpened(c.conn)
-
-	defer c.exitCtxCancel()
 
 	// 开启读协程
 	go func(c *ConnectionBase, readerHandler func() bool) {
