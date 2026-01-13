@@ -15,7 +15,6 @@ func NewConnectionWS(server IServer, conn *websocket.Conn) IConnection {
 	c := &connectionWS{
 		ConnectionBase: &ConnectionBase{
 			server:        server,
-			connId:        GetInstanceConnManager().NewConnId(),
 			msgBuffChan:   make(chan []byte, defaultServer.AppConf.MaxMsgChanLen),
 			taskQueue:     make(chan func(), defaultServer.AppConf.WorkerTaskMaxLen),
 			property:      map[string]any{},
@@ -23,6 +22,7 @@ func NewConnectionWS(server IServer, conn *websocket.Conn) IConnection {
 		},
 		conn: conn,
 	}
+	c.connId = c.RemoteAddrStr()
 	c.exitCtx, c.exitCtxCancel = context.WithCancel(context.Background())
 	c.ConnectionBase.conn = c
 	return c

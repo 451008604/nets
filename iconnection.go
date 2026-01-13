@@ -18,7 +18,7 @@ type IConnection interface {
 	DoTask(task func())
 
 	// 获取当前连接Id
-	GetConnId() int
+	GetConnId() string
 	// 获取客户端地址信息
 	RemoteAddrStr() string
 	// 获取连接是否已关闭

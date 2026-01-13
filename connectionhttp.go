@@ -26,6 +26,7 @@ func NewConnectionHTTP(server IServer, writer http.ResponseWriter, reader *http.
 		writer: writer,
 		reader: reader,
 	}
+	c.connId = c.RemoteAddrStr()
 	c.exitCtx, c.exitCtxCancel = context.WithCancel(context.Background())
 	c.ConnectionBase.conn = c
 	return c

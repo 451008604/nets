@@ -13,7 +13,7 @@ import (
 type ConnectionBase struct {
 	server        IServer            // 当前Conn所属的Server
 	conn          IConnection        // 绑定的连接
-	connId        int                // 当前连接的Id(SessionId)
+	connId        string             // 当前连接的Id(SessionId)
 	msgBuffChan   chan []byte        // 用于任务队列与写协程之间的消息通信
 	property      map[string]any     // 连接属性
 	propertyMutex sync.RWMutex       // 连接属性读写锁
@@ -155,7 +155,7 @@ func readerTaskHandler(c IConnection, m IMessage) {
 	router.RunHandler(c, msgData)
 }
 
-func (c *ConnectionBase) GetConnId() int {
+func (c *ConnectionBase) GetConnId() string {
 	return c.connId
 }
 

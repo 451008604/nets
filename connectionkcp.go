@@ -15,7 +15,6 @@ func NewConnectionKCP(server *serverKCP, conn net.Conn) IConnection {
 	c := &connectionKCP{
 		ConnectionBase: &ConnectionBase{
 			server:        server,
-			connId:        GetInstanceConnManager().NewConnId(),
 			msgBuffChan:   make(chan []byte, defaultServer.AppConf.MaxMsgChanLen),
 			taskQueue:     make(chan func(), defaultServer.AppConf.WorkerTaskMaxLen),
 			property:      map[string]any{},
@@ -23,6 +22,7 @@ func NewConnectionKCP(server *serverKCP, conn net.Conn) IConnection {
 		},
 		conn: conn,
 	}
+	c.connId = c.RemoteAddrStr()
 	c.exitCtx, c.exitCtxCancel = context.WithCancel(context.Background())
 	c.ConnectionBase.conn = c
 	return c
