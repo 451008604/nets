@@ -4,7 +4,6 @@ type AppConf struct {
 	AppName          string     // 服务名称
 	MaxPackSize      int        // 数据包最大长度
 	MaxConn          int        // 最大允许连接数
-	WorkerPoolSize   int        // 工作池容量
 	WorkerTaskMaxLen int        // 每个工作队列可执行最大任务数量
 	MaxMsgChanLen    int        // 读写通道最大限度
 	MaxFlowSecond    int        // 每秒允许的最大请求数量
@@ -28,7 +27,6 @@ var appConf = &AppConf{
 	AppName:          "nets",
 	MaxPackSize:      4096,
 	MaxConn:          100000,
-	WorkerPoolSize:   10000,
 	WorkerTaskMaxLen: 100,
 	MaxMsgChanLen:    100,
 	MaxFlowSecond:    30,
