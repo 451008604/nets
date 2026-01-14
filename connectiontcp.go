@@ -2,19 +2,23 @@ package nets
 
 import (
 	"context"
+	"fmt"
 	"net"
 	"sync"
+	"sync/atomic"
+	"time"
 )
 
 type connectionTCP struct {
 	*ConnectionBase
-	conn *net.TCPConn // 当前连接对象
+	conn *net.TCPConn
 }
 
 func NewConnectionTCP(server IServer, conn *net.TCPConn) IConnection {
 	c := &connectionTCP{
 		ConnectionBase: &ConnectionBase{
 			server:        server,
+			connId:        fmt.Sprintf("%X-%v", time.Now().Unix(), atomic.AddUint32(&connIdSeed, 1)),
 			msgBuffChan:   make(chan []byte, defaultServer.AppConf.MaxMsgChanLen),
 			taskQueue:     make(chan func(), defaultServer.AppConf.WorkerTaskMaxLen),
 			property:      map[string]any{},
@@ -22,7 +26,6 @@ func NewConnectionTCP(server IServer, conn *net.TCPConn) IConnection {
 		},
 		conn: conn,
 	}
-	c.connId = c.RemoteAddrStr()
 	c.exitCtx, c.exitCtxCancel = context.WithCancel(context.Background())
 	c.ConnectionBase.conn = c
 	return c

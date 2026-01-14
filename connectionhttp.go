@@ -2,10 +2,13 @@ package nets
 
 import (
 	"context"
+	"fmt"
 	"google.golang.org/protobuf/proto"
 	"io"
 	"net/http"
 	"sync"
+	"sync/atomic"
+	"time"
 )
 
 type connectionHTTP struct {
@@ -18,6 +21,7 @@ func NewConnectionHTTP(server IServer, writer http.ResponseWriter, reader *http.
 	c := &connectionHTTP{
 		ConnectionBase: &ConnectionBase{
 			server:        server,
+			connId:        fmt.Sprintf("%X-%v", time.Now().Unix(), atomic.AddUint32(&connIdSeed, 1)),
 			msgBuffChan:   make(chan []byte, defaultServer.AppConf.MaxMsgChanLen),
 			taskQueue:     make(chan func(), defaultServer.AppConf.WorkerTaskMaxLen),
 			property:      map[string]any{},
@@ -26,7 +30,6 @@ func NewConnectionHTTP(server IServer, writer http.ResponseWriter, reader *http.
 		writer: writer,
 		reader: reader,
 	}
-	c.connId = c.RemoteAddrStr()
 	c.exitCtx, c.exitCtxCancel = context.WithCancel(context.Background())
 	c.ConnectionBase.conn = c
 	return c

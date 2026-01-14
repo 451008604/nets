@@ -10,6 +10,9 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
+// 用于生成连接唯一ID
+var connIdSeed uint32
+
 type ConnectionBase struct {
 	server        IServer            // 当前Conn所属的Server
 	conn          IConnection        // 绑定的连接
