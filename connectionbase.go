@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"sync"
+	"sync/atomic"
 	"time"
 
 	"google.golang.org/protobuf/proto"
@@ -16,11 +17,11 @@ var connIdSeed uint32
 type ConnectionBase struct {
 	server        IServer            // 当前Conn所属的Server
 	conn          IConnection        // 绑定的连接
-	connId        string             // 当前连接的Id(SessionId)
+	connId        string             // 连接的唯一Id
 	msgBuffChan   chan []byte        // 用于任务队列与写协程之间的消息通信
 	property      map[string]any     // 连接属性
 	propertyMutex sync.RWMutex       // 连接属性读写锁
-	isClosed      bool               // 当前连接是否已关闭
+	isClosed      int32              // 当前连接是否已关闭
 	exitCtx       context.Context    // 管理连接的上下文
 	exitCtxCancel context.CancelFunc // 连接关闭信号
 	deadTime      int64              // 读写超时标记
@@ -104,10 +105,9 @@ func (c *ConnectionBase) taskHandler() {
 }
 
 func (c *ConnectionBase) Stop() bool {
-	if c.isClosed {
+	if atomic.AddInt32(&c.isClosed, 1) != 1 {
 		return false
 	}
-	c.isClosed = true
 	c.exitCtxCancel()
 	return true
 }
@@ -160,7 +160,7 @@ func (c *ConnectionBase) GetConnId() string {
 }
 
 func (c *ConnectionBase) IsClose() bool {
-	return c.isClosed
+	return atomic.LoadInt32(&c.isClosed) != 0
 }
 
 func (c *ConnectionBase) GetProperty(key string) any {
@@ -179,7 +179,7 @@ func (c *ConnectionBase) SetProperty(key string, value any) {
 }
 
 func (c *ConnectionBase) SendMsg(msgId int32, msgData proto.Message) {
-	if c.isClosed {
+	if c.IsClose() {
 		return
 	}
 	msgByte := c.ProtocolToByte(msgData)
