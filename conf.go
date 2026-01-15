@@ -29,7 +29,7 @@ var appConf = &AppConf{
 	MaxConn:          100000,
 	WorkerTaskMaxLen: 100,
 	MaxMsgChanLen:    100,
-	MaxFlowSecond:    30,
+	MaxFlowSecond:    -1,
 	ProtocolIsJson:   true,
 	ConnRWTimeOut:    30,
 	ServerTCP: ServerConf{

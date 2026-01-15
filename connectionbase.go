@@ -202,13 +202,13 @@ func (c *ConnectionBase) FlowControl() (b bool) {
 	defer func() {
 		if b {
 			GetInstanceConnManager().ConnRateLimiting(c.conn)
-			GetInstanceConnManager().Remove(c.conn)
+			c.conn.Stop()
 		}
 	}()
 
 	count := int64(defaultServer.AppConf.MaxFlowSecond)
-	if count == 0 {
-		return true
+	if count == -1 {
+		return false
 	}
 
 	if c.limitingTimer == 0 {
