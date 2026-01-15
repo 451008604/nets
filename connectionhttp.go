@@ -71,7 +71,7 @@ func (c *connectionHTTP) RemoteAddrStr() string {
 }
 
 func (c *connectionHTTP) SendMsg(msgId int32, msgData proto.Message) {
-	if c.isClosed {
+	if c.IsClose() {
 		return
 	}
 	// 发送给客户端

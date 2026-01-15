@@ -6,7 +6,6 @@ import (
 
 type ConnectionManager struct {
 	connections        ConcurrentMap[string, IConnection] // 管理的连接信息
-	removeList         chan IConnection                   // 等待关闭的连接列表
 	connOnOpened       func(conn IConnection)             // 连接建立时的Hook函数
 	connOnClosed       func(conn IConnection)             // 连接断开时的Hook函数
 	connOnRateLimiting func(conn IConnection)             // 触发限流时的Hook函数
@@ -20,20 +19,8 @@ func GetInstanceConnManager() *ConnectionManager {
 	instanceConnManagerOnce.Do(func() {
 		manager := &ConnectionManager{
 			connections: NewConcurrentMap[IConnection](),
-			removeList:  make(chan IConnection, defaultServer.AppConf.MaxConn),
 		}
 		instanceConnManager = manager
-
-		go func(c *ConnectionManager) {
-			for conn := range c.removeList {
-				// 关闭连接
-				if !conn.IsClose() {
-					conn.Stop()
-				}
-				// 删除连接
-				c.connections.Remove(conn.GetConnId())
-			}
-		}(manager)
 	})
 	return instanceConnManager
 }
@@ -51,12 +38,12 @@ func (c *ConnectionManager) Add(conn IConnection) {
 }
 
 func (c *ConnectionManager) Remove(conn IConnection) {
-	c.removeList <- conn
+	conn.Stop()
+	c.connections.Remove(conn.GetConnId())
 }
 
 func (c *ConnectionManager) Get(connId string) (IConnection, bool) {
-	value, ok := c.connections.Get(connId)
-	return value, ok
+	return c.connections.Get(connId)
 }
 
 func (c *ConnectionManager) Len() int {
@@ -64,7 +51,6 @@ func (c *ConnectionManager) Len() int {
 }
 
 func (c *ConnectionManager) ClearConn() {
-	// 清理全部的 connections 信息
 	c.RangeConnections(c.Remove)
 }
 

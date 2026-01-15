@@ -130,7 +130,7 @@ func readerTaskHandler(c IConnection, m IMessage) {
 
 	router, ok := iMsgHandler.GetApis()[int32(m.GetMsgId())]
 	if !ok {
-		GetInstanceConnManager().Remove(c)
+		c.Stop()
 		return
 	}
 
