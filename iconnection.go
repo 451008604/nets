@@ -6,7 +6,7 @@ import (
 
 type IConnection interface {
 	// 启动连接(通过connmanager调用)
-	Start(readerHandler func() bool, writerHandler func(data []byte) bool)
+	Start()
 	// 停止连接(通过connmanager调用)
 	Stop() bool
 

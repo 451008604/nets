@@ -30,11 +30,9 @@ type ConnectionBase struct {
 	taskQueue     chan func()        // 等待执行的任务队列
 }
 
-func (c *ConnectionBase) Start(readerHandler func() bool, writerHandler func(data []byte) bool) {
+func (c *ConnectionBase) Start() {
 	defer func(c *ConnectionBase) {
 		c.exitCtxCancel()
-		close(c.msgBuffChan)
-		close(c.taskQueue)
 		GetInstanceConnManager().ConnOnClosed(c.conn)
 		GetInstanceConnManager().Remove(c.conn)
 		GetInstanceServerManager().WaitGroupDone()
@@ -43,55 +41,9 @@ func (c *ConnectionBase) Start(readerHandler func() bool, writerHandler func(dat
 	GetInstanceServerManager().WaitGroupAdd(1)
 	GetInstanceConnManager().ConnOnOpened(c.conn)
 
-	// 开启读协程
-	go func(c *ConnectionBase, readerHandler func() bool) {
-		defer c.exitCtxCancel()
-		for {
-			c.deadTime = time.Now().Unix()
-			select {
-			case <-c.exitCtx.Done():
-				return
-			default:
-				// 调用注册方法处理接收到的消息
-				if !readerHandler() {
-					return
-				}
-			}
-		}
-	}(c, readerHandler)
-
-	// 开启写协程
-	go func(c *ConnectionBase, writerHandler func(data []byte) bool) {
-		defer c.exitCtxCancel()
-		for {
-			c.deadTime = time.Now().Unix()
-			select {
-			case <-c.exitCtx.Done():
-				return
-			case data, ok := <-c.msgBuffChan:
-				// 调用注册方法写消息给客户端
-				if !ok || !writerHandler(data) {
-					return
-				}
-			}
-		}
-	}(c, writerHandler)
-
-	// 开启任务协程
-	go func(c *ConnectionBase) {
-		defer c.exitCtxCancel()
-		for {
-			select {
-			case <-c.exitCtx.Done():
-				return
-			case taskFun, ok := <-c.taskQueue:
-				if !ok {
-					return
-				}
-				taskFun()
-			}
-		}
-	}(c)
+	go c.readHandler()  // 开启读协程
+	go c.writeHandler() // 开启写协程
+	go c.taskHandler()  // 开启任务协程
 
 	// 读写超时检测
 	for {
@@ -102,6 +54,51 @@ func (c *ConnectionBase) Start(readerHandler func() bool, writerHandler func(dat
 			if t.Unix()-c.deadTime > int64(defaultServer.AppConf.ConnRWTimeOut) {
 				return
 			}
+		}
+	}
+}
+
+func (c *ConnectionBase) readHandler() {
+	defer c.exitCtxCancel()
+	for {
+		c.deadTime = time.Now().Unix()
+		select {
+		case <-c.exitCtx.Done():
+			return
+		default:
+			if !c.conn.StartReader() {
+				return
+			}
+		}
+	}
+}
+
+func (c *ConnectionBase) writeHandler() {
+	defer c.exitCtxCancel()
+	for {
+		c.deadTime = time.Now().Unix()
+		select {
+		case <-c.exitCtx.Done():
+			return
+		case data, ok := <-c.msgBuffChan:
+			if !ok || !c.conn.StartWriter(data) {
+				return
+			}
+		}
+	}
+}
+
+func (c *ConnectionBase) taskHandler() {
+	defer c.exitCtxCancel()
+	for {
+		select {
+		case <-c.exitCtx.Done():
+			return
+		case taskFun, ok := <-c.taskQueue:
+			if !ok {
+				return
+			}
+			taskFun()
 		}
 	}
 }

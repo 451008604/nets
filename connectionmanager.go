@@ -34,7 +34,7 @@ func (c *ConnectionManager) RangeConnections(handler func(conn IConnection)) {
 func (c *ConnectionManager) Add(conn IConnection) {
 	c.connections.Set(conn.GetConnId(), conn)
 
-	go conn.Start(conn.StartReader, conn.StartWriter)
+	go conn.Start()
 }
 
 func (c *ConnectionManager) Remove(conn IConnection) {
