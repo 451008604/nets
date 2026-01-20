@@ -96,11 +96,14 @@ func (c *ConnectionBase) taskHandler() {
 		select {
 		case <-c.exitCtx.Done():
 			return
-		case taskFun, ok := <-c.taskQueue:
+		case t, ok := <-c.taskQueue:
 			if !ok {
 				return
 			}
-			taskFun()
+			func(taskFun func()) {
+				defer GetInstanceMsgHandler().GetErrCapture(c.conn, taskFun)
+				taskFun()
+			}(t)
 		}
 	}
 }
@@ -119,7 +122,6 @@ func (c *ConnectionBase) DoTask(task func()) {
 
 func readerTaskHandler(c IConnection, m IMessage) {
 	iMsgHandler := GetInstanceMsgHandler()
-	defer iMsgHandler.GetErrCapture(c, m)
 
 	// 连接关闭时丢弃后续所有操作
 	if c.IsClose() {
@@ -128,7 +130,7 @@ func readerTaskHandler(c IConnection, m IMessage) {
 
 	router, ok := iMsgHandler.GetApis()[int32(m.GetMsgId())]
 	if !ok {
-		c.Stop()
+		GetInstanceConnManager().Remove(c)
 		return
 	}
 
@@ -203,7 +205,7 @@ func (c *ConnectionBase) FlowControl() (b bool) {
 	defer func() {
 		if b {
 			GetInstanceConnManager().ConnRateLimiting(c.conn)
-			c.conn.Stop()
+			GetInstanceConnManager().Remove(c.conn)
 		}
 	}()
 

@@ -39,6 +39,7 @@ func (c *ConnectionManager) Add(conn IConnection) {
 
 func (c *ConnectionManager) Remove(conn IConnection) {
 	conn.Stop()
+
 	c.connections.Remove(conn.GetConnId())
 }
 

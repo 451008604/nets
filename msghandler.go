@@ -7,7 +7,7 @@ import (
 )
 
 type IFilter func(conn IConnection, msg IMessage) bool
-type IErrCapture func(conn IConnection, msg IMessage, panicInfo string)
+type IErrCapture func(conn IConnection, msg func(), panicInfo string)
 
 type MsgHandler struct {
 	apis       map[int32]*BaseRouter // 路由表
@@ -53,11 +53,11 @@ func (m *MsgHandler) SetErrCapture(fun IErrCapture) {
 	m.errCapture = fun
 }
 
-func (m *MsgHandler) GetErrCapture(conn IConnection, message IMessage) {
+func (m *MsgHandler) GetErrCapture(conn IConnection, taskFun func()) {
 	if m.errCapture == nil {
 		return
 	}
 	if r := recover(); r != nil {
-		m.errCapture(conn, message, fmt.Sprintf("%v\n%s", r, debug.Stack()))
+		m.errCapture(conn, taskFun, fmt.Sprintf("%v\n%s", r, debug.Stack()))
 	}
 }
