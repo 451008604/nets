@@ -101,7 +101,7 @@ func (c *ConnectionBase) taskHandler() {
 				return
 			}
 			func(taskFun func()) {
-				defer GetInstanceMsgHandler().GetErrCapture(c.conn, taskFun)
+				defer GetInstanceMsgHandler().GetErrCapture(c.conn)
 				taskFun()
 			}(t)
 		}
