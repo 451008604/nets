@@ -69,7 +69,7 @@ func (Test_MsgId) EnumDescriptor() ([]byte, []int) {
 
 type Test_EchoRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Message       string                 `protobuf:"bytes,1,opt,name=Message,proto3" json:"Message,omitempty"`
+	Message       string                 `protobuf:"bytes,1,opt,name=Message,proto3" json:"Message"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -113,7 +113,7 @@ func (x *Test_EchoRequest) GetMessage() string {
 
 type Test_EchoResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Message       string                 `protobuf:"bytes,1,opt,name=Message,proto3" json:"Message,omitempty"`
+	Message       string                 `protobuf:"bytes,1,opt,name=Message,proto3" json:"Message"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
