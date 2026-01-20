@@ -46,12 +46,13 @@ func (c *ConnectionBase) Start() {
 	go c.writeHandler() // 开启写协程
 	go c.taskHandler()  // 开启任务协程
 
+	tickC := time.Tick(time.Second)
 	// 读写超时检测
 	for {
 		select {
 		case <-c.exitCtx.Done():
 			return
-		case t := <-time.Tick(time.Second):
+		case t := <-tickC:
 			if t.Unix()-c.deadTime > int64(defaultServer.AppConf.ConnRWTimeOut) {
 				return
 			}
