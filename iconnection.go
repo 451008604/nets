@@ -27,6 +27,8 @@ type IConnection interface {
 	GetProperty(key string) any
 	// 设置连接绑定的属性
 	SetProperty(key string, value any)
+	// 移除连接绑定的属性
+	RemoveProperty(key string)
 
 	// 发送消息给客户端
 	SendMsg(msgId int32, msgData proto.Message)

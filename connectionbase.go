@@ -166,16 +166,19 @@ func (c *ConnectionBase) IsClose() bool {
 func (c *ConnectionBase) GetProperty(key string) any {
 	c.propertyMutex.RLock()
 	defer c.propertyMutex.RUnlock()
-	if v, ok := c.property[key]; ok {
-		return v
-	}
-	return nil
+	return c.property[key]
 }
 
 func (c *ConnectionBase) SetProperty(key string, value any) {
 	c.propertyMutex.Lock()
 	defer c.propertyMutex.Unlock()
 	c.property[key] = value
+}
+
+func (c *ConnectionBase) RemoveProperty(key string) {
+	c.propertyMutex.Lock()
+	defer c.propertyMutex.Unlock()
+	delete(c.property, key)
 }
 
 func (c *ConnectionBase) SendMsg(msgId int32, msgData proto.Message) {
