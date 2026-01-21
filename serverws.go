@@ -9,7 +9,7 @@ import (
 type serverWS struct {
 	serverName string // 服务器名称
 	ip         string // IP地址
-	port       string // 服务端口
+	port       int    // 服务端口
 }
 
 var serverWs IServer
@@ -30,7 +30,7 @@ func (s *serverWS) GetServerName() string {
 }
 
 func (s *serverWS) Start() {
-	if s.port == "" {
+	if s.port == 0 {
 		return
 	}
 	fmt.Printf("server starting [ %v:%v ]\n", s.serverName, s.port)
@@ -65,8 +65,8 @@ func (s *serverWS) Start() {
 	})
 
 	if certPath, keyPath := defaultServer.AppConf.ServerWS.TLSCertPath, defaultServer.AppConf.ServerWS.TLSKeyPath; certPath != "" && keyPath != "" {
-		fmt.Printf("%v\n", http.ListenAndServeTLS(fmt.Sprintf("%s:%s", s.ip, s.port), certPath, keyPath, wsServer))
+		fmt.Printf("%v\n", http.ListenAndServeTLS(fmt.Sprintf("%s:%v", s.ip, s.port), certPath, keyPath, wsServer))
 	} else {
-		fmt.Printf("%v\n", http.ListenAndServe(fmt.Sprintf("%s:%s", s.ip, s.port), wsServer))
+		fmt.Printf("%v\n", http.ListenAndServe(fmt.Sprintf("%s:%v", s.ip, s.port), wsServer))
 	}
 }

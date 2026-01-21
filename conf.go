@@ -17,7 +17,7 @@ type AppConf struct {
 
 type ServerConf struct {
 	Address     string // IP地址
-	Port        string // 端口
+	Port        int    // 端口
 	TLSCertPath string // ssl证书路径
 	TLSKeyPath  string // ssl密钥路径
 }
@@ -33,16 +33,16 @@ var appConf = &AppConf{
 	ProtocolIsJson:   true,
 	ConnRWTimeOut:    30,
 	ServerTCP: ServerConf{
-		Port: "17001",
+		Port: 17001,
 	},
 	ServerWS: ServerConf{
-		Port: "17002",
+		Port: 17002,
 	},
 	ServerHTTP: ServerConf{
-		Port: "17003",
+		Port: 17003,
 	},
 	ServerKCP: ServerConf{
-		Port: "17004",
+		Port: 17004,
 	},
 }
 

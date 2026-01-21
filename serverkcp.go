@@ -9,7 +9,7 @@ import (
 type serverKCP struct {
 	serverName string
 	ip         string
-	port       string
+	port       int
 }
 
 var serverKcp IServer
@@ -30,12 +30,12 @@ func (s *serverKCP) GetServerName() string {
 }
 
 func (s *serverKCP) Start() {
-	if s.port == "" {
+	if s.port == 0 {
 		return
 	}
 	fmt.Printf("server starting [ %v:%v ]\n", s.serverName, s.port)
 
-	listener, err := kcp.Listen(":" + s.port)
+	listener, err := kcp.Listen(fmt.Sprintf("%s:%v", s.ip, s.port))
 	if err != nil {
 		fmt.Printf("service startup failed %v\n", err)
 		return

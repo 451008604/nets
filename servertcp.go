@@ -8,7 +8,7 @@ import (
 type serverTCP struct {
 	serverName string // 服务器名称
 	ip         string // IP地址
-	port       string // 服务端口
+	port       int    // 服务端口
 }
 
 var serverTcp IServer
@@ -29,7 +29,7 @@ func (s *serverTCP) GetServerName() string {
 }
 
 func (s *serverTCP) Start() {
-	if s.port == "" {
+	if s.port == 0 {
 		return
 	}
 	fmt.Printf("server starting [ %v:%v ]\n", s.serverName, s.port)
@@ -41,7 +41,7 @@ func (s *serverTCP) Start() {
 		err  error
 	)
 
-	addr, err = net.ResolveTCPAddr("tcp4", fmt.Sprintf("%s:%s", s.ip, s.port))
+	addr, err = net.ResolveTCPAddr("tcp4", fmt.Sprintf("%s:%v", s.ip, s.port))
 	if err != nil {
 		fmt.Printf("service startup failed %v\n", err)
 		return

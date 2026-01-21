@@ -8,7 +8,7 @@ import (
 type serverHTTP struct {
 	serverName string
 	ip         string
-	port       string
+	port       int
 }
 
 var serverHttp IServer
@@ -29,7 +29,7 @@ func (s *serverHTTP) GetServerName() string {
 }
 
 func (s *serverHTTP) Start() {
-	if s.port == "" {
+	if s.port == 0 {
 		return
 	}
 	fmt.Printf("server starting [ %v:%v ]\n", s.serverName, s.port)
@@ -57,8 +57,8 @@ func (s *serverHTTP) Start() {
 	})
 
 	if certPath, keyPath := defaultServer.AppConf.ServerHTTP.TLSCertPath, defaultServer.AppConf.ServerHTTP.TLSKeyPath; certPath != "" && keyPath != "" {
-		fmt.Printf("%v\n", http.ListenAndServeTLS(fmt.Sprintf("%s:%s", s.ip, s.port), certPath, keyPath, httpServer))
+		fmt.Printf("%v\n", http.ListenAndServeTLS(fmt.Sprintf("%s:%v", s.ip, s.port), certPath, keyPath, httpServer))
 	} else {
-		fmt.Printf("%v\n", http.ListenAndServe(fmt.Sprintf("%s:%s", s.ip, s.port), httpServer))
+		fmt.Printf("%v\n", http.ListenAndServe(fmt.Sprintf("%s:%v", s.ip, s.port), httpServer))
 	}
 }
