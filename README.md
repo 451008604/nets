@@ -1,122 +1,84 @@
-<p align="center"><img src="./assets/logo2.webp" alt="" width="200"/></p>
+# NETS
 
-<div align="center">
-<img src="https://img.shields.io/github/license/451008604/nets.svg" alt="license"/>
-<img src="https://img.shields.io/github/issues/451008604/nets.svg" alt="issues"/>
-<img src="https://img.shields.io/github/issues-pr/451008604/nets.svg" alt="issues"/>
-<img src="https://img.shields.io/github/contributors/451008604/nets.svg" alt="contributors"/>
-</div>
-<div align="center">
-<img src="https://img.shields.io/github/watchers/451008604/nets.svg?label=Watch" alt="watchers"/>
-<img src="https://img.shields.io/github/forks/451008604/nets.svg?label=fork" alt="forks"/>
-<img src="https://img.shields.io/github/stars/451008604/nets.svg?label=star" alt="stars"/>
-</div>
+一个面向服务端的多协议网络框架，统一抽象 TCP / WebSocket / HTTP / KCP，提供路由、连接与生命周期管理，支持 JSON / Protobuf 编解码和限流，适合作为后端网关或游戏/实时服务的底层网络库。
 
+## 特性概览
+- **多协议统一**：同一套接口启动 TCP、WS、HTTP、KCP 服务，复用消息路由与连接管理。
+- **路由解耦**：`MsgHandler` 通过 `AddRouter(msgId, tmpl, handler)` 绑定消息结构体工厂与业务处理函数。
+- **编解码可选**：`AppConf.ProtocolIsJson` 在 JSON 与 Protobuf 间切换；可自定义 `DataPack` 和消息工厂。
+- **连接与流控**：`ConnectionBase` 拆分读/写/任务协程，支持属性存取、超时、基于 QPS 的限流与回调。
+- **生命周期管理**：`ServerManager` 并行启动多服务，监听系统信号后优雅关闭全部连接。
 
-# NETS 简介
+## 环境要求
+- Go ≥ 1.24（`go.mod`：`go 1.24.0`，`toolchain go1.24.11`）
 
-一个追求轻量、性能、实用、可快速上手的网络框架。采用工作池模式，已实现协程复用并且可根据并发数量自动扩容协程池。建立连接只需占用3个协程（1个读协程、1个写协程、1个协程池内的工作协程）
-
-使用面向接口编程和组合设计模式，最大程度提高系统的灵活性、可维护性和可扩展性
-
-TODO : 连接断开时，需要等待任务队列全部执行完毕之后再执行onClose / 丢弃等待执行的任务
-
-现已支持：
-* 服务：
-  - TCP
-  - WebSocket(s)
-  - UDP / KCP (🚧进行中)
-* 协议：
-  - Protocol Buffer
-  - JSON
-* 功能：
-  - [x] 设置连接建立时的前置
-  - [x] 设置连接断开时的后置
-  - [x] 绑定消息属性
-  - [x] 消息处理中间件
-  - [x] 自定义编码/解码器
-  - [x] 消息业务panic阻断
-  - [x] 停服时优雅关闭所有连接
-  - [x] 分组广播
-  - [x] 全服广播
-  - [ ] 广播历史记录 (🚧进行中)
-
-future：  
-完善消息广播功能，✅支持创建广播组、✅加入广播组、✅退出广播组、❌广播组解散 (标记不可用，记录保留)
-
-## 架构图
-![架构图](./assets/DesignDiagram.drawio.svg)
-
-# 使用说明
-### => 环境配置
-> Golang >= 1.18
-
-### => 快速上手
-
-- 一个简单的例子
-```go
-// 启动TCP服务
-serverTCP := network.NewServerTCP(nil)
-serverTCP.Listen()
-
-// 启动WebSocket服务
-serverWS := network.NewServerWS(nil)
-serverWS.Listen()
-
-// 阻塞主进程
-network.ServerWaitFlag.Wait()
+## 安装与构建
+```bash
+git clone https://github.com/451008604/nets.git
+cd nets
+go mod tidy
 ```
 
-- 连接管理器 ( iface.IConnManager ) 的应用  
-  **network.GetInstanceConnManager()** 为单例模式，保持全局唯一
+## 配置速览（`conf.go` 默认值）
+- 端口：TCP `17001`，WS `17002`，HTTP `17003`，KCP `17004`
+- JSON/Proto：`ProtocolIsJson`（默认 `false` 使用 Protobuf）
+- 数据包：头 4 字节（msgId uint16 + dataLen uint16，小端），`MaxPackSize` 默认 4096
+- 连接/限流：`MaxConn` 10000，`MaxFlowSecond` 1000，`ConnRWTimeOut` 5s
+
+> 可通过 `SetCustomServer(&CustomServer{AppConf: ..., DataPack: ..., Message: ...})` 覆盖配置、打包器或消息工厂（仅非零/非空字段会被合并）。
+
+## 快速上手
+下面示例展示如何注册路由并同时启动四种协议服务。
 
 ```go
-connManager := network.GetInstanceConnManager()
+package main
 
-// 设置连接建立时的处理
-connManager.OnConnOpen(func(conn iface.IConnection) {
-    // do something ...
-})
+import (
+    "github.com/451008604/nets"
+    "github.com/451008604/nets/internal" // 示例 proto 代码，按需替换
+    "google.golang.org/protobuf/proto"
+)
 
-// 设置连接断开时的处理
-connManager.OnConnClose(func(conn iface.IConnection) {
-    // do something ...
-})
+func main() {
+    // 注册业务路由
+    nets.GetInstanceMsgHandler().AddRouter(
+        int32(internal.Test_MsgId_Test_Echo),
+        func() proto.Message { return &internal.Test_EchoRequest{} },
+        func(conn nets.IConnection, m proto.Message) {
+            req := m.(*internal.Test_EchoRequest)
+            conn.SendMsg(int32(internal.Test_MsgId_Test_Echo), &internal.Test_EchoResponse{Message: req.Message})
+        },
+    )
+
+    // 启动多协议服务（默认监听 0.0.0.0）
+    nets.GetInstanceServerManager().RegisterServer(
+        nets.GetServerTCP(),
+        nets.GetServerWS(),
+        nets.GetServerHTTP(),
+        nets.GetServerKCP(),
+    )
+}
 ```
 
-- 消息处理器 ( iface.IMsgHandler ) 的应用
-
-```go
-msgHandler := network.GetInstanceMsgHandler()
-
-// 添加一个路由
-msgHandler.AddRouter(int32(pb.MSgID_PlayerLogin_Req), func() proto.Message { return &pb.PlayerLoginRequest{} }, func(con iface.IConnection, message proto.Message) {
-    // do something ...
-})
-
-// 自定义消息过滤器。返回 true 时可正常执行，返回 false 则不会执行路由方法
-msgHandler.SetFilter(func(request iface.IRequest, msgData proto.Message) bool {
-    // do something ...
-    return true
-})
-
-// 自定义panic捕获。保障业务逻辑不会导致服务整体崩溃
-msgHandler.SetErrCapture(func(request iface.IRequest, r any) {
-    // do something ...
-})
+运行：
+```bash
+go run main.go
 ```
+默认将开启 TCP/WS/HTTP/KCP 四个端口。
 
-- 广播管理器 ( iface.IBroadcastManager ) 的应用
+## 进阶配置
+- **切换 JSON / Proto**：`GetServerConf().ProtocolIsJson = true`
+- **限流回调**：实现 `ConnRateLimiting`，在 `ConnectionManager` Hook 中接收通知
+- **过滤与错误捕获**：`MsgHandler.SetFilter(filter)`，`MsgHandler.SetErrCapture(capture)`
 
-```go
-	broadcastManager := network.GetInstanceBroadcastManager()
+## 测试与示例
+- 运行全部测试：`go test ./...`
+- 参考客户端示例：`client_ws_test.go`、`client_kcp_test.go`
+- Protobuf 示例：`internal/message.proto`，生成脚本 `internal/generate_pb.sh`
 
-```
-
-### => Issues
-
-# 致谢
-
-# 许可证
-
-⚖️[Apache-2.0 license](https://github.com/451008604/nets?tab=Apache-2.0-1-ov-file#)
+## 目录提示（关键 Go 文件）
+- 配置与自定义：`conf.go`，`customserver.go`
+- 消息与打包：`message.go`，`datapack.go`，`idatapack.go`
+- 路由与处理：`router.go`，`msghandler.go`
+- 连接基类与协议：`connectionbase.go`，`connectiontcp.go`，`connectionws.go`，`connectionhttp.go`，`connectionkcp.go`
+- 服务器管理：`servermanager.go`，`servertcp.go`，`serverws.go`，`serverhttp.go`，`serverkcp.go`
