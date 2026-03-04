@@ -5,6 +5,7 @@ go 1.24.0
 toolchain go1.24.11
 
 require (
+	github.com/451008604/shard-map v1.1.1
 	github.com/gorilla/websocket v1.5.3
 	github.com/xtaci/kcp-go v5.4.20+incompatible
 	google.golang.org/protobuf v1.36.6

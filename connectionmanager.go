@@ -1,14 +1,15 @@
 package nets
 
 import (
+	"github.com/451008604/shard-map"
 	"sync"
 )
 
 type ConnectionManager struct {
-	connections        *ShardedMap[string, IConnection] // 管理的连接信息
-	connOnOpened       func(conn IConnection)           // 连接建立时的Hook函数
-	connOnClosed       func(conn IConnection)           // 连接断开时的Hook函数
-	connOnRateLimiting func(conn IConnection)           // 触发限流时的Hook函数
+	connections        *shardmap.ShardMap[string, IConnection] // 管理的连接信息
+	connOnOpened       func(conn IConnection)                  // 连接建立时的Hook函数
+	connOnClosed       func(conn IConnection)                  // 连接断开时的Hook函数
+	connOnRateLimiting func(conn IConnection)                  // 触发限流时的Hook函数
 }
 
 var instanceConnManager *ConnectionManager
@@ -18,7 +19,7 @@ var instanceConnManagerOnce = sync.Once{}
 func GetInstanceConnManager() *ConnectionManager {
 	instanceConnManagerOnce.Do(func() {
 		manager := &ConnectionManager{
-			connections: NewShardedMap[string, IConnection](),
+			connections: shardmap.NewShardMap[string, IConnection](),
 		}
 		instanceConnManager = manager
 	})
