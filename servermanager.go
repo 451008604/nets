@@ -47,10 +47,6 @@ func (c *ServerManager) RegisterServer(server ...IServer) {
 	c.waitGroup.Wait()
 }
 
-func (c *ServerManager) Servers() []IServer {
-	return c.servers
-}
-
 func (c *ServerManager) IsClose() bool {
 	return c.isClosed
 }
@@ -68,6 +64,9 @@ func (c *ServerManager) StopAll() {
 		return
 	}
 	c.isClosed = true
+	if len(c.servers) == 0 {
+		return
+	}
 	c.blockMainChan <- c.isClosed
 }
 
