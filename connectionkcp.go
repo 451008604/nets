@@ -70,8 +70,8 @@ func (c *connectionKCP) StartWriter(data []byte) bool {
 	return true
 }
 
-func (c *connectionKCP) Stop() bool {
-	if !c.ConnectionBase.Stop() {
+func (c *connectionKCP) Close() bool {
+	if !c.ConnectionBase.Close() {
 		return false
 	}
 	_ = c.conn.Close()

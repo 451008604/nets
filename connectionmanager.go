@@ -3,6 +3,7 @@ package nets
 import (
 	"github.com/451008604/shard-map"
 	"sync"
+	"time"
 )
 
 type ConnectionManager struct {
@@ -18,10 +19,10 @@ var instanceConnManagerOnce = sync.Once{}
 // 连接管理器
 func GetInstanceConnManager() *ConnectionManager {
 	instanceConnManagerOnce.Do(func() {
-		manager := &ConnectionManager{
+		instanceConnManager = &ConnectionManager{
 			connections: shardmap.NewShardMap[string, IConnection](),
 		}
-		instanceConnManager = manager
+		go instanceConnManager.connRWTimeOut()
 	})
 	return instanceConnManager
 }
@@ -36,11 +37,11 @@ func (c *ConnectionManager) RangeConnections(handler func(conn IConnection)) {
 func (c *ConnectionManager) Add(conn IConnection) {
 	c.connections.Set(conn.GetConnId(), conn)
 
-	go conn.Start()
+	go conn.Open()
 }
 
 func (c *ConnectionManager) Remove(conn IConnection) {
-	conn.Stop()
+	conn.Close()
 
 	c.connections.Delete(conn.GetConnId())
 }
@@ -88,4 +89,17 @@ func (c *ConnectionManager) ConnRateLimiting(conn IConnection) {
 		return
 	}
 	c.connOnRateLimiting(conn)
+}
+
+// 读写超时检测
+func (c *ConnectionManager) connRWTimeOut() {
+	ticker := time.NewTicker(time.Second * 5)
+	defer ticker.Stop()
+	for t := range ticker.C {
+		c.RangeConnections(func(conn IConnection) {
+			if t.Unix()-conn.GetDeadTime() > int64(defaultServer.AppConf.ConnRWTimeOut) {
+				conn.Close()
+			}
+		})
+	}
 }

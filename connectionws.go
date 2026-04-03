@@ -57,8 +57,8 @@ func (c *connectionWS) StartWriter(data []byte) bool {
 	return true
 }
 
-func (c *connectionWS) Stop() bool {
-	if !c.ConnectionBase.Stop() {
+func (c *connectionWS) Close() bool {
+	if !c.ConnectionBase.Close() {
 		return false
 	}
 	_ = c.conn.Close()

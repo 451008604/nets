@@ -31,7 +31,7 @@ type ConnectionBase struct {
 	taskQueue     chan func()        // 等待执行的任务队列
 }
 
-func (c *ConnectionBase) Start() {
+func (c *ConnectionBase) Open() {
 	defer func(c *ConnectionBase) {
 		c.exitCtxCancel()
 		GetInstanceConnManager().ConnOnClosed(c.conn)
@@ -44,54 +44,8 @@ func (c *ConnectionBase) Start() {
 
 	go c.readHandler()  // 开启读协程
 	go c.writeHandler() // 开启写协程
-	go c.taskHandler()  // 开启任务协程
 
-	tickC := time.Tick(time.Second)
-	// 读写超时检测
-	for {
-		select {
-		case <-c.exitCtx.Done():
-			return
-		case t := <-tickC:
-			if t.Unix()-c.deadTime > int64(defaultServer.AppConf.ConnRWTimeOut) {
-				return
-			}
-		}
-	}
-}
-
-func (c *ConnectionBase) readHandler() {
-	defer c.exitCtxCancel()
-	for {
-		c.deadTime = time.Now().Unix()
-		select {
-		case <-c.exitCtx.Done():
-			return
-		default:
-			if !c.conn.StartReader() {
-				return
-			}
-		}
-	}
-}
-
-func (c *ConnectionBase) writeHandler() {
-	defer c.exitCtxCancel()
-	for {
-		c.deadTime = time.Now().Unix()
-		select {
-		case <-c.exitCtx.Done():
-			return
-		case data, ok := <-c.msgBuffChan:
-			if !ok || !c.conn.StartWriter(data) {
-				return
-			}
-		}
-	}
-}
-
-func (c *ConnectionBase) taskHandler() {
-	defer c.exitCtxCancel()
+	// 开启任务协程
 	for {
 		select {
 		case <-c.exitCtx.Done():
@@ -108,7 +62,37 @@ func (c *ConnectionBase) taskHandler() {
 	}
 }
 
-func (c *ConnectionBase) Stop() bool {
+func (c *ConnectionBase) readHandler() {
+	defer c.exitCtxCancel()
+	for {
+		atomic.StoreInt64(&c.deadTime, time.Now().Unix())
+		select {
+		case <-c.exitCtx.Done():
+			return
+		default:
+			if !c.conn.StartReader() {
+				return
+			}
+		}
+	}
+}
+
+func (c *ConnectionBase) writeHandler() {
+	defer c.exitCtxCancel()
+	for {
+		atomic.StoreInt64(&c.deadTime, time.Now().Unix())
+		select {
+		case <-c.exitCtx.Done():
+			return
+		case data, ok := <-c.msgBuffChan:
+			if !ok || !c.conn.StartWriter(data) {
+				return
+			}
+		}
+	}
+}
+
+func (c *ConnectionBase) Close() bool {
 	if atomic.AddInt32(&c.isClosed, 1) != 1 {
 		return false
 	}
@@ -164,6 +148,10 @@ func (c *ConnectionBase) GetConnId() string {
 
 func (c *ConnectionBase) IsClose() bool {
 	return atomic.LoadInt32(&c.isClosed) != 0
+}
+
+func (c *ConnectionBase) GetDeadTime() int64 {
+	return atomic.LoadInt64(&c.deadTime)
 }
 
 func (c *ConnectionBase) GetProperty(key string) any {

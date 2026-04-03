@@ -70,8 +70,8 @@ func (c *connectionTCP) StartWriter(data []byte) bool {
 	return true
 }
 
-func (c *connectionTCP) Stop() bool {
-	if !c.ConnectionBase.Stop() {
+func (c *connectionTCP) Close() bool {
+	if !c.ConnectionBase.Close() {
 		return false
 	}
 	_ = c.conn.Close()
