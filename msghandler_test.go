@@ -12,15 +12,15 @@ import (
 func TestMsgHandler_SetErrCapture(t *testing.T) {
 	initTest()
 
-	instanceMsgHandler.SetErrCapture(func(conn IConnection, panicInfo string) {
+	GetInstanceMsgHandler().SetErrCapture(func(conn IConnection, panicInfo string) {
 		atomic.AddInt32(&flagErrCapture, 1)
 	})
 
 	connection := NewConnectionTest()
-	instanceConnManager.Add(connection)
+	GetInstanceConnManager().Add(connection)
 
 	// panicInfo Test_MsgId_Test_Echo panic
-	instanceMsgHandler.AddRouter(int32(internal.Test_MsgId_Test_Echo), func() proto.Message { return &internal.Test_EchoRequest{} }, func(conn IConnection, message proto.Message) {
+	GetInstanceMsgHandler().AddRouter(int32(internal.Test_MsgId_Test_Echo), func() proto.Message { return &internal.Test_EchoRequest{} }, func(conn IConnection, message proto.Message) {
 		panic("Test_MsgId_Test_Echo panic")
 	})
 	connection.SetProperty("msgReq", defaultServer.DataPack.Pack(NewMsgPackage(int32(internal.Test_MsgId_Test_Echo), msgStr)))
@@ -48,14 +48,14 @@ func TestMsgHandler_SetErrCapture(t *testing.T) {
 func TestMsgHandler_SetFilter(t *testing.T) {
 	initTest()
 
-	instanceMsgHandler.SetFilter(func(conn IConnection, msg IMessage) bool {
+	GetInstanceMsgHandler().SetFilter(func(conn IConnection, msg IMessage) bool {
 		conn.SetProperty("filterKey", "filterValue")
 		return true
 	})
 
 	connection := NewConnectionTest()
-	instanceConnManager.Add(connection)
-	instanceMsgHandler.AddRouter(int32(internal.Test_MsgId_Test_Echo), func() proto.Message { return &internal.Test_EchoRequest{} }, func(conn IConnection, message proto.Message) {
+	GetInstanceConnManager().Add(connection)
+	GetInstanceMsgHandler().AddRouter(int32(internal.Test_MsgId_Test_Echo), func() proto.Message { return &internal.Test_EchoRequest{} }, func(conn IConnection, message proto.Message) {
 		if v, ok := conn.GetProperty("filterKey").(string); ok {
 			if v != "filterValue" {
 				t.Error("TestMsgHandler_SetFilter", v)
@@ -67,6 +67,6 @@ func TestMsgHandler_SetFilter(t *testing.T) {
 
 func TestMsgHandler_AddRouter(t *testing.T) {
 	initTest()
-	instanceMsgHandler.AddRouter(int32(internal.Test_MsgId_Test_Echo), func() proto.Message { return &internal.Test_EchoRequest{} }, func(conn IConnection, message proto.Message) {})
-	instanceMsgHandler.AddRouter(int32(internal.Test_MsgId_Test_Echo), func() proto.Message { return &internal.Test_EchoRequest{} }, func(conn IConnection, message proto.Message) {})
+	GetInstanceMsgHandler().AddRouter(int32(internal.Test_MsgId_Test_Echo), func() proto.Message { return &internal.Test_EchoRequest{} }, func(conn IConnection, message proto.Message) {})
+	GetInstanceMsgHandler().AddRouter(int32(internal.Test_MsgId_Test_Echo), func() proto.Message { return &internal.Test_EchoRequest{} }, func(conn IConnection, message proto.Message) {})
 }

@@ -19,7 +19,7 @@ func TestGetServerWS(t *testing.T) {
 	time.Sleep(time.Second)
 
 	// ====================== 注册路由 ======================
-	instanceMsgHandler.AddRouter(int32(internal.Test_MsgId_Test_Echo), func() proto.Message { return &internal.Test_EchoRequest{} }, func(conn IConnection, message proto.Message) {
+	GetInstanceMsgHandler().AddRouter(int32(internal.Test_MsgId_Test_Echo), func() proto.Message { return &internal.Test_EchoRequest{} }, func(conn IConnection, message proto.Message) {
 		req, ok := message.(*internal.Test_EchoRequest)
 		if !ok || req == nil {
 			return

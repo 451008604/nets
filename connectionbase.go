@@ -97,6 +97,7 @@ func (c *ConnectionBase) Close() bool {
 		return false
 	}
 	c.exitCtxCancel()
+	GetInstanceConnManager().Remove(c.conn)
 	return true
 }
 

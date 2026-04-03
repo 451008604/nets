@@ -23,7 +23,7 @@ func TestGetServerHTTP(t *testing.T) {
 
 	// ====================== 注册路由 ======================
 	// Restful API 模式
-	instanceMsgHandler.AddRouter(int32(internal.Test_MsgId_Test_None), func() proto.Message { return &Message{} }, func(conn IConnection, message proto.Message) {
+	GetInstanceMsgHandler().AddRouter(int32(internal.Test_MsgId_Test_None), func() proto.Message { return &Message{} }, func(conn IConnection, message proto.Message) {
 		reader := conn.GetProperty(ConnPropertyHttpReader).(*http.Request)
 		writer := conn.GetProperty(ConnPropertyHttpWriter).(http.ResponseWriter)
 		if reader == nil || writer == nil {
@@ -33,17 +33,33 @@ func TestGetServerHTTP(t *testing.T) {
 		if !ok || msgReq == nil {
 			return
 		}
+
 		// t.Log("Method", reader.Method, "RequestURI", reader.RequestURI, "Data", string(msgReq.GetData()))
 		conn.SendMsg(int32(internal.Test_MsgId_Test_None), msgReq)
+
+		if conn.RemoteAddrStr() == "" {
+			t.Error("conn.RemoteAddrStr() is empty")
+			return
+		}
+		conn.Close()
+		conn.SendMsg(int32(internal.Test_MsgId_Test_Echo), msgReq)
 	})
 
 	// 消息ID 路由模式
-	instanceMsgHandler.AddRouter(int32(internal.Test_MsgId_Test_Echo), func() proto.Message { return &internal.Test_EchoRequest{} }, func(conn IConnection, message proto.Message) {
+	GetInstanceMsgHandler().AddRouter(int32(internal.Test_MsgId_Test_Echo), func() proto.Message { return &internal.Test_EchoRequest{} }, func(conn IConnection, message proto.Message) {
 		req, ok := message.(*internal.Test_EchoRequest)
 		if !ok || req == nil {
 			return
 		}
+
 		res := &internal.Test_EchoResponse{Message: req.Message}
+		conn.SendMsg(int32(internal.Test_MsgId_Test_Echo), res)
+
+		if conn.RemoteAddrStr() == "" {
+			t.Error("conn.RemoteAddrStr() is empty")
+			return
+		}
+		conn.Close()
 		conn.SendMsg(int32(internal.Test_MsgId_Test_Echo), res)
 	})
 
