@@ -3,31 +3,12 @@ package nets
 import (
 	"fmt"
 	"github.com/451008604/nets/internal"
-	"google.golang.org/protobuf/proto"
 	"net"
 	"sync/atomic"
 	"testing"
-	"time"
 )
 
 func TestGetServerTCP(t *testing.T) {
-	initTest()
-
-	// ====================== 启动服务 ======================
-	go GetInstanceServerManager().RegisterServer(GetServerTCP())
-	// 等待服务启动
-	time.Sleep(time.Second)
-
-	// ====================== 注册路由 ======================
-	GetInstanceMsgHandler().AddRouter(int32(internal.Test_MsgId_Test_Echo), func() proto.Message { return &internal.Test_EchoRequest{} }, func(conn IConnection, message proto.Message) {
-		req, ok := message.(*internal.Test_EchoRequest)
-		if !ok || req == nil {
-			return
-		}
-		res := &internal.Test_EchoResponse{Message: req.Message}
-		conn.SendMsg(int32(internal.Test_MsgId_Test_Echo), res)
-	})
-
 	// ====================== 发送请求 ======================
 	connNum := 1000
 	for i := 0; i < connNum; i++ {

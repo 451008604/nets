@@ -2,7 +2,6 @@ package nets
 
 import (
 	"github.com/451008604/nets/internal"
-	"google.golang.org/protobuf/proto"
 	"sync"
 	"sync/atomic"
 	"testing"
@@ -11,19 +10,6 @@ import (
 
 // 测试1百万个连接收发消息
 func TestConnections(t *testing.T) {
-	initTest()
-
-	GetInstanceConnManager().SetConnOnOpened(func(conn IConnection) { atomic.AddInt32(&flagOpened, 1) })
-	GetInstanceConnManager().SetConnOnClosed(func(conn IConnection) { atomic.AddInt32(&flagClosed, 1) })
-	GetInstanceMsgHandler().AddRouter(int32(internal.Test_MsgId_Test_Echo), func() proto.Message { return &internal.Test_EchoRequest{} }, func(conn IConnection, message proto.Message) {
-		req, ok := message.(*internal.Test_EchoRequest)
-		if !ok || req == nil {
-			return
-		}
-		res := &internal.Test_EchoResponse{Message: req.Message}
-		conn.SendMsg(int32(internal.Test_MsgId_Test_Echo), res)
-	})
-
 	var cCount = 1000000
 	var wg = sync.WaitGroup{}
 

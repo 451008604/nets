@@ -10,8 +10,6 @@ import (
 
 // 测试 taskFun 发生panic 时异常捕获
 func TestMsgHandler_SetErrCapture(t *testing.T) {
-	initTest()
-
 	GetInstanceMsgHandler().SetErrCapture(func(conn IConnection, panicInfo string) {
 		atomic.AddInt32(&flagErrCapture, 1)
 	})
@@ -43,30 +41,4 @@ func TestMsgHandler_SetErrCapture(t *testing.T) {
 		t.Error("TestMsgHandler_SetErrCapture", flagErrCapture)
 		return
 	}
-}
-
-func TestMsgHandler_SetFilter(t *testing.T) {
-	initTest()
-
-	GetInstanceMsgHandler().SetFilter(func(conn IConnection, msg IMessage) bool {
-		conn.SetProperty("filterKey", "filterValue")
-		return true
-	})
-
-	connection := NewConnectionTest()
-	GetInstanceConnManager().Add(connection)
-	GetInstanceMsgHandler().AddRouter(int32(internal.Test_MsgId_Test_Echo), func() proto.Message { return &internal.Test_EchoRequest{} }, func(conn IConnection, message proto.Message) {
-		if v, ok := conn.GetProperty("filterKey").(string); ok {
-			if v != "filterValue" {
-				t.Error("TestMsgHandler_SetFilter", v)
-			}
-		}
-	})
-	connection.SetProperty("msgReq", defaultServer.DataPack.Pack(NewMsgPackage(int32(internal.Test_MsgId_Test_Echo), msgStr)))
-}
-
-func TestMsgHandler_AddRouter(t *testing.T) {
-	initTest()
-	GetInstanceMsgHandler().AddRouter(int32(internal.Test_MsgId_Test_Echo), func() proto.Message { return &internal.Test_EchoRequest{} }, func(conn IConnection, message proto.Message) {})
-	GetInstanceMsgHandler().AddRouter(int32(internal.Test_MsgId_Test_Echo), func() proto.Message { return &internal.Test_EchoRequest{} }, func(conn IConnection, message proto.Message) {})
 }

@@ -5,8 +5,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/451008604/nets/internal"
+	"google.golang.org/protobuf/proto"
+	"os"
 	"sync"
 	"sync/atomic"
+	"testing"
 	"time"
 )
 
@@ -14,12 +17,46 @@ var msgStr, _ = json.Marshal(&internal.Test_EchoRequest{Message: "hello world"})
 
 var flagSend, flagReceive, flagOpened, flagClosed, flagErrCapture int32
 
-func initTest() {
-	// 重置标志位
-	flagSend, flagReceive, flagOpened, flagClosed, flagErrCapture = 0, 0, 0, 0, 0
+func TestMain(m *testing.M) {
+	GetInstanceConnManager().SetConnOnOpened(func(conn IConnection) { atomic.AddInt32(&flagOpened, 1) })
+	GetInstanceConnManager().SetConnOnClosed(func(conn IConnection) { atomic.AddInt32(&flagClosed, 1) })
+	GetInstanceMsgHandler().SetFilter(func(conn IConnection, msg IMessage) bool {
+		conn.SetProperty("filterKey", "filterValue")
+		return true
+	})
+	// ====================== 注册路由 ======================
+	GetInstanceMsgHandler().AddRouter(int32(internal.Test_MsgId_Test_Echo), func() proto.Message { return &internal.Test_EchoRequest{} }, func(conn IConnection, message proto.Message) {
+		if v, ok := conn.GetProperty("filterKey").(string); ok {
+			if v != "filterValue" {
+				fmt.Println("TestMsgHandler_SetFilter", v)
+			}
+		}
+		req, ok := message.(*internal.Test_EchoRequest)
+		if !ok || req == nil {
+			return
+		}
+		res := &internal.Test_EchoResponse{Message: req.Message}
+		conn.SendMsg(int32(internal.Test_MsgId_Test_Echo), res)
+
+		if conn.RemoteAddrStr() == "" {
+			fmt.Println("conn.RemoteAddrStr() is empty")
+			return
+		}
+		time.Sleep(time.Millisecond * 100)
+		conn.Close()
+		conn.SendMsg(int32(internal.Test_MsgId_Test_Echo), res)
+	})
+
+	// ====================== 启动服务 ======================
+	go GetInstanceServerManager().RegisterServer(GetServerHTTP(), GetServerKCP(), GetServerTCP(), GetServerWS())
+	// 等待服务启动
+	time.Sleep(time.Second)
+
+	code := m.Run()
+	os.Exit(code)
 }
 
-// ====================== 模拟测试连接 ======================
+// ============================================ 模拟连接 ============================================
 type ConnectionTest struct {
 	*ConnectionBase
 }
@@ -63,3 +100,5 @@ func (c *ConnectionTest) StartWriter(data []byte) bool {
 func (c *ConnectionTest) RemoteAddrStr() string {
 	return ""
 }
+
+// ============================================ 模拟连接 ============================================

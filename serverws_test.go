@@ -4,30 +4,11 @@ import (
 	"fmt"
 	"github.com/451008604/nets/internal"
 	"github.com/gorilla/websocket"
-	"google.golang.org/protobuf/proto"
 	"sync/atomic"
 	"testing"
-	"time"
 )
 
 func TestGetServerWS(t *testing.T) {
-	initTest()
-
-	// ====================== 启动服务 ======================
-	go GetInstanceServerManager().RegisterServer(GetServerWS())
-	// 等待服务启动
-	time.Sleep(time.Second)
-
-	// ====================== 注册路由 ======================
-	GetInstanceMsgHandler().AddRouter(int32(internal.Test_MsgId_Test_Echo), func() proto.Message { return &internal.Test_EchoRequest{} }, func(conn IConnection, message proto.Message) {
-		req, ok := message.(*internal.Test_EchoRequest)
-		if !ok || req == nil {
-			return
-		}
-		res := &internal.Test_EchoResponse{Message: req.Message}
-		conn.SendMsg(int32(internal.Test_MsgId_Test_Echo), res)
-	})
-
 	// ====================== 发送请求 ======================
 	connNum := 1000
 	for i := 0; i < connNum; i++ {
@@ -46,7 +27,7 @@ func TestGetServerWS(t *testing.T) {
 				atomic.AddInt32(&flagReceive, 1)
 			}
 		}
-		conn.Close()
+		_ = conn.Close()
 	}
 
 	if flagReceive != int32(connNum) {
