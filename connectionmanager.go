@@ -58,22 +58,22 @@ func (c *ConnectionManager) ClearConn() {
 	c.RangeConnections(c.Remove)
 }
 
-func (c *ConnectionManager) SetConnOnOpened(connOpenCallBack func(conn IConnection)) {
+func (c *ConnectionManager) SetConnOpened(connOpenCallBack func(conn IConnection)) {
 	c.connOnOpened = connOpenCallBack
 }
 
-func (c *ConnectionManager) ConnOnOpened(conn IConnection) {
+func (c *ConnectionManager) GetConnOpened(conn IConnection) {
 	if c.connOnOpened == nil {
 		return
 	}
 	c.connOnOpened(conn)
 }
 
-func (c *ConnectionManager) SetConnOnClosed(connCloseCallBack func(conn IConnection)) {
+func (c *ConnectionManager) SetConnClosed(connCloseCallBack func(conn IConnection)) {
 	c.connOnClosed = connCloseCallBack
 }
 
-func (c *ConnectionManager) ConnOnClosed(conn IConnection) {
+func (c *ConnectionManager) GetConnClosed(conn IConnection) {
 	if c.connOnClosed == nil {
 		return
 	}

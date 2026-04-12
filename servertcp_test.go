@@ -4,12 +4,11 @@ import (
 	"fmt"
 	"github.com/451008604/nets/internal"
 	"net"
-	"sync/atomic"
 	"testing"
 )
 
 func TestGetServerTCP(t *testing.T) {
-	// ====================== 发送请求 ======================
+	flag = &testFlag{}
 	connNum := 1000
 	for i := 0; i < connNum; i++ {
 		conn, err := net.Dial("tcp", fmt.Sprintf("127.0.0.1:%v", defaultServer.AppConf.ServerTCP.Port))
@@ -24,13 +23,15 @@ func TestGetServerTCP(t *testing.T) {
 		buf := make([]byte, 4096)
 		if message, _ := conn.Read(buf); message != 0 {
 			if pack := defaultServer.DataPack.UnPack(buf[:message]); pack != nil {
-				atomic.AddInt32(&flagReceive, 1)
+				if string(pack.GetData()) != string(msgStr) {
+					t.Error("TestGetServerTCP1", string(pack.GetData()))
+				}
 			}
 		}
 		_ = conn.Close()
 	}
 
-	if flagReceive != int32(connNum) {
-		t.Error("TestGetServerTCP", flagReceive)
+	if flag.flagReceive != int32(connNum) {
+		t.Error("TestGetServerTCP2", flag.flagReceive)
 	}
 }

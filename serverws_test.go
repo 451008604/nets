@@ -4,12 +4,11 @@ import (
 	"fmt"
 	"github.com/451008604/nets/internal"
 	"github.com/gorilla/websocket"
-	"sync/atomic"
 	"testing"
 )
 
 func TestGetServerWS(t *testing.T) {
-	// ====================== 发送请求 ======================
+	flag = &testFlag{}
 	connNum := 1000
 	for i := 0; i < connNum; i++ {
 		conn, _, err := websocket.DefaultDialer.Dial(fmt.Sprintf("ws://127.0.0.1:%v", defaultServer.AppConf.ServerWS.Port), nil)
@@ -24,13 +23,15 @@ func TestGetServerWS(t *testing.T) {
 		// 接收消息
 		if _, message, _ := conn.ReadMessage(); len(message) != 0 {
 			if pack := NewDataPack().UnPack(message); pack != nil {
-				atomic.AddInt32(&flagReceive, 1)
+				if string(pack.GetData()) != string(msgStr) {
+					t.Error("TestGetServerWS1", string(pack.GetData()))
+				}
 			}
 		}
 		_ = conn.Close()
 	}
 
-	if flagReceive != int32(connNum) {
-		t.Error("TestGetServerWS", flagReceive)
+	if flag.flagReceive != int32(connNum) {
+		t.Error("TestGetServerWS2", flag.flagReceive)
 	}
 }

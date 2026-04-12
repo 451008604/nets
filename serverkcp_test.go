@@ -4,13 +4,12 @@ import (
 	"fmt"
 	"github.com/451008604/nets/internal"
 	"github.com/xtaci/kcp-go"
-	"sync/atomic"
 	"testing"
 	"time"
 )
 
 func TestGetServerKCP(t *testing.T) {
-	// ====================== 发送请求 ======================
+	flag = &testFlag{}
 	connNum := 1000
 	for i := 0; i < connNum; i++ {
 		conn, err := kcp.DialWithOptions(fmt.Sprintf("127.0.0.1:%v", defaultServer.AppConf.ServerKCP.Port), nil, 0, 0)
@@ -27,19 +26,23 @@ func TestGetServerKCP(t *testing.T) {
 		_, _ = conn.Write(defaultServer.DataPack.Pack(NewMsgPackage(int32(internal.Test_MsgId_Test_Echo), msgStr)))
 
 		// 接收消息
-		_ = conn.SetReadDeadline(time.Now().Add(3 * time.Second))
+		_ = conn.SetReadDeadline(time.Now().Add(time.Second))
 		buf := make([]byte, 4096)
-		if message, _ := conn.Read(buf); message != 0 {
+		message, err := conn.Read(buf)
+		fmt.Printf("%v\n", err)
+		if message != 0 {
 			if pack := defaultServer.DataPack.UnPack(buf[:message]); pack != nil {
-				atomic.AddInt32(&flagReceive, 1)
+				if string(pack.GetData()) != string(msgStr) {
+					t.Error("TestGetServerKCP1", string(pack.GetData()))
+				}
 			}
 		}
 
 		_ = conn.Close()
 	}
 
-	time.Sleep(time.Second)
-	if flagReceive != int32(connNum) {
-		t.Error("TestGetServerKCP", flagReceive)
+	time.Sleep(time.Second * 3)
+	if flag.flagReceive != int32(connNum) {
+		t.Error("TestGetServerKCP2", flag.flagReceive)
 	}
 }

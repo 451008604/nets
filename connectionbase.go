@@ -34,13 +34,13 @@ type ConnectionBase struct {
 func (c *ConnectionBase) Open() {
 	defer func(c *ConnectionBase) {
 		c.exitCtxCancel()
-		GetInstanceConnManager().ConnOnClosed(c.conn)
+		GetInstanceConnManager().GetConnClosed(c.conn)
 		GetInstanceConnManager().Remove(c.conn)
 		GetInstanceServerManager().WaitGroupDone()
 	}(c)
 
 	GetInstanceServerManager().WaitGroupAdd(1)
-	GetInstanceConnManager().ConnOnOpened(c.conn)
+	GetInstanceConnManager().GetConnOpened(c.conn)
 
 	go c.readHandler()  // 开启读协程
 	go c.writeHandler() // 开启写协程

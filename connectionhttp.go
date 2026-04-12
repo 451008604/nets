@@ -54,6 +54,7 @@ func (c *connectionHTTP) StartReader() bool {
 		c.SetProperty(ConnPropertyHttpWriter, c.writer)
 	}
 
+	defer GetInstanceMsgHandler().GetErrCapture(c)
 	readerTaskHandler(c, msgData)
 	return true
 }
