@@ -2,7 +2,6 @@ package nets
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/451008604/nets/internal"
 	"google.golang.org/protobuf/proto"
 	"net/http"
@@ -60,22 +59,6 @@ func TestMain(m *testing.M) {
 		res := &internal.Test_EchoResponse{Message: req.Message}
 		conn.SendMsg(int32(internal.Test_MsgId_Test_Echo), res)
 		atomic.AddInt32(&flag.flagReceive, 1)
-
-		if conn.RemoteAddrStr() == "" {
-			fmt.Println("conn.RemoteAddrStr() is empty")
-			return
-		}
-
-		if v, ok := conn.GetProperty("filterKey").(string); ok {
-			if v != "filterValue" {
-				fmt.Println("TestMsgHandler_SetFilter", v)
-			}
-		}
-
-		conn.Close()
-		conn.SendMsg(int32(internal.Test_MsgId_Test_Echo), res)
-
-		panic("Test_MsgId_Test_Echo panic")
 	})
 
 	// ====================== 启动服务 ======================

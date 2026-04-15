@@ -46,7 +46,7 @@ func (s *serverHTTP) Start() {
 		// 连接数量超过限制后，关闭新建立的连接
 		if GetInstanceConnManager().Len() >= defaultServer.AppConf.MaxConn {
 			w.WriteHeader(http.StatusGatewayTimeout)
-			_, _ = w.Write([]byte("server is closed"))
+			_, _ = w.Write([]byte("connection max limit"))
 			return
 		}
 

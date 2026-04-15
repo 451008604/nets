@@ -9,8 +9,7 @@ import (
 )
 
 func TestGetServerKCP(t *testing.T) {
-	flag = &testFlag{}
-	connNum := 1000
+	connNum := 10000
 	for i := 0; i < connNum; i++ {
 		conn, err := kcp.DialWithOptions(fmt.Sprintf("127.0.0.1:%v", defaultServer.AppConf.ServerKCP.Port), nil, 0, 0)
 		if err != nil {
@@ -26,11 +25,9 @@ func TestGetServerKCP(t *testing.T) {
 		_, _ = conn.Write(defaultServer.DataPack.Pack(NewMsgPackage(int32(internal.Test_MsgId_Test_Echo), msgStr)))
 
 		// 接收消息
-		_ = conn.SetReadDeadline(time.Now().Add(time.Second))
+		// _ = conn.SetReadDeadline(time.Now().Add(time.Second))
 		buf := make([]byte, 4096)
-		message, err := conn.Read(buf)
-		fmt.Printf("%v\n", err)
-		if message != 0 {
+		if message, _ := conn.Read(buf); message != 0 {
 			if pack := defaultServer.DataPack.UnPack(buf[:message]); pack != nil {
 				if string(pack.GetData()) != string(msgStr) {
 					t.Error("TestGetServerKCP1", string(pack.GetData()))
@@ -41,8 +38,12 @@ func TestGetServerKCP(t *testing.T) {
 		_ = conn.Close()
 	}
 
-	time.Sleep(time.Second * 3)
 	if flag.flagReceive != int32(connNum) {
 		t.Error("TestGetServerKCP2", flag.flagReceive)
 	}
+
+	t.Cleanup(func() {
+		time.Sleep(time.Second * 3)
+		fmt.Printf("%+v\n", flag)
+	})
 }

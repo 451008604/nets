@@ -5,11 +5,11 @@ import (
 	"github.com/451008604/nets/internal"
 	"net"
 	"testing"
+	"time"
 )
 
 func TestGetServerTCP(t *testing.T) {
-	flag = &testFlag{}
-	connNum := 1000
+	connNum := 10000
 	for i := 0; i < connNum; i++ {
 		conn, err := net.Dial("tcp", fmt.Sprintf("127.0.0.1:%v", defaultServer.AppConf.ServerTCP.Port))
 		if err != nil {
@@ -34,4 +34,8 @@ func TestGetServerTCP(t *testing.T) {
 	if flag.flagReceive != int32(connNum) {
 		t.Error("TestGetServerTCP2", flag.flagReceive)
 	}
+	t.Cleanup(func() {
+		time.Sleep(time.Second * 3)
+		fmt.Printf("%+v\n", flag)
+	})
 }

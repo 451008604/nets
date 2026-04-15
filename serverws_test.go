@@ -5,11 +5,11 @@ import (
 	"github.com/451008604/nets/internal"
 	"github.com/gorilla/websocket"
 	"testing"
+	"time"
 )
 
 func TestGetServerWS(t *testing.T) {
-	flag = &testFlag{}
-	connNum := 1000
+	connNum := 10000
 	for i := 0; i < connNum; i++ {
 		conn, _, err := websocket.DefaultDialer.Dial(fmt.Sprintf("ws://127.0.0.1:%v", defaultServer.AppConf.ServerWS.Port), nil)
 		if err != nil {
@@ -34,4 +34,8 @@ func TestGetServerWS(t *testing.T) {
 	if flag.flagReceive != int32(connNum) {
 		t.Error("TestGetServerWS2", flag.flagReceive)
 	}
+	t.Cleanup(func() {
+		time.Sleep(time.Second * 3)
+		fmt.Printf("%+v\n", flag)
+	})
 }

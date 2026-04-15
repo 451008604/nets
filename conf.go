@@ -31,7 +31,7 @@ var appConf = &AppConf{
 	MaxMsgChanLen:    100,
 	MaxFlowSecond:    -1,
 	ProtocolIsJson:   true,
-	ConnRWTimeOut:    30,
+	ConnRWTimeOut:    2,
 	ServerTCP: ServerConf{
 		Port: 17001,
 	},
