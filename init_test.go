@@ -24,6 +24,7 @@ type testFlag struct {
 var flag = &testFlag{}
 
 func TestMain(m *testing.M) {
+	SetCustomServer(&CustomServer{AppConf: &AppConf{ConnRWTimeOut: 2}})
 	GetInstanceConnManager().SetConnOpened(func(conn IConnection) { atomic.AddInt32(&flag.flagOpened, 1) })
 	GetInstanceConnManager().SetConnClosed(func(conn IConnection) { atomic.AddInt32(&flag.flagClosed, 1) })
 	GetInstanceMsgHandler().SetFilter(func(conn IConnection, msg IMessage) bool {
