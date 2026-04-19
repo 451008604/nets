@@ -2,10 +2,16 @@ package nets
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/451008604/nets/internal"
+	"github.com/gorilla/websocket"
+	"github.com/xtaci/kcp-go"
 	"google.golang.org/protobuf/proto"
+	"io"
+	"net"
 	"net/http"
 	"os"
+	"strings"
 	"sync/atomic"
 	"testing"
 	"time"
@@ -24,7 +30,7 @@ type testFlag struct {
 var flag = &testFlag{}
 
 func TestMain(m *testing.M) {
-	SetCustomServer(&CustomServer{AppConf: &AppConf{ConnRWTimeOut: 2}})
+	SetCustomServer(&CustomServer{AppConf: &AppConf{ConnRWTimeOut: 30}})
 	GetInstanceConnManager().SetConnOpened(func(conn IConnection) { atomic.AddInt32(&flag.flagOpened, 1) })
 	GetInstanceConnManager().SetConnClosed(func(conn IConnection) { atomic.AddInt32(&flag.flagClosed, 1) })
 	GetInstanceMsgHandler().SetFilter(func(conn IConnection, msg IMessage) bool {
@@ -65,8 +71,95 @@ func TestMain(m *testing.M) {
 	// ====================== 启动服务 ======================
 	go GetInstanceServerManager().RegisterServer(GetServerHTTP(), GetServerKCP(), GetServerTCP(), GetServerWS())
 	// 等待服务启动
-	time.Sleep(time.Second * 5)
+	time.Sleep(time.Second * 3)
 
 	code := m.Run()
 	os.Exit(code)
+}
+
+func TestServer(t *testing.T) {
+	connNum := 1
+	for i := 0; i < connNum; i++ {
+		// ====================================================== 发送Restful API 模式HTTP请求
+		reqData := "testpoint"
+		request, _ := http.NewRequest(http.MethodPost, fmt.Sprintf(`http://127.0.0.1:%v/testpoint`, defaultServer.AppConf.ServerHTTP.Port), strings.NewReader(reqData))
+		resp, err := http.DefaultClient.Do(request)
+		if err != nil {
+			t.Fatal(err)
+		}
+		body, _ := io.ReadAll(resp.Body)
+		_ = resp.Body.Close()
+		if string(body) != `{"msg_id":0,"data":"`+reqData+`"}` {
+			t.Fatal("TestGetServerHTTP", string(body))
+		}
+
+		// ====================================================== 发送路由模式HTTP请求
+		marshal, _ := json.Marshal(NewMsgPackage(int32(internal.Test_MsgId_Test_Echo), msgStr)) // {"msg_id":1001,"data":"{\"Message\":\"hello world\"}"}
+		request, _ = http.NewRequest(http.MethodPost, fmt.Sprintf(`http://127.0.0.1:%v/`, defaultServer.AppConf.ServerHTTP.Port), strings.NewReader(string(marshal)))
+		client2 := &http.Client{}
+		resp, _ = client2.Do(request)
+		body, _ = io.ReadAll(resp.Body)
+		_ = resp.Body.Close()
+		if string(body) != string(msgStr) {
+			t.Fatal("TestGetServerHTTP", string(body))
+		}
+
+		// ====================================================== 测试WS
+		connWs, _, err := websocket.DefaultDialer.Dial(fmt.Sprintf("ws://127.0.0.1:%v", defaultServer.AppConf.ServerWS.Port), nil)
+		if err != nil {
+			t.Fatal(err)
+		}
+		// 发送消息
+		_ = connWs.WriteMessage(websocket.BinaryMessage, defaultServer.DataPack.Pack(NewMsgPackage(int32(internal.Test_MsgId_Test_Echo), msgStr)))
+		// 接收消息
+		if _, message, _ := connWs.ReadMessage(); len(message) != 0 {
+			if pack := NewDataPack().UnPack(message); pack != nil {
+				if string(pack.GetData()) != string(msgStr) {
+					t.Fatal("TestGetServerWS1", string(pack.GetData()))
+				}
+			}
+		}
+		_ = connWs.Close()
+
+		// ====================================================== 测试TCP
+		connTcp, err := net.Dial("tcp", fmt.Sprintf("127.0.0.1:%v", defaultServer.AppConf.ServerTCP.Port))
+		if err != nil {
+			t.Fatal(err)
+		}
+		// 发送消息
+		_, _ = connTcp.Write(defaultServer.DataPack.Pack(NewMsgPackage(int32(internal.Test_MsgId_Test_Echo), msgStr)))
+		// 接收消息
+		tcpBuf := make([]byte, 4096)
+		if message, _ := connTcp.Read(tcpBuf); message != 0 {
+			if pack := defaultServer.DataPack.UnPack(tcpBuf[:message]); pack != nil {
+				if string(pack.GetData()) != string(msgStr) {
+					t.Fatal("TestGetServerTCP1", string(pack.GetData()))
+				}
+			}
+		}
+		_ = connTcp.Close()
+
+		// ====================================================== 测试KCP
+		connKcp, err := kcp.DialWithOptions(fmt.Sprintf("127.0.0.1:%v", defaultServer.AppConf.ServerKCP.Port), nil, 0, 0)
+		if err != nil {
+			t.Fatal(err)
+		}
+		// connKcp.SetNoDelay(1, 10, 2, 1)
+		connKcp.SetNoDelay(1, 10, 2, 1) // nodelay, interval, resend, nc
+		connKcp.SetStreamMode(true)
+		connKcp.SetWindowSize(128, 128)
+		// 发送消息
+		_, _ = connKcp.Write(defaultServer.DataPack.Pack(NewMsgPackage(int32(internal.Test_MsgId_Test_Echo), msgStr)))
+		// 接收消息
+		// _ = connKcp.SetReadDeadline(time.Now().Add(time.Second))
+		kcpBuf := make([]byte, 4096)
+		if message, _ := connKcp.Read(kcpBuf); message != 0 {
+			if pack := defaultServer.DataPack.UnPack(kcpBuf[:message]); pack != nil {
+				if string(pack.GetData()) != string(msgStr) {
+					t.Fatal("TestGetServerKCP1", string(pack.GetData()))
+				}
+			}
+		}
+		_ = connKcp.Close()
+	}
 }
