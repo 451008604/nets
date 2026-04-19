@@ -10,11 +10,11 @@ type mockServer struct {
 	name string
 }
 
-func (m *mockServer) GetName() string { return m.name }
-func (m *mockServer) Start()          {}
-func (m *mockServer) Stop()           {}
-func (m *mockServer) GetIp() string   { return "127.0.0.1" }
-func (m *mockServer) GetPort() int    { return 8080 }
+func (m *mockServer) GetName() string   { return m.name }
+func (m *mockServer) Start()            {}
+func (m *mockServer) Stop()             {}
+func (m *mockServer) GetIp() string     { return "127.0.0.1" }
+func (m *mockServer) GetPort() int      { return 8080 }
 func (m *mockServer) GetMsgHandler() *MsgHandler {
 	return &MsgHandler{}
 }

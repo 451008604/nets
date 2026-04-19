@@ -41,6 +41,9 @@ func (c *ConnectionManager) Add(conn IConnection) {
 }
 
 func (c *ConnectionManager) Remove(conn IConnection) {
+	if conn == nil {
+		return
+	}
 	conn.Close()
 
 	c.connections.Delete(conn.GetConnId())
@@ -63,7 +66,7 @@ func (c *ConnectionManager) SetConnOpened(connOpenCallBack func(conn IConnection
 }
 
 func (c *ConnectionManager) GetConnOpened(conn IConnection) {
-	if c.connOnOpened == nil {
+	if conn == nil || c.connOnOpened == nil {
 		return
 	}
 	c.connOnOpened(conn)
@@ -74,7 +77,7 @@ func (c *ConnectionManager) SetConnClosed(connCloseCallBack func(conn IConnectio
 }
 
 func (c *ConnectionManager) GetConnClosed(conn IConnection) {
-	if c.connOnClosed == nil {
+	if conn == nil || c.connOnClosed == nil {
 		return
 	}
 	c.connOnClosed(conn)

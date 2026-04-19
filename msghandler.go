@@ -54,7 +54,7 @@ func (m *MsgHandler) SetErrCapture(fun IErrCapture) {
 }
 
 func (m *MsgHandler) GetErrCapture(conn IConnection) {
-	if m.errCapture == nil {
+	if conn == nil || m.errCapture == nil {
 		return
 	}
 	if r := recover(); r != nil {

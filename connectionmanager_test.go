@@ -1,6 +1,7 @@
 package nets
 
 import (
+	"sync"
 	"sync/atomic"
 	"testing"
 	"time"
@@ -10,32 +11,32 @@ import (
 
 // 模拟连接用于测试
 type mockConnection struct {
-	id      string
-	closed  int32
+	id       string
+	closed   int32
 	deadTime int64
 }
 
-func (m *mockConnection) GetConnId() string           { return m.id }
-func (m *mockConnection) IsClose() bool               { return atomic.LoadInt32(&m.closed) != 0 }
-func (m *mockConnection) GetDeadTime() int64          { return m.deadTime }
-func (m *mockConnection) Open()                       {}
+func (m *mockConnection) GetConnId() string  { return m.id }
+func (m *mockConnection) IsClose() bool      { return atomic.LoadInt32(&m.closed) != 0 }
+func (m *mockConnection) GetDeadTime() int64 { return m.deadTime }
+func (m *mockConnection) Open()              {}
 func (m *mockConnection) Close() bool {
 	if atomic.AddInt32(&m.closed, 1) == 1 {
 		return true
 	}
 	return false
 }
-func (m *mockConnection) DoTask(task func())                      {}
-func (m *mockConnection) StartReader() bool                      { return true }
-func (m *mockConnection) StartWriter(data []byte) bool           { return true }
-func (m *mockConnection) SetProperty(key string, value any)      {}
-func (m *mockConnection) GetProperty(key string) any             { return nil }
-func (m *mockConnection) RemoveProperty(key string)              {}
-func (m *mockConnection) SendMsg(msgId int32, msgData proto.Message)       {}
-func (m *mockConnection) FlowControl() bool                      { return false }
-func (m *mockConnection) ProtocolToByte(msg proto.Message) []byte          { return nil }
+func (m *mockConnection) DoTask(task func())                                     {}
+func (m *mockConnection) StartReader() bool                                      { return true }
+func (m *mockConnection) StartWriter(data []byte) bool                           { return true }
+func (m *mockConnection) SetProperty(key string, value any)                      {}
+func (m *mockConnection) GetProperty(key string) any                             { return nil }
+func (m *mockConnection) RemoveProperty(key string)                              {}
+func (m *mockConnection) SendMsg(msgId int32, msgData proto.Message)             {}
+func (m *mockConnection) FlowControl() bool                                      { return false }
+func (m *mockConnection) ProtocolToByte(msg proto.Message) []byte                { return nil }
 func (m *mockConnection) ByteToProtocol(data []byte, target proto.Message) error { return nil }
-func (m *mockConnection) RemoteAddrStr() string                  { return "" }
+func (m *mockConnection) RemoteAddrStr() string                                  { return "" }
 
 func TestConnectionManager_AddAndGet(t *testing.T) {
 	mgr := GetInstanceConnManager()
@@ -146,6 +147,7 @@ func TestConnectionManager_SetAndGetConnOpened(t *testing.T) {
 }
 
 func TestConnectionManager_GetConnOpened_NoCallback(t *testing.T) {
+	instanceConnManager = nil; instanceConnManagerOnce = sync.Once{}
 	mgr := GetInstanceConnManager()
 
 	// 不设置回调
@@ -173,6 +175,7 @@ func TestConnectionManager_SetAndGetConnClosed(t *testing.T) {
 }
 
 func TestConnectionManager_GetConnClosed_NoCallback(t *testing.T) {
+	instanceConnManager = nil; instanceConnManagerOnce = sync.Once{}
 	mgr := GetInstanceConnManager()
 
 	// 不设置回调
@@ -200,6 +203,7 @@ func TestConnectionManager_SetAndGetConnOnRateLimiting(t *testing.T) {
 }
 
 func TestConnectionManager_ConnRateLimiting_NoCallback(t *testing.T) {
+	instanceConnManager = nil; instanceConnManagerOnce = sync.Once{}
 	mgr := GetInstanceConnManager()
 
 	// 不设置回调

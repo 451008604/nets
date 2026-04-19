@@ -96,8 +96,12 @@ func (c *ConnectionBase) Close() bool {
 	if atomic.AddInt32(&c.isClosed, 1) != 1 {
 		return false
 	}
-	c.exitCtxCancel()
-	GetInstanceConnManager().Remove(c.conn)
+	if c.exitCtxCancel != nil {
+		c.exitCtxCancel()
+	}
+	if c.conn != nil {
+		GetInstanceConnManager().Remove(c.conn)
+	}
 	return true
 }
 
