@@ -78,7 +78,7 @@ func TestMain(m *testing.M) {
 }
 
 func TestServer(t *testing.T) {
-	connNum := 1
+	connNum := 100
 	for i := 0; i < connNum; i++ {
 		// ====================================================== 发送Restful API 模式HTTP请求
 		reqData := "testpoint"
@@ -144,14 +144,13 @@ func TestServer(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		// connKcp.SetNoDelay(1, 10, 2, 1)
 		connKcp.SetNoDelay(1, 10, 2, 1) // nodelay, interval, resend, nc
 		connKcp.SetStreamMode(true)
 		connKcp.SetWindowSize(128, 128)
 		// 发送消息
 		_, _ = connKcp.Write(defaultServer.DataPack.Pack(NewMsgPackage(int32(internal.Test_MsgId_Test_Echo), msgStr)))
 		// 接收消息
-		// _ = connKcp.SetReadDeadline(time.Now().Add(time.Second))
+		_ = connKcp.SetReadDeadline(time.Now().Add(time.Second * 5))
 		kcpBuf := make([]byte, 4096)
 		if message, _ := connKcp.Read(kcpBuf); message != 0 {
 			if pack := defaultServer.DataPack.UnPack(kcpBuf[:message]); pack != nil {
