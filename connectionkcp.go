@@ -32,6 +32,7 @@ func NewConnectionKCP(server *serverKCP, conn net.Conn) IConnection {
 }
 
 func (c *connectionKCP) StartReader() bool {
+	_ = c.conn.SetReadDeadline(time.Now().Add(time.Second * 5))
 	// 获取消息头信息
 	msgHead := make([]byte, defaultServer.DataPack.GetHeadLen())
 	if read, err := c.conn.Read(msgHead); err != nil || read < defaultServer.DataPack.GetHeadLen() {
