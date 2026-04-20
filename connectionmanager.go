@@ -11,6 +11,7 @@ type ConnectionManager struct {
 	connOnOpened       func(conn IConnection)                  // 连接建立时的Hook函数
 	connOnClosed       func(conn IConnection)                  // 连接断开时的Hook函数
 	connOnRateLimiting func(conn IConnection)                  // 触发限流时的Hook函数
+	stopChan           chan struct{}                           // 停止信号
 }
 
 var instanceConnManager *ConnectionManager
@@ -21,6 +22,7 @@ func GetInstanceConnManager() *ConnectionManager {
 	instanceConnManagerOnce.Do(func() {
 		instanceConnManager = &ConnectionManager{
 			connections: shardmap.NewShardMap[string, IConnection](),
+			stopChan:    make(chan struct{}),
 		}
 		go instanceConnManager.connRWTimeOut()
 	})
@@ -61,6 +63,10 @@ func (c *ConnectionManager) ClearConn() {
 	c.RangeConnections(c.Remove)
 }
 
+func (c *ConnectionManager) Stop() {
+	close(c.stopChan)
+}
+
 func (c *ConnectionManager) SetConnOpened(connOpenCallBack func(conn IConnection)) {
 	c.connOnOpened = connOpenCallBack
 }
@@ -98,11 +104,16 @@ func (c *ConnectionManager) ConnRateLimiting(conn IConnection) {
 func (c *ConnectionManager) connRWTimeOut() {
 	ticker := time.NewTicker(time.Second * 5)
 	defer ticker.Stop()
-	for t := range ticker.C {
-		c.RangeConnections(func(conn IConnection) {
-			if t.Unix()-conn.GetDeadTime() > int64(defaultServer.AppConf.ConnRWTimeOut) {
-				conn.Close()
-			}
-		})
+	for {
+		select {
+		case <-c.stopChan:
+			return
+		case t := <-ticker.C:
+			c.RangeConnections(func(conn IConnection) {
+				if t.Unix()-conn.GetDeadTime() > int64(defaultServer.AppConf.ConnRWTimeOut) {
+					conn.Close()
+				}
+			})
+		}
 	}
 }
