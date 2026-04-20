@@ -34,7 +34,6 @@ type ConnectionBase struct {
 func (c *ConnectionBase) Open() {
 	defer func(c *ConnectionBase) {
 		c.exitCtxCancel()
-		GetInstanceConnManager().GetConnClosed(c.conn)
 		GetInstanceConnManager().Remove(c.conn)
 		GetInstanceServerManager().WaitGroupDone()
 	}(c)
@@ -96,17 +95,22 @@ func (c *ConnectionBase) Close() bool {
 	if atomic.AddInt32(&c.isClosed, 1) != 1 {
 		return false
 	}
-	if c.exitCtxCancel != nil {
-		c.exitCtxCancel()
-	}
-	if c.conn != nil {
-		GetInstanceConnManager().Remove(c.conn)
-	}
+	GetInstanceConnManager().GetConnClosed(c.conn)
+	c.propertyMutex.Lock()
+	c.property = nil
+	c.propertyMutex.Unlock()
+	c.exitCtxCancel()
+	close(c.taskQueue)   // 关闭任务队列
+	close(c.msgBuffChan) // 关闭消息通道
+	GetInstanceConnManager().Remove(c.conn)
 	return true
 }
 
 func (c *ConnectionBase) DoTask(task func()) {
-	c.taskQueue <- task
+	select {
+	case <-c.exitCtx.Done(): // 连接已关闭，丢弃任务
+	case c.taskQueue <- task:
+	}
 }
 
 func readerTaskHandler(c IConnection, m IMessage) {
@@ -182,13 +186,14 @@ func (c *ConnectionBase) SendMsg(msgId int32, msgData proto.Message) {
 		return
 	}
 	msgByte := c.ProtocolToByte(msgData)
-	// 将消息数据封包
 	msg := defaultServer.DataPack.Pack(defaultServer.Message(msgId, msgByte))
 	if msg == nil {
 		return
 	}
-	// 写入传输通道发送给客户端
-	c.msgBuffChan <- msg
+	select {
+	case <-c.exitCtx.Done(): // 连接已关闭，丢弃消息
+	case c.msgBuffChan <- msg:
+	}
 }
 
 func (c *ConnectionBase) FlowControl() (b bool) {
