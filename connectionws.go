@@ -26,13 +26,12 @@ func NewConnectionWS(server IServer, conn *websocket.Conn) IConnection {
 		},
 		conn: conn,
 	}
-	c.exitCtx, c.exitCtxCancel = context.WithCancel(context.Background())
+	c.connCtx, c.connCtxCancel = context.WithCancel(context.Background())
 	c.ConnectionBase.conn = c
 	return c
 }
 
 func (c *connectionWS) StartReader() bool {
-	_ = c.conn.SetReadDeadline(time.Now().Add(time.Second * 5))
 	msgType, msgByte, err := c.conn.ReadMessage()
 	if err != nil || msgType != websocket.BinaryMessage {
 		return false

@@ -30,7 +30,7 @@ func NewConnectionHTTP(server IServer, writer http.ResponseWriter, reader *http.
 		writer: writer,
 		reader: reader,
 	}
-	c.exitCtx, c.exitCtxCancel = context.WithCancel(context.Background())
+	c.connCtx, c.connCtxCancel = context.WithCancel(context.Background())
 	c.ConnectionBase.conn = c
 	return c
 }

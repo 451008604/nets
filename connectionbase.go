@@ -22,8 +22,8 @@ type ConnectionBase struct {
 	property      map[string]any     // 连接属性
 	propertyMutex sync.RWMutex       // 连接属性读写锁
 	isClosed      int32              // 当前连接是否已关闭
-	exitCtx       context.Context    // 管理连接的上下文
-	exitCtxCancel context.CancelFunc // 连接关闭信号
+	connCtx       context.Context    // 管理连接的上下文
+	connCtxCancel context.CancelFunc // 连接关闭信号
 	deadTime      int64              // 读写超时标记
 	limitingCount int64              // 限流计数
 	limitingTimer int64              // 限流计时
@@ -33,7 +33,7 @@ type ConnectionBase struct {
 
 func (c *ConnectionBase) Open() {
 	defer func(c *ConnectionBase) {
-		c.exitCtxCancel()
+		c.connCtxCancel()
 		GetInstanceConnManager().Remove(c.conn)
 		GetInstanceServerManager().WaitGroupDone()
 	}(c)
@@ -47,7 +47,7 @@ func (c *ConnectionBase) Open() {
 	// 开启任务协程
 	for {
 		select {
-		case <-c.exitCtx.Done():
+		case <-c.connCtx.Done():
 			return
 		case t, ok := <-c.taskQueue:
 			if !ok {
@@ -62,11 +62,11 @@ func (c *ConnectionBase) Open() {
 }
 
 func (c *ConnectionBase) readHandler() {
-	defer c.exitCtxCancel()
+	defer c.connCtxCancel()
 	for {
 		atomic.StoreInt64(&c.deadTime, time.Now().Unix())
 		select {
-		case <-c.exitCtx.Done():
+		case <-c.connCtx.Done():
 			return
 		default:
 			if !c.conn.StartReader() {
@@ -77,11 +77,11 @@ func (c *ConnectionBase) readHandler() {
 }
 
 func (c *ConnectionBase) writeHandler() {
-	defer c.exitCtxCancel()
+	defer c.connCtxCancel()
 	for {
 		atomic.StoreInt64(&c.deadTime, time.Now().Unix())
 		select {
-		case <-c.exitCtx.Done():
+		case <-c.connCtx.Done():
 			return
 		case data, ok := <-c.msgBuffChan:
 			if !ok || !c.conn.StartWriter(data) {
@@ -97,9 +97,9 @@ func (c *ConnectionBase) Close() bool {
 	}
 	GetInstanceConnManager().GetConnClosed(c.conn)
 	c.propertyMutex.Lock()
-	c.property = nil
+	c.property = map[string]any{}
 	c.propertyMutex.Unlock()
-	c.exitCtxCancel()
+	c.connCtxCancel()
 	close(c.taskQueue)   // 关闭任务队列
 	close(c.msgBuffChan) // 关闭消息通道
 	GetInstanceConnManager().Remove(c.conn)
@@ -108,7 +108,7 @@ func (c *ConnectionBase) Close() bool {
 
 func (c *ConnectionBase) DoTask(task func()) {
 	select {
-	case <-c.exitCtx.Done(): // 连接已关闭，丢弃任务
+	case <-c.connCtx.Done(): // 连接已关闭，丢弃任务
 	case c.taskQueue <- task:
 	}
 }
@@ -191,7 +191,7 @@ func (c *ConnectionBase) SendMsg(msgId int32, msgData proto.Message) {
 		return
 	}
 	select {
-	case <-c.exitCtx.Done(): // 连接已关闭，丢弃消息
+	case <-c.connCtx.Done(): // 连接已关闭，丢弃消息
 	case c.msgBuffChan <- msg:
 	}
 }

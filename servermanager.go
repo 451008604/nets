@@ -1,6 +1,7 @@
 package nets
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"os/signal"
@@ -10,11 +11,12 @@ import (
 )
 
 type ServerManager struct {
-	servers       []IServer
-	isClosed      int32     // 服务是否已关闭
-	blockMainChan chan bool // 服务启动后阻塞主协程
-	waitGroup     sync.WaitGroup
+	servers   []IServer
+	isClosed  int32 // 服务是否已关闭
+	waitGroup sync.WaitGroup
 }
+
+var serverCtx, serverCtxCancel = context.WithCancel(context.Background())
 
 var instanceServerManager *ServerManager
 var instanceServerManagerOnce = sync.Once{}
@@ -23,9 +25,8 @@ var instanceServerManagerOnce = sync.Once{}
 func GetInstanceServerManager() *ServerManager {
 	instanceServerManagerOnce.Do(func() {
 		instanceServerManager = &ServerManager{
-			servers:       make([]IServer, 0),
-			blockMainChan: make(chan bool),
-			waitGroup:     sync.WaitGroup{},
+			servers:   make([]IServer, 0),
+			waitGroup: sync.WaitGroup{},
 		}
 		go operatingSystemSignalHandler()
 	})
@@ -42,13 +43,11 @@ func (c *ServerManager) RegisterServer(server ...IServer) {
 	}
 
 	// 阻塞后续执行，等待服务关闭
-	<-c.blockMainChan
-
+	<-serverCtx.Done()
 	// 关闭所有的连接
 	GetInstanceConnManager().ClearConn()
 
 	c.waitGroup.Wait()
-	os.Exit(0)
 }
 
 func (c *ServerManager) IsClose() bool {
@@ -70,7 +69,7 @@ func (c *ServerManager) StopAll() {
 	if atomic.AddInt32(&c.isClosed, 1) != 1 {
 		return
 	}
-	c.blockMainChan <- true
+	serverCtxCancel()
 }
 
 func operatingSystemSignalHandler() {
@@ -78,8 +77,12 @@ func operatingSystemSignalHandler() {
 	signal.Notify(signalCh, syscall.SIGINT, syscall.SIGTERM, syscall.SIGHUP, syscall.SIGQUIT, syscall.SIGKILL)
 	defer signal.Stop(signalCh)
 
-	sig := <-signalCh
-	fmt.Printf("Received signal: %v\n", sig)
+	select {
+	case sig := <-signalCh:
+		fmt.Printf("Received signal: %v\n", sig)
+	case <-serverCtx.Done():
+	}
+
 	// 执行进程退出前的处理
 	GetInstanceServerManager().StopAll()
 }
