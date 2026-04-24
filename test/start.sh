@@ -50,10 +50,10 @@ echo ""
 echo "=========================================="
 echo "  RESULTS"
 echo "=========================================="
-docker logs test-client-1 2>&1 | tail -8
+docker compose logs server
+docker compose logs client
 
 echo ""
 echo "[Cleanup]"
-docker compose logs
 docker compose down --remove-orphans
 echo "Done!"
