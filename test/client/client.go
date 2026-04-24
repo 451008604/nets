@@ -205,8 +205,7 @@ func newClient(proto, addr string) (Client, error) {
 	case "kcp":
 		return NewKCPClient(addr)
 	case "http":
-		c := NewHTTPClient(fmt.Sprintf("http://%s", addr))
-		return c, c.Write(1001, []byte("init"))
+		return NewHTTPClient(fmt.Sprintf("http://%s", addr)), nil
 	default:
 		return nil, fmt.Errorf("unknown protocol: %s", proto)
 	}
