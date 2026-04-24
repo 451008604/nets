@@ -1,0 +1,58 @@
+#!/bin/bash
+
+set -e
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+SERVER_DIR="$SCRIPT_DIR/server"
+CLIENT_DIR="$SCRIPT_DIR/client"
+SERVER_BIN="$SERVER_DIR/server"
+CLIENT_BIN="$CLIENT_DIR/client"
+TEST_DURATION=30
+
+echo "=========================================="
+echo "  NETS Automated Test"
+echo "=========================================="
+echo ""
+
+echo "[1/5] Check binaries..."
+[ ! -f "$SERVER_BIN" ] && BUILD_NEEDED=1 || echo "  Server: OK"
+[ ! -f "$CLIENT_BIN" ] && BUILD_NEEDED=1 || echo "  Client: OK"
+
+echo ""
+echo "[2/5] Compile..."
+CGO_ENABLED=1 GOOS=linux GOARCH=amd64 go build -o "$SERVER_BIN" "$SERVER_DIR/server.go"
+CGO_ENABLED=1 GOOS=linux GOARCH=amd64 go build -o "$CLIENT_BIN" "$CLIENT_DIR/client.go"
+
+echo ""
+echo "[3/5] Build Docker images..."
+cd "$SCRIPT_DIR"
+docker compose build
+
+echo ""
+echo "[4/5] Start server..."
+docker compose up -d server
+
+echo "  Wait for healthy..."
+for i in {1..20}; do
+    sleep 1
+    STATUS=$(docker inspect test-server-1 --format='{{.State.Health.Status}}' 2>/dev/null || echo "starting")
+    [ "$STATUS" = "healthy" ] && break
+    echo "  Status: $STATUS (try $i/20)"
+done
+
+echo ""
+echo "[5/5] Run test..."
+docker compose up -d client
+
+sleep "$TEST_DURATION"
+
+echo ""
+echo "=========================================="
+echo "  RESULTS"
+echo "=========================================="
+docker logs test-client-1 2>&1 | tail -8
+
+echo ""
+echo "[Cleanup]"
+docker compose down --remove-orphans
+echo "Done!"

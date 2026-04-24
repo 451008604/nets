@@ -1,0 +1,35 @@
+services:
+  server:
+    build:
+      context: .
+      dockerfile: server/Dockerfile
+    ports:
+      - "17001:17001"
+      - "17002:17002"
+      - "17003:17003"
+      - "17004:17004"
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:17003"]
+      interval: 2s
+      timeout: 1s
+      retries: 10
+      start_period: 3s
+    networks:
+      - nets-test
+    restart: unless-stopped
+
+  client:
+    build:
+      context: .
+      dockerfile: client/Dockerfile
+    depends_on:
+      server:
+        condition: service_healthy
+    command: ["/app/client", "-server", "server", "-proto", "tcp", "-conn", "10", "-interval", "1000", "-duration", "30"]
+    networks:
+      - nets-test
+
+networks:
+  nets-test:
+    name: nets-test
+    driver: bridge
