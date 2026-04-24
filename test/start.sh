@@ -51,7 +51,7 @@ echo "=========================================="
 echo "  RESULTS"
 echo "=========================================="
 docker compose logs server
-docker compose logs client
+docker compose logs -f client
 
 echo ""
 echo "[Cleanup]"
