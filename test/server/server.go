@@ -3,16 +3,11 @@ package main
 import (
 	"flag"
 	"fmt"
-	"net/http"
-	"os"
-	"os/signal"
-	"sync/atomic"
-	"syscall"
-	"time"
-
 	"github.com/451008604/nets"
 	"github.com/451008604/nets/internal"
-	proto "google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/proto"
+	"net/http"
+	"sync/atomic"
 )
 
 var (
@@ -73,16 +68,6 @@ func main() {
 		atomic.AddInt32(&stats.flagReceive, 1)
 	})
 
-	go nets.GetInstanceServerManager().RegisterServer(nets.GetServerHTTP(), nets.GetServerKCP(), nets.GetServerTCP(), nets.GetServerWS())
-
-	time.Sleep(time.Second * 1)
-	fmt.Printf("Server started: tcp=%d ws=%d http=%d kcp=%d\n", *tcpPort, *wsPort, *httpPort, *kcpPort)
-	fmt.Printf("Open connections: %d\n", nets.GetInstanceConnManager().Len())
-
-	sigCh := make(chan os.Signal, 1)
-	signal.Notify(sigCh, syscall.SIGINT, syscall.SIGTERM)
-	<-sigCh
-
+	nets.GetInstanceServerManager().RegisterServer(nets.GetServerHTTP(), nets.GetServerKCP(), nets.GetServerTCP(), nets.GetServerWS())
 	fmt.Printf("\nShutting down...\n")
-	nets.GetInstanceServerManager().StopAll()
 }
