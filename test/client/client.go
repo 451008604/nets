@@ -191,6 +191,12 @@ type Client interface {
 }
 
 func newClient(proto, addr string) (Client, error) {
+	// 支持多协议混合 tcp,kcp,http,ws
+	protoList := strings.Split(proto, ",")
+	if len(protoList) > 1 {
+		// 返回第一个协议客户端，多协议由调用方处理
+		proto = strings.TrimSpace(protoList[0])
+	}
 	switch proto {
 	case "tcp":
 		return NewTCPClient(addr)
@@ -221,17 +227,45 @@ func getAddr() string {
 	}
 }
 
+func getAddrByProto(protocol string) string {
+	switch protocol {
+	case "tcp":
+		return fmt.Sprintf("%s:%d", *serverIP, *tcpPort)
+	case "ws":
+		return fmt.Sprintf("%s:%d", *serverIP, *wsPort)
+	case "http":
+		return fmt.Sprintf("%s:%d", *serverIP, *httpPort)
+	case "kcp":
+		return fmt.Sprintf("%s:%d", *serverIP, *kcpPort)
+	default:
+		return ""
+	}
+}
+
 func main() {
 	flag.Parse()
 
-	addr := getAddr()
-	data := []byte(*msgData)
+	protoList := strings.Split(*proto, ",")
+	var protocols []string
+	for _, p := range protoList {
+		p = strings.TrimSpace(p)
+		if p != "" {
+			protocols = append(protocols, p)
+		}
+	}
+	if len(protocols) == 0 {
+		protocols = []string{"tcp"}
+	}
 
-	fmt.Printf("Connecting to %s (%s) with %d connections...\n", addr, *proto, *connNum)
+	fmt.Printf("Connecting to server with %d connections (protocols: %v)...\n", *connNum, protocols)
+
+	data := []byte(*msgData)
 
 	var clients []Client
 	for i := 0; i < *connNum; i++ {
-		c, err := newClient(*proto, addr)
+		proto := protocols[i%len(protocols)]
+		addr := getAddrByProto(proto)
+		c, err := newClient(proto, addr)
 		if err != nil {
 			fmt.Printf("Connection %d failed: %v\n", i, err)
 			continue

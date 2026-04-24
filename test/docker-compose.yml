@@ -25,7 +25,7 @@ services:
     depends_on:
       server:
         condition: service_healthy
-    command: ["/app/client", "-server", "server", "-proto", "tcp", "-conn", "10", "-interval", "1000", "-duration", "30"]
+    command: ["/app/client", "-server", "server", "-proto", "tcp,kcp,http,ws", "-conn", "1000", "-interval", "1000", "-duration", "30"]
     networks:
       - nets-test
 
