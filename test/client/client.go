@@ -10,8 +10,10 @@ import (
 	"os"
 	"os/signal"
 	"strings"
+	"sync/atomic"
 	"syscall"
 	"time"
+	"unsafe"
 
 	"github.com/gorilla/websocket"
 	"github.com/xtaci/kcp-go"
@@ -278,7 +280,6 @@ func main() {
 
 	sendCount := 0
 	recvCount := 0
-	buf := make([]byte, 4096)
 
 	ticker := time.NewTicker(time.Duration(*interval) * time.Millisecond)
 	defer ticker.Stop()
@@ -293,7 +294,23 @@ func main() {
 		}()
 	}
 
-	start := time.Now()
+start := time.Now()
+	go func() {
+		buf := make([]byte, 4096)
+		for {
+			for _, c := range clients {
+				n, err := c.Read(buf)
+				if err != nil || n == 0 {
+					continue
+				}
+				if pack := unpack(buf[:n]); pack != nil {
+					atomic.AddInt32((*int32)(unsafe.Pointer(&recvCount)), 1)
+				}
+			}
+			time.Sleep(time.Millisecond * 10)
+		}
+	}()
+
 	for {
 		select {
 		case <-done:
@@ -312,16 +329,6 @@ func main() {
 			}
 			if sendCount%1000 == 0 {
 				fmt.Printf("Sent: %d, Recv: %d\n", sendCount, recvCount)
-			}
-		default:
-			for _, c := range clients {
-				n, err := c.Read(buf)
-				if err != nil || n == 0 {
-					continue
-				}
-				if pack := unpack(buf[:n]); pack != nil {
-					recvCount++
-				}
 			}
 		}
 		d := time.Since(start)
