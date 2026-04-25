@@ -13,12 +13,6 @@ echo "=========================================="
 echo "  NETS Automated Test"
 echo "=========================================="
 echo ""
-
-echo "[1/5] Check binaries..."
-[ ! -f "$SERVER_BIN" ] && BUILD_NEEDED=1 || echo "  Server: OK"
-[ ! -f "$CLIENT_BIN" ] && BUILD_NEEDED=1 || echo "  Client: OK"
-
-echo ""
 echo "[2/5] Compile..."
 CGO_ENABLED=1 GOOS=linux GOARCH=amd64 go build -o "$SERVER_BIN" "$SERVER_DIR/server.go"
 CGO_ENABLED=1 GOOS=linux GOARCH=amd64 go build -o "$CLIENT_BIN" "$CLIENT_DIR/client.go"
@@ -51,7 +45,7 @@ echo "=========================================="
 echo "  RESULTS"
 echo "=========================================="
 docker compose logs server
-docker compose logs -f client
+docker compose logs client
 
 echo ""
 echo "[Cleanup]"
