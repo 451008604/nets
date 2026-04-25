@@ -13,17 +13,17 @@ echo "=========================================="
 echo "  NETS Automated Test"
 echo "=========================================="
 echo ""
-echo "[1/5] Compile..."
+echo "[1/4] Compile..."
 CGO_ENABLED=1 GOOS=linux GOARCH=amd64 go build -o "$SERVER_BIN" "$SERVER_DIR/server.go"
 CGO_ENABLED=1 GOOS=linux GOARCH=amd64 go build -o "$CLIENT_BIN" "$CLIENT_DIR/client.go"
 
 echo ""
-echo "[2/5] Build Docker images..."
+echo "[2/4] Build Docker images..."
 cd "$SCRIPT_DIR"
 docker compose build
 
 echo ""
-echo "[3/5] Start server..."
+echo "[3/4] Start server..."
 docker compose up -d server
 
 echo "  Wait for healthy..."
@@ -35,7 +35,7 @@ for i in {1..20}; do
 done
 
 echo ""
-echo "[4/5] Run test..."
+echo "[4/4] Run test..."
 docker compose up -d client
 
 sleep "$TEST_DURATION"
