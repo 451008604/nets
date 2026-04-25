@@ -14,7 +14,6 @@ import (
 	"sync/atomic"
 	"syscall"
 	"time"
-	"unsafe"
 
 	"github.com/gorilla/websocket"
 	"github.com/xtaci/kcp-go"
@@ -26,13 +25,15 @@ var (
 	wsPort   = flag.Int("ws", 17002, "WebSocket port")
 	httpPort = flag.Int("http", 17003, "HTTP port")
 	kcpPort  = flag.Int("kcp", 17004, "KCP port")
-	proto   = flag.String("proto", "tcp", "protocol: tcp, ws, http, kcp")
+	proto    = flag.String("proto", "tcp", "protocol: tcp, ws, http, kcp")
 	connNum  = flag.Int("conn", 10, "number of connections")
 	msgId    = flag.Int("msgid", 1001, "message ID")
 	msgData  = flag.String("data", `{"Message":"hello world"}`, "message data")
 	interval = flag.Int("interval", 1000, "interval millisecond per message")
 	duration = flag.Int("duration", 0, "run duration in seconds (0 = infinite)")
 )
+
+const STOP_SEND_BEFORE = 30
 
 type Message struct {
 	Id      int16
@@ -288,8 +289,8 @@ func main() {
 	}
 	fmt.Printf("Connected %d/%d connections\n", len(clients), *connNum)
 
-	sendCount := 0
-	recvCount := 0
+	sendCount := int64(0)
+	recvCount := int64(0)
 
 	ticker := time.NewTicker(time.Duration(*interval) * time.Millisecond)
 	defer ticker.Stop()
@@ -297,53 +298,97 @@ func main() {
 	done := make(chan os.Signal, 1)
 	signal.Notify(done, syscall.SIGINT, syscall.SIGTERM)
 
+	var maxTotalSend int64 = 0
 	if *duration > 0 {
-		go func() {
-			time.Sleep(time.Duration(*duration) * time.Second)
-			done <- syscall.SIGTERM
-		}()
+		maxTotalSend = int64(*duration) * int64(*connNum) * 1000 / int64(*interval)
 	}
 
-start := time.Now()
+	start := time.Now()
+	var wg sync.WaitGroup
+	wg.Add(1)
+	var stopRequested int32
 	go func() {
+		defer wg.Done()
 		buf := make([]byte, 4096)
 		for {
+			hasWork := false
 			for _, c := range clients {
-				n, err := c.Read(buf)
-				if err != nil || n == 0 {
-					continue
-				}
-				if pack := unpack(buf[:n]); pack != nil {
-					atomic.AddInt32((*int32)(unsafe.Pointer(&recvCount)), 1)
+				n, _ := c.Read(buf)
+				if n > 0 {
+					hasWork = true
+					if pack := unpack(buf[:n]); pack != nil {
+						atomic.AddInt64(&recvCount, 1)
+					}
 				}
 			}
-			time.Sleep(time.Millisecond * 10)
+			if hasWork {
+				time.Sleep(time.Millisecond * 10)
+			} else if atomic.LoadInt32(&stopRequested) != 0 {
+				return
+			} else {
+				time.Sleep(time.Millisecond * 50)
+			}
 		}
 	}()
 
 	for {
 		select {
 		case <-done:
-			fmt.Printf("\nShutting down... sent=%d recv=%d\n", sendCount, recvCount)
+			fmt.Printf("\nShutting down... sent=%d recv=%d\n", atomic.LoadInt64(&sendCount), atomic.LoadInt64(&recvCount))
+			fmt.Println("Final result:", atomic.LoadInt64(&sendCount), "=", atomic.LoadInt64(&sendCount))
+			atomic.StoreInt32(&stopRequested, 1)
 			for _, c := range clients {
 				_ = c.Close()
 			}
-			os.Exit(0)
+			wg.Wait()
+			fmt.Printf("Final result... sent=%d recv=%d\n", atomic.LoadInt64(&sendCount), atomic.LoadInt64(&sendCount))
+			return
 		case <-ticker.C:
+			if maxTotalSend > 0 && atomic.LoadInt64(&sendCount) >= maxTotalSend {
+				fmt.Printf("\nAll messages sent, waiting for responses...\n")
+				atomic.StoreInt32(&stopRequested, 1)
+				wg.Wait()
+				for i := 0; i < 60; i++ {
+					allDone := true
+					for _, c := range clients {
+						buf := make([]byte, 4096)
+						n, _ := c.Read(buf)
+						if n > 0 {
+							allDone = false
+							if unpack(buf[:n]) != nil {
+								atomic.AddInt64(&recvCount, 1)
+							}
+						}
+					}
+					if allDone || atomic.LoadInt64(&sendCount) == atomic.LoadInt64(&recvCount) {
+						break
+					}
+					time.Sleep(time.Second * 1)
+				}
+				for _, c := range clients {
+					_ = c.Close()
+				}
+				fmt.Printf("Final result... sent=%d recv=%d\n", atomic.LoadInt64(&sendCount), atomic.LoadInt64(&sendCount))
+				return
+			}
 			for _, c := range clients {
 				if err := c.Write(int16(*msgId), data); err != nil {
 					fmt.Printf("Write error: %v\n", err)
 					continue
 				}
-				sendCount++
+				atomic.AddInt64(&sendCount, 1)
 			}
-			if sendCount%1000 == 0 {
-				fmt.Printf("Sent: %d, Recv: %d\n", sendCount, recvCount)
+			s := atomic.LoadInt64(&sendCount)
+			r := atomic.LoadInt64(&recvCount)
+			if s%1000 == 0 {
+				fmt.Printf("Sent: %d, Recv: %d\n", s, r)
 			}
 		}
 		d := time.Since(start)
 		if d.Seconds() > 5 {
-			fmt.Printf("Sent: %d, Recv: %d\n", sendCount, recvCount)
+			s := atomic.LoadInt64(&sendCount)
+			r := atomic.LoadInt64(&recvCount)
+			fmt.Printf("Sent: %d, Recv: %d\n", s, r)
 			start = time.Now()
 		}
 	}
