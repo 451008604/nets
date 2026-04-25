@@ -38,7 +38,16 @@ echo ""
 echo "[4/4] Run test..."
 docker compose up -d client
 
-sleep "$TEST_DURATION"
+echo "  Waiting for test to complete..."
+for i in {1..90}; do
+    sleep 1
+    CLIENT_STATUS=$(docker inspect test-client-1 --format='{{.State.Status}}' 2>/dev/null || echo "running")
+    [ "$CLIENT_STATUS" != "running" ] && break
+    if docker compose logs client 2>/dev/null | grep -q "Final result"; then
+        break
+    fi
+    echo "  Waiting... ($i/90)"
+done
 
 echo ""
 echo "=========================================="
