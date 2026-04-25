@@ -10,6 +10,7 @@ import (
 	"os"
 	"os/signal"
 	"strings"
+	"sync"
 	"sync/atomic"
 	"syscall"
 	"time"
@@ -148,9 +149,11 @@ func (c *KCPClient) Close() error {
 }
 
 type HTTPClient struct {
-	url    string
-	resp   *http.Response
-	client *http.Client
+	url     string
+	resp    *http.Response
+	client  *http.Client
+	respBuf []byte
+	respMu  sync.Mutex
 }
 
 func NewHTTPClient(addr string) *HTTPClient {
@@ -164,19 +167,26 @@ func (c *HTTPClient) Write(msgId int16, data []byte) error {
 		return err
 	}
 	c.resp = resp
-	_, _ = io.Copy(io.Discard, resp.Body)
+	body, err := io.ReadAll(resp.Body)
+	resp.Body.Close()
+	if err != nil {
+		return err
+	}
+	c.respMu.Lock()
+	c.respBuf = body
+	c.respMu.Unlock()
 	return nil
 }
 
 func (c *HTTPClient) Read(buf []byte) (int, error) {
-	if c.resp == nil {
+	c.respMu.Lock()
+	defer c.respMu.Unlock()
+	if len(c.respBuf) == 0 {
 		return 0, nil
 	}
-	n, err := c.resp.Body.Read(buf)
-	if n > 0 {
-		return n, nil
-	}
-	return 0, err
+	n := copy(buf, c.respBuf)
+	c.respBuf = c.respBuf[n:]
+	return n, nil
 }
 
 func (c *HTTPClient) Close() error {
