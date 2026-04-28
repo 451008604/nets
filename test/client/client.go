@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"runtime"
 	"strings"
 	"sync"
 	"sync/atomic"
@@ -31,9 +32,20 @@ var (
 	msgData  = flag.String("data", `{"Message":"hello world"}`, "message data")
 	interval = flag.Int("interval", 1000, "interval millisecond per message")
 	duration = flag.Int("duration", 0, "run duration in seconds (0 = infinite)")
+	memtest  = flag.Bool("memtest", false, "run memory leak test mode")
+	mixProto = flag.Bool("mix", true, "mix protocols evenly in memtest mode")
 )
 
 const STOP_SEND_BEFORE = 30
+
+type MemStats struct {
+	Alloc        uint64 `json:"alloc"`
+	TotalAlloc   uint64 `json:"total_alloc"`
+	Sys          uint64 `json:"sys"`
+	NumGC        uint32 `json:"num_gc"`
+	NumGoroutine int    `json:"num_goroutine"`
+	Connections  int    `json:"connections"`
+}
 
 type Message struct {
 	Id      int16
@@ -224,21 +236,6 @@ func newClient(proto, addr string) (Client, error) {
 	}
 }
 
-func getAddr() string {
-	switch *proto {
-	case "tcp":
-		return fmt.Sprintf("%s:%d", *serverIP, *tcpPort)
-	case "ws":
-		return fmt.Sprintf("%s:%d", *serverIP, *wsPort)
-	case "http":
-		return fmt.Sprintf("%s:%d", *serverIP, *httpPort)
-	case "kcp":
-		return fmt.Sprintf("%s:%d", *serverIP, *kcpPort)
-	default:
-		return ""
-	}
-}
-
 func getAddrByProto(protocol string) string {
 	switch protocol {
 	case "tcp":
@@ -254,8 +251,45 @@ func getAddrByProto(protocol string) string {
 	}
 }
 
+func getMemStats() MemStats {
+	var m runtime.MemStats
+	runtime.ReadMemStats(&m)
+
+	connCount := 0
+	resp, err := http.Get(fmt.Sprintf("http://%s:%d/debug/connections", *serverIP, *httpPort))
+	if err == nil {
+		defer resp.Body.Close()
+		body, _ := io.ReadAll(resp.Body)
+		fmt.Sscanf(string(body), "Active Connections = %d", &connCount)
+	}
+
+	return MemStats{
+		Alloc:        m.Alloc,
+		TotalAlloc:   m.TotalAlloc,
+		Sys:          m.Sys,
+		NumGC:        m.NumGC,
+		NumGoroutine: runtime.NumGoroutine(),
+		Connections:  connCount,
+	}
+}
+
+func printMemStats(label string, stats MemStats) {
+	fmt.Printf("[%s] Memory Stats:\n", label)
+	fmt.Printf("  Alloc:        %d bytes (%.2f MB)\n", stats.Alloc, float64(stats.Alloc)/1024/1024)
+	fmt.Printf("  TotalAlloc:   %d bytes (%.2f MB)\n", stats.TotalAlloc, float64(stats.TotalAlloc)/1024/1024)
+	fmt.Printf("  Sys:          %d bytes (%.2f MB)\n", stats.Sys, float64(stats.Sys)/1024/1024)
+	fmt.Printf("  NumGC:        %d\n", stats.NumGC)
+	fmt.Printf("  NumGoroutine:  %d\n", stats.NumGoroutine)
+	fmt.Printf("  Connections:  %d\n\n", stats.Connections)
+}
+
 func main() {
 	flag.Parse()
+
+	if *memtest {
+		runMemtest()
+		return
+	}
 
 	protoList := strings.Split(*proto, ",")
 	var protocols []string
@@ -391,5 +425,126 @@ func main() {
 			fmt.Printf("Sent: %d, Recv: %d\n", s, r)
 			start = time.Now()
 		}
+	}
+}
+
+func runMemtest() {
+	protocols := []string{"tcp", "ws", "http", "kcp"}
+	protocolCount := len(protocols)
+
+	if *connNum <= 0 {
+		fmt.Println("conn must be > 0")
+		os.Exit(1)
+	}
+
+	fmt.Printf("=== Memory Leak Test ===\n")
+	fmt.Printf("Target server: %s\n", *serverIP)
+	fmt.Printf("Total connections: %d\n", *connNum)
+	fmt.Printf("Protocols: %v\n\n", protocols)
+
+	beforeStats := getMemStats()
+	printMemStats("BEFORE", beforeStats)
+
+	var wg sync.WaitGroup
+	var successCount int32
+	var mu sync.Mutex
+	var clients []Client
+
+	testData := []byte(`{"Message":"memory_test"}`)
+
+	fmt.Printf("Creating %d connections...\n", *connNum)
+
+	for i := 0; i < *connNum; i++ {
+		var proto string
+		if *mixProto {
+			proto = protocols[i%protocolCount]
+		} else {
+			proto = protocols[0]
+		}
+
+		addr := getAddrByProto(proto)
+		c, err := newClient(proto, addr)
+		if err != nil {
+			fmt.Printf("Connection %d (%s) failed: %v\n", i, proto, err)
+			continue
+		}
+
+		if err := c.Write(1001, testData); err != nil {
+			fmt.Printf("Write %d (%s) failed: %v\n", i, proto, err)
+			c.Close()
+			continue
+		}
+
+		mu.Lock()
+		clients = append(clients, c)
+		mu.Unlock()
+
+		atomic.AddInt32(&successCount, 1)
+
+		if atomic.LoadInt32(&successCount)%100 == 0 {
+			fmt.Printf("  Created %d/%d connections\n", atomic.LoadInt32(&successCount), *connNum)
+		}
+
+		if i%50 == 0 && i > 0 {
+			time.Sleep(time.Millisecond * 10)
+		}
+	}
+
+	fmt.Printf("\nTotal connections created: %d\n", len(clients))
+
+	runtime.GC()
+	time.Sleep(time.Second)
+
+	afterStats := getMemStats()
+	printMemStats("AFTER", afterStats)
+
+	fmt.Printf("=== Memory Delta ===\n")
+	allocDelta := int64(afterStats.Alloc) - int64(beforeStats.Alloc)
+	totalAllocDelta := int64(afterStats.TotalAlloc) - int64(beforeStats.TotalAlloc)
+	sysDelta := int64(afterStats.Sys) - int64(beforeStats.Sys)
+
+	fmt.Printf("Alloc delta:      %d bytes (%.2f MB)\n", allocDelta, float64(allocDelta)/1024/1024)
+	fmt.Printf("TotalAlloc delta: %d bytes (%.2f MB)\n", totalAllocDelta, float64(totalAllocDelta)/1024/1024)
+	fmt.Printf("Sys delta:      %d bytes (%.2f MB)\n", sysDelta, float64(sysDelta)/1024/1024)
+	fmt.Printf("Goroutines:    %d -> %d (delta: %d)\n", beforeStats.NumGoroutine, afterStats.NumGoroutine, afterStats.NumGoroutine-beforeStats.NumGoroutine)
+	fmt.Printf("GC count delta: %d\n", afterStats.NumGC-beforeStats.NumGC)
+
+	fmt.Printf("\n=== Closing connections ===\n")
+	for i, c := range clients {
+		c.Close()
+		if (i+1)%200 == 0 {
+			fmt.Printf("  Closed %d/%d\n", i+1, len(clients))
+		}
+	}
+
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+	}()
+
+	time.Sleep(time.Second * 2)
+
+	runtime.GC()
+	time.Sleep(time.Second)
+
+	closedStats := getMemStats()
+	printMemStats("CLOSED", closedStats)
+
+	closedDelta := int64(closedStats.Alloc) - int64(beforeStats.Alloc)
+
+	fmt.Printf("=== Final Analysis ===\n")
+	fmt.Printf("Memory after close: %d bytes (%.2f MB)\n", closedStats.Alloc, float64(closedStats.Alloc)/1024/1024)
+	fmt.Printf("Memory leaked:  %d bytes (%.2f MB)\n", closedDelta, float64(closedDelta)/1024/1024)
+
+	if closedDelta > 10*1024*1024 {
+		fmt.Printf("\nWARNING: Potential memory leak detected (>10MB)\n")
+	} else if closedDelta > 5*1024*1024 {
+		fmt.Printf("\nCAUTION: Elevated memory usage (>5MB)\n")
+	} else {
+		fmt.Printf("\nOK Memory usage looks normal\n")
+	}
+
+	if afterStats.NumGoroutine > beforeStats.NumGoroutine+50 {
+		fmt.Printf("WARNING: Goroutine leak detected\n")
 	}
 }
