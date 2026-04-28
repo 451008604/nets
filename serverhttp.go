@@ -3,6 +3,9 @@ package nets
 import (
 	"fmt"
 	"net/http"
+	"os"
+	"runtime"
+	"time"
 )
 
 type serverHTTP struct {
@@ -35,6 +38,16 @@ func (s *serverHTTP) Start() {
 	fmt.Printf("server starting [ %v:%v ]\n", s.serverName, s.port)
 
 	httpServer := http.NewServeMux()
+
+	// Full memstats JSON endpoint
+	httpServer.HandleFunc("/debug", func(w http.ResponseWriter, r *http.Request) {
+		var m runtime.MemStats
+		runtime.ReadMemStats(&m)
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = fmt.Fprintf(w, `{"timestamp":"%v","pid":"%v",alloc":"%v bytes","total_alloc":"%v bytes","sys":"%v bytes","num_gc":%v,"num_goroutine":%v,"connections":%v}`,
+			time.Now().Unix(), os.Getpid(), m.Alloc, m.TotalAlloc, m.Sys, m.NumGC, runtime.NumGoroutine(), GetInstanceConnManager().Len())
+	})
+
 	httpServer.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		// 服务关闭状态
 		if GetInstanceServerManager().IsClose() {
