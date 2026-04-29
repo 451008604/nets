@@ -2,22 +2,17 @@ package main
 
 import (
 	"encoding/binary"
+	"encoding/json"
 	"flag"
 	"fmt"
+	"github.com/gorilla/websocket"
+	"github.com/xtaci/kcp-go"
 	"io"
 	"net"
 	"net/http"
-	"os"
-	"os/signal"
-	"runtime"
 	"strings"
-	"sync"
 	"sync/atomic"
-	"syscall"
 	"time"
-
-	"github.com/gorilla/websocket"
-	"github.com/xtaci/kcp-go"
 )
 
 var (
@@ -26,31 +21,16 @@ var (
 	wsPort   = flag.Int("ws", 17002, "WebSocket port")
 	httpPort = flag.Int("http", 17003, "HTTP port")
 	kcpPort  = flag.Int("kcp", 17004, "KCP port")
-	proto    = flag.String("proto", "tcp", "protocol: tcp, ws, http, kcp")
-	connNum  = flag.Int("conn", 10, "number of connections")
+	proto    = flag.String("proto", "kcp", "protocol: tcp, ws, http, kcp")
 	msgId    = flag.Int("msgid", 1001, "message ID")
 	msgData  = flag.String("data", `{"Message":"hello world"}`, "message data")
-	interval = flag.Int("interval", 1000, "interval millisecond per message")
-	duration = flag.Int("duration", 0, "run duration in seconds (0 = infinite)")
-	memtest  = flag.Bool("memtest", false, "run memory leak test mode")
-	mixProto = flag.Bool("mix", true, "mix protocols evenly in memtest mode")
+	connNum  = flag.Int("conn", 20000, "number of connections")
 )
 
-const STOP_SEND_BEFORE = 30
-
-type MemStats struct {
-	Alloc        uint64 `json:"alloc"`
-	TotalAlloc   uint64 `json:"total_alloc"`
-	Sys          uint64 `json:"sys"`
-	NumGC        uint32 `json:"num_gc"`
-	NumGoroutine int    `json:"num_goroutine"`
-	Connections  int    `json:"connections"`
-}
-
 type Message struct {
-	Id      int16
-	DataLen int16
-	Data    []byte
+	Id      uint16 `protobuf:"bytes,1,opt,name=msg_id,proto3" json:"msg_id"` // 消息Id
+	Data    string `protobuf:"bytes,2,opt,name=data,proto3" json:"data"`     // 消息内容
+	DataLen uint16 `json:"-"`                                                // 消息长度
 }
 
 func pack(msgId int16, data []byte) []byte {
@@ -66,11 +46,11 @@ func unpack(data []byte) *Message {
 		return nil
 	}
 	msg := &Message{
-		Id:      int16(binary.LittleEndian.Uint16(data[0:2])),
-		DataLen: int16(binary.LittleEndian.Uint16(data[2:4])),
+		Id:      binary.LittleEndian.Uint16(data[0:2]),
+		DataLen: binary.LittleEndian.Uint16(data[2:4]),
 	}
 	if len(data) >= 4+int(msg.DataLen) {
-		msg.Data = data[4 : 4+msg.DataLen]
+		msg.Data = string(data[4 : 4+msg.DataLen])
 	}
 	return msg
 }
@@ -82,6 +62,7 @@ type TCPClient struct {
 func NewTCPClient(addr string) (*TCPClient, error) {
 	conn, err := net.Dial("tcp", addr)
 	if err != nil {
+		fmt.Printf("TCP NewTCPClient failed: %v\n", err)
 		return nil, err
 	}
 	return &TCPClient{conn: conn}, nil
@@ -89,11 +70,14 @@ func NewTCPClient(addr string) (*TCPClient, error) {
 
 func (c *TCPClient) Write(msgId int16, data []byte) error {
 	_, err := c.conn.Write(pack(msgId, data))
-	return err
+	if err != nil {
+		fmt.Printf("TCP Write failed: %v\n", err)
+		return err
+	}
+	return nil
 }
 
 func (c *TCPClient) Read(buf []byte) (int, error) {
-	_ = c.conn.SetReadDeadline(time.Now().Add(time.Millisecond * 10))
 	return c.conn.Read(buf)
 }
 
@@ -108,6 +92,7 @@ type WSClient struct {
 func NewWSClient(addr string) (*WSClient, error) {
 	conn, _, err := websocket.DefaultDialer.Dial(addr, nil)
 	if err != nil {
+		fmt.Printf("WS NewWSClient failed: %v\n", err)
 		return nil, err
 	}
 	return &WSClient{conn: conn}, nil
@@ -120,6 +105,7 @@ func (c *WSClient) Write(msgId int16, data []byte) error {
 func (c *WSClient) Read(buf []byte) (int, error) {
 	_, message, err := c.conn.ReadMessage()
 	if err != nil || len(message) == 0 {
+		fmt.Printf("WS Read failed: %v\n", err)
 		return 0, err
 	}
 	if len(message) > len(buf) {
@@ -140,6 +126,7 @@ type KCPClient struct {
 func NewKCPClient(addr string) (*KCPClient, error) {
 	conn, err := kcp.DialWithOptions(addr, nil, 0, 0)
 	if err != nil {
+		fmt.Printf("KCP NewKCPClient failed: %v\n", err)
 		return nil, err
 	}
 	conn.SetNoDelay(1, 10, 2, 1)
@@ -149,11 +136,14 @@ func NewKCPClient(addr string) (*KCPClient, error) {
 
 func (c *KCPClient) Write(msgId int16, data []byte) error {
 	_, err := c.conn.Write(pack(msgId, data))
-	return err
+	if err != nil {
+		fmt.Printf("KCP Write Err: %v\n", err)
+		return err
+	}
+	return nil
 }
 
 func (c *KCPClient) Read(buf []byte) (int, error) {
-	_ = c.conn.SetReadDeadline(time.Now().Add(time.Millisecond * 10))
 	return c.conn.Read(buf)
 }
 
@@ -165,40 +155,34 @@ type HTTPClient struct {
 	url     string
 	resp    *http.Response
 	client  *http.Client
-	respBuf []byte
-	respMu  sync.Mutex
+	respBuf chan string
 }
 
 func NewHTTPClient(addr string) *HTTPClient {
-	return &HTTPClient{url: addr, client: &http.Client{}}
+	return &HTTPClient{url: addr, client: &http.Client{}, respBuf: make(chan string)}
 }
 
 func (c *HTTPClient) Write(msgId int16, data []byte) error {
-	msg := fmt.Sprintf(`{"msg_id":%d,"data":"%s"}`, msgId, string(data))
-	resp, err := c.client.Post(c.url, "application/json", strings.NewReader(msg))
+	marshal, _ := json.Marshal(Message{Id: uint16(msgId), DataLen: uint16(len(data)), Data: string(data)})
+	resp, err := c.client.Post(c.url, "application/json", strings.NewReader(string(marshal)))
 	if err != nil {
+		fmt.Printf("HTTP Write Err: %v\n", err)
 		return err
 	}
 	c.resp = resp
 	body, err := io.ReadAll(resp.Body)
-	resp.Body.Close()
+	_ = resp.Body.Close()
 	if err != nil {
+		fmt.Printf("HTTP Write Err: %v\n", err)
 		return err
 	}
-	c.respMu.Lock()
-	c.respBuf = body
-	c.respMu.Unlock()
+	c.respBuf <- string(body)
 	return nil
 }
 
 func (c *HTTPClient) Read(buf []byte) (int, error) {
-	c.respMu.Lock()
-	defer c.respMu.Unlock()
-	if len(c.respBuf) == 0 {
-		return 0, nil
-	}
-	n := copy(buf, c.respBuf)
-	c.respBuf = c.respBuf[n:]
+	str := []byte(<-c.respBuf)
+	n := copy(buf, str)
 	return n, nil
 }
 
@@ -216,12 +200,6 @@ type Client interface {
 }
 
 func newClient(proto, addr string) (Client, error) {
-	// 支持多协议混合 tcp,kcp,http,ws
-	protoList := strings.Split(proto, ",")
-	if len(protoList) > 1 {
-		// 返回第一个协议客户端，多协议由调用方处理
-		proto = strings.TrimSpace(protoList[0])
-	}
 	switch proto {
 	case "tcp":
 		return NewTCPClient(addr)
@@ -251,46 +229,10 @@ func getAddrByProto(protocol string) string {
 	}
 }
 
-func getMemStats() MemStats {
-	var m runtime.MemStats
-	runtime.ReadMemStats(&m)
-
-	connCount := 0
-	resp, err := http.Get(fmt.Sprintf("http://%s:%d/debug/connections", *serverIP, *httpPort))
-	if err == nil {
-		defer resp.Body.Close()
-		body, _ := io.ReadAll(resp.Body)
-		fmt.Sscanf(string(body), "Active Connections = %d", &connCount)
-	}
-
-	return MemStats{
-		Alloc:        m.Alloc,
-		TotalAlloc:   m.TotalAlloc,
-		Sys:          m.Sys,
-		NumGC:        m.NumGC,
-		NumGoroutine: runtime.NumGoroutine(),
-		Connections:  connCount,
-	}
-}
-
-func printMemStats(label string, stats MemStats) {
-	fmt.Printf("[%s] Memory Stats:\n", label)
-	fmt.Printf("  Alloc:        %d bytes (%.2f MB)\n", stats.Alloc, float64(stats.Alloc)/1024/1024)
-	fmt.Printf("  TotalAlloc:   %d bytes (%.2f MB)\n", stats.TotalAlloc, float64(stats.TotalAlloc)/1024/1024)
-	fmt.Printf("  Sys:          %d bytes (%.2f MB)\n", stats.Sys, float64(stats.Sys)/1024/1024)
-	fmt.Printf("  NumGC:        %d\n", stats.NumGC)
-	fmt.Printf("  NumGoroutine:  %d\n", stats.NumGoroutine)
-	fmt.Printf("  Connections:  %d\n\n", stats.Connections)
-}
-
 func main() {
 	flag.Parse()
 
-	if *memtest {
-		runMemtest()
-		return
-	}
-
+	// 解析并标准化协议列表，支持多协议混合（如 "http,tcp,ws,kcp"）
 	protoList := strings.Split(*proto, ",")
 	var protocols []string
 	for _, p := range protoList {
@@ -299,252 +241,77 @@ func main() {
 			protocols = append(protocols, p)
 		}
 	}
-	if len(protocols) == 0 {
-		protocols = []string{"tcp"}
-	}
+	fmt.Printf("混合测试协议包含：%v\n", protocols)
 
-	fmt.Printf("Connecting to server with %d connections (protocols: %v)...\n", *connNum, protocols)
-
-	data := []byte(*msgData)
-
+	// 按轮询方式创建连接，多个协议时均匀分布
 	var clients []Client
 	for i := 0; i < *connNum; i++ {
-		proto := protocols[i%len(protocols)]
-		addr := getAddrByProto(proto)
-		c, err := newClient(proto, addr)
+		protoc := protocols[i%len(protocols)]
+		c, err := newClient(protoc, getAddrByProto(protoc))
 		if err != nil {
 			fmt.Printf("Connection %d failed: %v\n", i, err)
 			continue
 		}
 		clients = append(clients, c)
-		if i%100 == 0 && i > 0 {
-			fmt.Printf("Connected %d/%d\n", i, *connNum)
-		}
 	}
-	fmt.Printf("Connected %d/%d connections\n", len(clients), *connNum)
+	fmt.Printf("%d 个客户端初始化完成\n", len(clients))
 
-	sendCount := int64(0)
-	recvCount := int64(0)
-
-	ticker := time.NewTicker(time.Duration(*interval) * time.Millisecond)
-	defer ticker.Stop()
-
-	done := make(chan os.Signal, 1)
-	signal.Notify(done, syscall.SIGINT, syscall.SIGTERM)
-
-	var maxTotalSend int64 = 0
-	if *duration > 0 {
-		maxTotalSend = int64(*duration) * int64(*connNum) * 1000 / int64(*interval)
-	}
-
-	start := time.Now()
-	var wg sync.WaitGroup
-	wg.Add(1)
-	var stopRequested int32
-	go func() {
-		defer wg.Done()
-		buf := make([]byte, 4096)
-		for {
-			hasWork := false
-			for _, c := range clients {
-				n, _ := c.Read(buf)
+	sendCount := int32(0)
+	recCount := int32(0)
+	for _, c := range clients {
+		go func(client Client) {
+			buf := make([]byte, 4096)
+			for {
+				n, err := client.Read(buf)
+				if err != nil {
+					fmt.Printf("Read error: %v\n", err)
+					return // 连接关闭或出错
+				}
 				if n > 0 {
-					hasWork = true
-					if pack := unpack(buf[:n]); pack != nil {
-						atomic.AddInt64(&recvCount, 1)
-					}
-				}
-			}
-			if hasWork {
-				time.Sleep(time.Millisecond * 10)
-			} else if atomic.LoadInt32(&stopRequested) != 0 {
-				return
-			} else {
-				time.Sleep(time.Millisecond * 50)
-			}
-		}
-	}()
-
-	for {
-		select {
-		case <-done:
-			fmt.Printf("\nShutting down... sent=%d recv=%d\n", atomic.LoadInt64(&sendCount), atomic.LoadInt64(&recvCount))
-			fmt.Println("Final result:", atomic.LoadInt64(&sendCount), "=", atomic.LoadInt64(&sendCount))
-			atomic.StoreInt32(&stopRequested, 1)
-			for _, c := range clients {
-				_ = c.Close()
-			}
-			wg.Wait()
-			fmt.Printf("Final result... sent=%d recv=%d\n", atomic.LoadInt64(&sendCount), atomic.LoadInt64(&sendCount))
-			return
-		case <-ticker.C:
-			if maxTotalSend > 0 && atomic.LoadInt64(&sendCount) >= maxTotalSend {
-				fmt.Printf("\nAll messages sent, waiting for responses...\n")
-				atomic.StoreInt32(&stopRequested, 1)
-				wg.Wait()
-				for i := 0; i < 60; i++ {
-					allDone := true
-					for _, c := range clients {
-						buf := make([]byte, 4096)
-						n, _ := c.Read(buf)
-						if n > 0 {
-							allDone = false
-							if unpack(buf[:n]) != nil {
-								atomic.AddInt64(&recvCount, 1)
-							}
+					if d := unpack(buf[:n]); d != nil {
+						addInt32 := int(atomic.AddInt32(&recCount, 1))
+						if len(clients) < 3 || addInt32%(len(clients)/3) == 0 {
+							fmt.Printf("idx: %v, %v -> %s\n", addInt32, d.Id, d.Data)
 						}
+						return // 收到有效响应，退出
 					}
-					if allDone || atomic.LoadInt64(&sendCount) == atomic.LoadInt64(&recvCount) {
-						break
-					}
-					time.Sleep(time.Second * 1)
 				}
-				for _, c := range clients {
-					_ = c.Close()
-				}
-				fmt.Printf("Final result... sent=%d recv=%d\n", atomic.LoadInt64(&sendCount), atomic.LoadInt64(&sendCount))
+				time.Sleep(time.Millisecond)
+			}
+		}(c)
+	}
+
+	// 发送消息
+	data := []byte(*msgData)
+	for _, c := range clients {
+		if err := c.Write(int16(*msgId), data); err != nil {
+			fmt.Printf("Write error: %v\n", err)
+			continue
+		}
+		sendCount++
+		time.Sleep(time.Millisecond)
+	}
+
+	// 等待全部响应或超时（30秒）
+	func() {
+		for {
+			select {
+			case <-time.After(30 * time.Second):
+				fmt.Printf("等待响应超时，已收到 %d/%d 个响应\n", recCount, sendCount)
 				return
-			}
-			for _, c := range clients {
-				if err := c.Write(int16(*msgId), data); err != nil {
-					fmt.Printf("Write error: %v\n", err)
-					continue
+			default:
+				if atomic.LoadInt32(&recCount) >= sendCount {
+					return
 				}
-				atomic.AddInt64(&sendCount, 1)
-			}
-			s := atomic.LoadInt64(&sendCount)
-			r := atomic.LoadInt64(&recvCount)
-			if s%1000 == 0 {
-				fmt.Printf("Sent: %d, Recv: %d\n", s, r)
 			}
 		}
-		d := time.Since(start)
-		if d.Seconds() > 5 {
-			s := atomic.LoadInt64(&sendCount)
-			r := atomic.LoadInt64(&recvCount)
-			fmt.Printf("Sent: %d, Recv: %d\n", s, r)
-			start = time.Now()
-		}
-	}
-}
-
-func runMemtest() {
-	protocols := []string{"tcp", "ws", "http", "kcp"}
-	protocolCount := len(protocols)
-
-	if *connNum <= 0 {
-		fmt.Println("conn must be > 0")
-		os.Exit(1)
-	}
-
-	fmt.Printf("=== Memory Leak Test ===\n")
-	fmt.Printf("Target server: %s\n", *serverIP)
-	fmt.Printf("Total connections: %d\n", *connNum)
-	fmt.Printf("Protocols: %v\n\n", protocols)
-
-	beforeStats := getMemStats()
-	printMemStats("BEFORE", beforeStats)
-
-	var wg sync.WaitGroup
-	var successCount int32
-	var mu sync.Mutex
-	var clients []Client
-
-	testData := []byte(`{"Message":"memory_test"}`)
-
-	fmt.Printf("Creating %d connections...\n", *connNum)
-
-	for i := 0; i < *connNum; i++ {
-		var proto string
-		if *mixProto {
-			proto = protocols[i%protocolCount]
-		} else {
-			proto = protocols[0]
-		}
-
-		addr := getAddrByProto(proto)
-		c, err := newClient(proto, addr)
-		if err != nil {
-			fmt.Printf("Connection %d (%s) failed: %v\n", i, proto, err)
-			continue
-		}
-
-		if err := c.Write(1001, testData); err != nil {
-			fmt.Printf("Write %d (%s) failed: %v\n", i, proto, err)
-			c.Close()
-			continue
-		}
-
-		mu.Lock()
-		clients = append(clients, c)
-		mu.Unlock()
-
-		atomic.AddInt32(&successCount, 1)
-
-		if atomic.LoadInt32(&successCount)%100 == 0 {
-			fmt.Printf("  Created %d/%d connections\n", atomic.LoadInt32(&successCount), *connNum)
-		}
-
-		if i%50 == 0 && i > 0 {
-			time.Sleep(time.Millisecond * 10)
-		}
-	}
-
-	fmt.Printf("\nTotal connections created: %d\n", len(clients))
-
-	runtime.GC()
-	time.Sleep(time.Second)
-
-	afterStats := getMemStats()
-	printMemStats("AFTER", afterStats)
-
-	fmt.Printf("=== Memory Delta ===\n")
-	allocDelta := int64(afterStats.Alloc) - int64(beforeStats.Alloc)
-	totalAllocDelta := int64(afterStats.TotalAlloc) - int64(beforeStats.TotalAlloc)
-	sysDelta := int64(afterStats.Sys) - int64(beforeStats.Sys)
-
-	fmt.Printf("Alloc delta:      %d bytes (%.2f MB)\n", allocDelta, float64(allocDelta)/1024/1024)
-	fmt.Printf("TotalAlloc delta: %d bytes (%.2f MB)\n", totalAllocDelta, float64(totalAllocDelta)/1024/1024)
-	fmt.Printf("Sys delta:      %d bytes (%.2f MB)\n", sysDelta, float64(sysDelta)/1024/1024)
-	fmt.Printf("Goroutines:    %d -> %d (delta: %d)\n", beforeStats.NumGoroutine, afterStats.NumGoroutine, afterStats.NumGoroutine-beforeStats.NumGoroutine)
-	fmt.Printf("GC count delta: %d\n", afterStats.NumGC-beforeStats.NumGC)
-
-	fmt.Printf("\n=== Closing connections ===\n")
-	for i, c := range clients {
-		c.Close()
-		if (i+1)%200 == 0 {
-			fmt.Printf("  Closed %d/%d\n", i+1, len(clients))
-		}
-	}
-
-	wg.Add(1)
-	go func() {
-		defer wg.Done()
 	}()
 
-	time.Sleep(time.Second * 2)
+	fmt.Printf("sendCount: %v, recCount: %v\n", sendCount, recCount)
+	fmt.Printf("👉 测试完成🎉\n")
 
-	runtime.GC()
-	time.Sleep(time.Second)
-
-	closedStats := getMemStats()
-	printMemStats("CLOSED", closedStats)
-
-	closedDelta := int64(closedStats.Alloc) - int64(beforeStats.Alloc)
-
-	fmt.Printf("=== Final Analysis ===\n")
-	fmt.Printf("Memory after close: %d bytes (%.2f MB)\n", closedStats.Alloc, float64(closedStats.Alloc)/1024/1024)
-	fmt.Printf("Memory leaked:  %d bytes (%.2f MB)\n", closedDelta, float64(closedDelta)/1024/1024)
-
-	if closedDelta > 10*1024*1024 {
-		fmt.Printf("\nWARNING: Potential memory leak detected (>10MB)\n")
-	} else if closedDelta > 5*1024*1024 {
-		fmt.Printf("\nCAUTION: Elevated memory usage (>5MB)\n")
-	} else {
-		fmt.Printf("\nOK Memory usage looks normal\n")
-	}
-
-	if afterStats.NumGoroutine > beforeStats.NumGoroutine+50 {
-		fmt.Printf("WARNING: Goroutine leak detected\n")
+	// 关闭所有连接
+	for _, c := range clients {
+		_ = c.Close()
 	}
 }
