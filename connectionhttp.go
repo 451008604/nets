@@ -75,6 +75,11 @@ func (c *connectionHTTP) SendMsg(msgId int32, msgData proto.Message) {
 	if c.IsClose() {
 		return
 	}
+
 	// 发送给客户端
-	c.StartWriter(c.ProtocolToByte(msgData))
+	var msgByte = c.ProtocolToByte(msgData)
+	if msgId != 0 {
+		msgByte = defaultServer.DataPack.Pack(defaultServer.Message(msgId, msgByte))
+	}
+	c.StartWriter(msgByte)
 }
