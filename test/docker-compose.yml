@@ -26,7 +26,7 @@ services:
     depends_on:
       server:
         condition: service_healthy
-    command: ["/app/client", "-server", "server", "-proto", "kcp", "-conn", "1000"]
+    command: ["/app/client", "-server", "server", "-proto", "tcp,ws,http,kcp", "-conn", "10000"]
     networks:
       - nets-test
 
@@ -37,7 +37,7 @@ services:
     depends_on:
       server:
         condition: service_healthy
-    command: ["/app/client", "-server", "server", "-proto", "kcp", "-conn", "1000"]
+    command: ["/app/client", "-server", "server", "-proto", "tcp,ws,http,kcp", "-conn", "10000"]
     networks:
       - nets-test
 
@@ -48,7 +48,7 @@ services:
     depends_on:
       server:
         condition: service_healthy
-    command: ["/app/client", "-server", "server", "-proto", "kcp", "-conn", "1000"]
+    command: ["/app/client", "-server", "server", "-proto", "tcp,ws,http,kcp", "-conn", "10000"]
     networks:
       - nets-test
 
@@ -59,7 +59,7 @@ services:
     depends_on:
       server:
         condition: service_healthy
-    command: ["/app/client", "-server", "server", "-proto", "kcp", "-conn", "1000"]
+    command: ["/app/client", "-server", "server", "-proto", "tcp,ws,http,kcp", "-conn", "10000"]
     networks:
       - nets-test
 
