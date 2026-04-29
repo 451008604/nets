@@ -7,6 +7,7 @@ import (
 	"github.com/451008604/nets/internal"
 	"google.golang.org/protobuf/proto"
 	"net/http"
+	_ "net/http/pprof"
 	"sync/atomic"
 )
 
@@ -28,8 +29,12 @@ var stats struct {
 func main() {
 	flag.Parse()
 
+	go func() {
+		_ = http.ListenAndServe(":6060", nil)
+	}()
+
 	nets.SetCustomServer(&nets.CustomServer{AppConf: &nets.AppConf{
-		ConnRWTimeOut: 30,
+		ConnRWTimeOut: 10,
 		ServerTCP:     nets.ServerConf{Port: *tcpPort},
 		ServerWS:      nets.ServerConf{Port: *wsPort},
 		ServerHTTP:    nets.ServerConf{Port: *httpPort},
