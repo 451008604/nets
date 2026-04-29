@@ -34,7 +34,7 @@ func main() {
 	}()
 
 	nets.SetCustomServer(&nets.CustomServer{AppConf: &nets.AppConf{
-		ConnRWTimeOut: 10,
+		ConnRWTimeOut: 30,
 		ServerTCP:     nets.ServerConf{Port: *tcpPort},
 		ServerWS:      nets.ServerConf{Port: *wsPort},
 		ServerHTTP:    nets.ServerConf{Port: *httpPort},

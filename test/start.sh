@@ -17,8 +17,8 @@ docker compose down --remove-orphans
 echo "Done!"
 echo ""
 echo "[1/4] Compile..."
-CGO_ENABLED=1 GOOS=linux GOARCH=amd64 go build -o "$SERVER_BIN" "$SERVER_DIR/server.go"
-CGO_ENABLED=1 GOOS=linux GOARCH=amd64 go build -o "$CLIENT_BIN" "$CLIENT_DIR/client.go"
+GOOS=linux GOARCH=amd64 go build -o "$SERVER_BIN" "$SERVER_DIR/server.go"
+GOOS=linux GOARCH=amd64 go build -o "$CLIENT_BIN" "$CLIENT_DIR/client.go"
 
 echo ""
 echo "[2/4] Build Docker images..."
