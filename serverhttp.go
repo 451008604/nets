@@ -41,11 +41,12 @@ func (s *serverHTTP) Start() {
 
 	// Full memstats JSON endpoint
 	httpServer.HandleFunc("/debug", func(w http.ResponseWriter, r *http.Request) {
+		runtime.GC()
+
 		var m runtime.MemStats
 		runtime.ReadMemStats(&m)
 		w.Header().Set("Content-Type", "application/json")
-		_, _ = fmt.Fprintf(w, `{"timestamp":"%v","pid":"%v","alloc":"%v bytes","total_alloc":"%v bytes","sys":"%v bytes","num_gc":%v,"num_goroutine":%v,"connections":%v}`,
-			time.Now().Format("2006-01-02 15:04:05"), os.Getpid(), m.Alloc, m.TotalAlloc, m.Sys, m.NumGC, runtime.NumGoroutine(), GetInstanceConnManager().Len())
+		_, _ = fmt.Fprintf(w, "{\n  \"timestamp\": \"%v\",\n  \"pid\": \"%v\",\n  \"alloc\": \"%v bytes\",\n  \"total_alloc\": \"%v bytes\",\n  \"sys\": \"%v bytes\",\n  \"num_gc\": %v,\n  \"num_goroutine\": %v,\n  \"connections\": %v\n}", time.Now().Format("2006-01-02 15:04:05"), os.Getpid(), m.Alloc, m.TotalAlloc, m.Sys, m.NumGC, runtime.NumGoroutine(), GetInstanceConnManager().Len())
 	})
 
 	httpServer.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
