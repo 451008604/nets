@@ -270,9 +270,10 @@ func main() {
 				if n > 0 {
 					if d := unpack(buf[:n]); d != nil {
 						addInt32 := int(atomic.AddInt32(&recCount, 1))
-						if len(clients) < 3 || addInt32%(len(clients)/3) == 0 {
+						if len(clients) < 5 || addInt32%(len(clients)/5) == 0 {
 							fmt.Printf("idx: %v, %v -> %s\n", addInt32, d.Id, d.Data)
 						}
+						_ = client.Close()
 						return // 收到有效响应，退出
 					}
 				}
@@ -309,9 +310,4 @@ func main() {
 
 	fmt.Printf("sendCount: %v, recCount: %v\n", sendCount, recCount)
 	fmt.Printf("👉 测试完成🎉\n")
-
-	// 关闭所有连接
-	for _, c := range clients {
-		_ = c.Close()
-	}
 }
