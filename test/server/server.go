@@ -34,7 +34,7 @@ func main() {
 	}()
 
 	nets.SetCustomServer(&nets.CustomServer{AppConf: &nets.AppConf{
-		ConnRWTimeOut: 30,
+		ConnRWTimeOut: 60, // 分布式压力测试时适当延长超时时间，避免连接建立后还没有通信就被服务端关闭
 		ServerTCP:     nets.ServerConf{Port: *tcpPort},
 		ServerWS:      nets.ServerConf{Port: *wsPort},
 		ServerHTTP:    nets.ServerConf{Port: *httpPort},

@@ -1,5 +1,5 @@
 services:
-  server:
+  server_big:
     build:
       context: .
       dockerfile: server/Dockerfile
@@ -8,7 +8,7 @@ services:
       - "17002:17002"
       - "17003:17003"
       - "17004:17004"
-      - "6060:6060"
+      - "16060:6060"
     healthcheck:
       test: ["CMD", "wget", "-q", "--spider", "http://localhost:6060/debug/pprof/"]
       interval: 2s
@@ -19,47 +19,48 @@ services:
       - nets-test
     restart: unless-stopped
 
-  client1:
+  client_big:
     build:
       context: .
       dockerfile: client/Dockerfile
+    deploy:
+      replicas: 4  # 批量启动客户端
     depends_on:
-      server:
+      server_big:
         condition: service_healthy
-    command: ["/app/client", "-server", "server", "-proto", "tcp,ws,http,kcp", "-conn", "10000"]
+    command: ["/app/client", "-server", "server_big", "-proto", "tcp,ws,http,kcp", "-conn", "5000"]
     networks:
       - nets-test
 
-  client2:
+# 启动一组少量客户端连接作为对照组
+  server_small:
     build:
       context: .
-      dockerfile: client/Dockerfile
-    depends_on:
-      server:
-        condition: service_healthy
-    command: ["/app/client", "-server", "server", "-proto", "tcp,ws,http,kcp", "-conn", "10000"]
+      dockerfile: server/Dockerfile
+    ports:
+      - "27001:17001"
+      - "27002:17002"
+      - "27003:17003"
+      - "27004:17004"
+      - "26060:6060"
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:6060/debug/pprof/"]
+      interval: 2s
+      timeout: 1s
+      retries: 10
+      start_period: 3s
     networks:
       - nets-test
+    restart: unless-stopped
 
-  client3:
+  client_small:
     build:
       context: .
       dockerfile: client/Dockerfile
     depends_on:
-      server:
+      server_small:
         condition: service_healthy
-    command: ["/app/client", "-server", "server", "-proto", "tcp,ws,http,kcp", "-conn", "10000"]
-    networks:
-      - nets-test
-
-  client4:
-    build:
-      context: .
-      dockerfile: client/Dockerfile
-    depends_on:
-      server:
-        condition: service_healthy
-    command: ["/app/client", "-server", "server", "-proto", "tcp,ws,http,kcp", "-conn", "10000"]
+    command: ["/app/client", "-server", "server_small", "-proto", "tcp,ws,http,kcp", "-conn", "4"]
     networks:
       - nets-test
 
