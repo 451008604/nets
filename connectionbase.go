@@ -102,7 +102,6 @@ func (c *ConnectionBase) Close() bool {
 	c.connCtxCancel()
 	close(c.taskQueue)   // 关闭任务队列
 	close(c.msgBuffChan) // 关闭消息通道
-	GetInstanceConnManager().Remove(c.conn)
 	return true
 }
 
