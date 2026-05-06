@@ -24,13 +24,14 @@ services:
       context: .
       dockerfile: client/Dockerfile
     deploy:
-      replicas: 4  # 批量启动客户端
+      replicas: 20  # 批量启动客户端
     depends_on:
       server_big:
         condition: service_healthy
     command: ["/app/client", "-server", "server_big", "-proto", "tcp,ws,http,kcp", "-conn", "5000"]
     networks:
       - nets-test
+#    restart: unless-stopped # 循环测试
 
 # 启动一组少量客户端连接作为对照组
   server_small:
