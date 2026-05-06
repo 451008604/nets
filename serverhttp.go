@@ -54,6 +54,7 @@ func (s *serverHTTP) Start() {
 		if GetInstanceServerManager().IsClose() {
 			w.WriteHeader(http.StatusServiceUnavailable)
 			_, _ = w.Write([]byte("server is closed"))
+			_ = r.Body.Close()
 			return
 		}
 
@@ -61,6 +62,7 @@ func (s *serverHTTP) Start() {
 		if GetInstanceConnManager().Len() >= defaultServer.AppConf.MaxConn {
 			w.WriteHeader(http.StatusGatewayTimeout)
 			_, _ = w.Write([]byte("connection max limit"))
+			_ = r.Body.Close()
 			return
 		}
 

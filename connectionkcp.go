@@ -74,6 +74,7 @@ func (c *connectionKCP) Close() bool {
 	if !c.ConnectionBase.Close() {
 		return false
 	}
+	_ = c.conn.SetDeadline(time.Now())
 	_ = c.conn.Close()
 	return true
 }
