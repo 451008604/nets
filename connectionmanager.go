@@ -105,7 +105,7 @@ func (c *ConnectionManager) connRWTimeOut() {
 		case t := <-ticker.C:
 			c.RangeConnections(func(conn IConnection) {
 				if t.Unix()-conn.GetDeadTime() > int64(defaultServer.AppConf.ConnRWTimeOut) {
-					conn.Close()
+					c.Remove(conn)
 				}
 			})
 		}
