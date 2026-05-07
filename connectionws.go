@@ -45,7 +45,10 @@ func (c *connectionWS) StartReader() bool {
 		msgByte = msgByte[int(msgData.GetDataLen())+defaultServer.DataPack.GetHeadLen():]
 
 		// 封装请求数据传入处理函数
-		c.DoTask(func() { readerTaskHandler(c, msgData) })
+		c.DoTask(func() {
+			readerTaskHandler(c, msgData)
+			PutMessage(msgData)
+		})
 	}
 	return true
 }

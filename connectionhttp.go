@@ -56,6 +56,7 @@ func (c *connectionHTTP) StartReader() bool {
 
 	defer GetInstanceMsgHandler().GetErrCapture(c)
 	readerTaskHandler(c, msgData)
+	PutMessage(msgData)
 	return true
 }
 

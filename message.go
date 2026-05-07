@@ -2,7 +2,26 @@ package nets
 
 import (
 	"google.golang.org/protobuf/proto"
+	"sync"
 )
+
+var messagePool = sync.Pool{
+	New: func() any { return &Message{} },
+}
+
+func GetMessage() *Message {
+	return messagePool.Get().(*Message)
+}
+
+func PutMessage(m IMessage) {
+	if msg, ok := m.(*Message); ok {
+		msg.Message = nil
+		msg.Id = 0
+		msg.DataLen = 0
+		msg.Data = ""
+		messagePool.Put(msg)
+	}
+}
 
 type Message struct {
 	proto.Message `json:"-"`

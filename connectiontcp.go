@@ -59,7 +59,10 @@ func (c *connectionTCP) StartReader() bool {
 	}
 
 	// 封装请求数据传入处理函数
-	c.DoTask(func() { readerTaskHandler(c, msgData) })
+	c.DoTask(func() {
+		readerTaskHandler(c, msgData)
+		PutMessage(msgData)
+	})
 	return true
 }
 
