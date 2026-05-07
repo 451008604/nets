@@ -24,7 +24,7 @@ services:
       context: .
       dockerfile: client/Dockerfile
     deploy:
-      replicas: 20  # 批量启动客户端
+      replicas: 10  # 批量启动客户端
     depends_on:
       server_big:
         condition: service_healthy
