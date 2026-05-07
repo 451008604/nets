@@ -6,7 +6,6 @@ import (
 	"github.com/gorilla/websocket"
 	"sync"
 	"sync/atomic"
-	"time"
 )
 
 type connectionWS struct {
@@ -18,11 +17,12 @@ func NewConnectionWS(server IServer, conn *websocket.Conn) IConnection {
 	c := &connectionWS{
 		ConnectionBase: &ConnectionBase{
 			server:        server,
-			connId:        fmt.Sprintf("%X-%.10v", time.Now().Unix(), atomic.AddUint32(&connIdSeed, 1)),
+			connId:        fmt.Sprintf("%X-%.10v", getUTCTime().Unix(), atomic.AddUint32(&connIdSeed, 1)),
 			msgBuffChan:   make(chan []byte, defaultServer.AppConf.MaxMsgChanLen),
 			taskQueue:     make(chan func(), defaultServer.AppConf.WorkerTaskMaxLen),
 			property:      map[string]any{},
 			propertyMutex: sync.RWMutex{},
+			deadTime:      getUTCTime().Unix(),
 		},
 		conn: conn,
 	}
@@ -61,6 +61,8 @@ func (c *connectionWS) Close() bool {
 	if !c.ConnectionBase.Close() {
 		return false
 	}
+	_ = c.conn.SetReadDeadline(getUTCTime())
+	_ = c.conn.SetWriteDeadline(getUTCTime())
 	_ = c.conn.Close()
 	return true
 }

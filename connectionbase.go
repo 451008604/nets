@@ -14,6 +14,9 @@ import (
 // 用于生成连接唯一ID
 var connIdSeed uint32
 
+// 获取世界时
+func getUTCTime() time.Time { return time.Now().UTC() }
+
 type ConnectionBase struct {
 	server        IServer            // 当前Conn所属的Server
 	conn          IConnection        // 绑定的连接
@@ -29,6 +32,7 @@ type ConnectionBase struct {
 	limitingTimer int64              // 限流计时
 	limitingMutex sync.Mutex         // 限流锁
 	taskQueue     chan func()        // 等待执行的任务队列
+	waitGroup     sync.WaitGroup     // 控制读写退出后关闭任务协程
 }
 
 func (c *ConnectionBase) Open() {
@@ -40,6 +44,7 @@ func (c *ConnectionBase) Open() {
 
 	GetInstanceServerManager().WaitGroupAdd(1)
 	GetInstanceConnManager().GetConnOpened(c.conn)
+	c.waitGroup.Add(2)
 
 	go c.readHandler()  // 开启读协程
 	go c.writeHandler() // 开启写协程
@@ -48,6 +53,7 @@ func (c *ConnectionBase) Open() {
 	for {
 		select {
 		case <-c.connCtx.Done():
+			c.waitGroup.Wait() // 等待 read/write handler 退出
 			return
 		case t, ok := <-c.taskQueue:
 			if !ok {
@@ -62,9 +68,10 @@ func (c *ConnectionBase) Open() {
 }
 
 func (c *ConnectionBase) readHandler() {
+	defer c.waitGroup.Done()
 	defer c.connCtxCancel()
 	for {
-		atomic.StoreInt64(&c.deadTime, time.Now().Unix())
+		atomic.StoreInt64(&c.deadTime, getUTCTime().Unix())
 		select {
 		case <-c.connCtx.Done():
 			return
@@ -77,9 +84,10 @@ func (c *ConnectionBase) readHandler() {
 }
 
 func (c *ConnectionBase) writeHandler() {
+	defer c.waitGroup.Done()
 	defer c.connCtxCancel()
 	for {
-		atomic.StoreInt64(&c.deadTime, time.Now().Unix())
+		atomic.StoreInt64(&c.deadTime, getUTCTime().Unix())
 		select {
 		case <-c.connCtx.Done():
 			return
@@ -212,13 +220,13 @@ func (c *ConnectionBase) FlowControl() (b bool) {
 	}
 
 	if c.limitingTimer == 0 {
-		c.limitingTimer = time.Now().UnixMilli()
+		c.limitingTimer = getUTCTime().UnixMilli()
 	}
 	c.limitingCount++
 	if c.limitingCount <= count {
 		return false
 	}
-	now := time.Now().UnixMilli()
+	now := getUTCTime().UnixMilli()
 	if now-c.limitingTimer < int64(1000) {
 		return true
 	}

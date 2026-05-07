@@ -6,7 +6,6 @@ import (
 	"net"
 	"sync"
 	"sync/atomic"
-	"time"
 )
 
 type connectionKCP struct {
@@ -18,11 +17,12 @@ func NewConnectionKCP(server *serverKCP, conn net.Conn) IConnection {
 	c := &connectionKCP{
 		ConnectionBase: &ConnectionBase{
 			server:        server,
-			connId:        fmt.Sprintf("%X-%.10v", time.Now().Unix(), atomic.AddUint32(&connIdSeed, 1)),
+			connId:        fmt.Sprintf("%X-%.10v", getUTCTime().Unix(), atomic.AddUint32(&connIdSeed, 1)),
 			msgBuffChan:   make(chan []byte, defaultServer.AppConf.MaxMsgChanLen),
 			taskQueue:     make(chan func(), defaultServer.AppConf.WorkerTaskMaxLen),
 			property:      map[string]any{},
 			propertyMutex: sync.RWMutex{},
+			deadTime:      getUTCTime().Unix(),
 		},
 		conn: conn,
 	}
@@ -74,7 +74,7 @@ func (c *connectionKCP) Close() bool {
 	if !c.ConnectionBase.Close() {
 		return false
 	}
-	_ = c.conn.SetDeadline(time.Now())
+	_ = c.conn.SetDeadline(getUTCTime())
 	_ = c.conn.Close()
 	return true
 }

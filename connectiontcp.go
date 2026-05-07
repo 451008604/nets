@@ -6,7 +6,6 @@ import (
 	"net"
 	"sync"
 	"sync/atomic"
-	"time"
 )
 
 type connectionTCP struct {
@@ -18,11 +17,12 @@ func NewConnectionTCP(server IServer, conn *net.TCPConn) IConnection {
 	c := &connectionTCP{
 		ConnectionBase: &ConnectionBase{
 			server:        server,
-			connId:        fmt.Sprintf("%X-%.10v", time.Now().Unix(), atomic.AddUint32(&connIdSeed, 1)),
+			connId:        fmt.Sprintf("%X-%.10v", getUTCTime().Unix(), atomic.AddUint32(&connIdSeed, 1)),
 			msgBuffChan:   make(chan []byte, defaultServer.AppConf.MaxMsgChanLen),
 			taskQueue:     make(chan func(), defaultServer.AppConf.WorkerTaskMaxLen),
 			property:      map[string]any{},
 			propertyMutex: sync.RWMutex{},
+			deadTime:      getUTCTime().Unix(),
 		},
 		conn: conn,
 	}
@@ -74,6 +74,7 @@ func (c *connectionTCP) Close() bool {
 	if !c.ConnectionBase.Close() {
 		return false
 	}
+	_ = c.conn.SetDeadline(getUTCTime())
 	_ = c.conn.Close()
 	return true
 }

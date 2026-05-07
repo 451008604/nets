@@ -25,8 +25,7 @@ var instanceServerManagerOnce = sync.Once{}
 func GetInstanceServerManager() *ServerManager {
 	instanceServerManagerOnce.Do(func() {
 		instanceServerManager = &ServerManager{
-			servers:   make([]IServer, 0),
-			waitGroup: sync.WaitGroup{},
+			servers: make([]IServer, 0),
 		}
 		go operatingSystemSignalHandler()
 	})
