@@ -57,6 +57,11 @@ func (s *serverTCP) Start() {
 	}(tcp)
 
 	for {
+		select {
+		case <-serverCtx.Done():
+			return
+		default:
+		}
 		// 等待客户端请求建立连接
 		conn, err = tcp.AcceptTCP()
 		if err != nil {

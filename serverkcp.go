@@ -46,6 +46,11 @@ func (s *serverKCP) Start() {
 
 	var conn net.Conn
 	for {
+		select {
+		case <-serverCtx.Done():
+			return
+		default:
+		}
 		conn, err = listener.Accept()
 		if err != nil {
 			fmt.Printf("accept kcp err %v\n", err)
