@@ -3,7 +3,6 @@ package nets
 import (
 	"github.com/451008604/shard-map"
 	"sync"
-	"time"
 )
 
 type ConnectionManager struct {
@@ -22,7 +21,6 @@ func GetInstanceConnManager() *ConnectionManager {
 		instanceConnManager = &ConnectionManager{
 			connections: shardmap.NewShardMap[string, IConnection](),
 		}
-		go instanceConnManager.connRWTimeOut()
 	})
 	return instanceConnManager
 }
@@ -92,22 +90,4 @@ func (c *ConnectionManager) ConnRateLimiting(conn IConnection) {
 		return
 	}
 	c.connOnRateLimiting(conn)
-}
-
-// 读写超时检测
-func (c *ConnectionManager) connRWTimeOut() {
-	ticker := time.NewTicker(time.Second * 5)
-	defer ticker.Stop()
-	for {
-		select {
-		case <-serverCtx.Done():
-			return
-		case t := <-ticker.C:
-			c.RangeConnections(func(conn IConnection) {
-				if t.Unix()-conn.GetDeadTime() > int64(defaultServer.AppConf.ConnRWTimeOut) {
-					c.Remove(conn)
-				}
-			})
-		}
-	}
 }

@@ -6,6 +6,7 @@ import (
 	"net"
 	"sync"
 	"sync/atomic"
+	"time"
 )
 
 type connectionKCP struct {
@@ -17,12 +18,11 @@ func NewConnectionKCP(server *serverKCP, conn net.Conn) IConnection {
 	c := &connectionKCP{
 		ConnectionBase: &ConnectionBase{
 			server:        server,
-			connId:        fmt.Sprintf("%X-%.10v", getUTCTime().Unix(), atomic.AddUint32(&connIdSeed, 1)),
+			connId:        fmt.Sprintf("%X-%.10v", time.Now().Unix(), atomic.AddUint32(&connIdSeed, 1)),
 			msgBuffChan:   make(chan []byte, defaultServer.AppConf.MaxMsgChanLen),
 			taskQueue:     make(chan func(), defaultServer.AppConf.WorkerTaskMaxLen),
 			property:      map[string]any{},
 			propertyMutex: sync.RWMutex{},
-			deadTime:      getUTCTime().Unix(),
 		},
 		conn: conn,
 	}
@@ -31,20 +31,21 @@ func NewConnectionKCP(server *serverKCP, conn net.Conn) IConnection {
 	return c
 }
 
+func (c *connectionKCP) GetNetConn() net.Conn {
+	return c.conn
+}
+
 func (c *connectionKCP) StartReader() bool {
-	// 获取消息头信息
 	msgHead := make([]byte, defaultServer.DataPack.GetHeadLen())
 	if read, err := c.conn.Read(msgHead); err != nil || read < defaultServer.DataPack.GetHeadLen() {
 		return false
 	}
 
-	// 解析头信息
 	msgData := defaultServer.DataPack.UnPack(msgHead)
 	if msgData == nil {
 		return false
 	}
 
-	// 解析消息体的内容
 	for {
 		if len(msgData.GetData()) >= int(msgData.GetDataLen()) {
 			break
@@ -58,7 +59,6 @@ func (c *connectionKCP) StartReader() bool {
 		msgData.SetData(append(msgData.GetData(), bt[:read]...))
 	}
 
-	// 封装请求数据传入处理函数
 	c.DoTask(func() {
 		readerTaskHandler(c, msgData)
 		PutMessage(msgData)
@@ -70,15 +70,6 @@ func (c *connectionKCP) StartWriter(data []byte) bool {
 	if _, err := c.conn.Write(data); err != nil {
 		return false
 	}
-	return true
-}
-
-func (c *connectionKCP) Close() bool {
-	if !c.ConnectionBase.Close() {
-		return false
-	}
-	_ = c.conn.SetDeadline(getUTCTime())
-	_ = c.conn.Close()
 	return true
 }
 

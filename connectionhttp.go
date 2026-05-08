@@ -5,9 +5,11 @@ import (
 	"fmt"
 	"google.golang.org/protobuf/proto"
 	"io"
+	"net"
 	"net/http"
 	"sync"
 	"sync/atomic"
+	"time"
 )
 
 type connectionHTTP struct {
@@ -20,12 +22,11 @@ func NewConnectionHTTP(server IServer, writer http.ResponseWriter, reader *http.
 	c := &connectionHTTP{
 		ConnectionBase: &ConnectionBase{
 			server:        server,
-			connId:        fmt.Sprintf("%X-%.10v", getUTCTime().Unix(), atomic.AddUint32(&connIdSeed, 1)),
+			connId:        fmt.Sprintf("%X-%.10v", time.Now().Unix(), atomic.AddUint32(&connIdSeed, 1)),
 			msgBuffChan:   make(chan []byte, defaultServer.AppConf.MaxMsgChanLen),
 			taskQueue:     make(chan func(), defaultServer.AppConf.WorkerTaskMaxLen),
 			property:      map[string]any{},
 			propertyMutex: sync.RWMutex{},
-			deadTime:      getUTCTime().Unix(),
 		},
 		writer: writer,
 		reader: reader,
@@ -33,6 +34,10 @@ func NewConnectionHTTP(server IServer, writer http.ResponseWriter, reader *http.
 	c.connCtx, c.connCtxCancel = context.WithCancel(context.Background())
 	c.ConnectionBase.conn = c
 	return c
+}
+
+func (c *connectionHTTP) GetNetConn() net.Conn {
+	return nil
 }
 
 var (

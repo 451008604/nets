@@ -4,18 +4,14 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"google.golang.org/protobuf/proto"
 	"sync"
 	"sync/atomic"
 	"time"
-
-	"google.golang.org/protobuf/proto"
 )
 
 // 用于生成连接唯一ID
 var connIdSeed uint32
-
-// 获取世界时
-func getUTCTime() time.Time { return time.Now().UTC() }
 
 type ConnectionBase struct {
 	server        IServer            // 当前Conn所属的Server
@@ -27,7 +23,6 @@ type ConnectionBase struct {
 	isClosed      int32              // 当前连接是否已关闭
 	connCtx       context.Context    // 管理连接的上下文
 	connCtxCancel context.CancelFunc // 连接关闭信号
-	deadTime      int64              // 读写超时标记
 	limitingCount int64              // 限流计数
 	limitingTimer int64              // 限流计时
 	limitingMutex sync.Mutex         // 限流锁
@@ -36,11 +31,9 @@ type ConnectionBase struct {
 }
 
 func (c *ConnectionBase) Open() {
-	defer func(c *ConnectionBase) {
-		c.connCtxCancel()
-		GetInstanceConnManager().Remove(c.conn)
-		GetInstanceServerManager().WaitGroupDone()
-	}(c)
+	defer GetInstanceServerManager().WaitGroupDone()
+	defer GetInstanceConnManager().Remove(c.conn)
+	defer c.connCtxCancel()
 
 	GetInstanceServerManager().WaitGroupAdd(1)
 	GetInstanceConnManager().GetConnOpened(c.conn)
@@ -71,11 +64,15 @@ func (c *ConnectionBase) readHandler() {
 	defer c.waitGroup.Done()
 	defer c.connCtxCancel()
 	for {
-		atomic.StoreInt64(&c.deadTime, getUTCTime().Unix())
 		select {
 		case <-c.connCtx.Done():
 			return
 		default:
+			// 设置读超时
+			deadline := time.Now().Add(time.Duration(defaultServer.AppConf.ConnRWTimeOut) * time.Second)
+			if netConn := c.conn.GetNetConn(); netConn != nil && netConn.SetReadDeadline(deadline) != nil {
+				return
+			}
 			if !c.conn.StartReader() {
 				return
 			}
@@ -87,7 +84,6 @@ func (c *ConnectionBase) writeHandler() {
 	defer c.waitGroup.Done()
 	defer c.connCtxCancel()
 	for {
-		atomic.StoreInt64(&c.deadTime, getUTCTime().Unix())
 		select {
 		case <-c.connCtx.Done():
 			return
@@ -108,6 +104,9 @@ func (c *ConnectionBase) Close() bool {
 	c.property = map[string]any{}
 	c.propertyMutex.Unlock()
 	c.connCtxCancel()
+	if netConn := c.conn.GetNetConn(); netConn != nil {
+		_ = netConn.Close()
+	}
 	close(c.taskQueue)   // 关闭任务队列
 	close(c.msgBuffChan) // 关闭消息通道
 	return true
@@ -166,10 +165,6 @@ func (c *ConnectionBase) IsClose() bool {
 	return atomic.LoadInt32(&c.isClosed) != 0
 }
 
-func (c *ConnectionBase) GetDeadTime() int64 {
-	return atomic.LoadInt64(&c.deadTime)
-}
-
 func (c *ConnectionBase) GetProperty(key string) any {
 	c.propertyMutex.RLock()
 	defer c.propertyMutex.RUnlock()
@@ -220,13 +215,13 @@ func (c *ConnectionBase) FlowControl() (b bool) {
 	}
 
 	if c.limitingTimer == 0 {
-		c.limitingTimer = getUTCTime().UnixMilli()
+		c.limitingTimer = time.Now().UnixMilli()
 	}
 	c.limitingCount++
 	if c.limitingCount <= count {
 		return false
 	}
-	now := getUTCTime().UnixMilli()
+	now := time.Now().UnixMilli()
 	if now-c.limitingTimer < int64(1000) {
 		return true
 	}

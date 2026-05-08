@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"os"
 	"runtime"
+	"time"
 )
 
 type serverHTTP struct {
@@ -45,7 +46,7 @@ func (s *serverHTTP) Start() {
 		var m runtime.MemStats
 		runtime.ReadMemStats(&m)
 		w.Header().Set("Content-Type", "application/json")
-		_, _ = fmt.Fprintf(w, "{\n  \"timestamp\": \"%v\",\n  \"pid\": \"%v\",\n  \"alloc\": \"%v bytes\",\n  \"total_alloc\": \"%v bytes\",\n  \"sys\": \"%v bytes\",\n  \"num_gc\": %v,\n  \"num_goroutine\": %v,\n  \"connections\": %v\n}", getUTCTime().Local().Format("2006-01-02 15:04:05"), os.Getpid(), m.Alloc, m.TotalAlloc, m.Sys, m.NumGC, runtime.NumGoroutine(), GetInstanceConnManager().Len())
+		_, _ = fmt.Fprintf(w, "{\n  \"timestamp\": \"%v\",\n  \"pid\": \"%v\",\n  \"alloc\": \"%v bytes\",\n  \"total_alloc\": \"%v bytes\",\n  \"sys\": \"%v bytes\",\n  \"num_gc\": %v,\n  \"num_goroutine\": %v,\n  \"connections\": %v\n}", time.Now().Local().Format("2006-01-02 15:04:05"), os.Getpid(), m.Alloc, m.TotalAlloc, m.Sys, m.NumGC, runtime.NumGoroutine(), GetInstanceConnManager().Len())
 	})
 
 	httpServer.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {

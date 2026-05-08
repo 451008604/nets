@@ -2,6 +2,7 @@ package nets
 
 import (
 	"google.golang.org/protobuf/proto"
+	"net"
 )
 
 type IConnection interface {
@@ -9,6 +10,9 @@ type IConnection interface {
 	Open()
 	// 停止连接(通过connmanager调用)
 	Close() bool
+
+	// 获取真实连接
+	GetNetConn() net.Conn
 
 	// 启动接收消息协程
 	StartReader() bool
@@ -23,8 +27,6 @@ type IConnection interface {
 	RemoteAddrStr() string
 	// 获取连接是否已关闭
 	IsClose() bool
-	// 获取读写超时时间
-	GetDeadTime() int64
 	// 获取连接绑定的属性
 	GetProperty(key string) any
 	// 设置连接绑定的属性
