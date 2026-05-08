@@ -230,16 +230,27 @@ func (c *ConnectionBase) FlowControl() (b bool) {
 	return false
 }
 
+var (
+	protoMarshalOnce sync.Once
+	protoMarshal     func(proto.Message) ([]byte, error)
+	protoUnmarshal   func([]byte, proto.Message) error
+)
+
+func initProtoFuncs() {
+	protoMarshalOnce.Do(func() {
+		if defaultServer.AppConf.ProtocolIsJson {
+			protoMarshal = func(m proto.Message) ([]byte, error) { return json.Marshal(m) }
+			protoUnmarshal = func(b []byte, m proto.Message) error { return json.Unmarshal(b, m) }
+		} else {
+			protoMarshal = proto.MarshalOptions{}.Marshal
+			protoUnmarshal = proto.UnmarshalOptions{}.Unmarshal
+		}
+	})
+}
+
 func (c *ConnectionBase) ProtocolToByte(str proto.Message) []byte {
-	var err error
-	var marshal []byte
-
-	if defaultServer.AppConf.ProtocolIsJson {
-		marshal, err = json.Marshal(str)
-	} else {
-		marshal, err = proto.Marshal(str)
-	}
-
+	initProtoFuncs()
+	marshal, err := protoMarshal(str)
 	if err != nil {
 		return []byte{}
 	}
@@ -247,16 +258,6 @@ func (c *ConnectionBase) ProtocolToByte(str proto.Message) []byte {
 }
 
 func (c *ConnectionBase) ByteToProtocol(byte []byte, target proto.Message) error {
-	var err error
-
-	if defaultServer.AppConf.ProtocolIsJson {
-		err = json.Unmarshal(byte, target)
-	} else {
-		err = proto.Unmarshal(byte, target)
-	}
-
-	if err != nil {
-		return err
-	}
-	return nil
+	initProtoFuncs()
+	return protoUnmarshal(byte, target)
 }
