@@ -1,9 +1,12 @@
-FROM debian:stable-slim
+FROM alpine:3.23
 
-RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates && rm -rf /var/lib/apt/lists/*
+RUN apk add --no-cache ca-certificates
 
 WORKDIR /app
 
 COPY client/client .
+
+ENV GODEBUG="netdns=cgo"
+ENV GOTRACEBACK=crash
 
 CMD ["/app/client"]

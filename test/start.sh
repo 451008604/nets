@@ -14,11 +14,12 @@ echo "=========================================="
 echo ""
 echo "[Cleanup]"
 docker compose down --remove-orphans
+docker rmi test-client:latest  test-server:latest
 echo "Done!"
 echo ""
 echo "[1/3] Compile..."
-GOOS=linux GOARCH=amd64 go build -o "$SERVER_BIN" "$SERVER_DIR/server.go"
-GOOS=linux GOARCH=amd64 go build -o "$CLIENT_BIN" "$CLIENT_DIR/client.go"
+CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o "$SERVER_BIN" "$SERVER_DIR/server.go"
+CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o "$CLIENT_BIN" "$CLIENT_DIR/client.go"
 
 echo ""
 echo "[2/3] Build Docker images..."
