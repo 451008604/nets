@@ -1,15 +1,9 @@
 package nets
 
 import (
-	"bytes"
 	"encoding/binary"
 	"fmt"
-	"sync"
 )
-
-var bufferPool = sync.Pool{
-	New: func() any { return bytes.NewBuffer(make([]byte, 0, 64)) },
-}
 
 type dataPack struct{}
 
@@ -23,39 +17,28 @@ func (d *dataPack) GetHeadLen() int {
 }
 
 func (d *dataPack) Pack(msg IMessage) []byte {
-	dataBuff := bufferPool.Get().(*bytes.Buffer)
-	dataBuff.Reset()
-	defer bufferPool.Put(dataBuff)
+	data := msg.GetData()
+	headLen := d.GetHeadLen()
+	packed := make([]byte, headLen+len(data))
 
-	// 写msgId
-	if binary.Write(dataBuff, binary.LittleEndian, msg.GetMsgId()) != nil {
-		return nil
-	}
-	// 写dataLen
-	if binary.Write(dataBuff, binary.LittleEndian, msg.GetDataLen()) != nil {
-		return nil
-	}
-	// 写data数据
-	if binary.Write(dataBuff, binary.LittleEndian, msg.GetData()) != nil {
-		return nil
-	}
-	// 拷贝结果，防止 buffer 归还后数据被覆盖
-	return append([]byte(nil), dataBuff.Bytes()...)
+	// 直接写msgId (2字节, 小端)
+	binary.LittleEndian.PutUint16(packed[0:2], msg.GetMsgId())
+	// 直接写dataLen (2字节, 小端)
+	binary.LittleEndian.PutUint16(packed[2:4], msg.GetDataLen())
+	// 直接拷贝data
+	copy(packed[headLen:], data)
+
+	return packed
 }
 
 func (d *dataPack) UnPack(binaryData []byte) IMessage {
-	dataBuff := bytes.NewReader(binaryData)
 	msgData := GetMessage()
-	// 读msgId
-	if binary.Read(dataBuff, binary.LittleEndian, &msgData.Id) != nil {
-		PutMessage(msgData)
-		return nil
-	}
-	// 读dataLen
-	if binary.Read(dataBuff, binary.LittleEndian, &msgData.DataLen) != nil {
-		PutMessage(msgData)
-		return nil
-	}
+
+	// 直接读msgId (2字节, 小端)
+	msgData.Id = binary.LittleEndian.Uint16(binaryData[0:2])
+	// 直接读dataLen (2字节, 小端)
+	msgData.DataLen = binary.LittleEndian.Uint16(binaryData[2:4])
+
 	// 检查数据长度是否超出限制
 	if defaultServer.AppConf.MaxPackSize > 0 && int(msgData.GetDataLen()) > defaultServer.AppConf.MaxPackSize {
 		fmt.Printf("received data length exceeds the limit. MaxPackSize %v, msgDataLen %v\n", defaultServer.AppConf.MaxPackSize, msgData.GetDataLen())

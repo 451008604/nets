@@ -18,7 +18,7 @@ func PutMessage(m IMessage) {
 		msg.Message = nil
 		msg.Id = 0
 		msg.DataLen = 0
-		msg.Data = ""
+		msg.Data = nil
 		messagePool.Put(msg)
 	}
 }
@@ -26,7 +26,7 @@ func PutMessage(m IMessage) {
 type Message struct {
 	proto.Message `json:"-"`
 	Id            uint16 `protobuf:"bytes,1,opt,name=msg_id,proto3" json:"msg_id"` // 消息Id
-	Data          string `protobuf:"bytes,2,opt,name=data,proto3" json:"data"`     // 消息内容
+	Data          []byte `protobuf:"bytes,2,opt,name=data,proto3" json:"data"`     // 消息内容
 	DataLen       uint16 `json:"-"`                                                // 消息长度
 }
 
@@ -34,7 +34,7 @@ func NewMsgPackage(id int32, data []byte) IMessage {
 	return &Message{
 		Id:      uint16(id),
 		DataLen: uint16(len(data)),
-		Data:    string(data),
+		Data:    data,
 	}
 }
 
@@ -47,9 +47,9 @@ func (m *Message) GetMsgId() uint16 {
 }
 
 func (m *Message) GetData() []byte {
-	return []byte(m.Data)
+	return m.Data
 }
 
 func (m *Message) SetData(bytes []byte) {
-	m.Data = string(bytes)
+	m.Data = bytes
 }
