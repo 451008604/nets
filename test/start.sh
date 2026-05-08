@@ -13,8 +13,7 @@ echo "  NETS Automated Test"
 echo "=========================================="
 echo ""
 echo "[Cleanup]"
-docker compose down --remove-orphans
-docker rmi test-client:latest  test-server:latest
+docker compose down --remove-orphans --rmi all
 echo "Done!"
 echo ""
 echo "[1/3] Compile..."
