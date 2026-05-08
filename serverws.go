@@ -37,7 +37,7 @@ func (s *serverWS) Start() {
 
 	var upgrade = websocket.Upgrader{
 		ReadBufferSize:  defaultServer.AppConf.MaxPackSize,
-		WriteBufferSize: defaultServer.AppConf.MaxPackSize,
+		WriteBufferSize: 64 * 1024,
 	}
 	wsServer := http.NewServeMux()
 	wsServer.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {

@@ -57,6 +57,11 @@ func (s *serverKCP) Start() {
 			continue
 		}
 
+		if sess, ok := conn.(*kcp.UDPSession); ok {
+			sess.SetNoDelay(1, 10, 2, 1)
+			sess.SetWindowSize(256, 256)
+		}
+
 		// 服务关闭状态
 		if GetInstanceServerManager().IsClose() {
 			_ = conn.Close()
