@@ -9,6 +9,7 @@ import (
 	"net/http"
 	_ "net/http/pprof"
 	"sync/atomic"
+	"time"
 )
 
 var (
@@ -33,6 +34,12 @@ func main() {
 		_ = http.ListenAndServe(":6060", nil)
 	}()
 
+	go func() {
+		for t := range time.Tick(time.Second) {
+			println(t.Format("15:04:05"), "flagReceive: ", atomic.LoadInt32(&stats.flagReceive), ",flagSend: ", atomic.LoadInt32(&stats.flagSend), ", flagOpened: ", atomic.LoadInt32(&stats.flagOpened), ", flagClosed: ", atomic.LoadInt32(&stats.flagClosed), ", flagErrCapture:", atomic.LoadInt32(&stats.flagErrCapture))
+		}
+	}()
+
 	nets.SetCustomServer(&nets.CustomServer{AppConf: &nets.AppConf{
 		ConnRWTimeOut: 60, // 分布式压力测试时适当延长超时时间，避免连接建立后还没有通信就被服务端关闭
 		ServerTCP:     nets.ServerConf{Port: *tcpPort},
@@ -50,27 +57,15 @@ func main() {
 		atomic.AddInt32(&stats.flagErrCapture, 1)
 	})
 
-	nets.GetInstanceMsgHandler().AddRouter(int32(internal.Test_MsgId_Test_None), func() proto.Message { return &nets.Message{} }, func(conn nets.IConnection, message proto.Message) {
-		reader := conn.GetProperty(nets.ConnPropertyHttpReader).(*http.Request)
-		writer := conn.GetProperty(nets.ConnPropertyHttpWriter).(http.ResponseWriter)
-		if reader == nil || writer == nil {
-			return
-		}
-		msgReq, ok := message.(*nets.Message)
-		if !ok || msgReq == nil {
-			return
-		}
-		conn.SendMsg(int32(internal.Test_MsgId_Test_None), msgReq)
-		atomic.AddInt32(&stats.flagReceive, 1)
-	})
 	nets.GetInstanceMsgHandler().AddRouter(int32(internal.Test_MsgId_Test_Echo), func() proto.Message { return &internal.Test_EchoRequest{} }, func(conn nets.IConnection, message proto.Message) {
+		atomic.AddInt32(&stats.flagReceive, 1)
 		req, ok := message.(*internal.Test_EchoRequest)
 		if !ok || req == nil {
 			return
 		}
 		res := &internal.Test_EchoResponse{Message: req.Message}
 		conn.SendMsg(int32(internal.Test_MsgId_Test_Echo), res)
-		atomic.AddInt32(&stats.flagReceive, 1)
+		atomic.AddInt32(&stats.flagSend, 1)
 	})
 
 	nets.GetInstanceServerManager().RegisterServer(nets.GetServerHTTP(), nets.GetServerKCP(), nets.GetServerTCP(), nets.GetServerWS())

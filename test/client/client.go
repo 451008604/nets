@@ -11,6 +11,7 @@ import (
 	"net"
 	"net/http"
 	"strings"
+	"sync"
 	"sync/atomic"
 	"time"
 )
@@ -243,17 +244,31 @@ func main() {
 	}
 	fmt.Printf("混合测试协议包含：%v\n", protocols)
 
-	// 按轮询方式创建连接，多个协议时均匀分布
-	var clients []Client
+	// 并发创建连接，多个协议时均匀分布
+	var (
+		clients   []Client
+		clientsMu sync.Mutex
+		wg        sync.WaitGroup
+		sem       = make(chan struct{}, 10000) // 并发限制，避免文件描述符耗尽
+	)
 	for i := 0; i < *connNum; i++ {
-		protoc := protocols[i%len(protocols)]
-		c, err := newClient(protoc, getAddrByProto(protoc))
-		if err != nil {
-			fmt.Printf("Connection %d failed: %v\n", i, err)
-			continue
-		}
-		clients = append(clients, c)
+		wg.Add(1)
+		sem <- struct{}{}
+		go func(idx int) {
+			defer wg.Done()
+			defer func() { <-sem }()
+			protoc := protocols[idx%len(protocols)]
+			c, err := newClient(protoc, getAddrByProto(protoc))
+			if err != nil {
+				fmt.Printf("Connection %d failed: %v\n", idx, err)
+				return
+			}
+			clientsMu.Lock()
+			clients = append(clients, c)
+			clientsMu.Unlock()
+		}(i)
 	}
+	wg.Wait()
 	fmt.Printf("%d 个客户端初始化完成\n", len(clients))
 
 	sendCount := int32(0)
@@ -277,7 +292,7 @@ func main() {
 						return // 收到有效响应，退出
 					}
 				}
-				time.Sleep(time.Millisecond)
+				time.Sleep(time.Microsecond)
 			}
 		}(c)
 	}
@@ -290,7 +305,6 @@ func main() {
 			continue
 		}
 		sendCount++
-		time.Sleep(time.Millisecond)
 	}
 
 	// 等待全部响应或超时（30秒）
