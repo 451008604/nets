@@ -1,6 +1,7 @@
 package nets
 
 import (
+	"bufio"
 	"context"
 	"fmt"
 	"net"
@@ -11,7 +12,8 @@ import (
 
 type connectionTCP struct {
 	*ConnectionBase
-	conn *net.TCPConn
+	conn   *net.TCPConn
+	writer *bufio.Writer
 }
 
 func NewConnectionTCP(server IServer, conn *net.TCPConn) IConnection {
@@ -26,6 +28,7 @@ func NewConnectionTCP(server IServer, conn *net.TCPConn) IConnection {
 		},
 		conn: conn,
 	}
+	c.writer = bufio.NewWriterSize(conn, 64*1024)
 	c.connCtx, c.connCtxCancel = context.WithCancel(context.Background())
 	c.ConnectionBase.conn = c
 	return c
@@ -67,7 +70,10 @@ func (c *connectionTCP) StartReader() bool {
 }
 
 func (c *connectionTCP) StartWriter(data []byte) bool {
-	if _, err := c.conn.Write(data); err != nil {
+	if _, err := c.writer.Write(data); err != nil {
+		return false
+	}
+	if err := c.writer.Flush(); err != nil {
 		return false
 	}
 	return true
