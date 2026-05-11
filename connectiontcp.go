@@ -3,11 +3,8 @@ package nets
 import (
 	"bufio"
 	"context"
-	"fmt"
 	"net"
 	"sync"
-	"sync/atomic"
-	"time"
 )
 
 type connectionTCP struct {
@@ -20,7 +17,7 @@ func NewConnectionTCP(server IServer, conn *net.TCPConn) IConnection {
 	c := &connectionTCP{
 		ConnectionBase: &ConnectionBase{
 			server:        server,
-			connId:        fmt.Sprintf("%X-%.10v", time.Now().Unix(), atomic.AddUint32(&connIdSeed, 1)),
+			connId:        GenerateConnID(),
 			msgBuffChan:   make(chan []byte, defaultServer.AppConf.MaxMsgChanLen),
 			taskQueue:     make(chan func(), defaultServer.AppConf.WorkerTaskMaxLen),
 			property:      map[string]any{},
@@ -77,8 +74,4 @@ func (c *connectionTCP) StartWriter(data []byte) bool {
 		return false
 	}
 	return true
-}
-
-func (c *connectionTCP) RemoteAddrStr() string {
-	return c.conn.RemoteAddr().String()
 }

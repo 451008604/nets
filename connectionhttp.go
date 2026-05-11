@@ -2,14 +2,11 @@ package nets
 
 import (
 	"context"
-	"fmt"
 	"google.golang.org/protobuf/proto"
 	"io"
 	"net"
 	"net/http"
 	"sync"
-	"sync/atomic"
-	"time"
 )
 
 type connectionHTTP struct {
@@ -22,7 +19,7 @@ func NewConnectionHTTP(server IServer, writer http.ResponseWriter, reader *http.
 	c := &connectionHTTP{
 		ConnectionBase: &ConnectionBase{
 			server:        server,
-			connId:        fmt.Sprintf("%X-%.10v", time.Now().Unix(), atomic.AddUint32(&connIdSeed, 1)),
+			connId:        GenerateConnID(),
 			msgBuffChan:   make(chan []byte, defaultServer.AppConf.MaxMsgChanLen),
 			taskQueue:     make(chan func(), defaultServer.AppConf.WorkerTaskMaxLen),
 			property:      map[string]any{},
@@ -52,7 +49,7 @@ func (c *connectionHTTP) StartReader() bool {
 
 	// 解析body结构
 	data, _ := io.ReadAll(c.reader.Body)
-	msgData := &Message{}
+	msgData := GetMessage()
 	if err := c.ByteToProtocol(data, msgData); err != nil || msgData.GetMsgId() == 0 {
 		msgData.SetData(data)
 		c.SetProperty(ConnPropertyHttpReader, c.reader)
@@ -85,7 +82,11 @@ func (c *connectionHTTP) SendMsg(msgId int32, msgData proto.Message) {
 	// 发送给客户端
 	var msgByte = c.ProtocolToByte(msgData)
 	if msgId != 0 {
-		msgByte = defaultServer.DataPack.Pack(defaultServer.Message(msgId, msgByte))
+		packMsg := GetMessage()
+		packMsg.Id = uint16(msgId)
+		packMsg.Data = msgByte
+		msgByte = defaultServer.DataPack.Pack(packMsg)
+		PutMessage(packMsg)
 	}
 	c.StartWriter(msgByte)
 }

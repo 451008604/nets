@@ -2,11 +2,8 @@ package nets
 
 import (
 	"context"
-	"fmt"
 	"net"
 	"sync"
-	"sync/atomic"
-	"time"
 )
 
 type connectionKCP struct {
@@ -18,7 +15,7 @@ func NewConnectionKCP(server *serverKCP, conn net.Conn) IConnection {
 	c := &connectionKCP{
 		ConnectionBase: &ConnectionBase{
 			server:        server,
-			connId:        fmt.Sprintf("%X-%.10v", time.Now().Unix(), atomic.AddUint32(&connIdSeed, 1)),
+			connId:        GenerateConnID(),
 			msgBuffChan:   make(chan []byte, defaultServer.AppConf.MaxMsgChanLen),
 			taskQueue:     make(chan func(), defaultServer.AppConf.WorkerTaskMaxLen),
 			property:      map[string]any{},
@@ -71,8 +68,4 @@ func (c *connectionKCP) StartWriter(data []byte) bool {
 		return false
 	}
 	return true
-}
-
-func (c *connectionKCP) RemoteAddrStr() string {
-	return c.conn.RemoteAddr().String()
 }

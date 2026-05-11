@@ -2,12 +2,9 @@ package nets
 
 import (
 	"context"
-	"fmt"
 	"github.com/gorilla/websocket"
 	"net"
 	"sync"
-	"sync/atomic"
-	"time"
 )
 
 type connectionWS struct {
@@ -19,7 +16,7 @@ func NewConnectionWS(server IServer, conn *websocket.Conn) IConnection {
 	c := &connectionWS{
 		ConnectionBase: &ConnectionBase{
 			server:        server,
-			connId:        fmt.Sprintf("%X-%.10v", time.Now().Unix(), atomic.AddUint32(&connIdSeed, 1)),
+			connId:        GenerateConnID(),
 			msgBuffChan:   make(chan []byte, defaultServer.AppConf.MaxMsgChanLen),
 			taskQueue:     make(chan func(), defaultServer.AppConf.WorkerTaskMaxLen),
 			property:      map[string]any{},
@@ -62,8 +59,4 @@ func (c *connectionWS) StartWriter(data []byte) bool {
 		return false
 	}
 	return true
-}
-
-func (c *connectionWS) RemoteAddrStr() string {
-	return c.conn.RemoteAddr().String()
 }
