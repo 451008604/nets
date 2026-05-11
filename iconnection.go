@@ -9,7 +9,7 @@ type IConnection interface {
 	// 启动连接(通过connmanager调用)
 	Open()
 	// 停止连接(通过connmanager调用)
-	Close() bool
+	Close()
 
 	// 获取真实连接
 	GetNetConn() net.Conn
