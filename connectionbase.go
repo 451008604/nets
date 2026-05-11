@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"google.golang.org/protobuf/proto"
+	"strconv"
 	"sync"
 	"sync/atomic"
 	"time"
@@ -12,6 +13,16 @@ import (
 
 // 用于生成连接唯一ID
 var connIdSeed uint32
+
+func GenerateConnID() string {
+	// 1. 获取当前秒级时间戳 (取低 32 位)
+	now := uint64(time.Now().Unix())
+	// 2. 原子自增获取序列号
+	seq := uint64(atomic.AddUint32(&connIdSeed, 1))
+	// 3. 组合：时间戳左移 32 位，然后与序列号进行“或”运算
+	// [ 32位时间戳 ] [ 32位自增序列 ]
+	return strconv.FormatUint((now<<32)|seq, 16)
+}
 
 type ConnectionBase struct {
 	server        IServer            // 当前Conn所属的Server
@@ -27,26 +38,41 @@ type ConnectionBase struct {
 	limitingTimer int64              // 限流计时
 	limitingMutex sync.Mutex         // 限流锁
 	taskQueue     chan func()        // 等待执行的任务队列
-	waitGroup     sync.WaitGroup     // 控制读写退出后关闭任务协程
 }
 
 func (c *ConnectionBase) Open() {
-	defer GetInstanceServerManager().WaitGroupDone()
-	defer GetInstanceConnManager().Remove(c.conn)
-	defer c.connCtxCancel()
+	defer func() {
+		atomic.AddInt32(&c.isClosed, 1)
+		GetInstanceConnManager().GetConnClosed(c.conn)
+
+		// 清空属性
+		c.propertyMutex.Lock()
+		c.property = map[string]any{}
+		c.propertyMutex.Unlock()
+
+		// 关闭底层网络连接
+		if netConn := c.conn.GetNetConn(); netConn != nil {
+			_ = netConn.Close()
+		}
+		close(c.msgBuffChan)
+		c.msgBuffChan = nil
+		close(c.taskQueue)
+		c.taskQueue = nil
+
+		GetInstanceConnManager().Remove(c.conn)
+		GetInstanceServerManager().WaitGroupDone()
+	}()
 
 	GetInstanceServerManager().WaitGroupAdd(1)
 	GetInstanceConnManager().GetConnOpened(c.conn)
-	c.waitGroup.Add(2)
 
 	go c.readHandler()  // 开启读协程
 	go c.writeHandler() // 开启写协程
 
-	// 开启任务协程
+	// 任务协程：处理任务队列，直到上下文取消后排空剩余任务
 	for {
 		select {
 		case <-c.connCtx.Done():
-			c.waitGroup.Wait() // 等待 read/write handler 退出
 			return
 		case t, ok := <-c.taskQueue:
 			if !ok {
@@ -61,8 +87,7 @@ func (c *ConnectionBase) Open() {
 }
 
 func (c *ConnectionBase) readHandler() {
-	defer c.waitGroup.Done()
-	defer c.connCtxCancel()
+	defer c.Close()
 	for {
 		select {
 		case <-c.connCtx.Done():
@@ -81,8 +106,7 @@ func (c *ConnectionBase) readHandler() {
 }
 
 func (c *ConnectionBase) writeHandler() {
-	defer c.waitGroup.Done()
-	defer c.connCtxCancel()
+	defer c.Close()
 	for {
 		select {
 		case <-c.connCtx.Done():
@@ -95,26 +119,14 @@ func (c *ConnectionBase) writeHandler() {
 	}
 }
 
-func (c *ConnectionBase) Close() bool {
-	if atomic.AddInt32(&c.isClosed, 1) != 1 {
-		return false
-	}
-	GetInstanceConnManager().GetConnClosed(c.conn)
-	c.propertyMutex.Lock()
-	c.property = map[string]any{}
-	c.propertyMutex.Unlock()
+func (c *ConnectionBase) Close() {
+	// 通知所有协程退出
 	c.connCtxCancel()
-	if netConn := c.conn.GetNetConn(); netConn != nil {
-		_ = netConn.Close()
-	}
-	close(c.taskQueue)   // 关闭任务队列
-	close(c.msgBuffChan) // 关闭消息通道
-	return true
 }
 
 func (c *ConnectionBase) DoTask(task func()) {
 	select {
-	case <-c.connCtx.Done(): // 连接已关闭，丢弃任务
+	case <-c.connCtx.Done():
 	case c.taskQueue <- task:
 	}
 }
@@ -129,7 +141,6 @@ func readerTaskHandler(c IConnection, m IMessage) {
 
 	router, ok := iMsgHandler.GetApis()[int32(m.GetMsgId())]
 	if !ok {
-		GetInstanceConnManager().Remove(c)
 		return
 	}
 
@@ -184,16 +195,17 @@ func (c *ConnectionBase) RemoveProperty(key string) {
 }
 
 func (c *ConnectionBase) SendMsg(msgId int32, msgData proto.Message) {
-	if c.IsClose() {
-		return
-	}
 	msgByte := c.ProtocolToByte(msgData)
-	msg := defaultServer.DataPack.Pack(defaultServer.Message(msgId, msgByte))
+	packMsg := GetMessage()
+	packMsg.Id = uint16(msgId)
+	packMsg.Data = msgByte
+	msg := defaultServer.DataPack.Pack(packMsg)
+	PutMessage(packMsg)
 	if msg == nil {
 		return
 	}
 	select {
-	case <-c.connCtx.Done(): // 连接已关闭，丢弃消息
+	case <-c.connCtx.Done():
 	case c.msgBuffChan <- msg:
 	}
 }
@@ -228,6 +240,10 @@ func (c *ConnectionBase) FlowControl() (b bool) {
 	c.limitingCount = 1
 	c.limitingTimer = now
 	return false
+}
+
+func (c *ConnectionBase) RemoteAddrStr() string {
+	return c.conn.GetNetConn().RemoteAddr().String()
 }
 
 var (
