@@ -50,10 +50,18 @@ func (s *serverHTTP) Start() {
 	})
 
 	httpServer.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		// 请求方式非法
+		if r.Method != http.MethodPost {
+			w.WriteHeader(http.StatusMethodNotAllowed)
+			_, _ = w.Write([]byte(http.StatusText(http.StatusMethodNotAllowed)))
+			_ = r.Body.Close()
+			return
+		}
+
 		// 服务关闭状态
 		if GetInstanceServerManager().IsClose() {
 			w.WriteHeader(http.StatusServiceUnavailable)
-			_, _ = w.Write([]byte("server is closed"))
+			_, _ = w.Write([]byte(http.StatusText(http.StatusServiceUnavailable)))
 			_ = r.Body.Close()
 			return
 		}
@@ -61,7 +69,7 @@ func (s *serverHTTP) Start() {
 		// 连接数量超过限制后，关闭新建立的连接
 		if GetInstanceConnManager().Len() >= defaultServer.AppConf.MaxConn {
 			w.WriteHeader(http.StatusGatewayTimeout)
-			_, _ = w.Write([]byte("connection max limit"))
+			_, _ = w.Write([]byte(http.StatusText(http.StatusGatewayTimeout)))
 			_ = r.Body.Close()
 			return
 		}

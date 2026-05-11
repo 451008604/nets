@@ -7,15 +7,12 @@ import (
 var defaultServer = &CustomServer{
 	AppConf:  GetServerConf(),
 	DataPack: NewDataPack(),
-	Message:  NewMsgPackage,
 }
 
 // 自定义服务器
 type CustomServer struct {
-	AppConf  *AppConf                             // 服务启动配置
-	DataPack IDataPack                            // 自定义编码/解码器
-	Message  func(id int32, data []byte) IMessage // 自定消息
-
+	AppConf  *AppConf  // 服务启动配置
+	DataPack IDataPack // 自定义编码/解码器
 }
 
 // 设置自定义服务器参数
@@ -24,10 +21,6 @@ func SetCustomServer(custom *CustomServer) {
 
 	if custom.DataPack != nil {
 		defaultServer.DataPack = custom.DataPack
-	}
-
-	if custom.Message != nil {
-		defaultServer.Message = custom.Message
 	}
 }
 
