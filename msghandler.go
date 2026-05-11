@@ -31,6 +31,7 @@ func GetInstanceMsgHandler() *MsgHandler {
 func (m *MsgHandler) AddRouter(msgId int32, msgTemplate INewMsgStructTemplate, msgHandler IReceiveMsgHandler) {
 	if _, ok := m.apis[msgId]; ok {
 		fmt.Printf("msgId is duplicate %v\n", msgId)
+		return
 	}
 	m.apis[msgId] = &BaseRouter{}
 	m.apis[msgId].SetMsg(msgTemplate)

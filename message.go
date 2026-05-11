@@ -30,16 +30,11 @@ type Message struct {
 	DataLen       uint16 `json:"-"`                                                // 消息长度
 }
 
-func NewMsgPackage(id int32, data []byte) IMessage {
-	return &Message{
-		Id:      uint16(id),
-		DataLen: uint16(len(data)),
-		Data:    data,
-	}
-}
-
 func (m *Message) GetDataLen() uint16 {
-	return m.DataLen
+	if m.DataLen != 0 {
+		return m.DataLen
+	}
+	return uint16(len(m.Data))
 }
 
 func (m *Message) GetMsgId() uint16 {
