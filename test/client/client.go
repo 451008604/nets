@@ -22,15 +22,15 @@ var (
 	wsPort   = flag.Int("ws", 17002, "WebSocket port")
 	httpPort = flag.Int("http", 17003, "HTTP port")
 	kcpPort  = flag.Int("kcp", 17004, "KCP port")
-	proto    = flag.String("proto", "kcp", "protocol: tcp, ws, http, kcp")
+	proto    = flag.String("proto", "tcp,ws,http,kcp", "protocol: tcp, ws, http, kcp")
 	msgId    = flag.Int("msgid", 1001, "message ID")
 	msgData  = flag.String("data", `{"Message":"hello world"}`, "message data")
-	connNum  = flag.Int("conn", 20000, "number of connections")
+	connNum  = flag.Int("conn", 1000, "number of connections")
 )
 
 type Message struct {
 	Id      uint16 `protobuf:"bytes,1,opt,name=msg_id,proto3" json:"msg_id"` // 消息Id
-	Data    string `protobuf:"bytes,2,opt,name=data,proto3" json:"data"`     // 消息内容
+	Data    []byte `protobuf:"bytes,2,opt,name=data,proto3" json:"data"`     // 消息内容
 	DataLen uint16 `json:"-"`                                                // 消息长度
 }
 
@@ -51,7 +51,7 @@ func unpack(data []byte) *Message {
 		DataLen: binary.LittleEndian.Uint16(data[2:4]),
 	}
 	if len(data) >= 4+int(msg.DataLen) {
-		msg.Data = string(data[4 : 4+msg.DataLen])
+		msg.Data = data[4 : 4+msg.DataLen]
 	}
 	return msg
 }
@@ -164,7 +164,7 @@ func NewHTTPClient(addr string) *HTTPClient {
 }
 
 func (c *HTTPClient) Write(msgId int16, data []byte) error {
-	marshal, _ := json.Marshal(Message{Id: uint16(msgId), DataLen: uint16(len(data)), Data: string(data)})
+	marshal, _ := json.Marshal(Message{Id: uint16(msgId), DataLen: uint16(len(data)), Data: data})
 	resp, err := c.client.Post(c.url, "application/json", strings.NewReader(string(marshal)))
 	if err != nil {
 		fmt.Printf("HTTP Write Err: %v\n", err)
