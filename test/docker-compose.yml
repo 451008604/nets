@@ -11,7 +11,7 @@ services:
       - "16060:6060"
     healthcheck:
       test: ["CMD", "wget", "-q", "--spider", "http://localhost:6060/debug/pprof/"]
-      interval: 2s
+      interval: 5s
       timeout: 1s
       retries: 10
       start_period: 3s
@@ -19,8 +19,10 @@ services:
       - nets-test
     restart: unless-stopped
     sysctls:
-      - net.core.somaxconn=65535
-      - net.ipv4.tcp_max_syn_backlog=65535
+      - net.core.somaxconn=65535                # 全连接队列长度
+      - net.ipv4.tcp_max_syn_backlog=65535      # SYN半连接队列长度
+      - net.ipv4.tcp_tw_reuse=1                 # 允许将TIME_WAIT状态的sockets重新用于新的TCP连接
+      - net.ipv4.tcp_fin_timeout=15             # 保持在FIN-WAIT-2状态的时间，调低可释放内存
     ulimits:
       nofile:
         soft: 1048576
@@ -33,17 +35,10 @@ services:
       dockerfile: client/Dockerfile
     deploy:
       replicas: 5
-#      resources:
-#        limits:
-#          cpus: "2"
-#          memory: 2G
-#        reservations:
-#          cpus: "1"
-#          memory: 512M
     depends_on:
       server:
         condition: service_healthy
-    command: ["/app/client", "-server", "server", "-proto", "tcp,ws,http,kcp", "-conn", "5000"]
+    command: ["/app/client", "-server", "server", "-proto", "tcp,ws,kcp", "-conn", "5000"]
     networks:
       - nets-test
     restart: unless-stopped

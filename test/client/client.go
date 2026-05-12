@@ -242,12 +242,12 @@ func main() {
 			protocols = append(protocols, p)
 		}
 	}
-	fmt.Printf("混合测试协议包含：%v\n", protocols)
+	// fmt.Printf("混合测试协议包含：%v\n", protocols)
 
 	// 并发创建连接，多个协议时均匀分布
 	var (
-		clients   []Client
-		clientsMu sync.Mutex
+		sendCount = int32(0)
+		recCount  = int32(0)
 		wg        sync.WaitGroup
 		sem       = make(chan struct{}, 10000) // 并发限制，避免文件描述符耗尽
 	)
@@ -263,49 +263,35 @@ func main() {
 				fmt.Printf("Connection %d failed: %v\n", idx, err)
 				return
 			}
-			clientsMu.Lock()
-			clients = append(clients, c)
-			clientsMu.Unlock()
+
+			go func(client Client) {
+				buf := make([]byte, 4096)
+				for {
+					n, err := client.Read(buf)
+					if err != nil {
+						fmt.Printf("Read error: %v\n", err)
+						return // 连接关闭或出错
+					}
+					if n > 0 {
+						if d := unpack(buf[:n]); d != nil {
+							atomic.AddInt32(&recCount, 1)
+							_ = client.Close()
+							return // 收到有效响应，退出
+						}
+					}
+					time.Sleep(time.Microsecond)
+				}
+			}(c)
+
+			// 发送消息
+			if err := c.Write(int16(*msgId), []byte(*msgData)); err != nil {
+				fmt.Printf("Write error: %v\n", err)
+			} else {
+				sendCount++
+			}
 		}(i)
 	}
 	wg.Wait()
-	fmt.Printf("%d 个客户端初始化完成\n", len(clients))
-
-	sendCount := int32(0)
-	recCount := int32(0)
-	for _, c := range clients {
-		go func(client Client) {
-			buf := make([]byte, 4096)
-			for {
-				n, err := client.Read(buf)
-				if err != nil {
-					fmt.Printf("Read error: %v\n", err)
-					return // 连接关闭或出错
-				}
-				if n > 0 {
-					if d := unpack(buf[:n]); d != nil {
-						addInt32 := int(atomic.AddInt32(&recCount, 1))
-						if len(clients) < 5 || addInt32%(len(clients)/5) == 0 {
-							fmt.Printf("idx: %v, %v -> %s\n", addInt32, d.Id, d.Data)
-						}
-						_ = client.Close()
-						return // 收到有效响应，退出
-					}
-				}
-				time.Sleep(time.Microsecond)
-			}
-		}(c)
-	}
-
-	// 发送消息
-	data := []byte(*msgData)
-	for _, c := range clients {
-		if err := c.Write(int16(*msgId), data); err != nil {
-			fmt.Printf("Write error: %v\n", err)
-			continue
-		}
-		sendCount++
-	}
 
 	// 等待全部响应或超时（30秒）
 	func() {
@@ -322,6 +308,6 @@ func main() {
 		}
 	}()
 
-	fmt.Printf("sendCount: %v, recCount: %v\n", sendCount, recCount)
-	fmt.Printf("👉 测试完成🎉\n")
+	// fmt.Printf("sendCount: %v, recCount: %v\n", sendCount, recCount)
+	// fmt.Printf("👉 测试完成🎉\n")
 }
