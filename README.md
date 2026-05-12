@@ -14,6 +14,7 @@
 
 <div align="center">
   <img src="https://img.shields.io/github/license/451008604/nets.svg" alt="License"/>
+  <img src="https://img.shields.io/github/stars/451008604/nets.svg?label=Star" alt="Stars"/>
 
 [//]: # (   <img src="https://img.shields.io/github/issues/451008604/nets.svg" alt="Issues"/>)
 
@@ -24,7 +25,6 @@
 [//]: # (  <img src="https://img.shields.io/github/watchers/451008604/nets.svg?label=Watch" alt="Watchers"/>)
 
 [//]: # (  <img src="https://img.shields.io/github/forks/451008604/nets.svg?label=Fork" alt="Forks"/>)
-  <img src="https://img.shields.io/github/stars/451008604/nets.svg?label=Star" alt="Stars"/>
 </div>
 
 ---
