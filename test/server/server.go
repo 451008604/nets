@@ -20,8 +20,6 @@ var (
 )
 
 var stats struct {
-	flagSend       int32
-	flagReceive    int32
 	flagOpened     int32
 	flagClosed     int32
 	flagErrCapture int32
@@ -36,13 +34,13 @@ func main() {
 
 	go func() {
 		for t := range time.Tick(time.Second) {
-			println(t.Format("15:04:05"), "flagReceive: ", atomic.LoadInt32(&stats.flagReceive), ",flagSend: ", atomic.LoadInt32(&stats.flagSend), ", flagOpened: ", atomic.LoadInt32(&stats.flagOpened), ", flagClosed: ", atomic.LoadInt32(&stats.flagClosed), ", flagErrCapture:", atomic.LoadInt32(&stats.flagErrCapture))
+			println(t.Format("15:04:05"), "flagOpened: ", atomic.LoadInt32(&stats.flagOpened), ", flagClosed: ", atomic.LoadInt32(&stats.flagClosed), ", flagErrCapture:", atomic.LoadInt32(&stats.flagErrCapture))
 		}
 	}()
 
 	// 1. (可选) 自定义配置参数
 	nets.SetCustomServer(&nets.CustomServer{AppConf: &nets.AppConf{
-		ConnRWTimeOut: 60, // 分布式压力测试时适当延长超时时间，避免连接建立后还没有通信就被服务端关闭
+		ConnRWTimeOut: 5, // 分布式压力测试时适当延长超时时间，避免连接建立后还没有通信就被服务端关闭
 		ServerTCP:     nets.ServerConf{Port: *tcpPort},
 		ServerWS:      nets.ServerConf{Port: *wsPort},
 		ServerHTTP:    nets.ServerConf{Port: *httpPort},
