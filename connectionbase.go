@@ -72,7 +72,7 @@ func (c *ConnectionBase) Open() {
 	// 任务协程：处理任务队列，直到上下文取消后排空剩余任务
 	for {
 		select {
-		case <-c.connCtx.Done():
+		case <-c.ConnCtxDone():
 			return
 		case t, ok := <-c.taskQueue:
 			if !ok {
@@ -90,7 +90,7 @@ func (c *ConnectionBase) readHandler() {
 	defer c.Close()
 	for {
 		select {
-		case <-c.connCtx.Done():
+		case <-c.ConnCtxDone():
 			return
 		default:
 			// 设置读超时
@@ -109,7 +109,7 @@ func (c *ConnectionBase) writeHandler() {
 	defer c.Close()
 	for {
 		select {
-		case <-c.connCtx.Done():
+		case <-c.ConnCtxDone():
 			return
 		case data, ok := <-c.msgBuffChan:
 			if !ok || !c.conn.StartWriter(data) {
@@ -119,6 +119,10 @@ func (c *ConnectionBase) writeHandler() {
 	}
 }
 
+func (c *ConnectionBase) ConnCtxDone() <-chan struct{} {
+	return c.connCtx.Done()
+}
+
 func (c *ConnectionBase) Close() {
 	// 通知所有协程退出
 	c.connCtxCancel()
@@ -126,7 +130,7 @@ func (c *ConnectionBase) Close() {
 
 func (c *ConnectionBase) DoTask(task func()) {
 	select {
-	case <-c.connCtx.Done():
+	case <-c.ConnCtxDone():
 	case c.taskQueue <- task:
 	}
 }
@@ -205,7 +209,7 @@ func (c *ConnectionBase) SendMsg(msgId int32, msgData proto.Message) {
 		return
 	}
 	select {
-	case <-c.connCtx.Done():
+	case <-c.ConnCtxDone():
 	case c.msgBuffChan <- msg:
 	}
 }

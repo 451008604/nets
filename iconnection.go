@@ -13,6 +13,8 @@ type IConnection interface {
 
 	// 获取真实连接
 	GetNetConn() net.Conn
+	// 连接上下文关闭信号
+	ConnCtxDone() <-chan struct{}
 
 	// 启动接收消息协程
 	StartReader() bool
