@@ -10,6 +10,7 @@ import (
 	"io"
 	"net"
 	"net/http"
+	"os"
 	"strings"
 	"sync"
 	"sync/atomic"
@@ -232,6 +233,19 @@ func getAddrByProto(protocol string) string {
 
 func main() {
 	flag.Parse()
+	// 并发创建连接，多个协议时均匀分布
+	var (
+		sendCount = int32(0)
+		recCount  = int32(0)
+		wg        sync.WaitGroup
+	)
+	go func() {
+		select {
+		case <-time.After(10 * time.Second):
+			fmt.Printf("等待响应超时，已收到 %d/%d 个响应\n", atomic.LoadInt32(&recCount), atomic.LoadInt32(&sendCount))
+		}
+		os.Exit(1)
+	}()
 
 	// 解析并标准化协议列表，支持多协议混合（如 "http,tcp,ws,kcp"）
 	protoList := strings.Split(*proto, ",")
@@ -244,38 +258,28 @@ func main() {
 	}
 	// fmt.Printf("混合测试协议包含：%v\n", protocols)
 
-	// 并发创建连接，多个协议时均匀分布
-	var (
-		sendCount = int32(0)
-		recCount  = int32(0)
-		wg        sync.WaitGroup
-		sem       = make(chan struct{}, 10000) // 并发限制，避免文件描述符耗尽
-	)
 	for i := 0; i < *connNum; i++ {
 		wg.Add(1)
-		sem <- struct{}{}
 		go func(idx int) {
-			defer wg.Done()
-			defer func() { <-sem }()
 			protoc := protocols[idx%len(protocols)]
 			c, err := newClient(protoc, getAddrByProto(protoc))
 			if err != nil {
 				fmt.Printf("Connection %d failed: %v\n", idx, err)
+				wg.Done()
 				return
 			}
 
 			go func(client Client) {
+				defer wg.Done()
 				buf := make([]byte, 4096)
 				for {
-					n, err := client.Read(buf)
-					if err != nil {
-						fmt.Printf("Read error: %v\n", err)
+					if n, err2 := client.Read(buf); err2 != nil {
+						fmt.Printf("Read error: %v\n", err2)
 						return // 连接关闭或出错
-					}
-					if n > 0 {
+					} else if n > 0 {
 						if d := unpack(buf[:n]); d != nil {
-							atomic.AddInt32(&recCount, 1)
 							_ = client.Close()
+							atomic.AddInt32(&recCount, 1)
 							return // 收到有效响应，退出
 						}
 					}
@@ -284,30 +288,12 @@ func main() {
 			}(c)
 
 			// 发送消息
-			if err := c.Write(int16(*msgId), []byte(*msgData)); err != nil {
-				fmt.Printf("Write error: %v\n", err)
+			if err3 := c.Write(int16(*msgId), []byte(*msgData)); err3 != nil {
+				fmt.Printf("Write error: %v\n", err3)
 			} else {
-				sendCount++
+				atomic.AddInt32(&sendCount, 1)
 			}
 		}(i)
 	}
 	wg.Wait()
-
-	// 等待全部响应或超时（30秒）
-	func() {
-		for {
-			select {
-			case <-time.After(30 * time.Second):
-				fmt.Printf("等待响应超时，已收到 %d/%d 个响应\n", recCount, sendCount)
-				return
-			default:
-				if atomic.LoadInt32(&recCount) >= sendCount {
-					return
-				}
-			}
-		}
-	}()
-
-	// fmt.Printf("sendCount: %v, recCount: %v\n", sendCount, recCount)
-	// fmt.Printf("👉 测试完成🎉\n")
 }
