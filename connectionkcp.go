@@ -3,7 +3,6 @@ package nets
 import (
 	"context"
 	"net"
-	"sync"
 )
 
 type connectionKCP struct {
@@ -14,12 +13,11 @@ type connectionKCP struct {
 func NewConnectionKCP(server *serverKCP, conn net.Conn) IConnection {
 	c := &connectionKCP{
 		ConnectionBase: &ConnectionBase{
-			server:        server,
-			connId:        GenerateConnID(),
-			msgBuffChan:   make(chan []byte, defaultServer.AppConf.MaxMsgChanLen),
-			taskQueue:     make(chan func(), defaultServer.AppConf.WorkerTaskMaxLen),
-			property:      map[string]any{},
-			propertyMutex: sync.RWMutex{},
+			server:      server,
+			connId:      GenerateConnID(),
+			msgBuffChan: make(chan []byte, defaultServer.AppConf.MaxMsgChanLen),
+			taskQueue:   make(chan func(), defaultServer.AppConf.WorkerTaskMaxLen),
+			property:    map[string]any{},
 		},
 		conn: conn,
 	}

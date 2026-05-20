@@ -1,31 +1,26 @@
 package nets
 
 import (
-	"bufio"
 	"context"
 	"net"
-	"sync"
 )
 
 type connectionTCP struct {
 	*ConnectionBase
-	conn   *net.TCPConn
-	writer *bufio.Writer
+	conn *net.TCPConn
 }
 
 func NewConnectionTCP(server IServer, conn *net.TCPConn) IConnection {
 	c := &connectionTCP{
 		ConnectionBase: &ConnectionBase{
-			server:        server,
-			connId:        GenerateConnID(),
-			msgBuffChan:   make(chan []byte, defaultServer.AppConf.MaxMsgChanLen),
-			taskQueue:     make(chan func(), defaultServer.AppConf.WorkerTaskMaxLen),
-			property:      map[string]any{},
-			propertyMutex: sync.RWMutex{},
+			server:      server,
+			connId:      GenerateConnID(),
+			msgBuffChan: make(chan []byte, defaultServer.AppConf.MaxMsgChanLen),
+			taskQueue:   make(chan func(), defaultServer.AppConf.WorkerTaskMaxLen),
+			property:    map[string]any{},
 		},
 		conn: conn,
 	}
-	c.writer = bufio.NewWriterSize(conn, 64*1024)
 	c.connCtx, c.connCtxCancel = context.WithCancel(context.Background())
 	c.ConnectionBase.conn = c
 	return c
@@ -67,10 +62,7 @@ func (c *connectionTCP) StartReader() bool {
 }
 
 func (c *connectionTCP) StartWriter(data []byte) bool {
-	if _, err := c.writer.Write(data); err != nil {
-		return false
-	}
-	if err := c.writer.Flush(); err != nil {
+	if _, err := c.conn.Write(data); err != nil {
 		return false
 	}
 	return true

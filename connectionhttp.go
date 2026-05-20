@@ -6,7 +6,6 @@ import (
 	"io"
 	"net"
 	"net/http"
-	"sync"
 )
 
 type connectionHTTP struct {
@@ -18,12 +17,11 @@ type connectionHTTP struct {
 func NewConnectionHTTP(server IServer, writer http.ResponseWriter, reader *http.Request) IConnection {
 	c := &connectionHTTP{
 		ConnectionBase: &ConnectionBase{
-			server:        server,
-			connId:        GenerateConnID(),
-			msgBuffChan:   make(chan []byte, defaultServer.AppConf.MaxMsgChanLen),
-			taskQueue:     make(chan func(), defaultServer.AppConf.WorkerTaskMaxLen),
-			property:      map[string]any{},
-			propertyMutex: sync.RWMutex{},
+			server:      server,
+			connId:      GenerateConnID(),
+			msgBuffChan: make(chan []byte, defaultServer.AppConf.MaxMsgChanLen),
+			taskQueue:   make(chan func(), defaultServer.AppConf.WorkerTaskMaxLen),
+			property:    map[string]any{},
 		},
 		writer: writer,
 		reader: reader,
