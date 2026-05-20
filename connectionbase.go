@@ -42,7 +42,6 @@ type ConnectionBase struct {
 
 func (c *ConnectionBase) Open() {
 	defer func() {
-		atomic.AddInt32(&c.isClosed, 1)
 		GetInstanceConnManager().GetConnClosed(c.conn)
 
 		// 清空属性
@@ -69,7 +68,7 @@ func (c *ConnectionBase) Open() {
 	go c.readHandler()  // 开启读协程
 	go c.writeHandler() // 开启写协程
 
-	// 任务协程：处理任务队列，直到上下文取消后排空剩余任务
+	// 任务协程：处理任务队列
 	for {
 		select {
 		case <-c.ConnCtxDone():
@@ -124,6 +123,7 @@ func (c *ConnectionBase) ConnCtxDone() <-chan struct{} {
 }
 
 func (c *ConnectionBase) Close() {
+	atomic.AddInt32(&c.isClosed, 1)
 	// 通知所有协程退出
 	c.connCtxCancel()
 }
