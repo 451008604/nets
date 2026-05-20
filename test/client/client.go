@@ -26,7 +26,7 @@ var (
 	proto    = flag.String("proto", "tcp,ws,http,kcp", "protocol: tcp, ws, http, kcp")
 	msgId    = flag.Int("msgid", 1001, "message ID")
 	msgData  = flag.String("data", `{"Message":"hello world"}`, "message data")
-	connNum  = flag.Int("conn", 1000, "number of connections")
+	connNum  = flag.Int("conn", 1, "number of connections")
 )
 
 type Message struct {

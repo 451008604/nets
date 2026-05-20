@@ -11,9 +11,14 @@ CLIENT_BIN="$CLIENT_DIR/client"
 # 清理函数
 cleanup() {
     echo ""
-    echo "✅ 收到退出信号，清理镜像和容器..."
-    docker compose down --remove-orphans --rmi all
-    echo "✅ 清理完毕"
+    echo "✅ 收到退出信号，开始清理 client 容器..."
+    # 后台停止容器，避免阻塞
+    docker compose down client &>/dev/null &
+    wait
+    echo "⚠️ client 容器已清理完成，如需清理 server 容器，请执行："
+    echo ""
+    echo "    docker compose down --remove-orphans --rmi all"
+    echo ""
     exit 0
 }
 # 捕获 Ctrl+C 和终止信号
@@ -41,6 +46,7 @@ docker compose up --build -d
 ROUND=1
 while true; do
     echo "✅ 开始第 $ROUND 轮测试..."
-    docker compose up client --no-deps
+    docker compose up client --no-deps &
+    wait $!  # 等待 docker compose 完成，同时允许 trap 信号中断
     ((ROUND++))
 done
