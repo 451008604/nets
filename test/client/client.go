@@ -30,9 +30,9 @@ var (
 )
 
 type Message struct {
-	Id      uint16 `protobuf:"bytes,1,opt,name=msg_id,proto3" json:"msg_id"` // 消息Id
-	Data    []byte `protobuf:"bytes,2,opt,name=data,proto3" json:"data"`     // 消息内容
-	DataLen uint16 `json:"-"`                                                // 消息长度
+	Id      uint16 `protobuf:"bytes,1,opt,name=msg_id,proto3" json:"msg_id"` // Message ID / 消息Id
+	Data    []byte `protobuf:"bytes,2,opt,name=data,proto3" json:"data"`     // Message Content / 消息内容
+	DataLen uint16 `json:"-"`                                                // Message Length / 消息长度
 }
 
 func pack(msgId int16, data []byte) []byte {
@@ -233,7 +233,7 @@ func getAddrByProto(protocol string) string {
 
 func main() {
 	flag.Parse()
-	// 并发创建连接，多个协议时均匀分布
+	// Concurrently create connections, evenly distributed across protocols / 并发创建连接，多个协议时均匀分布
 	var (
 		sendCount = int32(0)
 		recCount  = int32(0)
@@ -247,7 +247,7 @@ func main() {
 		os.Exit(1)
 	}()
 
-	// 解析并标准化协议列表，支持多协议混合（如 "http,tcp,ws,kcp"）
+	// Parse and normalize protocol list, support multi-protocol mixing (e.g., "http,tcp,ws,kcp") / 解析并标准化协议列表，支持多协议混合（如 "http,tcp,ws,kcp"）
 	protoList := strings.Split(*proto, ",")
 	var protocols []string
 	for _, p := range protoList {
@@ -275,19 +275,19 @@ func main() {
 				for {
 					if n, err2 := client.Read(buf); err2 != nil {
 						fmt.Printf("Read error: %v\n", err2)
-						return // 连接关闭或出错
+						return // Connection closed or error / 连接关闭或出错
 					} else if n > 0 {
 						if d := unpack(buf[:n]); d != nil {
 							_ = client.Close()
 							atomic.AddInt32(&recCount, 1)
-							return // 收到有效响应，退出
+							return // Received valid response, exit / 收到有效响应，退出
 						}
 					}
 					time.Sleep(time.Microsecond)
 				}
 			}(c)
 
-			// 发送消息
+			// Send Message / 发送消息
 			if err3 := c.Write(int16(*msgId), []byte(*msgData)); err3 != nil {
 				fmt.Printf("Write error: %v\n", err3)
 			} else {
