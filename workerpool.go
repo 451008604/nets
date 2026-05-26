@@ -333,13 +333,6 @@ func (p *WorkerPool) Pending() int {
 	return total
 }
 
-// Size returns the maximum number of workers (pool capacity).
-//
-// Size 返回最大工作协程数量（池容量）。
-func (p *WorkerPool) Size() int32 {
-	return p.maxWorkers
-}
-
 // Stats returns a snapshot of the pool's current statistics.
 //
 // Stats 返回池当前统计信息的快照。
@@ -371,7 +364,7 @@ func (p *WorkerPool) nextWorker() int {
 // 用于从连接 ID 或其他字符串键生成 workerId。
 // 返回值可用于 SubmitWithWorker，后者会在内部将其映射到有效的 worker。
 func (p *WorkerPool) HashWorkerId(key string) int {
-	if n, err := strconv.ParseInt(key, 16, 64); n > 0 && err == nil {
+	if n, err := strconv.ParseInt(key, 16, 0); n > 0 && err == nil {
 		return int(n)
 	}
 	h := fnv.New32a()

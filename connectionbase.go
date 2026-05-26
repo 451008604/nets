@@ -206,8 +206,8 @@ func (c *ConnectionBase) SendMsg(msgId int32, msgData proto.Message) {
 	}
 	// Then try to send message / 再尝试发送消息
 	select {
-	case c.msgBuffChan <- msg:
 	case <-c.ConnCtx().Done():
+	case c.msgBuffChan <- msg:
 	}
 }
 
