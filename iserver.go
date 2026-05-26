@@ -1,9 +1,9 @@
 package nets
 
-// 定义服务器接口
+// Define Server Interface / 定义服务器接口
 type IServer interface {
-	// 获取服务器名称
+	// Get Server Name / 获取服务器名称
 	GetServerName() string
-	// 启动服务器
+	// Start Server / 启动服务器
 	Start()
 }

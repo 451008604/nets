@@ -20,7 +20,6 @@ func NewConnectionHTTP(server IServer, writer http.ResponseWriter, reader *http.
 			server:      server,
 			connId:      GenerateConnID(),
 			msgBuffChan: make(chan []byte, defaultServer.AppConf.MaxMsgChanLen),
-			taskQueue:   make(chan func(), defaultServer.AppConf.WorkerTaskMaxLen),
 			property:    map[string]any{},
 		},
 		writer: writer,
@@ -45,7 +44,7 @@ func (c *connectionHTTP) StartReader() bool {
 	xToken := c.reader.Header.Get(ConnPropertyHttpAuthorization)
 	c.SetProperty(ConnPropertyHttpAuthorization, xToken)
 
-	// 解析body结构
+	// Parse Body Structure / 解析body结构
 	data, _ := io.ReadAll(c.reader.Body)
 	msgData := GetMessage()
 	if err := c.ByteToProtocol(data, msgData); err != nil || msgData.GetMsgId() == 0 {
@@ -77,7 +76,7 @@ func (c *connectionHTTP) SendMsg(msgId int32, msgData proto.Message) {
 		return
 	}
 
-	// 发送给客户端
+	// Send to Client / 发送给客户端
 	var msgByte = c.ProtocolToByte(msgData)
 	if msgId != 0 {
 		packMsg := GetMessage()

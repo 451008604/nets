@@ -17,7 +17,6 @@ func NewConnectionWS(server IServer, conn *websocket.Conn) IConnection {
 			server:      server,
 			connId:      GenerateConnID(),
 			msgBuffChan: make(chan []byte, defaultServer.AppConf.MaxMsgChanLen),
-			taskQueue:   make(chan func(), defaultServer.AppConf.WorkerTaskMaxLen),
 			property:    map[string]any{},
 		},
 		conn: conn,
