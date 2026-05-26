@@ -9,13 +9,13 @@ var defaultServer = &CustomServer{
 	DataPack: NewDataPack(),
 }
 
-// 自定义服务器
+// Custom Server / 自定义服务器
 type CustomServer struct {
-	AppConf  *AppConf  // 服务启动配置
-	DataPack IDataPack // 自定义编码/解码器
+	AppConf  *AppConf  // Service Startup Configuration / 服务启动配置
+	DataPack IDataPack // Custom Encoder/Decoder / 自定义编码/解码器
 }
 
-// 设置自定义服务器参数
+// Set Custom Server Parameters / 设置自定义服务器参数
 func SetCustomServer(custom *CustomServer) {
 	defaultServer.AppConf = mergeStructValues(defaultServer.AppConf, custom.AppConf)
 
@@ -24,7 +24,7 @@ func SetCustomServer(custom *CustomServer) {
 	}
 }
 
-// 将 defaultData 与 customData 进行合并，相同字段赋值优先使用 customData
+// Merge defaultData with customData, prioritizing customData for same fields / 将 defaultData 与 customData 进行合并，相同字段赋值优先使用 customData
 func mergeStructValues[T any](defaultData, customData *T) *T {
 	if customData == nil && defaultData == nil {
 		return new(T)
@@ -44,7 +44,7 @@ func mergeStructValues[T any](defaultData, customData *T) *T {
 		fieldValue1 := v1.Field(i)
 		fieldValue2 := v2.Field(i)
 
-		// 如果 customData 中的字段有值则使用它；否则使用 defaultData 中的对应字段值
+		// Use field value from customData if present; otherwise use defaultData / 如果 customData 中的字段有值则使用它；否则使用 defaultData 中的对应字段值
 		if !fieldValue2.IsZero() {
 			v3.Field(i).Set(fieldValue2)
 		} else {

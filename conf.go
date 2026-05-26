@@ -1,28 +1,29 @@
 package nets
 
 type AppConf struct {
-	AppName          string     // 服务名称
-	MaxPackSize      int        // 数据包最大长度
-	MaxConn          int        // 最大允许连接数
-	WorkerTaskMaxLen int        // 每个工作队列可执行最大任务数量
-	MaxMsgChanLen    int        // 读写通道最大限度
-	MaxFlowSecond    int        // 每秒允许的最大请求数量
-	ProtocolIsJson   bool       // 是否使用json协议
-	ConnRWTimeOut    int        // 连接读写超时时间(秒)
-	ServerTCP        ServerConf // tcp服务
-	ServerWS         ServerConf // websocket服务
-	ServerHTTP       ServerConf // http服务
-	ServerKCP        ServerConf // http服务
+	AppName          string     // Service Name / 服务名称
+	MaxPackSize      int        // Max Packet Length / 数据包最大长度
+	MaxConn          int        // Max Connections / 最大允许连接数
+	WorkerTaskMaxLen int        // Max Tasks per Worker Queue / 每个工作队列可执行最大任务数量
+	WorkerPoolSize int          // Worker Pool Size (default CPU*10) / 协程池工作协程数量（默认 CPU*10）
+	MaxMsgChanLen    int        // Max Message Channel Length / 读写通道最大限度
+	MaxFlowSecond    int        // Max Requests per Second / 每秒允许的最大请求数量
+	ProtocolIsJson   bool       // Use JSON Protocol / 是否使用json协议
+	ConnRWTimeOut    int        // Connection Read/Write Timeout (seconds) / 连接读写超时时间(秒)
+	ServerTCP        ServerConf // TCP Service / tcp服务
+	ServerWS         ServerConf // WebSocket Service / websocket服务
+	ServerHTTP       ServerConf // HTTP Service / http服务
+	ServerKCP        ServerConf // KCP Service / kcp服务
 }
 
 type ServerConf struct {
-	Address     string // IP地址
-	Port        int    // 端口
-	TLSCertPath string // ssl证书路径
-	TLSKeyPath  string // ssl密钥路径
+	Address     string // IP Address / IP地址
+	Port        int    // Port / 端口
+	TLSCertPath string // SSL Certificate Path / ssl证书路径
+	TLSKeyPath  string // SSL Key Path / ssl密钥路径
 }
 
-// 默认配置
+// Default Configuration / 默认配置
 var appConf = &AppConf{
 	AppName:          "nets",
 	MaxPackSize:      4096,
@@ -46,7 +47,7 @@ var appConf = &AppConf{
 	},
 }
 
-// 获取默认配置
+// Get Default Configuration / 获取默认配置
 func GetServerConf() *AppConf {
 	return appConf
 }
