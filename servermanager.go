@@ -12,7 +12,7 @@ import (
 
 type ServerManager struct {
 	servers   []IServer
-	isClosed  int32 // 服务是否已关闭
+	isClosed  int32 // Whether Service is Closed / 服务是否已关闭
 	waitGroup sync.WaitGroup
 }
 
@@ -21,7 +21,7 @@ var serverCtx, serverCtxCancel = context.WithCancel(context.Background())
 var instanceServerManager *ServerManager
 var instanceServerManagerOnce = sync.Once{}
 
-// 服务管理器
+// Server Manager / 服务管理器
 func GetInstanceServerManager() *ServerManager {
 	instanceServerManagerOnce.Do(func() {
 		instanceServerManager = &ServerManager{
@@ -41,12 +41,13 @@ func (c *ServerManager) RegisterServer(server ...IServer) {
 		go iServer.Start()
 	}
 
-	// 阻塞后续执行，等待服务关闭
+	// Block subsequent execution, wait for service shutdown / 阻塞后续执行，等待服务关闭
 	<-serverCtx.Done()
-	// 关闭所有的连接
+	// Close All Connections / 关闭所有的连接
 	GetInstanceConnManager().ClearConn()
 
 	c.waitGroup.Wait()
+	GetInstanceWorkerPool().Stop()
 }
 
 func (c *ServerManager) IsClose() bool {
@@ -82,6 +83,6 @@ func operatingSystemSignalHandler() {
 	case <-serverCtx.Done():
 	}
 
-	// 执行进程退出前的处理
+	// Execute Pre-exit Processing / 执行进程退出前的处理
 	GetInstanceServerManager().StopAll()
 }
