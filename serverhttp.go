@@ -1,6 +1,7 @@
 package nets
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"os"
@@ -47,7 +48,7 @@ func (s *serverHTTP) Start() {
 		runtime.ReadMemStats(&m)
 		w.Header().Set("Content-Type", "application/json")
 
-		var httpcount, tcpcount, wscount, kcpcount, defaultcount int
+		var httpcount, tcpcount, wscount, kcpcount int
 		GetInstanceConnManager().RangeConnections(func(conn IConnection) {
 			switch conn.(type) {
 			case *connectionHTTP:
@@ -58,26 +59,26 @@ func (s *serverHTTP) Start() {
 				wscount++
 			case *connectionKCP:
 				kcpcount++
-			default:
-				defaultcount++
 			}
 		})
 
-		_, _ = fmt.Fprintf(w, "{\n"+
-			"  \"timestamp\": \"%v\",\n"+
-			"  \"pid\": \"%v\",\n"+
-			"  \"alloc\": \"%v bytes\",\n"+
-			"  \"total_alloc\": \"%v bytes\",\n"+
-			"  \"sys\": \"%v bytes\",\n"+
-			"  \"num_gc\": %v,\n"+
-			"  \"num_goroutine\": %v,\n"+
-			"  \"connections\": %v,\n"+
-			"  \"httpcount\": %v,\n"+
-			"  \"tcpcount\": %v,\n"+
-			"  \"wscount\": %v,\n"+
-			"  \"kcpcount\": %v,\n"+
-			"  \"defaultcount\": %v\n"+
-			"}", time.Now().Local().Format("2006-01-02 15:04:05"), os.Getpid(), m.Alloc, m.TotalAlloc, m.Sys, m.NumGC, runtime.NumGoroutine(), GetInstanceConnManager().Len(), httpcount, tcpcount, wscount, kcpcount, defaultcount)
+		maps := map[string]interface{}{
+			"time_stamp":    time.Now().Local().Format("2006-01-02 15:04:05"),
+			"pid":           os.Getpid(),
+			"alloc":         m.Alloc,
+			"alloc_total":   m.TotalAlloc,
+			"sys":           m.Sys,
+			"num_gc":        m.NumGC,
+			"num_goroutine": runtime.NumGoroutine(),
+			"connections":   GetInstanceConnManager().Len(),
+			"count_http":    httpcount,
+			"count_tcp":     tcpcount,
+			"count_ws":      wscount,
+			"count_kcp":     kcpcount,
+			"work_pool":     GetInstanceWorkerPool().Stats(),
+		}
+		marshal, _ := json.Marshal(maps)
+		_, _ = fmt.Fprintf(w, "%s", marshal)
 	})
 
 	httpServer.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
