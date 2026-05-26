@@ -130,14 +130,22 @@ func (p *WorkerPool) worker(idx int) {
 // Submit adds a task to the pool for execution using round-robin distribution.
 // It blocks if the target worker's channel is full.
 // Returns ErrPoolClosed if the pool has been closed.
+// Priority: p.done > channel send
 //
 // Submit 使用轮询分配将任务添加到池中执行。
 // 如果目标 worker 的通道已满则阻塞。
 // 如果池已关闭则返回 ErrPoolClosed。
+// 优先级：p.done > channel send
 func (p *WorkerPool) Submit(task func()) error {
-	idx := p.nextWorker()
+	// Non-blocking check closed first / 先非阻塞检查关闭状态
 	select {
-	case p.workers[idx] <- task:
+	case <-p.done:
+		return ErrPoolClosed
+	default:
+	}
+	// Then try to send task / 再尝试发送任务
+	select {
+	case p.workers[p.nextWorker()] <- task:
 		atomic.AddInt64(&p.totalSubmitted, 1)
 		return nil
 	case <-p.done:
@@ -148,12 +156,14 @@ func (p *WorkerPool) Submit(task func()) error {
 // SubmitWithWorker adds a task bound to a specific worker.
 // Tasks with the same workerId are guaranteed to execute on the same worker in FIFO order.
 // The workerId will be mapped to a valid worker index internally using modulo operation.
+// Priority: p.done > channel send
 //
 // Use HashWorkerId() to convert string (e.g., connection ID) to workerId.
 //
 // SubmitWithWorker 添加绑定到特定 worker 的任务。
 // 相同 workerId 的任务保证在同一 worker 上按 FIFO 顺序执行。
 // workerId 会在内部通过取模运算映射到有效的 worker 索引。
+// 优先级：p.done > channel send
 //
 // 使用 HashWorkerId() 将字符串（如连接 ID）转换为 workerId。
 func (p *WorkerPool) SubmitWithWorker(task func(), workerId int) error {
@@ -161,6 +171,13 @@ func (p *WorkerPool) SubmitWithWorker(task func(), workerId int) error {
 	if idx < 0 {
 		idx = -idx
 	}
+	// Non-blocking check closed first / 先非阻塞检查关闭状态
+	select {
+	case <-p.done:
+		return ErrPoolClosed
+	default:
+	}
+	// Then try to send task / 再尝试发送任务
 	select {
 	case p.workers[idx] <- task:
 		atomic.AddInt64(&p.totalSubmitted, 1)
@@ -172,13 +189,23 @@ func (p *WorkerPool) SubmitWithWorker(task func(), workerId int) error {
 
 // SubmitCtx adds a task to the pool with context cancellation support using round-robin distribution.
 // It blocks if the target worker's channel is full, but can be canceled via the context.
+// Priority: ctx.Done() > p.done > channel send
 //
 // SubmitCtx 使用轮询分配将任务添加到池中，支持 context 取消。
 // 如果目标 worker 的通道已满则阻塞，但可以通过 context 取消。
+// 优先级：ctx.Done() > p.done > channel send
 func (p *WorkerPool) SubmitCtx(ctx context.Context, task func()) error {
-	idx := p.nextWorker()
+	// Non-blocking check cancellation signals first / 先非阻塞检查取消信号
 	select {
-	case p.workers[idx] <- task:
+	case <-ctx.Done():
+		return ctx.Err()
+	case <-p.done:
+		return ErrPoolClosed
+	default:
+	}
+	// Then try to send task / 再尝试发送任务
+	select {
+	case p.workers[p.nextWorker()] <- task:
 		atomic.AddInt64(&p.totalSubmitted, 1)
 		return nil
 	case <-ctx.Done():
@@ -189,15 +216,24 @@ func (p *WorkerPool) SubmitCtx(ctx context.Context, task func()) error {
 }
 
 // SubmitWithWorkerCtx adds a task bound to a specific worker with context cancellation support.
-// The workerId will be mapped to a valid worker index internally using modulo operation.
+// Priority: ctx.Done() > p.done > channel send
 //
 // SubmitWithWorkerCtx 添加绑定到特定 worker 的任务，支持 context 取消。
-// workerId 会在内部通过取模运算映射到有效的 worker 索引。
+// 优先级：ctx.Done() > p.done > channel send
 func (p *WorkerPool) SubmitWithWorkerCtx(ctx context.Context, task func(), workerId int) error {
 	idx := workerId % len(p.workers)
 	if idx < 0 {
 		idx = -idx
 	}
+	// Non-blocking check cancellation signals first / 先非阻塞检查取消信号
+	select {
+	case <-ctx.Done():
+		return ctx.Err()
+	case <-p.done:
+		return ErrPoolClosed
+	default:
+	}
+	// Then try to send task / 再尝试发送任务
 	select {
 	case p.workers[idx] <- task:
 		atomic.AddInt64(&p.totalSubmitted, 1)
@@ -211,13 +247,21 @@ func (p *WorkerPool) SubmitWithWorkerCtx(ctx context.Context, task func(), worke
 
 // TrySubmit attempts to add a task without blocking using round-robin distribution.
 // Returns true if the task was submitted successfully, false if the channel is full or the pool is closed.
+// Priority: p.done > channel send > default
 //
 // TrySubmit 尝试使用轮询分配非阻塞地添加任务。
 // 如果任务提交成功则返回 true，如果通道已满或池已关闭则返回 false。
+// 优先级：p.done > channel send > default
 func (p *WorkerPool) TrySubmit(task func()) bool {
-	idx := p.nextWorker()
+	// Non-blocking check closed first / 先非阻塞检查关闭状态
 	select {
-	case p.workers[idx] <- task:
+	case <-p.done:
+		return false
+	default:
+	}
+	// Then try to send task / 再尝试发送任务
+	select {
+	case p.workers[p.nextWorker()] <- task:
 		atomic.AddInt64(&p.totalSubmitted, 1)
 		return true
 	case <-p.done:
@@ -229,14 +273,23 @@ func (p *WorkerPool) TrySubmit(task func()) bool {
 
 // TrySubmitWithWorker attempts to add a task bound to a specific worker without blocking.
 // The workerId will be mapped to a valid worker index internally using modulo operation.
+// Priority: p.done > channel send > default
 //
 // TrySubmitWithWorker 尝试非阻塞地添加绑定到特定 worker 的任务。
 // workerId 会在内部通过取模运算映射到有效的 worker 索引。
+// 优先级：p.done > channel send > default
 func (p *WorkerPool) TrySubmitWithWorker(task func(), workerId int) bool {
 	idx := workerId % len(p.workers)
 	if idx < 0 {
 		idx = -idx
 	}
+	// Non-blocking check closed first / 先非阻塞检查关闭状态
+	select {
+	case <-p.done:
+		return false
+	default:
+	}
+	// Then try to send task / 再尝试发送任务
 	select {
 	case p.workers[idx] <- task:
 		atomic.AddInt64(&p.totalSubmitted, 1)

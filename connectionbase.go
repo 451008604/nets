@@ -198,9 +198,16 @@ func (c *ConnectionBase) SendMsg(msgId int32, msgData proto.Message) {
 	if msg == nil {
 		return
 	}
+	// Non-blocking check connection closed first / 先非阻塞检查连接是否关闭
 	select {
 	case <-c.ConnCtx().Done():
+		return
+	default:
+	}
+	// Then try to send message / 再尝试发送消息
+	select {
 	case c.msgBuffChan <- msg:
+	case <-c.ConnCtx().Done():
 	}
 }
 
