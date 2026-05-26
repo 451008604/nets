@@ -12,7 +12,7 @@ func NewDataPack() IDataPack {
 }
 
 func (d *dataPack) GetHeadLen() int {
-	// id int(2字节) + dataLen int(2字节)
+	// id int(2 bytes) + dataLen int(2 bytes) / id int(2字节) + dataLen int(2字节)
 	return 4
 }
 
@@ -21,11 +21,11 @@ func (d *dataPack) Pack(msg IMessage) []byte {
 	headLen := d.GetHeadLen()
 	packed := make([]byte, headLen+len(data))
 
-	// 直接写msgId (2字节, 小端)
+	// Directly write msgId (2 bytes, little-endian) / 直接写msgId (2字节, 小端)
 	binary.LittleEndian.PutUint16(packed[0:2], msg.GetMsgId())
-	// 直接写dataLen (2字节, 小端)
+	// Directly write dataLen (2 bytes, little-endian) / 直接写dataLen (2字节, 小端)
 	binary.LittleEndian.PutUint16(packed[2:4], msg.GetDataLen())
-	// 直接拷贝data
+	// Directly copy data / 直接拷贝data
 	copy(packed[headLen:], data)
 
 	return packed
@@ -34,12 +34,12 @@ func (d *dataPack) Pack(msg IMessage) []byte {
 func (d *dataPack) UnPack(binaryData []byte) IMessage {
 	msgData := GetMessage()
 
-	// 直接读msgId (2字节, 小端)
+	// Directly read msgId (2 bytes, little-endian) / 直接读msgId (2字节, 小端)
 	msgData.Id = binary.LittleEndian.Uint16(binaryData[0:2])
-	// 直接读dataLen (2字节, 小端)
+	// Directly read dataLen (2 bytes, little-endian) / 直接读dataLen (2字节, 小端)
 	msgData.DataLen = binary.LittleEndian.Uint16(binaryData[2:4])
 
-	// 检查数据长度是否超出限制
+	// Check if data length exceeds limit / 检查数据长度是否超出限制
 	if defaultServer.AppConf.MaxPackSize > 0 && int(msgData.GetDataLen()) > defaultServer.AppConf.MaxPackSize {
 		fmt.Printf("received data length exceeds the limit. MaxPackSize %v, msgDataLen %v\n", defaultServer.AppConf.MaxPackSize, msgData.GetDataLen())
 		PutMessage(msgData)

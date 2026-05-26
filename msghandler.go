@@ -10,15 +10,15 @@ type IFilter func(conn IConnection, msg IMessage) bool
 type IErrCapture func(conn IConnection, panicInfo string)
 
 type MsgHandler struct {
-	apis       map[int32]*BaseRouter // 路由表
-	filter     IFilter               // 消息过滤器
-	errCapture IErrCapture           // 错误捕获器
+	apis       map[int32]*BaseRouter // Router Table / 路由表
+	filter     IFilter               // Message Filter / 消息过滤器
+	errCapture IErrCapture           // Error Capture / 错误捕获器
 }
 
 var instanceMsgHandler *MsgHandler
 var instanceMsgHandlerOnce = sync.Once{}
 
-// 消息处理器
+// Message Handler / 消息处理器
 func GetInstanceMsgHandler() *MsgHandler {
 	instanceMsgHandlerOnce.Do(func() {
 		instanceMsgHandler = &MsgHandler{
