@@ -11,52 +11,50 @@ import (
 	"time"
 )
 
-// 用于生成连接唯一ID
+// Used to Generate Unique Connection ID / 用于生成连接唯一ID
 var connIdSeed uint32
 
 func GenerateConnID() string {
-	// 1. 获取当前秒级时间戳 (取低 32 位)
+	// 1. Get current second-level timestamp (low 32 bits) / 获取当前秒级时间戳 (取低 32 位)
 	now := uint64(time.Now().Unix())
-	// 2. 原子自增获取序列号
+	// 2. Atomically increment to get sequence number / 原子自增获取序列号
 	seq := uint64(atomic.AddUint32(&connIdSeed, 1))
-	// 3. 组合：时间戳左移 32 位，然后与序列号进行“或”运算
-	// [ 32位时间戳 ] [ 32位自增序列 ]
+	// 3. Combine: timestamp shifted left by 32 bits, OR with sequence number / 组合：时间戳左移 32 位，然后与序列号进行“或”运算
+	// [ 32-bit Timestamp ] [ 32-bit Auto-increment Sequence / 32位时间戳 ] [ 32位自增序列 ]
 	return strconv.FormatUint((now<<32)|seq, 16)
 }
 
 type ConnectionBase struct {
-	server        IServer            // 当前Conn所属的Server
-	conn          IConnection        // 绑定的连接
-	connId        string             // 连接的唯一Id
-	msgBuffChan   chan []byte        // 用于任务队列与写协程之间的消息通信
-	property      map[string]any     // 连接属性
-	propertyMutex sync.RWMutex       // 连接属性读写锁
-	isClosed      int32              // 当前连接是否已关闭
-	connCtx       context.Context    // 管理连接的上下文
-	connCtxCancel context.CancelFunc // 连接关闭信号
-	limitingCount int64              // 限流计数
-	limitingTimer int64              // 限流计时
-	limitingMutex sync.Mutex         // 限流锁
-	taskQueue     chan func()        // 等待执行的任务队列
+	server        IServer            // Current Conn's Server / 当前Conn所属的Server
+	conn          IConnection        // Bound Connection / 绑定的连接
+	connId        string             // Unique Connection ID / 连接的唯一Id
+	msgBuffChan   chan []byte        // Message communication between task queue and write goroutine / 用于任务队列与写协程之间的消息通信
+	property      map[string]any     // Connection Properties / 连接属性
+	propertyMutex sync.RWMutex       // Connection Property R/W Lock / 连接属性读写锁
+	isClosed      int32              // Whether Connection is Closed / 当前连接是否已关闭
+	connCtx       context.Context    // Connection Management Context / 管理连接的上下文
+	connCtxCancel context.CancelFunc // Connection Close Signal / 连接关闭信号
+	limitingCount int64              // Rate Limiting Count / 限流计数
+	limitingTimer int64              // Rate Limiting Timer / 限流计时
+	limitingMutex sync.Mutex         // Rate Limiting Lock / 限流锁
 }
 
 func (c *ConnectionBase) Open() {
 	defer func() {
+		c.Close()
 		GetInstanceConnManager().GetConnClosed(c.conn)
 
-		// 清空属性
+		// Clear Properties / 清空属性
 		c.propertyMutex.Lock()
 		c.property = map[string]any{}
 		c.propertyMutex.Unlock()
 
-		// 关闭底层网络连接
+		// Close Underlying Network Connection / 关闭底层网络连接
 		if netConn := c.conn.GetNetConn(); netConn != nil {
 			_ = netConn.Close()
 		}
 		close(c.msgBuffChan)
 		c.msgBuffChan = nil
-		close(c.taskQueue)
-		c.taskQueue = nil
 
 		GetInstanceConnManager().Remove(c.conn)
 		GetInstanceServerManager().WaitGroupDone()
@@ -65,22 +63,18 @@ func (c *ConnectionBase) Open() {
 	GetInstanceServerManager().WaitGroupAdd(1)
 	GetInstanceConnManager().GetConnOpened(c.conn)
 
-	go c.readHandler()  // 开启读协程
-	go c.writeHandler() // 开启写协程
+	// Start Read Goroutine / 开启读协程
+	go c.readHandler()
 
-	// 任务协程：处理任务队列
+	// Start Write Goroutine / 开启写协程
 	for {
 		select {
-		case <-c.ConnCtxDone():
+		case <-c.ConnCtx().Done():
 			return
-		case t, ok := <-c.taskQueue:
-			if !ok {
+		case data, ok := <-c.msgBuffChan:
+			if !ok || !c.conn.StartWriter(data) {
 				return
 			}
-			func(taskFun func()) {
-				defer GetInstanceMsgHandler().GetErrCapture(c.conn)
-				taskFun()
-			}(t)
 		}
 	}
 }
@@ -89,10 +83,10 @@ func (c *ConnectionBase) readHandler() {
 	defer c.Close()
 	for {
 		select {
-		case <-c.ConnCtxDone():
+		case <-c.ConnCtx().Done():
 			return
 		default:
-			// 设置读超时
+			// Set Read Timeout / 设置读超时
 			deadline := time.Now().Add(time.Duration(defaultServer.AppConf.ConnRWTimeOut) * time.Second)
 			if netConn := c.conn.GetNetConn(); netConn != nil && netConn.SetReadDeadline(deadline) != nil {
 				return
@@ -104,41 +98,37 @@ func (c *ConnectionBase) readHandler() {
 	}
 }
 
-func (c *ConnectionBase) writeHandler() {
-	defer c.Close()
-	for {
-		select {
-		case <-c.ConnCtxDone():
-			return
-		case data, ok := <-c.msgBuffChan:
-			if !ok || !c.conn.StartWriter(data) {
-				return
-			}
-		}
-	}
-}
-
-func (c *ConnectionBase) ConnCtxDone() <-chan struct{} {
-	return c.connCtx.Done()
+func (c *ConnectionBase) ConnCtx() context.Context {
+	return c.connCtx
 }
 
 func (c *ConnectionBase) Close() {
 	atomic.AddInt32(&c.isClosed, 1)
-	// 通知所有协程退出
+	// Notify all goroutines to exit / 通知所有协程退出
 	c.connCtxCancel()
 }
 
 func (c *ConnectionBase) DoTask(task func()) {
-	select {
-	case <-c.ConnCtxDone():
-	case c.taskQueue <- task:
+	if c.IsClose() {
+		return
+	}
+	// Hash connId to workerId, ensure all handlers of same connection execute on same worker
+	// 将 connId 哈希为 workerId，确保同一连接的所有 handler 在同一 worker 上执行
+	pool := GetInstanceWorkerPool()
+	err := pool.SubmitWithWorkerCtx(c.ConnCtx(), func() {
+		defer GetInstanceMsgHandler().GetErrCapture(c.conn)
+		task()
+	}, pool.HashWorkerId(c.connId))
+	if err != nil {
+		fmt.Printf("pool do task err:%v\n", err)
+		return
 	}
 }
 
 func readerTaskHandler(c IConnection, m IMessage) {
 	iMsgHandler := GetInstanceMsgHandler()
 
-	// 连接关闭时丢弃后续所有操作
+	// Discard all subsequent operations when connection closes / 连接关闭时丢弃后续所有操作
 	if c.IsClose() {
 		return
 	}
@@ -157,18 +147,18 @@ func readerTaskHandler(c IConnection, m IMessage) {
 	} else {
 		msgData = m.(*Message)
 	}
-	// 限流控制
+	// Rate Limiting Control / 限流控制
 	if c.FlowControl() {
 		fmt.Printf("flowControl RemoteAddress: %v, GetMsgId: %v, GetData: %s\n", c.RemoteAddrStr(), m.GetMsgId(), m.GetData())
 		return
 	}
 
-	// 过滤器校验
+	// Filter Validation / 过滤器校验
 	if iMsgHandler.GetFilter() != nil && !iMsgHandler.GetFilter()(c, m) {
 		return
 	}
 
-	// 对应的逻辑处理方法
+	// Corresponding Logic Handler / 对应的逻辑处理方法
 	router.RunHandler(c, msgData)
 }
 
@@ -209,7 +199,7 @@ func (c *ConnectionBase) SendMsg(msgId int32, msgData proto.Message) {
 		return
 	}
 	select {
-	case <-c.ConnCtxDone():
+	case <-c.ConnCtx().Done():
 	case c.msgBuffChan <- msg:
 	}
 }

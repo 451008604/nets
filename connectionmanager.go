@@ -6,16 +6,16 @@ import (
 )
 
 type ConnectionManager struct {
-	connections        *shardmap.ShardMap[string, IConnection] // 管理的连接信息
-	connOnOpened       func(conn IConnection)                  // 连接建立时的Hook函数
-	connOnClosed       func(conn IConnection)                  // 连接断开时的Hook函数
-	connOnRateLimiting func(conn IConnection)                  // 触发限流时的Hook函数
+	connections        *shardmap.ShardMap[string, IConnection] // Managed Connection Info / 管理的连接信息
+	connOnOpened       func(conn IConnection)                  // Hook Function on Connection Open / 连接建立时的Hook函数
+	connOnClosed       func(conn IConnection)                  // Hook Function on Connection Close / 连接断开时的Hook函数
+	connOnRateLimiting func(conn IConnection)                  // Hook Function on Rate Limiting / 触发限流时的Hook函数
 }
 
 var instanceConnManager *ConnectionManager
 var instanceConnManagerOnce = sync.Once{}
 
-// 连接管理器
+// Connection Manager / 连接管理器
 func GetInstanceConnManager() *ConnectionManager {
 	instanceConnManagerOnce.Do(func() {
 		instanceConnManager = &ConnectionManager{

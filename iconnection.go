@@ -1,49 +1,50 @@
 package nets
 
 import (
+	"context"
 	"google.golang.org/protobuf/proto"
 	"net"
 )
 
 type IConnection interface {
-	// 启动连接(通过connmanager调用)
+	// Start Connection (called by connmanager) / 启动连接(通过connmanager调用)
 	Open()
-	// 停止连接(通过connmanager调用)
+	// Stop Connection (called by connmanager) / 停止连接(通过connmanager调用)
 	Close()
 
-	// 获取真实连接
+	// Get Real Connection / 获取真实连接
 	GetNetConn() net.Conn
-	// 连接上下文关闭信号
-	ConnCtxDone() <-chan struct{}
+	// Connection Context / 连接上下文
+	ConnCtx() context.Context
 
-	// 启动接收消息协程
+	// Start Message Receiving Goroutine / 启动接收消息协程
 	StartReader() bool
-	// 启动发送消息协程
+	// Start Message Sending Goroutine / 启动发送消息协程
 	StartWriter(data []byte) bool
-	// 执行任务
+	// Execute Task / 执行任务
 	DoTask(task func())
 
-	// 获取当前连接Id
+	// Get Current Connection ID / 获取当前连接Id
 	GetConnId() string
-	// 获取客户端地址信息
+	// Get Client Address Info / 获取客户端地址信息
 	RemoteAddrStr() string
-	// 获取连接是否已关闭
+	// Get Whether Connection is Closed / 获取连接是否已关闭
 	IsClose() bool
-	// 获取连接绑定的属性
+	// Get Connection Bound Property / 获取连接绑定的属性
 	GetProperty(key string) any
-	// 设置连接绑定的属性
+	// Set Connection Bound Property / 设置连接绑定的属性
 	SetProperty(key string, value any)
-	// 移除连接绑定的属性
+	// Remove Connection Bound Property / 移除连接绑定的属性
 	RemoveProperty(key string)
 
-	// 发送消息给客户端
+	// Send Message to Client / 发送消息给客户端
 	SendMsg(msgId int32, msgData proto.Message)
 
-	// 限流控制
+	// Rate Limiting Control / 限流控制
 	FlowControl() bool
 
-	// 序列化
+	// Serialize / 序列化
 	ProtocolToByte(str proto.Message) []byte
-	// 反序列化
+	// Deserialize / 反序列化
 	ByteToProtocol(byte []byte, target proto.Message) error
 }
