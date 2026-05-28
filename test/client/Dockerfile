@@ -1,12 +1,9 @@
-FROM alpine:3.23
-
-RUN apk add --no-cache ca-certificates
+FROM centos:7.9.2009
 
 WORKDIR /app
 
 COPY client/client .
 
-ENV GODEBUG="netdns=cgo"
 ENV GOTRACEBACK=crash
 
 CMD ["/app/client"]

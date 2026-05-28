@@ -39,7 +39,7 @@
 | **连接管理**  | 分片哈希表存储，读写任务三协程分离，属性存取               |
 | **限流控制**  | 基于 QPS 的连接限流，支持回调与自动断开               |
 | **优雅退出**  | 监听系统信号，在进程退出前并行关闭所有服务与连接             |
-| **高性能**   | 4核单机 QPS 可达 10,000+                  |
+| **高性能**   | 4核8G单台机器 CPS(每秒新建连接数) 可达 10,000+            |
 
 [//]: # (---)
 
@@ -104,7 +104,17 @@ func main() {
 ## 🔧 分布式压测
 
 性能测试工具位于 `test` 目录，采用 `docker compose` 编排 `1个server + N个client` 模拟海量客户端并发测试。具体测试配置项位于 [docker-compose.yml](./test/docker-compose.yml)  
-进入 `test` 目录，执行 `sh ./start.sh` 启动性能测试
+进入 `test` 目录
+- 执行 `sh run_all.sh` 启动完整性能测试
+- 执行 `sh run_client.sh` 单独启动客户端
+
+```shell
+# 查看内存占用
+go tool pprof -http=:8080 http://localhost:16060/debug/pprof/heap
+
+# 查看 server 日志
+docker compose logs server -f
+```
 
 ---
 
