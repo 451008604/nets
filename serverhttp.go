@@ -77,7 +77,7 @@ func (s *serverHTTP) Start() {
 			"count_kcp":     kcpcount,
 			"work_pool":     GetInstanceWorkerPool().Stats(),
 		}
-		marshal, _ := json.Marshal(maps)
+		marshal, _ := json.MarshalIndent(maps, "", "    ")
 		_, _ = fmt.Fprintf(w, "%s", marshal)
 	})
 
