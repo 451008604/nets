@@ -7,8 +7,10 @@ package nets
 import (
 	"context"
 	"errors"
+	"fmt"
 	"hash/fnv"
 	"runtime"
+	"runtime/debug"
 	"strconv"
 	"sync"
 	"sync/atomic"
@@ -109,6 +111,7 @@ func (p *WorkerPool) worker(idx int) {
 	defer func() {
 		if r := recover(); r != nil {
 			// Worker recovered from fatal panic / Worker 从致命 panic 中恢复
+			fmt.Printf("workerpool worker panic: %v\n%s\n", r, debug.Stack())
 		}
 		atomic.AddInt32(&p.activeWorkers, -1)
 		p.wg.Done()
@@ -119,6 +122,7 @@ func (p *WorkerPool) worker(idx int) {
 			defer func() {
 				if r := recover(); r != nil {
 					// Task panicked, continue processing next task / 任务 panic，继续处理下一个
+					fmt.Printf("workerpool task panic: %v\n%s\n", r, debug.Stack())
 				}
 			}()
 			task()
