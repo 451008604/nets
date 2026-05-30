@@ -15,7 +15,6 @@ func GetMessage() *Message {
 
 func PutMessage(m IMessage) {
 	if msg, ok := m.(*Message); ok {
-		msg.Message = nil
 		msg.Id = 0
 		msg.DataLen = 0
 		msg.Data = nil

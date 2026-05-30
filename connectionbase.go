@@ -245,7 +245,10 @@ func (c *ConnectionBase) FlowControl() (b bool) {
 }
 
 func (c *ConnectionBase) RemoteAddrStr() string {
-	return c.conn.GetNetConn().RemoteAddr().String()
+	if netConn := c.conn.GetNetConn(); netConn != nil {
+		return netConn.RemoteAddr().String()
+	}
+	return ""
 }
 
 var (

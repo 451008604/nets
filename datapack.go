@@ -44,8 +44,12 @@ func (d *dataPack) UnPack(binaryData []byte) IMessage {
 	msgData.DataLen = binary.LittleEndian.Uint16(binaryData[2:4])
 
 	// Check if data length exceeds limit / 检查数据长度是否超出限制
-	if defaultServer.AppConf.MaxPackSize > 0 && int(msgData.GetDataLen()) > defaultServer.AppConf.MaxPackSize {
-		fmt.Printf("received data length exceeds the limit. MaxPackSize %v, msgDataLen %v\n", defaultServer.AppConf.MaxPackSize, msgData.GetDataLen())
+	maxPackSize := defaultServer.AppConf.MaxPackSize
+	if maxPackSize <= 0 {
+		maxPackSize = 4096 // Default limit / 默认限制
+	}
+	if int(msgData.GetDataLen()) > maxPackSize {
+		fmt.Printf("received data length exceeds the limit. MaxPackSize %v, msgDataLen %v\n", maxPackSize, msgData.GetDataLen())
 		PutMessage(msgData)
 		return nil
 	}
