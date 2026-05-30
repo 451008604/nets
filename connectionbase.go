@@ -53,7 +53,6 @@ func (c *ConnectionBase) Open() {
 		if netConn := c.conn.GetNetConn(); netConn != nil {
 			_ = netConn.Close()
 		}
-		close(c.msgBuffChan)
 		c.msgBuffChan = nil
 
 		GetInstanceConnManager().Remove(c.conn)
@@ -103,7 +102,9 @@ func (c *ConnectionBase) ConnCtx() context.Context {
 }
 
 func (c *ConnectionBase) Close() {
-	atomic.AddInt32(&c.isClosed, 1)
+	if atomic.AddInt32(&c.isClosed, 1) != 1 {
+		return
+	}
 	// Notify all goroutines to exit / 通知所有协程退出
 	c.connCtxCancel()
 }
