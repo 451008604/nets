@@ -38,6 +38,14 @@ func (c *ConnectionManager) Add(conn IConnection) {
 	go conn.Open()
 }
 
+// Register registers a connection without starting Open() goroutine.
+// Used for short-lived connections like HTTP.
+// Register 注册连接但不启动 Open() 协程，用于 HTTP 等短连接。
+func (c *ConnectionManager) Register(conn IConnection) {
+	c.connections.Set(conn.GetConnId(), conn)
+	c.GetConnOpened(conn)
+}
+
 func (c *ConnectionManager) Remove(conn IConnection) {
 	if conn == nil {
 		return

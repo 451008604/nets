@@ -46,6 +46,7 @@ func (c *connectionHTTP) StartReader() bool {
 
 	// Parse Body Structure / 解析body结构
 	data, _ := io.ReadAll(c.reader.Body)
+	_ = c.reader.Body.Close()
 	msgData := GetMessage()
 	if err := c.ByteToProtocol(data, msgData); err != nil || msgData.GetMsgId() == 0 {
 		msgData.SetData(data)

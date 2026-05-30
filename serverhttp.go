@@ -108,8 +108,10 @@ func (s *serverHTTP) Start() {
 
 		// Establish new connection and listen for client messages / 建立新连接并监听客户端请求的消息
 		msgConn := NewConnectionHTTP(s, w, r)
+		GetInstanceConnManager().Register(msgConn)
 		// Short connection service does not need read/write goroutine separation / 短链接服务不需要启动读写分离协程
 		msgConn.StartReader()
+		GetInstanceConnManager().Remove(msgConn)
 	})
 
 	if certPath, keyPath := defaultServer.AppConf.ServerHTTP.TLSCertPath, defaultServer.AppConf.ServerHTTP.TLSKeyPath; certPath != "" && keyPath != "" {
