@@ -32,6 +32,10 @@ func (d *dataPack) Pack(msg IMessage) []byte {
 }
 
 func (d *dataPack) UnPack(binaryData []byte) IMessage {
+	if len(binaryData) < d.GetHeadLen() {
+		return nil
+	}
+
 	msgData := GetMessage()
 
 	// Directly read msgId (2 bytes, little-endian) / 直接读msgId (2字节, 小端)
