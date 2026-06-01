@@ -1,6 +1,7 @@
 package nets
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -109,14 +110,26 @@ func (s *serverHTTP) Start() {
 		// Establish new connection and listen for client messages / 建立新连接并监听客户端请求的消息
 		msgConn := NewConnectionHTTP(s, w, r)
 		GetInstanceConnManager().Register(msgConn)
+		// Deferred removal guarantees cleanup even if StartReader panics (otherwise the conn leaks in the manager map)
+		// 用 defer 移除，确保 StartReader panic 时连接也能被清理（否则连接会泄漏在管理器 map 中）
+		defer GetInstanceConnManager().Remove(msgConn)
 		// Short connection service does not need read/write goroutine separation / 短链接服务不需要启动读写分离协程
 		msgConn.StartReader()
-		GetInstanceConnManager().Remove(msgConn)
 	})
 
+	srv := &http.Server{Addr: fmt.Sprintf("%s:%v", s.ip, s.port), Handler: httpServer}
+	go func() {
+		<-serverCtx.Done()
+		_ = srv.Shutdown(context.Background())
+	}()
+
 	if certPath, keyPath := defaultServer.AppConf.ServerHTTP.TLSCertPath, defaultServer.AppConf.ServerHTTP.TLSKeyPath; certPath != "" && keyPath != "" {
-		fmt.Printf("%v\n", http.ListenAndServeTLS(fmt.Sprintf("%s:%v", s.ip, s.port), certPath, keyPath, httpServer))
+		if err := srv.ListenAndServeTLS(certPath, keyPath); err != nil && err != http.ErrServerClosed {
+			fmt.Printf("server error: %v\n", err)
+		}
 	} else {
-		fmt.Printf("%v\n", http.ListenAndServe(fmt.Sprintf("%s:%v", s.ip, s.port), httpServer))
+		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+			fmt.Printf("server error: %v\n", err)
+		}
 	}
 }

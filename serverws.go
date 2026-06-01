@@ -1,6 +1,7 @@
 package nets
 
 import (
+	"context"
 	"fmt"
 	"github.com/gorilla/websocket"
 	"net/http"
@@ -64,9 +65,19 @@ func (s *serverWS) Start() {
 		GetInstanceConnManager().Add(msgConn)
 	})
 
+	srv := &http.Server{Addr: fmt.Sprintf("%s:%v", s.ip, s.port), Handler: wsServer}
+	go func() {
+		<-serverCtx.Done()
+		_ = srv.Shutdown(context.Background())
+	}()
+
 	if certPath, keyPath := defaultServer.AppConf.ServerWS.TLSCertPath, defaultServer.AppConf.ServerWS.TLSKeyPath; certPath != "" && keyPath != "" {
-		fmt.Printf("%v\n", http.ListenAndServeTLS(fmt.Sprintf("%s:%v", s.ip, s.port), certPath, keyPath, wsServer))
+		if err := srv.ListenAndServeTLS(certPath, keyPath); err != nil && err != http.ErrServerClosed {
+			fmt.Printf("server error: %v\n", err)
+		}
 	} else {
-		fmt.Printf("%v\n", http.ListenAndServe(fmt.Sprintf("%s:%v", s.ip, s.port), wsServer))
+		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+			fmt.Printf("server error: %v\n", err)
+		}
 	}
 }

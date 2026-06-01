@@ -56,15 +56,22 @@ func (s *serverTCP) Start() {
 		_ = tcp.Close()
 	}(tcp)
 
+	// Close the listener on shutdown so the blocking Accept returns immediately
+	// 退出时关闭监听器，使阻塞的 Accept 立即返回
+	go func() {
+		<-serverCtx.Done()
+		_ = tcp.Close()
+	}()
+
 	for {
-		select {
-		case <-serverCtx.Done():
-			return
-		default:
-		}
 		// Wait for client request to establish connection / 等待客户端请求建立连接
 		conn, err = tcp.AcceptTCP()
 		if err != nil {
+			select {
+			case <-serverCtx.Done():
+				return
+			default:
+			}
 			fmt.Printf("accept tcp err %v\n", err)
 			continue
 		}

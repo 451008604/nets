@@ -44,15 +44,22 @@ func (s *serverKCP) Start() {
 		_ = listener.Close()
 	}(listener)
 
+	// Close the listener on shutdown so the blocking Accept returns immediately
+	// 退出时关闭监听器，使阻塞的 Accept 立即返回
+	go func() {
+		<-serverCtx.Done()
+		_ = listener.Close()
+	}()
+
 	var conn net.Conn
 	for {
-		select {
-		case <-serverCtx.Done():
-			return
-		default:
-		}
 		conn, err = listener.Accept()
 		if err != nil {
+			select {
+			case <-serverCtx.Done():
+				return
+			default:
+			}
 			fmt.Printf("accept kcp err %v\n", err)
 			continue
 		}
