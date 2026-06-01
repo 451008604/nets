@@ -53,10 +53,7 @@ func (c *connectionTCP) StartReader() bool {
 		msgData.SetData(append(msgData.GetData(), bt[:read]...))
 	}
 
-	c.DoTask(func() {
-		readerTaskHandler(c, msgData)
-		PutMessage(msgData)
-	})
+	c.submitReaderTask(msgData)
 	return true
 }
 

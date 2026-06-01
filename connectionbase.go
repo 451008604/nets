@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"google.golang.org/protobuf/proto"
+	"runtime/debug"
 	"strconv"
 	"sync"
 	"sync/atomic"
@@ -22,6 +23,24 @@ func GenerateConnID() string {
 	// 3. Combine: timestamp shifted left by 32 bits, OR with sequence number / 组合：时间戳左移 32 位，然后与序列号进行“或”运算
 	// [ 32-bit Timestamp ] [ 32-bit Auto-increment Sequence / 32位时间戳 ] [ 32位自增序列 ]
 	return strconv.FormatUint((now<<32)|seq, 16)
+}
+
+// readerTask is a pooled task struct that replaces the double-closure allocation in DoTask.
+// readerTask 是一个池化的任务结构体，用于替代 DoTask 中的双闭包分配。
+type readerTask struct {
+	conn    IConnection
+	msgData IMessage
+}
+
+var readerTaskPool = sync.Pool{
+	New: func() any { return &readerTask{} },
+}
+
+func (t *readerTask) run() {
+	defer readerTaskPool.Put(t)
+	defer GetInstanceMsgHandler().GetErrCapture(t.conn)
+	readerTaskHandler(t.conn, t.msgData)
+	PutMessage(t.msgData)
 }
 
 type ConnectionBase struct {
@@ -53,7 +72,6 @@ func (c *ConnectionBase) Open() {
 		if netConn := c.conn.GetNetConn(); netConn != nil {
 			_ = netConn.Close()
 		}
-		c.msgBuffChan = nil
 
 		GetInstanceConnManager().Remove(c.conn)
 		GetInstanceServerManager().WaitGroupDone()
@@ -62,16 +80,31 @@ func (c *ConnectionBase) Open() {
 	GetInstanceServerManager().WaitGroupAdd(1)
 	GetInstanceConnManager().GetConnOpened(c.conn)
 
-	// Start Read Goroutine / 开启读协程
+	// Start Read Goroutine
 	go c.readHandler()
 
-	// Start Write Goroutine / 开启写协程
+	// Start Write Goroutine with lazy-refresh deadline
+	// Refresh when deadline has less than half of writeTimeout remaining
+	// 当 deadline 剩余时间不足 writeTimeout 的一半时刷新
+	var writeDeadline time.Time
+	// Cached write deadline duration / 缓存的写超时间隔
+	writeTimeout := time.Duration(defaultServer.AppConf.ConnRWTimeOut) * time.Second
 	for {
 		select {
 		case <-c.ConnCtx().Done():
 			return
 		case data, ok := <-c.msgBuffChan:
-			if !ok || !c.conn.StartWriter(data) {
+			if !ok {
+				return
+			}
+			now := time.Now()
+			if writeDeadline.IsZero() || now.Add(writeTimeout/2).After(writeDeadline) {
+				writeDeadline = now.Add(writeTimeout)
+				if netConn := c.conn.GetNetConn(); netConn != nil {
+					_ = netConn.SetWriteDeadline(writeDeadline)
+				}
+			}
+			if !c.conn.StartWriter(data) {
 				return
 			}
 		}
@@ -79,20 +112,25 @@ func (c *ConnectionBase) Open() {
 }
 
 func (c *ConnectionBase) readHandler() {
-	defer c.Close()
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Printf("readHandler panic: %v\n%s\n", r, debug.Stack())
+		}
+		c.Close()
+	}()
+	// Cached read deadline duration / 缓存的读超时间隔
+	readTimeout := time.Duration(defaultServer.AppConf.ConnRWTimeOut) * time.Second
 	for {
 		select {
 		case <-c.ConnCtx().Done():
 			return
 		default:
-			// Set Read Timeout / 设置读超时
-			deadline := time.Now().Add(time.Duration(defaultServer.AppConf.ConnRWTimeOut) * time.Second)
-			if netConn := c.conn.GetNetConn(); netConn != nil && netConn.SetReadDeadline(deadline) != nil {
-				return
-			}
-			if !c.conn.StartReader() {
-				return
-			}
+		}
+		if netConn := c.conn.GetNetConn(); netConn != nil && netConn.SetReadDeadline(time.Now().Add(readTimeout)) != nil {
+			return
+		}
+		if !c.conn.StartReader() {
+			return
 		}
 	}
 }
@@ -122,6 +160,24 @@ func (c *ConnectionBase) DoTask(task func()) {
 	}, pool.HashWorkerId(c.connId))
 	if err != nil {
 		fmt.Printf("pool do task err:%v\n", err)
+		return
+	}
+}
+
+// submitReaderTask submits a read message to the worker pool using a pooled task struct,
+// avoiding the double-closure allocation of the old DoTask path.
+// submitReaderTask 使用池化的任务结构体将读取的消息提交到 worker 池，避免旧 DoTask 路径的双闭包分配。
+func (c *ConnectionBase) submitReaderTask(msgData IMessage) {
+	if c.IsClose() {
+		return
+	}
+	task := readerTaskPool.Get().(*readerTask)
+	task.conn = c.conn
+	task.msgData = msgData
+	pool := GetInstanceWorkerPool()
+	if err := pool.SubmitWithWorkerCtx(c.ConnCtx(), task.run, pool.HashWorkerId(c.connId)); err != nil {
+		readerTaskPool.Put(task)
+		PutMessage(msgData)
 		return
 	}
 }

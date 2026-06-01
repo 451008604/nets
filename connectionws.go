@@ -41,12 +41,16 @@ func (c *connectionWS) StartReader() bool {
 		if msgData == nil {
 			return false
 		}
-		msgByte = msgByte[int(msgData.GetDataLen())+defaultServer.DataPack.GetHeadLen():]
-
-		c.DoTask(func() {
-			readerTaskHandler(c, msgData)
+		// Guard against a frame whose declared length exceeds the remaining bytes (avoids slice-out-of-range panic)
+		// 防御声明长度超过实际剩余字节的帧（避免切片越界 panic）
+		step := int(msgData.GetDataLen()) + defaultServer.DataPack.GetHeadLen()
+		if step > len(msgByte) {
 			PutMessage(msgData)
-		})
+			return false
+		}
+		msgByte = msgByte[step:]
+
+		c.submitReaderTask(msgData)
 	}
 	return true
 }
