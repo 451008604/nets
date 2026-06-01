@@ -1,9 +1,5 @@
 package nets
 
-import (
-	"reflect"
-)
-
 var defaultServer = &CustomServer{
 	AppConf:  GetServerConf(),
 	DataPack: NewDataPack(),
@@ -15,41 +11,22 @@ type CustomServer struct {
 	DataPack IDataPack // Custom Encoder/Decoder / 自定义编码/解码器
 }
 
-// Set Custom Server Parameters / 设置自定义服务器参数
+// SetCustomServer applies the caller-provided configuration.
+// Callers should obtain the defaults via GetServerConf() and mutate the fields they need,
+// then pass the result here. This avoids the "zero value means unset" ambiguity, so values
+// like ProtocolIsJson=false or Port=0 are honored as-is.
+//
+// SetCustomServer 应用调用方提供的配置。
+// 调用方应通过 GetServerConf() 获取默认值并按需修改字段后传入。
+// 这样可避免“零值即未设置”的歧义，使 ProtocolIsJson=false、Port=0 等值被如实采用。
 func SetCustomServer(custom *CustomServer) {
-	defaultServer.AppConf = mergeStructValues(defaultServer.AppConf, custom.AppConf)
-
+	if custom == nil {
+		return
+	}
+	if custom.AppConf != nil {
+		defaultServer.AppConf = custom.AppConf
+	}
 	if custom.DataPack != nil {
 		defaultServer.DataPack = custom.DataPack
 	}
-}
-
-// Merge defaultData with customData, prioritizing customData for same fields / 将 defaultData 与 customData 进行合并，相同字段赋值优先使用 customData
-func mergeStructValues[T any](defaultData, customData *T) *T {
-	if customData == nil && defaultData == nil {
-		return new(T)
-	}
-	if customData == nil {
-		return defaultData
-	} else if defaultData == nil {
-		return customData
-	}
-
-	resultData := new(T)
-	v1 := reflect.ValueOf(defaultData).Elem()
-	v2 := reflect.ValueOf(customData).Elem()
-	v3 := reflect.ValueOf(resultData).Elem()
-
-	for i := 0; i < v1.NumField(); i++ {
-		fieldValue1 := v1.Field(i)
-		fieldValue2 := v2.Field(i)
-
-		// Use field value from customData if present; otherwise use defaultData / 如果 customData 中的字段有值则使用它；否则使用 defaultData 中的对应字段值
-		if !fieldValue2.IsZero() {
-			v3.Field(i).Set(fieldValue2)
-		} else {
-			v3.Field(i).Set(fieldValue1)
-		}
-	}
-	return resultData
 }

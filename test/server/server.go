@@ -39,14 +39,14 @@ func main() {
 	}()
 
 	// 1. (Optional) Custom configuration parameters / 1. (可选) 自定义配置参数
-	nets.SetCustomServer(&nets.CustomServer{AppConf: &nets.AppConf{
-		MaxConn:       1000000,
-		ConnRWTimeOut: 5, // Extend timeout appropriately for distributed stress testing to avoid premature closure / 分布式压力测试时适当延长超时时间，避免连接建立后还没有通信就被服务端关闭
-		ServerTCP:     nets.ServerConf{Port: *tcpPort},
-		ServerWS:      nets.ServerConf{Port: *wsPort},
-		ServerHTTP:    nets.ServerConf{Port: *httpPort},
-		ServerKCP:     nets.ServerConf{Port: *kcpPort},
-	}})
+	serverConf := nets.GetServerConf()
+	serverConf.MaxConn = 1000000
+	serverConf.ConnRWTimeOut = 5
+	serverConf.ServerTCP = nets.ServerConf{Port: *tcpPort}
+	serverConf.ServerWS = nets.ServerConf{Port: *wsPort}
+	serverConf.ServerHTTP = nets.ServerConf{Port: *httpPort}
+	serverConf.ServerKCP = nets.ServerConf{Port: *kcpPort}
+	nets.SetCustomServer(&nets.CustomServer{AppConf: serverConf})
 
 	// 2. (Optional) Set connection open hook function / 2. (可选) 设置连接建立时Hook函数
 	nets.GetInstanceConnManager().SetConnOpened(func(conn nets.IConnection) {
