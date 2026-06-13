@@ -66,7 +66,7 @@ func (c *ServerManager) StopAll() {
 	if len(c.servers) == 0 {
 		return
 	}
-	if atomic.AddInt32(&c.isClosed, 1) != 1 {
+	if !atomic.CompareAndSwapInt32(&c.isClosed, 0, 1) {
 		return
 	}
 	serverCtxCancel()

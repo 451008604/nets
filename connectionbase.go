@@ -37,10 +37,16 @@ var readerTaskPool = sync.Pool{
 }
 
 func (t *readerTask) run() {
-	defer readerTaskPool.Put(t)
-	defer GetInstanceMsgHandler().GetErrCapture(t.conn)
+	defer func() {
+		t.conn = nil
+		t.msgData = nil
+		readerTaskPool.Put(t)
+	}()
+	defer func() {
+		GetInstanceMsgHandler().GetErrCapture(t.conn)
+		PutMessage(t.msgData)
+	}()
 	readerTaskHandler(t.conn, t.msgData)
-	PutMessage(t.msgData)
 }
 
 type ConnectionBase struct {
@@ -77,7 +83,6 @@ func (c *ConnectionBase) Open() {
 		GetInstanceServerManager().WaitGroupDone()
 	}()
 
-	GetInstanceServerManager().WaitGroupAdd(1)
 	GetInstanceConnManager().GetConnOpened(c.conn)
 
 	// Start Read Goroutine
@@ -101,7 +106,9 @@ func (c *ConnectionBase) Open() {
 			if writeDeadline.IsZero() || now.Add(writeTimeout/2).After(writeDeadline) {
 				writeDeadline = now.Add(writeTimeout)
 				if netConn := c.conn.GetNetConn(); netConn != nil {
-					_ = netConn.SetWriteDeadline(writeDeadline)
+					if err := netConn.SetWriteDeadline(writeDeadline); err != nil {
+						return
+					}
 				}
 			}
 			if !c.conn.StartWriter(data) {
@@ -140,7 +147,7 @@ func (c *ConnectionBase) ConnCtx() context.Context {
 }
 
 func (c *ConnectionBase) Close() {
-	if atomic.AddInt32(&c.isClosed, 1) != 1 {
+	if !atomic.CompareAndSwapInt32(&c.isClosed, 0, 1) {
 		return
 	}
 	// Notify all goroutines to exit / 通知所有协程退出
@@ -169,6 +176,7 @@ func (c *ConnectionBase) DoTask(task func()) {
 // submitReaderTask 使用池化的任务结构体将读取的消息提交到 worker 池，避免旧 DoTask 路径的双闭包分配。
 func (c *ConnectionBase) submitReaderTask(msgData IMessage) {
 	if c.IsClose() {
+		PutMessage(msgData)
 		return
 	}
 	task := readerTaskPool.Get().(*readerTask)
@@ -190,7 +198,7 @@ func readerTaskHandler(c IConnection, m IMessage) {
 		return
 	}
 
-	router, ok := iMsgHandler.GetApis()[int32(m.GetMsgId())]
+	router, ok := iMsgHandler.GetRouter(int32(m.GetMsgId()))
 	if !ok {
 		return
 	}
@@ -246,6 +254,10 @@ func (c *ConnectionBase) RemoveProperty(key string) {
 }
 
 func (c *ConnectionBase) SendMsg(msgId int32, msgData proto.Message) {
+	if msgId < 0 || msgId > 65535 {
+		fmt.Printf("msgId %d out of uint16 range, message dropped\n", msgId)
+		return
+	}
 	msgByte := c.ProtocolToByte(msgData)
 	packMsg := GetMessage()
 	packMsg.Id = uint16(msgId)
@@ -275,6 +287,9 @@ func (c *ConnectionBase) FlowControl() (b bool) {
 	defer func() {
 		if b {
 			GetInstanceConnManager().ConnRateLimiting(c.conn)
+			if netConn := c.conn.GetNetConn(); netConn != nil {
+				_ = netConn.Close()
+			}
 			GetInstanceConnManager().Remove(c.conn)
 		}
 	}()
