@@ -54,6 +54,7 @@ type WorkerPool struct {
 	activeWorkers  int32
 	workers        []chan func() // Array of worker channels / worker 通道数组
 	done           chan struct{} // Signal channel for shutdown / 关闭信号通道
+	stopOnce       sync.Once     // Ensure Stop() is called only once / 确保 Stop() 只调用一次
 	wg             sync.WaitGroup
 	nextIdx        uint64 // Atomic counter for round-robin / 轮询原子计数器
 	totalSubmitted int64
@@ -88,6 +89,12 @@ func GetInstanceWorkerPool() *WorkerPool {
 // NewWorkerPool 使用指定的工作协程数量和任务通道容量创建一个新的 WorkerPool。
 // 它立即启动所有工作协程，这些协程将处理提交到池中的任务。
 func NewWorkerPool(poolSize, maxTaskLen int) *WorkerPool {
+	if poolSize <= 0 {
+		panic("poolSize must be > 0")
+	}
+	if maxTaskLen < 0 {
+		panic("maxTaskLen must be >= 0")
+	}
 	pool := &WorkerPool{
 		maxWorkers: int32(poolSize),
 		workers:    make([]chan func(), poolSize),
@@ -103,9 +110,11 @@ func NewWorkerPool(poolSize, maxTaskLen int) *WorkerPool {
 
 // worker is the goroutine that continuously processes tasks from its dedicated channel.
 // It recovers from panics in task functions to prevent worker death.
+// It exits gracefully when p.done is closed.
 //
 // worker 是持续从其专属通道处理任务的 goroutine。
 // 它从任务函数的 panic 中恢复，防止 worker 死亡。
+// 当 p.done 关闭时，它会优雅地退出。
 func (p *WorkerPool) worker(idx int) {
 	atomic.AddInt32(&p.activeWorkers, 1)
 	defer func() {
@@ -117,17 +126,25 @@ func (p *WorkerPool) worker(idx int) {
 		p.wg.Done()
 	}()
 
-	for task := range p.workers[idx] {
-		func() {
-			defer func() {
-				if r := recover(); r != nil {
-					// Task panicked, continue processing next task / 任务 panic，继续处理下一个
-					fmt.Printf("workerpool task panic: %v\n%s\n", r, debug.Stack())
-				}
+	for {
+		select {
+		case task, ok := <-p.workers[idx]:
+			if !ok {
+				return
+			}
+			func() {
+				defer func() {
+					if r := recover(); r != nil {
+						// Task panicked, continue processing next task / 任务 panic，继续处理下一个
+						fmt.Printf("workerpool task panic: %v\n%s\n", r, debug.Stack())
+					}
+				}()
+				task()
+				atomic.AddInt64(&p.totalCompleted, 1)
 			}()
-			task()
-			atomic.AddInt64(&p.totalCompleted, 1)
-		}()
+		case <-p.done:
+			return
+		}
 	}
 }
 
@@ -312,17 +329,9 @@ func (p *WorkerPool) TrySubmitWithWorker(task func(), workerId int) bool {
 // Stop 优雅地关闭工作池。它阻止新任务提交，等待所有工作协程完成当前任务，然后返回。
 // 后续对 Stop 的调用是无操作。
 func (p *WorkerPool) Stop() {
-	select {
-	case <-p.done:
-		return // Already stopped / 已经停止
-	default:
+	p.stopOnce.Do(func() {
 		close(p.done)
-	}
-	// Close all worker channels after signaling done
-	// 在发送 done 信号后关闭所有 worker 通道
-	for _, ch := range p.workers {
-		close(ch)
-	}
+	})
 	p.wg.Wait()
 }
 
@@ -373,5 +382,5 @@ func (p *WorkerPool) HashWorkerId(key string) int {
 	}
 	h := fnv.New32a()
 	_, _ = h.Write([]byte(key))
-	return int(h.Sum32())
+	return int(h.Sum32() & 0x7fffffff)
 }
