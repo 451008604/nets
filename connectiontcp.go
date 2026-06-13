@@ -11,11 +11,15 @@ type connectionTCP struct {
 }
 
 func NewConnectionTCP(server IServer, conn *net.TCPConn) IConnection {
+	msgChanLen := defaultServer.AppConf.MaxMsgChanLen
+	if msgChanLen < 0 {
+		msgChanLen = 0
+	}
 	c := &connectionTCP{
 		ConnectionBase: &ConnectionBase{
 			server:      server,
 			connId:      GenerateConnID(),
-			msgBuffChan: make(chan []byte, defaultServer.AppConf.MaxMsgChanLen),
+			msgBuffChan: make(chan []byte, msgChanLen),
 			property:    map[string]any{},
 		},
 		conn: conn,

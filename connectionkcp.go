@@ -11,11 +11,15 @@ type connectionKCP struct {
 }
 
 func NewConnectionKCP(server *serverKCP, conn net.Conn) IConnection {
+	msgChanLen := defaultServer.AppConf.MaxMsgChanLen
+	if msgChanLen < 0 {
+		msgChanLen = 0
+	}
 	c := &connectionKCP{
 		ConnectionBase: &ConnectionBase{
 			server:      server,
 			connId:      GenerateConnID(),
-			msgBuffChan: make(chan []byte, defaultServer.AppConf.MaxMsgChanLen),
+			msgBuffChan: make(chan []byte, msgChanLen),
 			property:    map[string]any{},
 		},
 		conn: conn,
