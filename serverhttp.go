@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"runtime"
+	"sync"
 	"time"
 )
 
@@ -16,16 +17,19 @@ type serverHTTP struct {
 	port       int
 }
 
-var serverHttp IServer
+var (
+	serverHttp     IServer
+	serverHttpOnce sync.Once
+)
 
 func GetServerHTTP() IServer {
-	if serverHttp == nil {
+	serverHttpOnce.Do(func() {
 		serverHttp = &serverHTTP{
 			serverName: defaultServer.AppConf.AppName + "_http",
 			ip:         defaultServer.AppConf.ServerHTTP.Address,
 			port:       defaultServer.AppConf.ServerHTTP.Port,
 		}
-	}
+	})
 	return serverHttp
 }
 
@@ -109,7 +113,12 @@ func (s *serverHTTP) Start() {
 
 		// Establish new connection and listen for client messages / 建立新连接并监听客户端请求的消息
 		msgConn := NewConnectionHTTP(s, w, r)
-		GetInstanceConnManager().Register(msgConn)
+		if !GetInstanceConnManager().Register(msgConn) {
+			w.WriteHeader(http.StatusServiceUnavailable)
+			_, _ = w.Write([]byte(http.StatusText(http.StatusServiceUnavailable)))
+			_ = r.Body.Close()
+			return
+		}
 		// Deferred removal guarantees cleanup even if StartReader panics (otherwise the conn leaks in the manager map)
 		// 用 defer 移除，确保 StartReader panic 时连接也能被清理（否则连接会泄漏在管理器 map 中）
 		defer GetInstanceConnManager().Remove(msgConn)
@@ -120,7 +129,9 @@ func (s *serverHTTP) Start() {
 	srv := &http.Server{Addr: fmt.Sprintf("%s:%v", s.ip, s.port), Handler: httpServer}
 	go func() {
 		<-serverCtx.Done()
-		_ = srv.Shutdown(context.Background())
+		ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+		defer cancel()
+		_ = srv.Shutdown(ctx)
 	}()
 
 	if certPath, keyPath := defaultServer.AppConf.ServerHTTP.TLSCertPath, defaultServer.AppConf.ServerHTTP.TLSKeyPath; certPath != "" && keyPath != "" {

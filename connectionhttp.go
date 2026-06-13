@@ -6,20 +6,26 @@ import (
 	"io"
 	"net"
 	"net/http"
+	"sync/atomic"
 )
 
 type connectionHTTP struct {
 	*ConnectionBase
-	writer http.ResponseWriter
-	reader *http.Request
+	writer        http.ResponseWriter
+	reader        *http.Request
+	headerWritten int32
 }
 
 func NewConnectionHTTP(server IServer, writer http.ResponseWriter, reader *http.Request) IConnection {
+	msgChanLen := defaultServer.AppConf.MaxMsgChanLen
+	if msgChanLen < 0 {
+		msgChanLen = 0
+	}
 	c := &connectionHTTP{
 		ConnectionBase: &ConnectionBase{
 			server:      server,
 			connId:      GenerateConnID(),
-			msgBuffChan: make(chan []byte, defaultServer.AppConf.MaxMsgChanLen),
+			msgBuffChan: make(chan []byte, msgChanLen),
 			property:    map[string]any{},
 		},
 		writer: writer,
@@ -45,7 +51,10 @@ func (c *connectionHTTP) StartReader() bool {
 	c.SetProperty(ConnPropertyHttpAuthorization, xToken)
 
 	// Parse Body Structure / 解析body结构
-	data, _ := io.ReadAll(c.reader.Body)
+	data, err := io.ReadAll(c.reader.Body)
+	if err != nil {
+		return false
+	}
 	_ = c.reader.Body.Close()
 	msgData := GetMessage()
 	if err := c.ByteToProtocol(data, msgData); err != nil || msgData.GetMsgId() == 0 {
@@ -54,14 +63,19 @@ func (c *connectionHTTP) StartReader() bool {
 		c.SetProperty(ConnPropertyHttpWriter, c.writer)
 	}
 
-	defer GetInstanceMsgHandler().GetErrCapture(c)
+	defer func() {
+		GetInstanceMsgHandler().GetErrCapture(c)
+		PutMessage(msgData)
+		GetInstanceConnManager().GetConnClosed(c)
+	}()
 	readerTaskHandler(c, msgData)
-	PutMessage(msgData)
 	return true
 }
 
 func (c *connectionHTTP) StartWriter(data []byte) bool {
-	c.writer.WriteHeader(http.StatusOK)
+	if atomic.CompareAndSwapInt32(&c.headerWritten, 0, 1) {
+		c.writer.WriteHeader(http.StatusOK)
+	}
 	if _, err := c.writer.Write(data); err != nil {
 		return false
 	}
