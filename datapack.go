@@ -19,13 +19,22 @@ func (d *dataPack) GetHeadLen() int {
 func (d *dataPack) Pack(msg IMessage) []byte {
 	data := msg.GetData()
 	headLen := d.GetHeadLen()
+
+	// Reject oversize payloads instead of silently truncating DataLen to 65535.
+	// Truncation would cause the receiver to misread trailing bytes as the next
+	// message, corrupting the entire subsequent stream.
+	if len(data) > 0xFFFF {
+		fmt.Printf("pack aborted: data length %d exceeds uint16 max (%d)\n", len(data), 0xFFFF)
+		return nil
+	}
+
 	packed := make([]byte, headLen+len(data))
 
 	// Directly write msgId (2 bytes, little-endian) / 直接写msgId (2字节, 小端)
 	binary.LittleEndian.PutUint16(packed[0:2], msg.GetMsgId())
 	// Directly write dataLen (2 bytes, little-endian) / 直接写dataLen (2字节, 小端)
-	binary.LittleEndian.PutUint16(packed[2:4], msg.GetDataLen())
-	// Directly copy data / 直接拷贝data
+	binary.LittleEndian.PutUint16(packed[2:4], uint16(len(data)))
+	// Directly copy data / 直接拷贝数据
 	copy(packed[headLen:], data)
 
 	return packed
