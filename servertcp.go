@@ -3,6 +3,7 @@ package nets
 import (
 	"fmt"
 	"net"
+	"sync"
 )
 
 type serverTCP struct {
@@ -11,16 +12,19 @@ type serverTCP struct {
 	port       int    // Service Port / 服务端口
 }
 
-var serverTcp IServer
+var (
+	serverTcp     IServer
+	serverTcpOnce sync.Once
+)
 
 func GetServerTCP() IServer {
-	if serverTcp == nil {
+	serverTcpOnce.Do(func() {
 		serverTcp = &serverTCP{
 			serverName: defaultServer.AppConf.AppName + "_tcp",
 			ip:         defaultServer.AppConf.ServerTCP.Address,
 			port:       defaultServer.AppConf.ServerTCP.Port,
 		}
-	}
+	})
 	return serverTcp
 }
 

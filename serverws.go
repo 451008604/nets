@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"github.com/gorilla/websocket"
 	"net/http"
+	"sync"
+	"time"
 )
 
 type serverWS struct {
@@ -13,16 +15,19 @@ type serverWS struct {
 	port       int    // Service Port / 服务端口
 }
 
-var serverWs IServer
+var (
+	serverWs     IServer
+	serverWsOnce sync.Once
+)
 
 func GetServerWS() IServer {
-	if serverWs == nil {
+	serverWsOnce.Do(func() {
 		serverWs = &serverWS{
 			serverName: defaultServer.AppConf.AppName + "_ws",
 			ip:         defaultServer.AppConf.ServerWS.Address,
 			port:       defaultServer.AppConf.ServerWS.Port,
 		}
-	}
+	})
 	return serverWs
 }
 
@@ -68,7 +73,9 @@ func (s *serverWS) Start() {
 	srv := &http.Server{Addr: fmt.Sprintf("%s:%v", s.ip, s.port), Handler: wsServer}
 	go func() {
 		<-serverCtx.Done()
-		_ = srv.Shutdown(context.Background())
+		ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+		defer cancel()
+		_ = srv.Shutdown(ctx)
 	}()
 
 	if certPath, keyPath := defaultServer.AppConf.ServerWS.TLSCertPath, defaultServer.AppConf.ServerWS.TLSKeyPath; certPath != "" && keyPath != "" {

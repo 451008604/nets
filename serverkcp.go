@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/xtaci/kcp-go"
 	"net"
+	"sync"
 )
 
 type serverKCP struct {
@@ -12,16 +13,19 @@ type serverKCP struct {
 	port       int
 }
 
-var serverKcp IServer
+var (
+	serverKcp     IServer
+	serverKcpOnce sync.Once
+)
 
 func GetServerKCP() IServer {
-	if serverKcp == nil {
+	serverKcpOnce.Do(func() {
 		serverKcp = &serverKCP{
 			serverName: defaultServer.AppConf.AppName + "_kcp",
 			ip:         defaultServer.AppConf.ServerKCP.Address,
 			port:       defaultServer.AppConf.ServerKCP.Port,
 		}
-	}
+	})
 	return serverKcp
 }
 
