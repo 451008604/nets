@@ -1,6 +1,6 @@
 module github.com/451008604/nets/testclient/server
 
-go 1.21.1
+go 1.24.13
 
 require (
 	github.com/451008604/nets v1.2.1
@@ -17,9 +17,9 @@ require (
 	github.com/templexxx/xor v0.0.0-20191217153810-f85b25db303b // indirect
 	github.com/tjfoc/gmsm v1.4.1 // indirect
 	github.com/xtaci/kcp-go v5.4.20+incompatible // indirect
-	golang.org/x/crypto v0.24.0 // indirect
-	golang.org/x/net v0.26.0 // indirect
-	golang.org/x/sys v0.21.0 // indirect
+	golang.org/x/crypto v0.45.0 // indirect
+	golang.org/x/net v0.47.0 // indirect
+	golang.org/x/sys v0.38.0 // indirect
 )
 
 replace github.com/451008604/nets => ../../
