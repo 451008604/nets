@@ -12,15 +12,11 @@ type connectionWS struct {
 }
 
 func NewConnectionWS(server IServer, conn *websocket.Conn) IConnection {
-	msgChanLen := defaultServer.AppConf.MaxMsgChanLen
-	if msgChanLen < 0 {
-		msgChanLen = 0
-	}
 	c := &connectionWS{
 		ConnectionBase: &ConnectionBase{
 			server:      server,
 			connId:      GenerateConnID(),
-			msgBuffChan: make(chan []byte, msgChanLen),
+			msgBuffChan: make(chan []byte, defaultServer.AppConf.MaxMsgChanLen),
 			property:    map[string]any{},
 		},
 		conn: conn,
@@ -54,7 +50,9 @@ func (c *connectionWS) StartReader() bool {
 		}
 		msgByte = msgByte[step:]
 
-		c.submitReaderTask(msgData)
+		if !c.DoTask(func() { readerTaskHandler(c, msgData); PutMessage(msgData) }) {
+			PutMessage(msgData)
+		}
 	}
 	return true
 }

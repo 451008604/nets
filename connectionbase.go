@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"google.golang.org/protobuf/proto"
-	"runtime/debug"
 	"strconv"
 	"sync"
 	"sync/atomic"
@@ -25,30 +24,6 @@ func GenerateConnID() string {
 	return strconv.FormatUint((now<<32)|seq, 16)
 }
 
-// readerTask is a pooled task struct that replaces the double-closure allocation in DoTask.
-// readerTask 是一个池化的任务结构体，用于替代 DoTask 中的双闭包分配。
-type readerTask struct {
-	conn    IConnection
-	msgData IMessage
-}
-
-var readerTaskPool = sync.Pool{
-	New: func() any { return &readerTask{} },
-}
-
-func (t *readerTask) run() {
-	defer func() {
-		t.conn = nil
-		t.msgData = nil
-		readerTaskPool.Put(t)
-	}()
-	defer func() {
-		GetInstanceMsgHandler().GetErrCapture(t.conn)
-		PutMessage(t.msgData)
-	}()
-	readerTaskHandler(t.conn, t.msgData)
-}
-
 type ConnectionBase struct {
 	server        IServer            // Current Conn's Server / 当前Conn所属的Server
 	conn          IConnection        // Bound Connection / 绑定的连接
@@ -66,7 +41,6 @@ type ConnectionBase struct {
 
 func (c *ConnectionBase) Open() {
 	defer func() {
-		c.Close()
 		GetInstanceConnManager().GetConnClosed(c.conn)
 
 		// Clear Properties / 清空属性
@@ -82,7 +56,9 @@ func (c *ConnectionBase) Open() {
 		GetInstanceConnManager().Remove(c.conn)
 		GetInstanceServerManager().WaitGroupDone()
 	}()
+	defer GetInstanceMsgHandler().GetErrCapture(c.conn)
 
+	GetInstanceServerManager().WaitGroupAdd(1)
 	GetInstanceConnManager().GetConnOpened(c.conn)
 
 	// Start Read Goroutine
@@ -119,12 +95,9 @@ func (c *ConnectionBase) Open() {
 }
 
 func (c *ConnectionBase) readHandler() {
-	defer func() {
-		if r := recover(); r != nil {
-			fmt.Printf("readHandler panic: %v\n%s\n", r, debug.Stack())
-		}
-		c.Close()
-	}()
+	defer GetInstanceConnManager().Remove(c.conn)
+	defer GetInstanceMsgHandler().GetErrCapture(c.conn)
+
 	// Cached read deadline duration / 缓存的读超时间隔
 	readTimeout := time.Duration(defaultServer.AppConf.ConnRWTimeOut) * time.Second
 	for {
@@ -154,9 +127,9 @@ func (c *ConnectionBase) Close() {
 	c.connCtxCancel()
 }
 
-func (c *ConnectionBase) DoTask(task func()) {
+func (c *ConnectionBase) DoTask(task func()) bool {
 	if c.IsClose() {
-		return
+		return false
 	}
 	// Hash connId to workerId, ensure all handlers of same connection execute on same worker
 	// 将 connId 哈希为 workerId，确保同一连接的所有 handler 在同一 worker 上执行
@@ -167,30 +140,14 @@ func (c *ConnectionBase) DoTask(task func()) {
 	}, pool.HashWorkerId(c.connId))
 	if err != nil {
 		fmt.Printf("pool do task err:%v\n", err)
-		return
+		return false
 	}
-}
-
-// submitReaderTask submits a read message to the worker pool using a pooled task struct,
-// avoiding the double-closure allocation of the old DoTask path.
-// submitReaderTask 使用池化的任务结构体将读取的消息提交到 worker 池，避免旧 DoTask 路径的双闭包分配。
-func (c *ConnectionBase) submitReaderTask(msgData IMessage) {
-	if c.IsClose() {
-		PutMessage(msgData)
-		return
-	}
-	task := readerTaskPool.Get().(*readerTask)
-	task.conn = c.conn
-	task.msgData = msgData
-	pool := GetInstanceWorkerPool()
-	if err := pool.SubmitWithWorkerCtx(c.ConnCtx(), task.run, pool.HashWorkerId(c.connId)); err != nil {
-		readerTaskPool.Put(task)
-		PutMessage(msgData)
-		return
-	}
+	return true
 }
 
 func readerTaskHandler(c IConnection, m IMessage) {
+	defer GetInstanceMsgHandler().GetErrCapture(c)
+
 	iMsgHandler := GetInstanceMsgHandler()
 
 	// Discard all subsequent operations when connection closes / 连接关闭时丢弃后续所有操作
@@ -219,7 +176,7 @@ func readerTaskHandler(c IConnection, m IMessage) {
 	}
 
 	// Filter Validation / 过滤器校验
-	if iMsgHandler.GetFilter() != nil && !iMsgHandler.GetFilter()(c, m) {
+	if !iMsgHandler.GetFilter(c, m) {
 		return
 	}
 
@@ -280,19 +237,9 @@ func (c *ConnectionBase) SendMsg(msgId int32, msgData proto.Message) {
 	}
 }
 
-func (c *ConnectionBase) FlowControl() (b bool) {
+func (c *ConnectionBase) FlowControl() bool {
 	defer c.limitingMutex.Unlock()
 	c.limitingMutex.Lock()
-
-	defer func() {
-		if b {
-			GetInstanceConnManager().ConnRateLimiting(c.conn)
-			if netConn := c.conn.GetNetConn(); netConn != nil {
-				_ = netConn.Close()
-			}
-			GetInstanceConnManager().Remove(c.conn)
-		}
-	}()
 
 	count := int64(defaultServer.AppConf.MaxFlowSecond)
 	if count == -1 {
@@ -308,6 +255,7 @@ func (c *ConnectionBase) FlowControl() (b bool) {
 	}
 	now := time.Now().UnixMilli()
 	if now-c.limitingTimer < int64(1000) {
+		GetInstanceConnManager().ConnRateLimiting(c.conn)
 		return true
 	}
 	c.limitingCount = 1

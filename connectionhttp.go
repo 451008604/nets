@@ -17,15 +17,11 @@ type connectionHTTP struct {
 }
 
 func NewConnectionHTTP(server IServer, writer http.ResponseWriter, reader *http.Request) IConnection {
-	msgChanLen := defaultServer.AppConf.MaxMsgChanLen
-	if msgChanLen < 0 {
-		msgChanLen = 0
-	}
 	c := &connectionHTTP{
 		ConnectionBase: &ConnectionBase{
 			server:      server,
 			connId:      GenerateConnID(),
-			msgBuffChan: make(chan []byte, msgChanLen),
+			msgBuffChan: make(chan []byte, 0), // HTTP 不经过 Open()，缓冲设为 0
 			property:    map[string]any{},
 		},
 		writer: writer,
@@ -57,18 +53,20 @@ func (c *connectionHTTP) StartReader() bool {
 	}
 	_ = c.reader.Body.Close()
 	msgData := GetMessage()
-	if err := c.ByteToProtocol(data, msgData); err != nil || msgData.GetMsgId() == 0 {
+	if c.ByteToProtocol(data, msgData) != nil || msgData.GetMsgId() == 0 {
 		msgData.SetData(data)
 		c.SetProperty(ConnPropertyHttpReader, c.reader)
 		c.SetProperty(ConnPropertyHttpWriter, c.writer)
 	}
 
 	defer func() {
-		GetInstanceMsgHandler().GetErrCapture(c)
 		PutMessage(msgData)
 		GetInstanceConnManager().GetConnClosed(c)
 	}()
+	defer GetInstanceMsgHandler().GetErrCapture(c)
+	GetInstanceConnManager().GetConnOpened(c)
 	readerTaskHandler(c, msgData)
+	PutMessage(msgData)
 	return true
 }
 

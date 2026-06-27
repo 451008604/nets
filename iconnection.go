@@ -22,7 +22,7 @@ type IConnection interface {
 	// Start Message Sending Goroutine / 启动发送消息协程
 	StartWriter(data []byte) bool
 	// Execute Task / 执行任务
-	DoTask(task func())
+	DoTask(task func()) bool
 
 	// Get Current Connection ID / 获取当前连接Id
 	GetConnId() string

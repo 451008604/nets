@@ -11,15 +11,11 @@ type connectionKCP struct {
 }
 
 func NewConnectionKCP(server *serverKCP, conn net.Conn) IConnection {
-	msgChanLen := defaultServer.AppConf.MaxMsgChanLen
-	if msgChanLen < 0 {
-		msgChanLen = 0
-	}
 	c := &connectionKCP{
 		ConnectionBase: &ConnectionBase{
 			server:      server,
 			connId:      GenerateConnID(),
-			msgBuffChan: make(chan []byte, msgChanLen),
+			msgBuffChan: make(chan []byte, defaultServer.AppConf.MaxMsgChanLen),
 			property:    map[string]any{},
 		},
 		conn: conn,
@@ -57,7 +53,9 @@ func (c *connectionKCP) StartReader() bool {
 		msgData.SetData(append(msgData.GetData(), bt[:read]...))
 	}
 
-	c.submitReaderTask(msgData)
+	if !c.DoTask(func() { readerTaskHandler(c, msgData); PutMessage(msgData) }) {
+		PutMessage(msgData)
+	}
 	return true
 }
 

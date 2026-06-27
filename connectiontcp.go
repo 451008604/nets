@@ -11,15 +11,11 @@ type connectionTCP struct {
 }
 
 func NewConnectionTCP(server IServer, conn *net.TCPConn) IConnection {
-	msgChanLen := defaultServer.AppConf.MaxMsgChanLen
-	if msgChanLen < 0 {
-		msgChanLen = 0
-	}
 	c := &connectionTCP{
 		ConnectionBase: &ConnectionBase{
 			server:      server,
 			connId:      GenerateConnID(),
-			msgBuffChan: make(chan []byte, msgChanLen),
+			msgBuffChan: make(chan []byte, defaultServer.AppConf.MaxMsgChanLen),
 			property:    map[string]any{},
 		},
 		conn: conn,
@@ -57,7 +53,9 @@ func (c *connectionTCP) StartReader() bool {
 		msgData.SetData(append(msgData.GetData(), bt[:read]...))
 	}
 
-	c.submitReaderTask(msgData)
+	if !c.DoTask(func() { readerTaskHandler(c, msgData); PutMessage(msgData) }) {
+		PutMessage(msgData)
+	}
 	return true
 }
 
