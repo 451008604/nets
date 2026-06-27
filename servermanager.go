@@ -45,9 +45,9 @@ func (c *ServerManager) RegisterServer(server ...IServer) {
 	<-serverCtx.Done()
 	// Close All Connections / 关闭所有的连接
 	GetInstanceConnManager().ClearConn()
+	GetInstanceWorkerPool().Stop()
 
 	c.waitGroup.Wait()
-	GetInstanceWorkerPool().Stop()
 }
 
 func (c *ServerManager) IsClose() bool {

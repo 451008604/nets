@@ -7,11 +7,8 @@ package nets
 import (
 	"context"
 	"errors"
-	"fmt"
 	"hash/fnv"
 	"runtime"
-	"runtime/debug"
-	"strconv"
 	"sync"
 	"sync/atomic"
 )
@@ -29,7 +26,6 @@ type WorkerPoolStats struct {
 	PendingTasks   int
 	Capacity       int32
 	TotalSubmitted int64
-	TotalCompleted int64
 }
 
 // WorkerPool manages a pool of goroutine workers that execute submitted tasks concurrently.
@@ -58,7 +54,6 @@ type WorkerPool struct {
 	wg             sync.WaitGroup
 	nextIdx        uint64 // Atomic counter for round-robin / 轮询原子计数器
 	totalSubmitted int64
-	totalCompleted int64
 }
 
 // Singleton instance variables / 单例实例变量
@@ -74,11 +69,7 @@ var instanceWorkerPoolOnce = sync.Once{}
 // 如果 WorkerPoolSize 未配置（<= 0），则默认为 runtime.NumCPU() * 10。
 func GetInstanceWorkerPool() *WorkerPool {
 	instanceWorkerPoolOnce.Do(func() {
-		poolSize := defaultServer.AppConf.WorkerPoolSize
-		if poolSize <= 0 {
-			poolSize = runtime.NumCPU() * 10
-		}
-		instanceWorkerPool = NewWorkerPool(poolSize, defaultServer.AppConf.WorkerTaskMaxLen)
+		instanceWorkerPool = NewWorkerPool(defaultServer.AppConf.WorkerPoolSize, defaultServer.AppConf.WorkerTaskMaxLen)
 	})
 	return instanceWorkerPool
 }
@@ -88,20 +79,20 @@ func GetInstanceWorkerPool() *WorkerPool {
 //
 // NewWorkerPool 使用指定的工作协程数量和任务通道容量创建一个新的 WorkerPool。
 // 它立即启动所有工作协程，这些协程将处理提交到池中的任务。
-func NewWorkerPool(poolSize, maxTaskLen int) *WorkerPool {
-	if poolSize <= 0 {
-		panic("poolSize must be > 0")
+func NewWorkerPool(poolSize, maxTaskLen uint) *WorkerPool {
+	if poolSize == 0 {
+		poolSize = uint(runtime.NumCPU() * 10)
 	}
-	if maxTaskLen < 0 {
-		panic("maxTaskLen must be >= 0")
+	if maxTaskLen == 0 {
+		maxTaskLen = 10
 	}
 	pool := &WorkerPool{
 		maxWorkers: int32(poolSize),
 		workers:    make([]chan func(), poolSize),
 		done:       make(chan struct{}),
 	}
-	pool.wg.Add(poolSize)
-	for i := 0; i < poolSize; i++ {
+	pool.wg.Add(int(poolSize))
+	for i := 0; i < int(poolSize); i++ {
 		pool.workers[i] = make(chan func(), maxTaskLen)
 		go pool.worker(i)
 	}
@@ -118,13 +109,10 @@ func NewWorkerPool(poolSize, maxTaskLen int) *WorkerPool {
 func (p *WorkerPool) worker(idx int) {
 	atomic.AddInt32(&p.activeWorkers, 1)
 	defer func() {
-		if r := recover(); r != nil {
-			// Worker recovered from fatal panic / Worker 从致命 panic 中恢复
-			fmt.Printf("workerpool worker panic: %v\n%s\n", r, debug.Stack())
-		}
 		atomic.AddInt32(&p.activeWorkers, -1)
 		p.wg.Done()
 	}()
+	defer GetInstanceMsgHandler().GetErrCapture(nil)
 
 	for {
 		select {
@@ -132,16 +120,7 @@ func (p *WorkerPool) worker(idx int) {
 			if !ok {
 				return
 			}
-			func() {
-				defer func() {
-					if r := recover(); r != nil {
-						// Task panicked, continue processing next task / 任务 panic，继续处理下一个
-						fmt.Printf("workerpool task panic: %v\n%s\n", r, debug.Stack())
-					}
-				}()
-				task()
-				atomic.AddInt64(&p.totalCompleted, 1)
-			}()
+			task()
 		case <-p.done:
 			return
 		}
@@ -355,7 +334,6 @@ func (p *WorkerPool) Stats() WorkerPoolStats {
 		PendingTasks:   p.Pending(),
 		Capacity:       p.maxWorkers,
 		TotalSubmitted: atomic.LoadInt64(&p.totalSubmitted),
-		TotalCompleted: atomic.LoadInt64(&p.totalCompleted),
 	}
 }
 
@@ -377,9 +355,6 @@ func (p *WorkerPool) nextWorker() int {
 // 用于从连接 ID 或其他字符串键生成 workerId。
 // 返回值可用于 SubmitWithWorker，后者会在内部将其映射到有效的 worker。
 func (p *WorkerPool) HashWorkerId(key string) int {
-	if n, err := strconv.ParseInt(key, 16, 0); n > 0 && err == nil {
-		return int(n)
-	}
 	h := fnv.New32a()
 	_, _ = h.Write([]byte(key))
 	return int(h.Sum32() & 0x7fffffff)
