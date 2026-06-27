@@ -54,6 +54,8 @@ func main() {
 	})
 	// 3. (Optional) Set connection close hook function / 3. (可选) 设置连接断开时Hook函数
 	nets.GetInstanceConnManager().SetConnClosed(func(conn nets.IConnection) {
+		// 设置3-5秒随机延迟
+		// time.Sleep(time.Second * time.Duration(rand.Intn(3)+3))
 		atomic.AddInt32(&stats.flagClosed, 1)
 	})
 	// 4. (Optional) Set filter. Return false to drop message / 4. (可选) 设置过滤器。返回 false 则丢弃消息
@@ -62,7 +64,7 @@ func main() {
 		return true
 	})
 	// 5. (Optional) Set connection-level error capture / 5. (可选) 设置连接级别错误捕获
-	nets.GetInstanceMsgHandler().SetErrCapture(func(conn nets.IConnection, panicInfo string) {
+	nets.GetInstanceMsgHandler().SetErrCapture(func(conn nets.IConnection, r any) {
 		atomic.AddInt32(&stats.flagErrCapture, 1)
 	})
 
@@ -81,5 +83,6 @@ func main() {
 
 	// 7. Start service (block main goroutine) / 7. 启动服务(阻塞主协程)
 	nets.GetInstanceServerManager().RegisterServer(nets.GetServerHTTP(), nets.GetServerKCP(), nets.GetServerTCP(), nets.GetServerWS())
+	println("----------------\n", time.Now().Format("15:04:05"), "flagOpened: ", atomic.LoadInt32(&stats.flagOpened), ", flagClosed: ", atomic.LoadInt32(&stats.flagClosed), ", flagErrCapture:", atomic.LoadInt32(&stats.flagErrCapture))
 	fmt.Printf("\nShutting down...\n")
 }

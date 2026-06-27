@@ -1,4 +1,4 @@
-FROM centos:7.9.2009
+FROM ubuntu:24.04
 
 WORKDIR /app
 

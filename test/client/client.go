@@ -241,8 +241,8 @@ func main() {
 	)
 	go func() {
 		select {
-		case <-time.After(10 * time.Second):
-			fmt.Printf("等待响应超时，已收到 %d/%d 个响应\n", atomic.LoadInt32(&recCount), atomic.LoadInt32(&sendCount))
+		case <-time.After(30 * time.Second):
+			fmt.Printf("测试超时，已收到 %d/%d 个响应\n", atomic.LoadInt32(&recCount), atomic.LoadInt32(&sendCount))
 		}
 		os.Exit(1)
 	}()
@@ -278,21 +278,25 @@ func main() {
 						return // Connection closed or error / 连接关闭或出错
 					} else if n > 0 {
 						if d := unpack(buf[:n]); d != nil {
-							_ = client.Close()
 							atomic.AddInt32(&recCount, 1)
-							return // Received valid response, exit / 收到有效响应，退出
+							// 不关闭连接，继续等待下一条消息
+							_ = client.Close()
+							return
 						}
 					}
 					time.Sleep(time.Microsecond)
 				}
 			}(c)
 
-			// Send Message / 发送消息
+			// Send Message periodically / 周期性发送消息
+			// for {
 			if err3 := c.Write(int16(*msgId), []byte(*msgData)); err3 != nil {
 				fmt.Printf("Write error: %v\n", err3)
-			} else {
-				atomic.AddInt32(&sendCount, 1)
+				return
 			}
+			atomic.AddInt32(&sendCount, 1)
+			// time.Sleep(time.Second) // 每秒发送一次
+			// }
 		}(i)
 	}
 	wg.Wait()

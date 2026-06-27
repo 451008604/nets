@@ -9,12 +9,11 @@ services:
             - "17003:17003"
             - "17004:17004"
             - "16060:6060"
-        healthcheck:
-            test: [ "CMD", "curl", "-f", "http://localhost:6060/debug/pprof/" ]
-            interval: 5s
-            timeout: 1s
-            retries: 3
-            start_period: 3s
+#        healthcheck:
+#            test: [ "CMD-SHELL", "grep -q ':17AC .* 0A ' /proc/net/tcp*" ]
+#            interval: 1s
+#            timeout: 1s
+#            retries: 5
         networks:
             - nets-test
         restart: unless-stopped
@@ -39,11 +38,11 @@ services:
             context: .
             dockerfile: client/Dockerfile
         deploy:
-            replicas: 5
-        command: [ "/app/client", "-server", "server", "-proto", "ws", "-conn", "10000" ]
-        depends_on:
-            server:
-                condition: service_healthy
+            replicas: 10
+        command: [ "/app/client", "-server", "server", "-proto", "ws", "-conn", "5000" ]
+#        depends_on:
+#            server:
+#                condition: service_healthy
         networks:
             - nets-test
         sysctls:

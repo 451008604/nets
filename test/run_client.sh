@@ -9,11 +9,11 @@ CLIENT_BIN="$CLIENT_DIR/client"
 # 清理函数
 cleanup() {
     echo ""
-    echo "✅ 收到退出信号，开始清理 client 容器..."
+    echo "✅ 收到退出信号，开始清理 client 容器 ..."
     # 后台停止容器，避免阻塞
     docker compose down client &>/dev/null &
     wait
-    echo "⚠️ client 容器已清理完成，如需清理 server 容器，请执行："
+    echo "⚠️ client 容器已清理完成，如需清理测试残留，请执行："
     echo ""
     echo "    docker compose down --remove-orphans --rmi all"
     echo ""
@@ -23,22 +23,18 @@ cleanup() {
 trap cleanup SIGINT SIGTERM
 
 echo ""
-echo "✅ 初始化测试环境..."
-docker compose down client
-
-echo ""
-echo "✅ 编译client..."
+echo "✅ 编译 client ..."
 CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o "$CLIENT_BIN" "$CLIENT_DIR/client.go"
 
 echo ""
-echo "✅ 构建Docker镜像并启动..."
+echo "✅ 构建 client 镜像并启动 ..."
 cd "$SCRIPT_DIR"
-docker compose up client --build -d
+docker compose up --build -d client;
 
 # 循环测试
 ROUND=1
 while true; do
-    echo "✅ 开始第 $ROUND 轮测试..."
+    echo "✅ 开始第 $ROUND 轮测试 ..."
     docker compose up client --no-deps &
     wait $!  # 等待 docker compose 完成，同时允许 trap 信号中断
     ((ROUND++))
