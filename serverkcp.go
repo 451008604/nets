@@ -80,7 +80,7 @@ func (s *serverKCP) Start() {
 		}
 
 		// Close new connections when count exceeds limit / 连接数量超过限制后，关闭新建立的连接
-		if GetInstanceConnManager().Len() >= defaultServer.AppConf.MaxConn {
+		if GetInstanceConnManager().Len() >= int(defaultServer.AppConf.MaxConn) {
 			_ = conn.Close()
 			continue
 		}

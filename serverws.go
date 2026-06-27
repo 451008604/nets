@@ -42,7 +42,7 @@ func (s *serverWS) Start() {
 	fmt.Printf("server starting [ %v:%v ]\n", s.serverName, s.port)
 
 	var upgrade = websocket.Upgrader{
-		ReadBufferSize:  defaultServer.AppConf.MaxPackSize,
+		ReadBufferSize:  int(defaultServer.AppConf.MaxPackSize),
 		WriteBufferSize: 64 * 1024,
 	}
 	wsServer := http.NewServeMux()
@@ -59,7 +59,7 @@ func (s *serverWS) Start() {
 		}
 
 		// Close new connections when count exceeds limit / 连接数量超过限制后，关闭新建立的连接
-		if GetInstanceConnManager().Len() >= defaultServer.AppConf.MaxConn {
+		if GetInstanceConnManager().Len() >= int(defaultServer.AppConf.MaxConn) {
 			_ = conn.Close()
 			return
 		}

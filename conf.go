@@ -2,14 +2,14 @@ package nets
 
 type AppConf struct {
 	AppName          string     // Service Name / 服务名称
-	MaxPackSize      int        // Max Packet Length / 数据包最大长度
-	MaxConn          int        // Max Connections / 最大允许连接数
-	WorkerTaskMaxLen int        // Max Tasks per Worker Queue / 每个工作队列可执行最大任务数量
-	WorkerPoolSize int          // Worker Pool Size (default CPU*10) / 协程池工作协程数量（默认 CPU*10）
-	MaxMsgChanLen    int        // Max Message Channel Length / 读写通道最大限度
+	MaxPackSize      uint       // Max Packet Length / 数据包最大长度
+	MaxConn          uint       // Max Connections / 最大允许连接数
+	WorkerTaskMaxLen uint       // Max Tasks per Worker Queue / 每个工作队列可执行最大任务数量
+	WorkerPoolSize   uint       // Worker Pool Size (default CPU*10) / 协程池工作协程数量（默认 CPU*10）
+	MaxMsgChanLen    uint       // Max Message Channel Length / 读写通道最大限度
 	MaxFlowSecond    int        // Max Requests per Second / 每秒允许的最大请求数量
 	ProtocolIsJson   bool       // Use JSON Protocol / 是否使用json协议
-	ConnRWTimeOut    int        // Connection Read/Write Timeout (seconds) / 连接读写超时时间(秒)
+	ConnRWTimeOut    uint       // Connection Read/Write Timeout (seconds) / 连接读写超时时间(秒)
 	ServerTCP        ServerConf // TCP Service / tcp服务
 	ServerWS         ServerConf // WebSocket Service / websocket服务
 	ServerHTTP       ServerConf // HTTP Service / http服务
@@ -48,6 +48,6 @@ var appConf = &AppConf{
 }
 
 // Get Default Configuration / 获取默认配置
-func GetServerConf() *AppConf {
-	return appConf
+func GetServerConf() AppConf {
+	return *appConf
 }

@@ -47,7 +47,10 @@ func (s *serverHTTP) Start() {
 
 	// Full memstats JSON endpoint
 	httpServer.HandleFunc("/debug", func(w http.ResponseWriter, r *http.Request) {
-		runtime.GC()
+		// 仅在显式请求时触发 GC，避免监控请求造成 STW
+		if r.URL.Query().Get("gc") == "1" {
+			runtime.GC()
+		}
 
 		var m runtime.MemStats
 		runtime.ReadMemStats(&m)
@@ -104,7 +107,7 @@ func (s *serverHTTP) Start() {
 		}
 
 		// Close new connections when count exceeds limit / 连接数量超过限制后，关闭新建立的连接
-		if GetInstanceConnManager().Len() >= defaultServer.AppConf.MaxConn {
+		if GetInstanceConnManager().Len() >= int(defaultServer.AppConf.MaxConn) {
 			w.WriteHeader(http.StatusGatewayTimeout)
 			_, _ = w.Write([]byte(http.StatusText(http.StatusGatewayTimeout)))
 			_ = r.Body.Close()
@@ -113,15 +116,6 @@ func (s *serverHTTP) Start() {
 
 		// Establish new connection and listen for client messages / 建立新连接并监听客户端请求的消息
 		msgConn := NewConnectionHTTP(s, w, r)
-		if !GetInstanceConnManager().Register(msgConn) {
-			w.WriteHeader(http.StatusServiceUnavailable)
-			_, _ = w.Write([]byte(http.StatusText(http.StatusServiceUnavailable)))
-			_ = r.Body.Close()
-			return
-		}
-		// Deferred removal guarantees cleanup even if StartReader panics (otherwise the conn leaks in the manager map)
-		// 用 defer 移除，确保 StartReader panic 时连接也能被清理（否则连接会泄漏在管理器 map 中）
-		defer GetInstanceConnManager().Remove(msgConn)
 		// Short connection service does not need read/write goroutine separation / 短链接服务不需要启动读写分离协程
 		msgConn.StartReader()
 	})

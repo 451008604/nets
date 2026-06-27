@@ -57,7 +57,7 @@ func (d *dataPack) UnPack(binaryData []byte) IMessage {
 	if maxPackSize <= 0 {
 		maxPackSize = 4096 // Default limit / 默认限制
 	}
-	if int(msgData.GetDataLen()) > maxPackSize {
+	if uint(msgData.GetDataLen()) > maxPackSize {
 		fmt.Printf("received data length exceeds the limit. MaxPackSize %v, msgDataLen %v\n", maxPackSize, msgData.GetDataLen())
 		PutMessage(msgData)
 		return nil

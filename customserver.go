@@ -7,7 +7,7 @@ var defaultServer = &CustomServer{
 
 // Custom Server / 自定义服务器
 type CustomServer struct {
-	AppConf  *AppConf  // Service Startup Configuration / 服务启动配置
+	AppConf  AppConf   // Service Startup Configuration / 服务启动配置
 	DataPack IDataPack // Custom Encoder/Decoder / 自定义编码/解码器
 }
 
@@ -26,7 +26,7 @@ func SetCustomServer(custom *CustomServer) {
 	if custom == nil {
 		return
 	}
-	if custom.AppConf != nil {
+	if &custom.AppConf != nil {
 		defaultServer.AppConf = custom.AppConf
 	}
 	if custom.DataPack != nil {
