@@ -3,6 +3,7 @@ package nets
 import (
 	"context"
 	"fmt"
+	"log/slog"
 	"net/http"
 	"sync"
 	"time"
@@ -38,7 +39,7 @@ func (s *serverHTTP) Start() {
 	if s.port == 0 {
 		return
 	}
-	fmt.Printf("server starting [ %v:%v ]\n", s.serverName, s.port)
+	slog.Info("server starting", "name", s.serverName, "port", s.port)
 
 	httpServer := http.NewServeMux()
 	httpServer.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
@@ -81,8 +82,8 @@ func (s *serverHTTP) Start() {
 	}()
 
 	if certPath, keyPath := defaultServer.AppConf.ServerHTTP.TLSCertPath, defaultServer.AppConf.ServerHTTP.TLSKeyPath; certPath != "" && keyPath != "" {
-		fmt.Printf("server error: %v\n", srv.ListenAndServeTLS(certPath, keyPath))
+		slog.Error("server error", "err", srv.ListenAndServeTLS(certPath, keyPath))
 	} else {
-		fmt.Printf("server error: %v\n", srv.ListenAndServe())
+		slog.Error("server error", "err", srv.ListenAndServe())
 	}
 }

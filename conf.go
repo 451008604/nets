@@ -1,5 +1,28 @@
 package nets
 
+import (
+	"log/slog"
+	"os"
+)
+
+// init initializes the global slog logger with a JSON handler writing to stdout
+// (AddSource enabled) at Info level as a fallback. The effective level is re-applied
+// from AppConf.LogLevel when SetCustomServer is called.
+// 初始化全局 slog 日志，默认 JSON 输出到 stdout（含调用源），Info 级别兜底；
+// 实际级别在 SetCustomServer 时按 AppConf.LogLevel 重新应用。
+func init() {
+	applySlogHandler(slog.LevelInfo)
+}
+
+// applySlogHandler (re)builds the global slog logger with the given level.
+// 依据指定级别（重新）构建全局 slog 日志。
+func applySlogHandler(level slog.Level) {
+	slog.SetDefault(slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{
+		AddSource: true,
+		Level:     level,
+	})))
+}
+
 type AppConf struct {
 	AppName          string     // Service Name / 服务名称
 	MaxPackSize      uint       // Max Packet Length / 数据包最大长度
@@ -10,6 +33,7 @@ type AppConf struct {
 	MaxFlowSecond    int        // Max Requests per Second / 每秒允许的最大请求数量
 	ProtocolIsJson   bool       // Use JSON Protocol / 是否使用json协议
 	ConnRWTimeOut    uint       // Connection Read/Write Timeout (seconds) / 连接读写超时时间(秒)
+	LogLevel         slog.Level // Log Level (default Info) / 日志级别（默认 Info）
 	ServerTCP        ServerConf // TCP Service / tcp服务
 	ServerWS         ServerConf // WebSocket Service / websocket服务
 	ServerHTTP       ServerConf // HTTP Service / http服务

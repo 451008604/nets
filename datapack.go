@@ -2,7 +2,7 @@ package nets
 
 import (
 	"encoding/binary"
-	"fmt"
+	"log/slog"
 )
 
 type dataPack struct{}
@@ -24,7 +24,7 @@ func (d *dataPack) Pack(msg IMessage) []byte {
 	// Truncation would cause the receiver to misread trailing bytes as the next
 	// message, corrupting the entire subsequent stream.
 	if len(data) > 0xFFFF {
-		fmt.Printf("pack aborted: data length %d exceeds uint16 max (%d)\n", len(data), 0xFFFF)
+		slog.Error("pack aborted: payload exceeds uint16 max", "len", len(data), "max", 0xFFFF)
 		return nil
 	}
 
@@ -58,7 +58,7 @@ func (d *dataPack) UnPack(binaryData []byte) IMessage {
 		maxPackSize = 4096 // Default limit / 默认限制
 	}
 	if uint(msgData.GetDataLen()) > maxPackSize {
-		fmt.Printf("received data length exceeds the limit. MaxPackSize %v, msgDataLen %v\n", maxPackSize, msgData.GetDataLen())
+		slog.Warn("received data length exceeds limit", "maxPackSize", maxPackSize, "msgDataLen", msgData.GetDataLen())
 		PutMessage(msgData)
 		return nil
 	}

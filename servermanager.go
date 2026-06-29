@@ -2,7 +2,7 @@ package nets
 
 import (
 	"context"
-	"fmt"
+	"log/slog"
 	"os"
 	"os/signal"
 	"sync"
@@ -79,7 +79,7 @@ func operatingSystemSignalHandler() {
 
 	select {
 	case sig := <-signalCh:
-		fmt.Printf("Received signal: %v\n", sig)
+		slog.Info("received signal", "sig", sig)
 	case <-serverCtx.Done():
 	}
 

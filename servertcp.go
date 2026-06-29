@@ -2,6 +2,7 @@ package nets
 
 import (
 	"fmt"
+	"log/slog"
 	"net"
 	"sync"
 )
@@ -36,7 +37,7 @@ func (s *serverTCP) Start() {
 	if s.port == 0 {
 		return
 	}
-	fmt.Printf("server starting [ %v:%v ]\n", s.serverName, s.port)
+	slog.Info("server starting", "name", s.serverName, "port", s.port)
 
 	var (
 		addr *net.TCPAddr
@@ -47,13 +48,13 @@ func (s *serverTCP) Start() {
 
 	addr, err = net.ResolveTCPAddr("tcp4", fmt.Sprintf("%s:%v", s.ip, s.port))
 	if err != nil {
-		fmt.Printf("service startup failed %v\n", err)
+		slog.Error("service startup failed", "err", err)
 		return
 	}
 
 	tcp, err = net.ListenTCP("tcp4", addr)
 	if err != nil {
-		fmt.Printf("failed to listen to service address %v\n", err)
+		slog.Error("failed to listen to service address", "err", err)
 		return
 	}
 	defer func(tcp *net.TCPListener) {
@@ -76,7 +77,7 @@ func (s *serverTCP) Start() {
 				return
 			default:
 			}
-			fmt.Printf("accept tcp err %v\n", err)
+			slog.Warn("accept tcp failed", "err", err)
 			continue
 		}
 

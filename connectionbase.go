@@ -4,8 +4,8 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"google.golang.org/protobuf/proto"
+	"log/slog"
 	"strconv"
 	"sync"
 	"sync/atomic"
@@ -140,7 +140,7 @@ func (c *ConnectionBase) DoTask(task func()) bool {
 		task()
 	}, pool.HashWorkerId(c.connId))
 	if err != nil && !errors.Is(err, context.Canceled) {
-		fmt.Printf("pool do task err:%v\n", err)
+		slog.Error("pool do task failed", "err", err)
 		return false
 	}
 	return true
@@ -164,7 +164,7 @@ func readerTaskHandler(c IConnection, m IMessage) {
 	msgData := router.GetNewMsg()
 	if m.GetMsgId() != 0 {
 		if err := c.ByteToProtocol(m.GetData(), msgData); err != nil {
-			fmt.Printf("api msgId %v parsing %s error %v\n", m.GetMsgId(), m.GetData(), err)
+			slog.Error("api msg parsing error", "msgId", m.GetMsgId(), "data", m.GetData(), "err", err)
 			return
 		}
 	} else {
@@ -172,7 +172,7 @@ func readerTaskHandler(c IConnection, m IMessage) {
 	}
 	// Rate Limiting Control / 限流控制
 	if c.FlowControl() {
-		fmt.Printf("flowControl RemoteAddress: %v, GetMsgId: %v, GetData: %s\n", c.RemoteAddrStr(), m.GetMsgId(), m.GetData())
+		slog.Warn("flow control triggered", "remoteAddr", c.RemoteAddrStr(), "msgId", m.GetMsgId(), "data", m.GetData())
 		return
 	}
 
@@ -213,7 +213,7 @@ func (c *ConnectionBase) RemoveProperty(key string) {
 
 func (c *ConnectionBase) SendMsg(msgId int32, msgData proto.Message) {
 	if msgId < 0 || msgId > 65535 {
-		fmt.Printf("msgId %d out of uint16 range, message dropped\n", msgId)
+		slog.Warn("msgId out of uint16 range, message dropped", "msgId", msgId)
 		return
 	}
 	msgByte := c.ProtocolToByte(msgData)

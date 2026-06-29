@@ -28,6 +28,7 @@ func SetCustomServer(custom *CustomServer) {
 	}
 	if &custom.AppConf != nil {
 		defaultServer.AppConf = custom.AppConf
+		applySlogHandler(custom.AppConf.LogLevel)
 	}
 	if custom.DataPack != nil {
 		defaultServer.DataPack = custom.DataPack

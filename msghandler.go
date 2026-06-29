@@ -1,7 +1,7 @@
 package nets
 
 import (
-	"fmt"
+	"log/slog"
 	"runtime/debug"
 	"sync"
 )
@@ -30,11 +30,11 @@ func GetInstanceMsgHandler() *MsgHandler {
 
 func (m *MsgHandler) AddRouter(msgId int32, msgTemplate INewMsgStructTemplate, msgHandler IReceiveMsgHandler) {
 	if msgTemplate == nil || msgHandler == nil {
-		fmt.Printf("router %v has nil template or handler\n", msgId)
+		slog.Error("router has nil template or handler", "msgId", msgId)
 		return
 	}
 	if _, ok := m.apis[msgId]; ok {
-		fmt.Printf("msgId is duplicate %v\n", msgId)
+		slog.Warn("msgId is duplicate", "msgId", msgId)
 		return
 	}
 	m.apis[msgId] = &BaseRouter{}
@@ -65,11 +65,11 @@ func (m *MsgHandler) SetErrCapture(fun IErrCapture) {
 
 func (m *MsgHandler) GetErrCapture(conn IConnection) {
 	if r1 := recover(); r1 != nil {
-		fmt.Printf("--------\n%v\n%s", r1, debug.Stack())
+		slog.Error("panic recovered", "panic", r1, "stack", string(debug.Stack()))
 		if m.errCapture != nil && conn != nil {
 			defer func() {
 				if r2 := recover(); r2 != nil {
-					fmt.Printf("%v\n%s", r2, debug.Stack())
+					slog.Error("errCapture panic", "panic", r2, "stack", string(debug.Stack()))
 				}
 			}()
 			m.errCapture(conn, r1)
