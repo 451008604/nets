@@ -64,7 +64,6 @@ type TCPClient struct {
 func NewTCPClient(addr string) (*TCPClient, error) {
 	conn, err := net.Dial("tcp", addr)
 	if err != nil {
-		fmt.Printf("TCP NewTCPClient failed: %v\n", err)
 		return nil, err
 	}
 	return &TCPClient{conn: conn}, nil
@@ -73,7 +72,6 @@ func NewTCPClient(addr string) (*TCPClient, error) {
 func (c *TCPClient) Write(msgId int16, data []byte) error {
 	_, err := c.conn.Write(pack(msgId, data))
 	if err != nil {
-		fmt.Printf("TCP Write failed: %v\n", err)
 		return err
 	}
 	return nil
@@ -94,7 +92,6 @@ type WSClient struct {
 func NewWSClient(addr string) (*WSClient, error) {
 	conn, _, err := websocket.DefaultDialer.Dial(addr, nil)
 	if err != nil {
-		fmt.Printf("WS NewWSClient failed: %v\n", err)
 		return nil, err
 	}
 	return &WSClient{conn: conn}, nil
@@ -105,9 +102,8 @@ func (c *WSClient) Write(msgId int16, data []byte) error {
 }
 
 func (c *WSClient) Read(buf []byte) (int, error) {
-	_, message, err := c.conn.ReadMessage()
-	if err != nil || len(message) == 0 {
-		fmt.Printf("WS Read failed: %v\n", err)
+	msgType, message, err := c.conn.ReadMessage()
+	if err != nil || msgType != websocket.BinaryMessage {
 		return 0, err
 	}
 	if len(message) > len(buf) {
@@ -128,7 +124,6 @@ type KCPClient struct {
 func NewKCPClient(addr string) (*KCPClient, error) {
 	conn, err := kcp.DialWithOptions(addr, nil, 0, 0)
 	if err != nil {
-		fmt.Printf("KCP NewKCPClient failed: %v\n", err)
 		return nil, err
 	}
 	conn.SetNoDelay(1, 10, 2, 1)
@@ -139,7 +134,6 @@ func NewKCPClient(addr string) (*KCPClient, error) {
 func (c *KCPClient) Write(msgId int16, data []byte) error {
 	_, err := c.conn.Write(pack(msgId, data))
 	if err != nil {
-		fmt.Printf("KCP Write Err: %v\n", err)
 		return err
 	}
 	return nil
@@ -168,14 +162,12 @@ func (c *HTTPClient) Write(msgId int16, data []byte) error {
 	marshal, _ := json.Marshal(Message{Id: uint16(msgId), DataLen: uint16(len(data)), Data: data})
 	resp, err := c.client.Post(c.url, "application/json", strings.NewReader(string(marshal)))
 	if err != nil {
-		fmt.Printf("HTTP Write Err: %v\n", err)
 		return err
 	}
 	c.resp = resp
 	body, err := io.ReadAll(resp.Body)
 	_ = resp.Body.Close()
 	if err != nil {
-		fmt.Printf("HTTP Write Err: %v\n", err)
 		return err
 	}
 	c.respBuf <- string(body)
@@ -274,7 +266,7 @@ func main() {
 				buf := make([]byte, 4096)
 				for {
 					if n, err2 := client.Read(buf); err2 != nil {
-						fmt.Printf("Read error: %v\n", err2)
+						// fmt.Printf("Read error: %v\n", err2)
 						return // Connection closed or error / 连接关闭或出错
 					} else if n > 0 {
 						if d := unpack(buf[:n]); d != nil {
@@ -291,7 +283,7 @@ func main() {
 			// Send Message periodically / 周期性发送消息
 			// for {
 			if err3 := c.Write(int16(*msgId), []byte(*msgData)); err3 != nil {
-				fmt.Printf("Write error: %v\n", err3)
+				// fmt.Printf("Write error: %v\n", err3)
 				return
 			}
 			atomic.AddInt32(&sendCount, 1)

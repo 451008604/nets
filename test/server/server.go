@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"flag"
 	"fmt"
 	"github.com/451008604/nets"
@@ -8,6 +9,8 @@ import (
 	"google.golang.org/protobuf/proto"
 	"net/http"
 	_ "net/http/pprof"
+	"os"
+	"runtime"
 	"sync/atomic"
 	"time"
 )
@@ -29,6 +32,25 @@ func main() {
 	flag.Parse()
 
 	go func() {
+		http.HandleFunc("/debug", func(w http.ResponseWriter, r *http.Request) {
+			runtime.GC()
+			var m runtime.MemStats
+			runtime.ReadMemStats(&m)
+			w.Header().Set("Content-Type", "application/json")
+			maps := map[string]interface{}{
+				"time_stamp":    time.Now().Local().Format("2006-01-02 15:04:05"),
+				"pid":           os.Getpid(),
+				"alloc":         m.Alloc,
+				"alloc_total":   m.TotalAlloc,
+				"sys":           m.Sys,
+				"num_gc":        m.NumGC,
+				"num_goroutine": runtime.NumGoroutine(),
+				"connections":   nets.GetInstanceConnManager().Len(),
+				"work_pool":     nets.GetInstanceWorkerPool().Stats(),
+			}
+			marshal, _ := json.MarshalIndent(maps, "", "    ")
+			_, _ = fmt.Fprintf(w, "%s", marshal)
+		})
 		_ = http.ListenAndServe(":6060", nil)
 	}()
 
