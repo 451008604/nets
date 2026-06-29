@@ -2,11 +2,8 @@ package nets
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"net/http"
-	"os"
-	"runtime"
 	"sync"
 	"time"
 )
@@ -44,51 +41,6 @@ func (s *serverHTTP) Start() {
 	fmt.Printf("server starting [ %v:%v ]\n", s.serverName, s.port)
 
 	httpServer := http.NewServeMux()
-
-	// Full memstats JSON endpoint
-	httpServer.HandleFunc("/debug", func(w http.ResponseWriter, r *http.Request) {
-		// 仅在显式请求时触发 GC，避免监控请求造成 STW
-		if r.URL.Query().Get("gc") == "1" {
-			runtime.GC()
-		}
-
-		var m runtime.MemStats
-		runtime.ReadMemStats(&m)
-		w.Header().Set("Content-Type", "application/json")
-
-		var httpcount, tcpcount, wscount, kcpcount int
-		GetInstanceConnManager().RangeConnections(func(conn IConnection) {
-			switch conn.(type) {
-			case *connectionHTTP:
-				httpcount++
-			case *connectionTCP:
-				tcpcount++
-			case *connectionWS:
-				wscount++
-			case *connectionKCP:
-				kcpcount++
-			}
-		})
-
-		maps := map[string]interface{}{
-			"time_stamp":    time.Now().Local().Format("2006-01-02 15:04:05"),
-			"pid":           os.Getpid(),
-			"alloc":         m.Alloc,
-			"alloc_total":   m.TotalAlloc,
-			"sys":           m.Sys,
-			"num_gc":        m.NumGC,
-			"num_goroutine": runtime.NumGoroutine(),
-			"connections":   GetInstanceConnManager().Len(),
-			"count_http":    httpcount,
-			"count_tcp":     tcpcount,
-			"count_ws":      wscount,
-			"count_kcp":     kcpcount,
-			"work_pool":     GetInstanceWorkerPool().Stats(),
-		}
-		marshal, _ := json.MarshalIndent(maps, "", "    ")
-		_, _ = fmt.Fprintf(w, "%s", marshal)
-	})
-
 	httpServer.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		// Invalid Request Method / 请求方式非法
 		if r.Method != http.MethodPost {
@@ -129,12 +81,8 @@ func (s *serverHTTP) Start() {
 	}()
 
 	if certPath, keyPath := defaultServer.AppConf.ServerHTTP.TLSCertPath, defaultServer.AppConf.ServerHTTP.TLSKeyPath; certPath != "" && keyPath != "" {
-		if err := srv.ListenAndServeTLS(certPath, keyPath); err != nil && err != http.ErrServerClosed {
-			fmt.Printf("server error: %v\n", err)
-		}
+		fmt.Printf("server error: %v\n", srv.ListenAndServeTLS(certPath, keyPath))
 	} else {
-		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-			fmt.Printf("server error: %v\n", err)
-		}
+		fmt.Printf("server error: %v\n", srv.ListenAndServe())
 	}
 }

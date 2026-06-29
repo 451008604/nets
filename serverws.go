@@ -79,12 +79,8 @@ func (s *serverWS) Start() {
 	}()
 
 	if certPath, keyPath := defaultServer.AppConf.ServerWS.TLSCertPath, defaultServer.AppConf.ServerWS.TLSKeyPath; certPath != "" && keyPath != "" {
-		if err := srv.ListenAndServeTLS(certPath, keyPath); err != nil && err != http.ErrServerClosed {
-			fmt.Printf("server error: %v\n", err)
-		}
+		fmt.Printf("server error: %v\n", srv.ListenAndServeTLS(certPath, keyPath))
 	} else {
-		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-			fmt.Printf("server error: %v\n", err)
-		}
+		fmt.Printf("server error: %v\n", srv.ListenAndServe())
 	}
 }
