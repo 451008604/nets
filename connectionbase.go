@@ -3,6 +3,7 @@ package nets
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"google.golang.org/protobuf/proto"
 	"strconv"
@@ -138,7 +139,7 @@ func (c *ConnectionBase) DoTask(task func()) bool {
 		defer GetInstanceMsgHandler().GetErrCapture(c.conn)
 		task()
 	}, pool.HashWorkerId(c.connId))
-	if err != nil {
+	if err != nil && !errors.Is(err, context.Canceled) {
 		fmt.Printf("pool do task err:%v\n", err)
 		return false
 	}
