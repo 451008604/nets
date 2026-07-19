@@ -3,7 +3,6 @@ package nets
 import (
 	"context"
 	"fmt"
-	"log/slog"
 	"net/http"
 	"sync"
 	"time"
@@ -39,7 +38,7 @@ func (s *serverHTTP) Start() {
 	if s.port == 0 {
 		return
 	}
-	slog.Info("server starting", "name", s.serverName, "port", s.port)
+	getLogger().Info("server starting", "name", s.serverName, "port", s.port)
 
 	httpServer := http.NewServeMux()
 	httpServer.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
@@ -82,8 +81,8 @@ func (s *serverHTTP) Start() {
 	}()
 
 	if certPath, keyPath := defaultServer.AppConf.ServerHTTP.TLSCertPath, defaultServer.AppConf.ServerHTTP.TLSKeyPath; certPath != "" && keyPath != "" {
-		slog.Error("server error", "err", srv.ListenAndServeTLS(certPath, keyPath))
+		getLogger().Error("server error", "err", srv.ListenAndServeTLS(certPath, keyPath))
 	} else {
-		slog.Error("server error", "err", srv.ListenAndServe())
+		getLogger().Error("server error", "err", srv.ListenAndServe())
 	}
 }

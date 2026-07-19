@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"github.com/gorilla/websocket"
-	"log/slog"
 	"net/http"
 	"sync"
 	"time"
@@ -40,7 +39,7 @@ func (s *serverWS) Start() {
 	if s.port == 0 {
 		return
 	}
-	slog.Info("server starting", "name", s.serverName, "port", s.port)
+	getLogger().Info("server starting", "name", s.serverName, "port", s.port)
 
 	var upgrade = websocket.Upgrader{
 		ReadBufferSize:  int(defaultServer.AppConf.MaxPackSize),
@@ -80,8 +79,8 @@ func (s *serverWS) Start() {
 	}()
 
 	if certPath, keyPath := defaultServer.AppConf.ServerWS.TLSCertPath, defaultServer.AppConf.ServerWS.TLSKeyPath; certPath != "" && keyPath != "" {
-		slog.Error("server error", "err", srv.ListenAndServeTLS(certPath, keyPath))
+		getLogger().Error("server error", "err", srv.ListenAndServeTLS(certPath, keyPath))
 	} else {
-		slog.Error("server error", "err", srv.ListenAndServe())
+		getLogger().Error("server error", "err", srv.ListenAndServe())
 	}
 }

@@ -8,6 +8,7 @@ import (
 	"github.com/gorilla/websocket"
 	"github.com/xtaci/kcp-go"
 	"io"
+	"log/slog"
 	"net"
 	"net/http"
 	"os"
@@ -234,7 +235,7 @@ func main() {
 	go func() {
 		select {
 		case <-time.After(30 * time.Second):
-			fmt.Printf("测试超时，已收到 %d/%d 个响应\n", atomic.LoadInt32(&recCount), atomic.LoadInt32(&sendCount))
+			slog.Error("测试超时", "received", atomic.LoadInt32(&recCount), "sent", atomic.LoadInt32(&sendCount))
 		}
 		os.Exit(1)
 	}()
@@ -248,15 +249,13 @@ func main() {
 			protocols = append(protocols, p)
 		}
 	}
-	// fmt.Printf("混合测试协议包含：%v\n", protocols)
-
 	for i := 0; i < *connNum; i++ {
 		wg.Add(1)
 		go func(idx int) {
 			protoc := protocols[idx%len(protocols)]
 			c, err := newClient(protoc, getAddrByProto(protoc))
 			if err != nil {
-				fmt.Printf("Connection %d failed: %v\n", idx, err)
+				slog.Error("connection failed", "index", idx, "err", err)
 				wg.Done()
 				return
 			}
@@ -266,7 +265,6 @@ func main() {
 				buf := make([]byte, 4096)
 				for {
 					if n, err2 := client.Read(buf); err2 != nil {
-						// fmt.Printf("Read error: %v\n", err2)
 						return // Connection closed or error / 连接关闭或出错
 					} else if n > 0 {
 						if d := unpack(buf[:n]); d != nil {
@@ -283,7 +281,7 @@ func main() {
 			// Send Message periodically / 周期性发送消息
 			// for {
 			if err3 := c.Write(int16(*msgId), []byte(*msgData)); err3 != nil {
-				// fmt.Printf("Write error: %v\n", err3)
+				slog.Error("write failed", "index", idx, "err", err3)
 				return
 			}
 			atomic.AddInt32(&sendCount, 1)

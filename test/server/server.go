@@ -7,6 +7,7 @@ import (
 	"github.com/451008604/nets"
 	"github.com/451008604/nets/internal"
 	"google.golang.org/protobuf/proto"
+	"log/slog"
 	"net/http"
 	_ "net/http/pprof"
 	"os"
@@ -56,7 +57,7 @@ func main() {
 
 	go func() {
 		for t := range time.Tick(time.Second) {
-			println(t.Format("15:04:05"), "flagOpened: ", atomic.LoadInt32(&stats.flagOpened), ", flagClosed: ", atomic.LoadInt32(&stats.flagClosed), ", flagErrCapture:", atomic.LoadInt32(&stats.flagErrCapture))
+			slog.Info("connection stats", "time", t.Format("15:04:05"), "opened", atomic.LoadInt32(&stats.flagOpened), "closed", atomic.LoadInt32(&stats.flagClosed), "errCapture", atomic.LoadInt32(&stats.flagErrCapture))
 		}
 	}()
 
@@ -105,6 +106,5 @@ func main() {
 
 	// 7. Start service (block main goroutine) / 7. 启动服务(阻塞主协程)
 	nets.GetInstanceServerManager().RegisterServer(nets.GetServerHTTP(), nets.GetServerKCP(), nets.GetServerTCP(), nets.GetServerWS())
-	println("----------------\n", time.Now().Format("15:04:05"), "flagOpened: ", atomic.LoadInt32(&stats.flagOpened), ", flagClosed: ", atomic.LoadInt32(&stats.flagClosed), ", flagErrCapture:", atomic.LoadInt32(&stats.flagErrCapture))
-	fmt.Printf("\nShutting down...\n")
+	slog.Info("server stopped", "time", time.Now().Format("15:04:05"), "opened", atomic.LoadInt32(&stats.flagOpened), "closed", atomic.LoadInt32(&stats.flagClosed), "errCapture", atomic.LoadInt32(&stats.flagErrCapture))
 }

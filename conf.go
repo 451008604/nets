@@ -5,22 +5,13 @@ import (
 	"os"
 )
 
-// init initializes the global slog logger with a JSON handler writing to stdout
-// (AddSource enabled) at Info level as a fallback. The effective level is re-applied
-// from AppConf.LogLevel when SetCustomServer is called.
-// 初始化全局 slog 日志，默认 JSON 输出到 stdout（含调用源），Info 级别兜底；
-// 实际级别在 SetCustomServer 时按 AppConf.LogLevel 重新应用。
-func init() {
-	applySlogHandler(slog.LevelInfo)
-}
-
-// applySlogHandler (re)builds the global slog logger with the given level.
-// 依据指定级别（重新）构建全局 slog 日志。
-func applySlogHandler(level slog.Level) {
-	slog.SetDefault(slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{
+// newDefaultLogger creates the SDK fallback logger without changing the process-wide slog default.
+// 创建 SDK 的兜底日志实例，不修改进程级 slog 默认实例。
+func newDefaultLogger(level slog.Level) *slog.Logger {
+	return slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{
 		AddSource: true,
 		Level:     level,
-	})))
+	}))
 }
 
 type AppConf struct {

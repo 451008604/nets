@@ -3,7 +3,6 @@ package nets
 import (
 	"fmt"
 	"github.com/xtaci/kcp-go"
-	"log/slog"
 	"net"
 	"sync"
 )
@@ -38,11 +37,11 @@ func (s *serverKCP) Start() {
 	if s.port == 0 {
 		return
 	}
-	slog.Info("server starting", "name", s.serverName, "port", s.port)
+	getLogger().Info("server starting", "name", s.serverName, "port", s.port)
 
 	listener, err := kcp.Listen(fmt.Sprintf("%s:%v", s.ip, s.port))
 	if err != nil {
-		slog.Error("service startup failed", "err", err)
+		getLogger().Error("service startup failed", "err", err)
 		return
 	}
 	defer func(listener net.Listener) {
@@ -65,7 +64,7 @@ func (s *serverKCP) Start() {
 				return
 			default:
 			}
-			slog.Warn("accept kcp failed", "err", err)
+			getLogger().Warn("accept kcp failed", "err", err)
 			continue
 		}
 
