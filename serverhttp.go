@@ -2,16 +2,42 @@ package nets
 
 import (
 	"context"
-	"fmt"
+	"errors"
+	"io"
+	"log/slog"
+	"net"
 	"net/http"
+	"strconv"
 	"sync"
+	"sync/atomic"
 	"time"
 )
 
+const (
+	defaultHTTPTimeout = 30 * time.Second
+	maxHTTPHeaderBytes = 64 << 10
+	httpBodyExtraBytes = 1024
+)
+
 type serverHTTP struct {
-	serverName string
-	ip         string
-	port       int
+	serverName    string
+	ip            string
+	port          int
+	activeRequest atomic.Int64
+}
+
+type limitedHTTPBody struct {
+	io.ReadCloser
+	tooLarge bool
+}
+
+func (b *limitedHTTPBody) Read(p []byte) (int, error) {
+	n, err := b.ReadCloser.Read(p)
+	var maxBytesErr *http.MaxBytesError
+	if errors.As(err, &maxBytesErr) {
+		b.tooLarge = true
+	}
+	return n, err
 }
 
 var (
@@ -34,55 +60,113 @@ func (s *serverHTTP) GetServerName() string {
 	return s.serverName
 }
 
+func getHTTPTimeout() time.Duration {
+	timeout := time.Duration(defaultServer.AppConf.ConnRWTimeOut) * time.Second
+	if timeout <= 0 {
+		return defaultHTTPTimeout
+	}
+	return timeout
+}
+
+// HTTP 使用 JSON 时 bytes 会经过 base64 编码，因此在 MaxPackSize 基础上预留额外空间。
+func getHTTPBodyLimit() int64 {
+	maxPackSize := defaultServer.AppConf.MaxPackSize
+	if maxPackSize == 0 {
+		maxPackSize = 4096
+	}
+	return int64(maxPackSize)*2 + httpBodyExtraBytes
+}
+
+func (s *serverHTTP) acquireRequest() bool {
+	maxConn := uint64(defaultServer.AppConf.MaxConn)
+	for {
+		active := s.activeRequest.Load()
+		if uint64(GetInstanceConnManager().Len())+uint64(active) >= maxConn {
+			return false
+		}
+		if s.activeRequest.CompareAndSwap(active, active+1) {
+			return true
+		}
+	}
+}
+
+func (s *serverHTTP) handler() http.Handler {
+	mux := http.NewServeMux()
+	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost {
+			w.Header().Set("Allow", http.MethodPost)
+			http.Error(w, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
+			return
+		}
+
+		if GetInstanceServerManager().IsClose() {
+			http.Error(w, http.StatusText(http.StatusServiceUnavailable), http.StatusServiceUnavailable)
+			return
+		}
+
+		if !s.acquireRequest() {
+			http.Error(w, http.StatusText(http.StatusServiceUnavailable), http.StatusServiceUnavailable)
+			return
+		}
+		defer s.activeRequest.Add(-1)
+
+		bodyLimit := getHTTPBodyLimit()
+		if r.ContentLength > bodyLimit {
+			http.Error(w, http.StatusText(http.StatusRequestEntityTooLarge), http.StatusRequestEntityTooLarge)
+			return
+		}
+		limitedBody := &limitedHTTPBody{ReadCloser: http.MaxBytesReader(w, r.Body, bodyLimit)}
+		r.Body = limitedBody
+		defer func() { _ = r.Body.Close() }()
+
+		msgConn := NewConnectionHTTP(s, w, r)
+		if !msgConn.StartReader() {
+			status := http.StatusBadRequest
+			if limitedBody.tooLarge {
+				status = http.StatusRequestEntityTooLarge
+			}
+			http.Error(w, http.StatusText(status), status)
+		}
+	})
+	return mux
+}
+
 func (s *serverHTTP) Start() {
 	if s.port == 0 {
 		return
 	}
 	getLogger().Info("server starting", "name", s.serverName, "port", s.port)
 
-	httpServer := http.NewServeMux()
-	httpServer.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		// Invalid Request Method / 请求方式非法
-		if r.Method != http.MethodPost {
-			w.WriteHeader(http.StatusMethodNotAllowed)
-			_, _ = w.Write([]byte(http.StatusText(http.StatusMethodNotAllowed)))
-			_ = r.Body.Close()
-			return
-		}
-
-		// Service Shutdown Status / 服务关闭状态
-		if GetInstanceServerManager().IsClose() {
-			w.WriteHeader(http.StatusServiceUnavailable)
-			_, _ = w.Write([]byte(http.StatusText(http.StatusServiceUnavailable)))
-			_ = r.Body.Close()
-			return
-		}
-
-		// Close new connections when count exceeds limit / 连接数量超过限制后，关闭新建立的连接
-		if GetInstanceConnManager().Len() >= int(defaultServer.AppConf.MaxConn) {
-			w.WriteHeader(http.StatusGatewayTimeout)
-			_, _ = w.Write([]byte(http.StatusText(http.StatusGatewayTimeout)))
-			_ = r.Body.Close()
-			return
-		}
-
-		// Establish new connection and listen for client messages / 建立新连接并监听客户端请求的消息
-		msgConn := NewConnectionHTTP(s, w, r)
-		// Short connection service does not need read/write goroutine separation / 短链接服务不需要启动读写分离协程
-		msgConn.StartReader()
-	})
-
-	srv := &http.Server{Addr: fmt.Sprintf("%s:%v", s.ip, s.port), Handler: httpServer}
+	timeout := getHTTPTimeout()
+	srv := &http.Server{
+		Addr:              net.JoinHostPort(s.ip, strconv.Itoa(s.port)),
+		Handler:           s.handler(),
+		ReadHeaderTimeout: timeout,
+		ReadTimeout:       timeout,
+		WriteTimeout:      timeout,
+		IdleTimeout:       timeout,
+		MaxHeaderBytes:    maxHTTPHeaderBytes,
+		ErrorLog:          slog.NewLogLogger(getLogger().Handler(), slog.LevelError),
+	}
 	go func() {
 		<-serverCtx.Done()
-		ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+		ctx, cancel := context.WithTimeout(context.Background(), defaultHTTPTimeout)
 		defer cancel()
-		_ = srv.Shutdown(ctx)
+		if err := srv.Shutdown(ctx); err != nil {
+			getLogger().Warn("http server graceful shutdown failed", "name", s.serverName, "err", err)
+			if closeErr := srv.Close(); closeErr != nil {
+				getLogger().Error("http server forced shutdown failed", "name", s.serverName, "err", closeErr)
+			}
+		}
 	}()
 
+	var err error
 	if certPath, keyPath := defaultServer.AppConf.ServerHTTP.TLSCertPath, defaultServer.AppConf.ServerHTTP.TLSKeyPath; certPath != "" && keyPath != "" {
-		getLogger().Error("server error", "err", srv.ListenAndServeTLS(certPath, keyPath))
+		err = srv.ListenAndServeTLS(certPath, keyPath)
 	} else {
-		getLogger().Error("server error", "err", srv.ListenAndServe())
+		err = srv.ListenAndServe()
+	}
+	if err != nil && !errors.Is(err, http.ErrServerClosed) {
+		getLogger().Error("http server stopped unexpectedly", "name", s.serverName, "err", err)
 	}
 }
