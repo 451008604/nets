@@ -46,52 +46,52 @@
 ## 📐 架构总览
 
 ```mermaid
-flowchart LR
-    Client["① 客户端<br/>发送请求数据包"]
-    Protocol["② 多协议服务<br/>TCP · WebSocket · HTTP · KCP"]
+flowchart TB
+    Client["客户端<br/>请求数据包"]
+    Protocol["多协议服务<br/>TCP / WebSocket / HTTP / KCP"]
 
-    LongConn["③ 长连接 Connection<br/>TCP · WebSocket · KCP"]
-    HTTPConn["③ HTTP Connection<br/>读取请求 Body"]
+    subgraph RequestPaths["请求处理路径"]
+        direction LR
 
-    Unpack["④ IDataPack.UnPack<br/>读取 msgId、dataLen 和消息体"]
-    HTTPParse["④ HTTP 协议解析<br/>JSON / Protobuf / 原始 Body"]
-    Workers["⑤ WorkerPool<br/>按 connectionId 投递到固定 Worker"]
-    MsgHandler["⑥ readerTaskHandler + MsgHandler<br/>路由查找 → 反序列化 → 限流 → Filter"]
-    Host["⑦ 宿主应用<br/>执行已注册的业务 Handler"]
+        subgraph LongPath["TCP / WebSocket / KCP"]
+            direction TB
+            LongConn["Connection<br/>长连接读包"]
+            Unpack["IDataPack.UnPack<br/>拆包"]
+            Workers["WorkerPool<br/>按连接分发任务"]
+
+            LongConn --> Unpack
+            Unpack --> Workers
+        end
+
+        subgraph HTTPPath["HTTP"]
+            direction TB
+            HTTPConn["HTTP Connection<br/>读取请求体"]
+        end
+    end
+
+    MsgHandler["MsgHandler<br/>路由与过滤"]
+    Host["宿主应用<br/>业务 Handler"]
 
     Client -->|"请求数据包"| Protocol
     Protocol -->|"TCP / WebSocket / KCP"| LongConn
     Protocol -->|"HTTP"| HTTPConn
 
-    LongConn -->|"读取字节流或二进制帧"| Unpack
-    Unpack -->|"IMessage"| Workers
-    Workers -->|"同一连接顺序执行"| MsgHandler
+    HTTPConn -->|"短请求直接分发"| MsgHandler
+    Workers --> MsgHandler
+    MsgHandler --> Host
 
-    HTTPConn --> HTTPParse
-    HTTPParse -->|"HTTP 短请求直接分发"| MsgHandler
+    subgraph Managers["管理组件"]
+        direction LR
+        ServerManager["ServerManager<br/>服务生命周期"]
+        ConnManager["ConnectionManager<br/>连接管理与 Hook"]
+    end
 
-    MsgHandler -->|"router.RunHandler"| Host
-
-    ServerManager["ServerManager<br/>服务启动、停止与优雅退出"]
-    ConnManager["ConnectionManager<br/>连接集合与生命周期 Hook"]
-
-    Host -.->|"注册并启动服务"| ServerManager
-    Host -.->|"注册路由、Filter、Hook"| MsgHandler
-    ServerManager -.->|"管理协议服务"| Protocol
-    ServerManager -.->|"退出时清理"| ConnManager
-    ServerManager -.->|"退出时停止"| Workers
-    ConnManager -.->|"Add / Remove / Open / Close"| LongConn
-    ConnManager -.->|"Open / Close Hook"| HTTPConn
-
-    classDef packet fill:#dbeafe,stroke:#2563eb,color:#172554,stroke-width:2px
-    classDef process fill:#ecfdf5,stroke:#059669,color:#064e3b
-    classDef manager fill:#fff7ed,stroke:#ea580c,color:#7c2d12
-    classDef host fill:#f5f3ff,stroke:#7c3aed,color:#3b0764,stroke-width:2px
-
-    class Client packet
-    class Protocol,LongConn,HTTPConn,Unpack,HTTPParse,Workers,MsgHandler process
-    class ServerManager,ConnManager manager
-    class Host host
+    Host -.->|"注册服务"| ServerManager
+    Host -.->|"注册路由和 Hook"| MsgHandler
+    ServerManager -.->|"管理"| Protocol
+    ServerManager -.->|"退出清理"| ConnManager
+    ServerManager -.->|"退出停止"| Workers
+    ConnManager -.->|"管理长连接"| LongConn
 ```
 
 - **实线**表示请求数据包的实际处理流向，**虚线**表示注册、管理和生命周期控制关系。
