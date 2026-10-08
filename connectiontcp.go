@@ -6,10 +6,15 @@ import (
 
 type connectionTCP struct {
 	*ConnectionBase
-	conn *net.TCPConn
+	conn net.Conn
 }
 
 func NewConnectionTCP(server IServer, conn *net.TCPConn) IConnection {
+	return newConnectionTCP(server, conn)
+}
+
+// The public constructor retains its signature; the server also accepts TLS streams.
+func newConnectionTCP(server IServer, conn net.Conn) IConnection {
 	c := &connectionTCP{
 		ConnectionBase: newConnectionBase(server, managerForServer(server).ctx, true),
 		conn:           conn,

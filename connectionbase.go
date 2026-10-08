@@ -2,6 +2,7 @@ package nets
 
 import (
 	"context"
+	"crypto/tls"
 	"encoding/json"
 	"fmt"
 	"google.golang.org/protobuf/proto"
@@ -69,6 +70,20 @@ func (c *ConnectionBase) Open() {
 	if c.IsClose() {
 		return
 	}
+	if secure, ok := c.conn.GetNetConn().(*tls.Conn); ok {
+		// Handshake only after connection admission, outside the shared workers.
+		// No business hook or reader runs before the peer has completed TLS.
+		ctx, cancel := context.WithTimeout(c.ConnCtx(), time.Duration(c.manager.config.AppConf.ConnRWTimeOut)*time.Second)
+		err := secure.HandshakeContext(ctx)
+		cancel()
+		if err != nil {
+			c.manager.config.Logger.Debug("TLS handshake failed", "connId", c.connId, "err", err)
+			return
+		}
+		if c.IsClose() {
+			return
+		}
+	}
 	opened = true
 	c.manager.connections.GetConnOpened(c.conn)
 	if c.IsClose() {
@@ -127,6 +142,11 @@ func (c *ConnectionBase) Close() {
 	c.connCtxCancel()
 	if c.conn != nil {
 		if conn := c.conn.GetNetConn(); conn != nil {
+			if secure, ok := conn.(*tls.Conn); ok {
+				// Abort the underlying transport first: tls.Close's close_notify
+				// write must not delay cancellation on a backpressured stream.
+				_ = secure.NetConn().Close()
+			}
 			_ = conn.Close()
 		}
 	}

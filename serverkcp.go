@@ -2,6 +2,8 @@ package nets
 
 import (
 	"context"
+	"crypto/tls"
+	"fmt"
 	"github.com/xtaci/kcp-go"
 	"net"
 	"strconv"
@@ -29,6 +31,10 @@ func (s *serverKCP) Serve(ctx context.Context) error {
 	if s.port == 0 || ctx.Err() != nil {
 		return nil
 	}
+	tlsConfig, err := loadStreamTLSConfig(s.manager.config.AppConf.ServerKCP)
+	if err != nil {
+		return fmt.Errorf("KCP TLS: %w", err)
+	}
 	listener, err := kcp.Listen(net.JoinHostPort(s.ip, strconv.Itoa(s.port)))
 	if err != nil {
 		return err
@@ -38,6 +44,9 @@ func (s *serverKCP) Serve(ctx context.Context) error {
 			session.SetStreamMode(true)
 			session.SetNoDelay(1, 10, 2, 1)
 			session.SetWindowSize(256, 256)
+		}
+		if tlsConfig != nil {
+			conn = tls.Server(conn, tlsConfig)
 		}
 		return NewConnectionKCP(s, conn)
 	}, s.manager.connections)

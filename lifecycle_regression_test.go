@@ -326,7 +326,7 @@ func TestTLSConfigurationMatchesProtocolSupport(t *testing.T) {
 				protocol := map[string]*ServerConf{"TCP": &conf.ServerTCP, "KCP": &conf.ServerKCP, "HTTP": &conf.ServerHTTP, "WebSocket": &conf.ServerWS}[name]
 				protocol.Port, protocol.TLSCertPath, protocol.TLSKeyPath = 0, paths[0], paths[1]
 				manager, err := NewServerManager(&CustomServer{AppConf: conf})
-				valid := (name == "HTTP" || name == "WebSocket") && paths[0] != "" && paths[1] != ""
+				valid := paths[0] != "" && paths[1] != ""
 				if valid {
 					if err != nil {
 						t.Fatal(err)

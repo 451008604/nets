@@ -182,11 +182,30 @@ func main() {
 - TCP / KCP 使用小端四字节包头：`uint16 msg_id + uint16 payload_length`。框架处理短读与短写，并在同一连接内按提交顺序执行消息。KCP 服务端启用流模式。
 - WebSocket 使用二进制消息；每个 WebSocket 消息的总长度上限为 `MaxPackSize + 包头长度`，包括聚合在同一消息中的多个包。
 - `ProtocolIsJson=true` 使用 Go `encoding/json` 编解码业务消息，`false` 使用 Protobuf。HTTP 请求封套是 `Message{msg_id, data}`；JSON 下 `data` 使用 base64，Protobuf 字段定义见 [envelope.proto](./envelope.proto)。
-- TLS 证书与密钥字段仅支持 HTTP / WebSocket，必须成对配置；TCP / KCP 配置任一 TLS 字段会在构造时返回错误，避免将此前被忽略的字段误认为已启用加密。
+- 四个协议均支持成对配置 `TLSCertPath` / `TLSKeyPath`；未配置时保留明文模式。TCP 使用标准 TLS，KCP 在可靠有序的流上运行 TLS，HTTP / WebSocket 使用 HTTPS / WSS。
 - HTTP 的非零消息 ID 响应保留二进制封包格式；消息 ID 为 0 时发送原始业务序列化结果。只有显式注册路由 0 才接受原始请求体。HTTP 任务同步执行，请求结束后连接上下文关闭，异步响应发送会返回错误。
 - `MaxConn` 是单个 ServerManager 内 HTTP 在途请求与 TCP / KCP / WebSocket 长连接共享的原子准入上限。`MaxPackSize` 限制收发正文，最大值为 65535。
 - `MaxFlowSecond` 是每个连接的固定时间窗口限流：-1 关闭限流，0 拒绝全部消息。HTTP 每个请求对应一个连接对象，持续的客户端限流应由网关或业务 Filter 实现。
 - 工作池每个任务独立恢复 panic。`Stop()` 拒绝新任务并处理完已接收队列；业务应响应上下文取消。公开 `Submit` / `SubmitWithWorker` 仍等待队列空位；不要在任务中向同一 worker 的满队列做阻塞提交，也不要在池内任务调用同一个工作池的阻塞 `Stop()`，可调用 ServerManager 的非阻塞 `Stop()`。
+
+## TLS 配置与客户端
+
+```go
+conf := nets.GetServerConf()
+conf.ServerTCP.TLSCertPath, conf.ServerTCP.TLSKeyPath = "server-cert.pem", "server-key.pem"
+conf.ServerKCP.TLSCertPath, conf.ServerKCP.TLSKeyPath = "server-cert.pem", "server-key.pem"
+manager, err := nets.NewServerManager(&nets.CustomServer{AppConf: conf})
+if err != nil {
+    return err
+}
+return manager.Run(ctx, manager.GetServerTCP(), manager.GetServerKCP())
+```
+
+TCP / KCP 启动时加载并校验证书与私钥，失败通过 `Run` 返回并停止同管理器的其他服务；最低支持 TLS 1.2，可协商 TLS 1.3。只配置证书或私钥会在构造时失败，端口为 0 的服务不监听或加载证书文件。
+
+每个握手先占用共享 `MaxConn` 预算，在独立连接协程完成，不阻塞接受其他客户端。握手受 `ConnRWTimeOut` 秒的总超时及连接上下文取消控制，成功后才执行 opened hook、启动业务读写。握手失败释放容量，不调用连接 hook。`Close` / 停止服务直接关闭底层传输以解除等待，不等待客户端读取 TLS `close_notify`。
+
+TCP 客户端可以使用 `tls.DialWithDialer`；KCP 客户端先用 `kcp.DialWithOptions` 创建会话、启用 `SetStreamMode(true)`，再用 `tls.Client(session, config)` 和有期限的 `HandshakeContext`。客户端应通过 `RootCAs` 和 `ServerName` 校验证书；KCP 的服务器名需要显式设置为证书中的主机名或 IP。KCP 的此模式是 **TLS over KCP**，加密业务字节流，KCP/UDP 外层头仍保留，不是 DTLS。
 
 ## 验证
 

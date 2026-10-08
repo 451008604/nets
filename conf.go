@@ -34,8 +34,8 @@ type AppConf struct {
 type ServerConf struct {
 	Address     string // IP Address / IP地址
 	Port        int    // Port / 端口
-	TLSCertPath string // TLS certificate path, HTTP/WS only; TCP/KCP reject it.
-	TLSKeyPath  string // TLS key path, HTTP/WS only; TCP/KCP reject it.
+	TLSCertPath string // TLS certificate path; KCP runs TLS over its reliable stream.
+	TLSKeyPath  string // TLS private key path; must be configured with TLSCertPath.
 }
 
 // Default Configuration / 默认配置

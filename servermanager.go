@@ -71,9 +71,6 @@ func NewServerManager(custom *CustomServer) (*ServerManager, error) {
 		if conf.Port < 0 || conf.Port > 65535 {
 			return nil, fmt.Errorf("%s port outside [0, 65535]", protocol.name)
 		}
-		if (protocol.name == "TCP" || protocol.name == "KCP") && (conf.TLSCertPath != "" || conf.TLSKeyPath != "") {
-			return nil, fmt.Errorf("%s does not support TLS configuration", protocol.name)
-		}
 		if (conf.TLSCertPath == "") != (conf.TLSKeyPath == "") {
 			return nil, fmt.Errorf("%s TLS certificate and key must both be configured", protocol.name)
 		}

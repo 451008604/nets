@@ -2,6 +2,8 @@ package nets
 
 import (
 	"context"
+	"crypto/tls"
+	"fmt"
 	"net"
 	"strconv"
 )
@@ -28,6 +30,10 @@ func (s *serverTCP) Serve(ctx context.Context) error {
 	if s.port == 0 || ctx.Err() != nil {
 		return nil
 	}
+	tlsConfig, err := loadStreamTLSConfig(s.manager.config.AppConf.ServerTCP)
+	if err != nil {
+		return fmt.Errorf("TCP TLS: %w", err)
+	}
 	addr, err := net.ResolveTCPAddr("tcp", net.JoinHostPort(s.ip, strconv.Itoa(s.port)))
 	if err != nil {
 		return err
@@ -36,5 +42,10 @@ func (s *serverTCP) Serve(ctx context.Context) error {
 	if err != nil {
 		return err
 	}
-	return serveConnections(ctx, listener, func(conn net.Conn) IConnection { return NewConnectionTCP(s, conn.(*net.TCPConn)) }, s.manager.connections)
+	return serveConnections(ctx, listener, func(conn net.Conn) IConnection {
+		if tlsConfig != nil {
+			conn = tls.Server(conn, tlsConfig)
+		}
+		return newConnectionTCP(s, conn)
+	}, s.manager.connections)
 }
