@@ -207,6 +207,15 @@ TCP / KCP 启动时加载并校验证书与私钥，失败通过 `Run` 返回并
 
 TCP 客户端可以使用 `tls.DialWithDialer`；KCP 客户端先用 `kcp.DialWithOptions` 创建会话、启用 `SetStreamMode(true)`，再用 `tls.Client(session, config)` 和有期限的 `HandshakeContext`。客户端应通过 `RootCAs` 和 `ServerName` 校验证书；KCP 的服务器名需要显式设置为证书中的主机名或 IP。KCP 的此模式是 **TLS over KCP**，加密业务字节流，KCP/UDP 外层头仍保留，不是 DTLS。
 
+示例服务端支持 `-tls-cert` / `-tls-key`，示例客户端支持 `-tls` / `-tls-ca` / `-tls-server-name`，会验证证书与服务器名；同样适用于 HTTPS / WSS。以下命令在对应示例目录运行（证书需包含 `localhost` SAN）：
+
+```sh
+# test/server
+go run . -tls-cert /path/server-cert.pem -tls-key /path/server-key.pem
+# test/client
+go run . -proto tcp,kcp -conn 2 -tls -tls-ca /path/ca.pem -tls-server-name localhost
+```
+
 ## 验证
 
 ```bash

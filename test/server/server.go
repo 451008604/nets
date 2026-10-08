@@ -21,6 +21,8 @@ var (
 	wsPort   = flag.Int("ws", 17002, "WebSocket port")
 	httpPort = flag.Int("http", 17003, "HTTP port")
 	kcpPort  = flag.Int("kcp", 17004, "KCP port")
+	tlsCert  = flag.String("tls-cert", "", "TLS certificate PEM path for enabled protocols")
+	tlsKey   = flag.String("tls-key", "", "TLS private key PEM path for enabled protocols")
 )
 
 var stats struct {
@@ -36,11 +38,14 @@ func main() {
 	serverConf := nets.GetServerConf()
 	serverConf.MaxConn = 1000000
 	serverConf.ConnRWTimeOut = 5
-	serverConf.ServerTCP = nets.ServerConf{Port: *tcpPort}
-	serverConf.ServerWS = nets.ServerConf{Port: *wsPort}
-	serverConf.ServerHTTP = nets.ServerConf{Port: *httpPort}
-	serverConf.ServerKCP = nets.ServerConf{Port: *kcpPort}
-	nets.SetCustomServer(&nets.CustomServer{AppConf: serverConf})
+	serverConf.ServerTCP = nets.ServerConf{Port: *tcpPort, TLSCertPath: *tlsCert, TLSKeyPath: *tlsKey}
+	serverConf.ServerWS = nets.ServerConf{Port: *wsPort, TLSCertPath: *tlsCert, TLSKeyPath: *tlsKey}
+	serverConf.ServerHTTP = nets.ServerConf{Port: *httpPort, TLSCertPath: *tlsCert, TLSKeyPath: *tlsKey}
+	serverConf.ServerKCP = nets.ServerConf{Port: *kcpPort, TLSCertPath: *tlsCert, TLSKeyPath: *tlsKey}
+	if err := nets.ConfigureDefault(&nets.CustomServer{AppConf: serverConf}); err != nil {
+		slog.Error("invalid server configuration", "err", err)
+		os.Exit(1)
+	}
 
 	go func() {
 		http.HandleFunc("/debug", func(w http.ResponseWriter, r *http.Request) {

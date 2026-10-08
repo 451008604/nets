@@ -1,6 +1,9 @@
 package main
 
 import (
+	"context"
+	"crypto/tls"
+	"crypto/x509"
 	"encoding/binary"
 	"encoding/json"
 	"flag"
@@ -19,16 +22,39 @@ import (
 )
 
 var (
-	serverIP = flag.String("server", "127.0.0.1", "server IP")
-	tcpPort  = flag.Int("tcp", 17001, "TCP port")
-	wsPort   = flag.Int("ws", 17002, "WebSocket port")
-	httpPort = flag.Int("http", 17003, "HTTP port")
-	kcpPort  = flag.Int("kcp", 17004, "KCP port")
-	proto    = flag.String("proto", "tcp,ws,http,kcp", "protocol: tcp, ws, http, kcp")
-	msgId    = flag.Int("msgid", 1001, "message ID")
-	msgData  = flag.String("data", `{"Message":"hello world"}`, "message data")
-	connNum  = flag.Int("conn", 1, "number of connections")
+	serverIP        = flag.String("server", "127.0.0.1", "server IP")
+	tcpPort         = flag.Int("tcp", 17001, "TCP port")
+	wsPort          = flag.Int("ws", 17002, "WebSocket port")
+	httpPort        = flag.Int("http", 17003, "HTTP port")
+	kcpPort         = flag.Int("kcp", 17004, "KCP port")
+	proto           = flag.String("proto", "tcp,ws,http,kcp", "protocol: tcp, ws, http, kcp")
+	msgId           = flag.Int("msgid", 1001, "message ID")
+	msgData         = flag.String("data", `{"Message":"hello world"}`, "message data")
+	connNum         = flag.Int("conn", 1, "number of connections")
+	useTLS          = flag.Bool("tls", false, "enable verified TLS for selected protocols")
+	tlsCA           = flag.String("tls-ca", "", "additional trusted CA certificate PEM path (enables TLS)")
+	tlsName         = flag.String("tls-server-name", "", "TLS certificate server name (defaults to server host; enables TLS)")
+	clientTLSConfig *tls.Config
 )
+
+func loadClientTLSConfig(caPath, serverName string) (*tls.Config, error) {
+	config := &tls.Config{ServerName: serverName, MinVersion: tls.VersionTLS12}
+	if caPath != "" {
+		data, err := os.ReadFile(caPath)
+		if err != nil {
+			return nil, err
+		}
+		roots, err := x509.SystemCertPool()
+		if err != nil {
+			roots = x509.NewCertPool()
+		}
+		if !roots.AppendCertsFromPEM(data) {
+			return nil, fmt.Errorf("TLS CA file contains no certificates")
+		}
+		config.RootCAs = roots
+	}
+	return config, nil
+}
 
 type Message struct {
 	Id      uint16 `protobuf:"bytes,1,opt,name=msg_id,proto3" json:"msg_id"` // Message ID / 消息Id
@@ -63,7 +89,13 @@ type TCPClient struct {
 }
 
 func NewTCPClient(addr string) (*TCPClient, error) {
-	conn, err := net.Dial("tcp", addr)
+	var conn net.Conn
+	var err error
+	if clientTLSConfig != nil {
+		conn, err = tls.DialWithDialer(&net.Dialer{Timeout: 5 * time.Second}, "tcp", addr, clientTLSConfig.Clone())
+	} else {
+		conn, err = net.DialTimeout("tcp", addr, 5*time.Second)
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -91,7 +123,15 @@ type WSClient struct {
 }
 
 func NewWSClient(addr string) (*WSClient, error) {
-	conn, _, err := websocket.DefaultDialer.Dial(addr, nil)
+	dialer := *websocket.DefaultDialer
+	if clientTLSConfig != nil {
+		dialer.TLSClientConfig = clientTLSConfig.Clone()
+		dialer.TLSClientConfig.NextProtos = []string{"http/1.1"}
+	}
+	conn, response, err := dialer.Dial(addr, nil)
+	if response != nil {
+		response.Body.Close()
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -119,7 +159,7 @@ func (c *WSClient) Close() error {
 }
 
 type KCPClient struct {
-	conn *kcp.UDPSession
+	conn net.Conn
 }
 
 func NewKCPClient(addr string) (*KCPClient, error) {
@@ -129,6 +169,25 @@ func NewKCPClient(addr string) (*KCPClient, error) {
 	}
 	conn.SetNoDelay(1, 10, 2, 1)
 	conn.SetWindowSize(128, 128)
+	conn.SetStreamMode(true)
+	if clientTLSConfig != nil {
+		config := clientTLSConfig.Clone()
+		if config.ServerName == "" {
+			config.ServerName, _, err = net.SplitHostPort(addr)
+			if err != nil {
+				conn.Close()
+				return nil, err
+			}
+		}
+		secure := tls.Client(conn, config)
+		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+		defer cancel()
+		if err := secure.HandshakeContext(ctx); err != nil {
+			conn.Close()
+			return nil, err
+		}
+		return &KCPClient{conn: secure}, nil
+	}
 	return &KCPClient{conn: conn}, nil
 }
 
@@ -156,7 +215,13 @@ type HTTPClient struct {
 }
 
 func NewHTTPClient(addr string) *HTTPClient {
-	return &HTTPClient{url: addr, client: &http.Client{}, respBuf: make(chan string)}
+	client := &http.Client{Timeout: 5 * time.Second}
+	if clientTLSConfig != nil {
+		transport := http.DefaultTransport.(*http.Transport).Clone()
+		transport.TLSClientConfig = clientTLSConfig.Clone()
+		client.Transport = transport
+	}
+	return &HTTPClient{url: addr, client: client, respBuf: make(chan string)}
 }
 
 func (c *HTTPClient) Write(msgId int16, data []byte) error {
@@ -185,6 +250,9 @@ func (c *HTTPClient) Close() error {
 	if c.resp != nil {
 		_ = c.resp.Body.Close()
 	}
+	if clientTLSConfig != nil {
+		c.client.CloseIdleConnections()
+	}
 	return nil
 }
 
@@ -195,15 +263,19 @@ type Client interface {
 }
 
 func newClient(proto, addr string) (Client, error) {
+	httpScheme, wsScheme := "http", "ws"
+	if clientTLSConfig != nil {
+		httpScheme, wsScheme = "https", "wss"
+	}
 	switch proto {
 	case "tcp":
 		return NewTCPClient(addr)
 	case "ws":
-		return NewWSClient(fmt.Sprintf("ws://%s", addr))
+		return NewWSClient(fmt.Sprintf("%s://%s", wsScheme, addr))
 	case "kcp":
 		return NewKCPClient(addr)
 	case "http":
-		return NewHTTPClient(fmt.Sprintf("http://%s", addr)), nil
+		return NewHTTPClient(fmt.Sprintf("%s://%s", httpScheme, addr)), nil
 	default:
 		return nil, fmt.Errorf("unknown protocol: %s", proto)
 	}
@@ -226,6 +298,14 @@ func getAddrByProto(protocol string) string {
 
 func main() {
 	flag.Parse()
+	if *useTLS || *tlsCA != "" || *tlsName != "" {
+		var err error
+		clientTLSConfig, err = loadClientTLSConfig(*tlsCA, *tlsName)
+		if err != nil {
+			slog.Error("invalid TLS configuration", "err", err)
+			os.Exit(1)
+		}
+	}
 	// Concurrently create connections, evenly distributed across protocols / 并发创建连接，多个协议时均匀分布
 	var (
 		sendCount = int32(0)
@@ -282,6 +362,7 @@ func main() {
 			// for {
 			if err3 := c.Write(int16(*msgId), []byte(*msgData)); err3 != nil {
 				slog.Error("write failed", "index", idx, "err", err3)
+				_ = c.Close()
 				return
 			}
 			atomic.AddInt32(&sendCount, 1)
@@ -290,4 +371,8 @@ func main() {
 		}(i)
 	}
 	wg.Wait()
+	if atomic.LoadInt32(&recCount) != int32(*connNum) {
+		slog.Error("incomplete responses", "received", atomic.LoadInt32(&recCount), "expected", *connNum)
+		os.Exit(1)
+	}
 }
