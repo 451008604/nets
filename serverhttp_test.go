@@ -1,22 +1,34 @@
 package nets
 
 import (
+	"context"
 	"net/http"
 	"net/http/httptest"
 	"strings"
 	"testing"
+	"time"
 )
 
-func withHTTPTestConf(t *testing.T, update func(*AppConf)) {
+func withHTTPTestConf(t *testing.T, update func(*AppConf)) *serverHTTP {
 	t.Helper()
-	original := defaultServer.AppConf
-	t.Cleanup(func() { defaultServer.AppConf = original })
-	update(&defaultServer.AppConf)
+	conf := GetServerConf()
+	update(&conf)
+	manager, err := NewServerManager(&CustomServer{AppConf: conf})
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Cleanup(func() {
+		ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
+		defer cancel()
+		if err := manager.Shutdown(ctx); err != nil {
+			t.Error(err)
+		}
+	})
+	return manager.GetServerHTTP().(*serverHTTP)
 }
 
 func TestServerHTTPRejectsUnsupportedMethod(t *testing.T) {
-	withHTTPTestConf(t, func(conf *AppConf) { conf.MaxConn = 1 })
-	server := &serverHTTP{}
+	server := withHTTPTestConf(t, func(conf *AppConf) { conf.MaxConn = 1 })
 	recorder := httptest.NewRecorder()
 	request := httptest.NewRequest(http.MethodGet, "/", nil)
 
@@ -31,12 +43,11 @@ func TestServerHTTPRejectsUnsupportedMethod(t *testing.T) {
 }
 
 func TestServerHTTPRejectsOversizedBody(t *testing.T) {
-	withHTTPTestConf(t, func(conf *AppConf) {
+	server := withHTTPTestConf(t, func(conf *AppConf) {
 		conf.MaxConn = 1
 		conf.MaxPackSize = 1
 	})
-	server := &serverHTTP{}
-	request := httptest.NewRequest(http.MethodPost, "/", strings.NewReader(strings.Repeat("x", int(getHTTPBodyLimit()+1))))
+	request := httptest.NewRequest(http.MethodPost, "/", strings.NewReader(strings.Repeat("x", int((int64(server.manager.Config().MaxPackSize)*2+httpBodyExtraBytes)+1))))
 	recorder := httptest.NewRecorder()
 
 	server.handler().ServeHTTP(recorder, request)
@@ -50,12 +61,11 @@ func TestServerHTTPRejectsOversizedBody(t *testing.T) {
 }
 
 func TestServerHTTPRejectsChunkedOversizedBody(t *testing.T) {
-	withHTTPTestConf(t, func(conf *AppConf) {
+	server := withHTTPTestConf(t, func(conf *AppConf) {
 		conf.MaxConn = 1
 		conf.MaxPackSize = 1
 	})
-	server := &serverHTTP{}
-	request := httptest.NewRequest(http.MethodPost, "/", strings.NewReader(strings.Repeat("x", int(getHTTPBodyLimit()+1))))
+	request := httptest.NewRequest(http.MethodPost, "/", strings.NewReader(strings.Repeat("x", int((int64(server.manager.Config().MaxPackSize)*2+httpBodyExtraBytes)+1))))
 	request.ContentLength = -1
 	recorder := httptest.NewRecorder()
 
@@ -70,8 +80,7 @@ func TestServerHTTPRejectsChunkedOversizedBody(t *testing.T) {
 }
 
 func TestServerHTTPRejectsWhenCapacityIsExhausted(t *testing.T) {
-	withHTTPTestConf(t, func(conf *AppConf) { conf.MaxConn = 0 })
-	server := &serverHTTP{}
+	server := withHTTPTestConf(t, func(conf *AppConf) { conf.MaxConn = 0 })
 	recorder := httptest.NewRecorder()
 	request := httptest.NewRequest(http.MethodPost, "/", strings.NewReader("{}"))
 

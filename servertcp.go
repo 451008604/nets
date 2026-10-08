@@ -1,100 +1,40 @@
 package nets
 
 import (
-	"fmt"
+	"context"
 	"net"
-	"sync"
+	"strconv"
 )
 
 type serverTCP struct {
-	serverName string // Server Name / 服务器名称
-	ip         string // IP Address / IP地址
-	port       int    // Service Port / 服务端口
+	manager        *ServerManager
+	serverName, ip string
+	port           int
 }
 
-var (
-	serverTcp     IServer
-	serverTcpOnce sync.Once
-)
-
-func GetServerTCP() IServer {
-	serverTcpOnce.Do(func() {
-		serverTcp = &serverTCP{
-			serverName: defaultServer.AppConf.AppName + "_tcp",
-			ip:         defaultServer.AppConf.ServerTCP.Address,
-			port:       defaultServer.AppConf.ServerTCP.Port,
-		}
-	})
-	return serverTcp
+func (m *ServerManager) GetServerTCP() IServer {
+	conf := m.config.AppConf.ServerTCP
+	return &serverTCP{m, m.config.AppConf.AppName + "_tcp", conf.Address, conf.Port}
 }
-
-func (s *serverTCP) GetServerName() string {
-	return s.serverName
-}
-
+func GetServerTCP() IServer                       { return getDefaultServerManager().GetServerTCP() }
+func (s *serverTCP) managerOwner() *ServerManager { return s.manager }
+func (s *serverTCP) GetServerName() string        { return s.serverName }
 func (s *serverTCP) Start() {
-	if s.port == 0 {
-		return
+	if err := s.Serve(s.manager.ctx); err != nil {
+		s.manager.config.Logger.Error("TCP server failed", "err", err)
 	}
-	getLogger().Info("server starting", "name", s.serverName, "port", s.port)
-
-	var (
-		addr *net.TCPAddr
-		tcp  *net.TCPListener
-		conn *net.TCPConn
-		err  error
-	)
-
-	addr, err = net.ResolveTCPAddr("tcp4", fmt.Sprintf("%s:%v", s.ip, s.port))
+}
+func (s *serverTCP) Serve(ctx context.Context) error {
+	if s.port == 0 || ctx.Err() != nil {
+		return nil
+	}
+	addr, err := net.ResolveTCPAddr("tcp", net.JoinHostPort(s.ip, strconv.Itoa(s.port)))
 	if err != nil {
-		getLogger().Error("service startup failed", "err", err)
-		return
+		return err
 	}
-
-	tcp, err = net.ListenTCP("tcp4", addr)
+	listener, err := net.ListenTCP("tcp", addr)
 	if err != nil {
-		getLogger().Error("failed to listen to service address", "err", err)
-		return
+		return err
 	}
-	defer func(tcp *net.TCPListener) {
-		_ = tcp.Close()
-	}(tcp)
-
-	// Close the listener on shutdown so the blocking Accept returns immediately
-	// 退出时关闭监听器，使阻塞的 Accept 立即返回
-	go func() {
-		<-serverCtx.Done()
-		_ = tcp.Close()
-	}()
-
-	for {
-		// Wait for client request to establish connection / 等待客户端请求建立连接
-		conn, err = tcp.AcceptTCP()
-		if err != nil {
-			select {
-			case <-serverCtx.Done():
-				return
-			default:
-			}
-			getLogger().Warn("accept tcp failed", "err", err)
-			continue
-		}
-
-		// Service Shutdown Status / 服务关闭状态
-		if GetInstanceServerManager().IsClose() {
-			_ = conn.Close()
-			continue
-		}
-
-		// Close new connections when count exceeds limit / 连接数量超过限制后，关闭新建立的连接
-		if GetInstanceConnManager().Len() >= int(defaultServer.AppConf.MaxConn) {
-			_ = conn.Close()
-			continue
-		}
-
-		// Establish new connection and listen for client messages / 建立新连接并监听客户端请求的消息
-		msgConn := NewConnectionTCP(s, conn)
-		// Add new connection to unified connection manager / 将新建的连接添加到统一的连接管理器内
-		GetInstanceConnManager().Add(msgConn)
-	}
+	return serveConnections(ctx, listener, func(conn net.Conn) IConnection { return NewConnectionTCP(s, conn.(*net.TCPConn)) }, s.manager.connections)
 }

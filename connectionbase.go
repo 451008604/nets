@@ -3,7 +3,7 @@ package nets
 import (
 	"context"
 	"encoding/json"
-	"errors"
+	"fmt"
 	"google.golang.org/protobuf/proto"
 	"strconv"
 	"sync"
@@ -11,78 +11,83 @@ import (
 	"time"
 )
 
-// Used to Generate Unique Connection ID / 用于生成连接唯一ID
 var connIdSeed uint32
 
 func GenerateConnID() string {
-	// 1. Get current second-level timestamp (low 32 bits) / 获取当前秒级时间戳 (取低 32 位)
 	now := uint64(time.Now().Unix())
-	// 2. Atomically increment to get sequence number / 原子自增获取序列号
 	seq := uint64(atomic.AddUint32(&connIdSeed, 1))
-	// 3. Combine: timestamp shifted left by 32 bits, OR with sequence number / 组合：时间戳左移 32 位，然后与序列号进行“或”运算
-	// [ 32-bit Timestamp ] [ 32-bit Auto-increment Sequence / 32位时间戳 ] [ 32位自增序列 ]
 	return strconv.FormatUint((now<<32)|seq, 16)
 }
 
 type ConnectionBase struct {
-	server        IServer            // Current Conn's Server / 当前Conn所属的Server
-	conn          IConnection        // Bound Connection / 绑定的连接
-	connId        string             // Unique Connection ID / 连接的唯一Id
-	msgBuffChan   chan []byte        // Message communication between task queue and write goroutine / 用于任务队列与写协程之间的消息通信
-	property      map[string]any     // Connection Properties / 连接属性
-	propertyMutex sync.RWMutex       // Connection Property R/W Lock / 连接属性读写锁
-	isClosed      int32              // Whether Connection is Closed / 当前连接是否已关闭
-	connCtx       context.Context    // Connection Management Context / 管理连接的上下文
-	connCtxCancel context.CancelFunc // Connection Close Signal / 连接关闭信号
-	limitingCount int64              // Rate Limiting Count / 限流计数
-	limitingTimer int64              // Rate Limiting Timer / 限流计时
-	limitingMutex sync.Mutex         // Rate Limiting Lock / 限流锁
+	manager       *ServerManager
+	server        IServer
+	conn          IConnection
+	connId        string
+	msgBuffChan   chan []byte
+	property      map[string]any
+	propertyMutex sync.RWMutex
+	isClosed      int32
+	connCtx       context.Context
+	connCtxCancel context.CancelFunc
+	limitingCount int64
+	limitingTimer int64
+	limitingMutex sync.Mutex
+	taskMu        sync.Mutex
+	tasksClosed   bool
+	tasks         sync.WaitGroup
 }
 
+func newConnectionBase(server IServer, parent context.Context, queued bool) *ConnectionBase {
+	r := managerForServer(server)
+	ctx, cancel := context.WithCancel(parent)
+	var messages chan []byte
+	if queued {
+		messages = make(chan []byte, r.config.AppConf.MaxMsgChanLen)
+	}
+	return &ConnectionBase{manager: r, server: server, connId: GenerateConnID(), msgBuffChan: messages, property: make(map[string]any), connCtx: ctx, connCtxCancel: cancel}
+}
+func (c *ConnectionBase) managerOwner() *ServerManager { return c.manager }
 func (c *ConnectionBase) Open() {
+	readerDone := make(chan struct{})
+	readerStarted := false
+	opened := false
 	defer func() {
-		GetInstanceConnManager().GetConnClosed(c.conn)
-
-		// Clear Properties / 清空属性
-		c.propertyMutex.Lock()
-		c.property = map[string]any{}
-		c.propertyMutex.Unlock()
-
-		// Close Underlying Network Connection / 关闭底层网络连接
-		if netConn := c.conn.GetNetConn(); netConn != nil {
-			_ = netConn.Close()
+		c.Close()
+		if readerStarted {
+			<-readerDone
 		}
-
-		GetInstanceConnManager().Remove(c.conn)
-		GetInstanceServerManager().WaitGroupDone()
+		c.tasks.Wait()
+		if opened {
+			c.manager.connections.GetConnClosed(c.conn)
+		}
+		c.propertyMutex.Lock()
+		clear(c.property)
+		c.propertyMutex.Unlock()
 	}()
-	defer GetInstanceMsgHandler().GetErrCapture(c.conn)
-
-	GetInstanceServerManager().WaitGroupAdd(1)
-	GetInstanceConnManager().GetConnOpened(c.conn)
-
-	// Start Read Goroutine
-	go c.readHandler()
-
-	// Start Write Goroutine with lazy-refresh deadline
-	// Refresh when deadline has less than half of writeTimeout remaining
-	// 当 deadline 剩余时间不足 writeTimeout 的一半时刷新
+	defer c.manager.messages.GetErrCapture(c.conn)
+	if c.IsClose() {
+		return
+	}
+	opened = true
+	c.manager.connections.GetConnOpened(c.conn)
+	if c.IsClose() {
+		return
+	}
+	readerStarted = true
+	go func() { defer close(readerDone); c.readHandler() }()
 	var writeDeadline time.Time
-	// Cached write deadline duration / 缓存的写超时间隔
-	writeTimeout := time.Duration(defaultServer.AppConf.ConnRWTimeOut) * time.Second
+	timeout := time.Duration(c.manager.config.AppConf.ConnRWTimeOut) * time.Second
 	for {
 		select {
 		case <-c.ConnCtx().Done():
 			return
-		case data, ok := <-c.msgBuffChan:
-			if !ok {
-				return
-			}
+		case data := <-c.msgBuffChan:
 			now := time.Now()
-			if writeDeadline.IsZero() || now.Add(writeTimeout/2).After(writeDeadline) {
-				writeDeadline = now.Add(writeTimeout)
-				if netConn := c.conn.GetNetConn(); netConn != nil {
-					if err := netConn.SetWriteDeadline(writeDeadline); err != nil {
+			if writeDeadline.IsZero() || now.Add(timeout/2).After(writeDeadline) {
+				writeDeadline = now.Add(timeout)
+				if conn := c.conn.GetNetConn(); conn != nil {
+					if err := conn.SetWriteDeadline(writeDeadline); err != nil {
 						return
 					}
 				}
@@ -93,211 +98,231 @@ func (c *ConnectionBase) Open() {
 		}
 	}
 }
-
 func (c *ConnectionBase) readHandler() {
-	defer GetInstanceConnManager().Remove(c.conn)
-	defer GetInstanceMsgHandler().GetErrCapture(c.conn)
-
-	// Cached read deadline duration / 缓存的读超时间隔
-	readTimeout := time.Duration(defaultServer.AppConf.ConnRWTimeOut) * time.Second
+	defer c.Close()
+	defer c.manager.messages.GetErrCapture(c.conn)
+	timeout := time.Duration(c.manager.config.AppConf.ConnRWTimeOut) * time.Second
 	for {
-		select {
-		case <-c.ConnCtx().Done():
+		if c.IsClose() {
 			return
-		default:
 		}
-		if netConn := c.conn.GetNetConn(); netConn != nil && netConn.SetReadDeadline(time.Now().Add(readTimeout)) != nil {
-			return
+		if conn := c.conn.GetNetConn(); conn != nil {
+			if err := conn.SetReadDeadline(time.Now().Add(timeout)); err != nil {
+				return
+			}
 		}
 		if !c.conn.StartReader() {
 			return
 		}
 	}
 }
-
-func (c *ConnectionBase) ConnCtx() context.Context {
-	return c.connCtx
-}
-
+func (c *ConnectionBase) ConnCtx() context.Context { return c.connCtx }
 func (c *ConnectionBase) Close() {
+	c.taskMu.Lock()
+	c.tasksClosed = true
+	c.taskMu.Unlock()
 	if !atomic.CompareAndSwapInt32(&c.isClosed, 0, 1) {
 		return
 	}
-	// Notify all goroutines to exit / 通知所有协程退出
 	c.connCtxCancel()
+	if c.conn != nil {
+		if conn := c.conn.GetNetConn(); conn != nil {
+			_ = conn.Close()
+		}
+	}
 }
 
-func (c *ConnectionBase) DoTask(task func()) bool {
-	if c.IsClose() {
+// DoTask never waits for queue space. Callers must handle false on rejection.
+func (c *ConnectionBase) DoTask(task func()) bool { return c.doTask(task, false) }
+
+// doReadTask preserves backpressure for protocol readers outside the worker pool.
+func (c *ConnectionBase) doReadTask(task func()) bool { return c.doTask(task, true) }
+
+func (c *ConnectionBase) doTask(task func(), block bool) bool {
+	c.taskMu.Lock()
+	if task == nil || c.tasksClosed || c.IsClose() {
+		c.taskMu.Unlock()
 		return false
 	}
-	// Hash connId to workerId, ensure all handlers of same connection execute on same worker
-	// 将 connId 哈希为 workerId，确保同一连接的所有 handler 在同一 worker 上执行
-	pool := GetInstanceWorkerPool()
-	err := pool.SubmitWithWorkerCtx(c.ConnCtx(), func() {
-		defer GetInstanceMsgHandler().GetErrCapture(c.conn)
+	// Close closes this admission gate before Open can wait for task completion.
+	c.tasks.Add(1)
+	c.taskMu.Unlock()
+	pool := c.manager.WorkerPool()
+	err := pool.submit(c.ConnCtx(), func() {
+		defer c.tasks.Done()
+		defer c.manager.messages.GetErrCapture(c.conn)
 		task()
-	}, pool.HashWorkerId(c.connId))
-	if err != nil && !errors.Is(err, context.Canceled) {
-		getLogger().Error("pool do task failed", "err", err)
-		return false
+	}, pool.workerIndex(pool.HashWorkerId(c.connId)), block)
+	if err != nil {
+		c.tasks.Done()
 	}
-	return true
+	return err == nil
 }
 
-func readerTaskHandler(c IConnection, m IMessage) {
-	defer GetInstanceMsgHandler().GetErrCapture(c)
+func submitReadTask(conn IConnection, task func()) bool {
+	if reader, ok := conn.(interface{ doReadTask(func()) bool }); ok {
+		return reader.doReadTask(task)
+	}
+	return conn.DoTask(task)
+}
 
-	iMsgHandler := GetInstanceMsgHandler()
-
-	// Discard all subsequent operations when connection closes / 连接关闭时丢弃后续所有操作
-	if c.IsClose() {
+func readerTaskHandler(c IConnection, msg IMessage) {
+	r := managerForConnection(c)
+	defer r.messages.GetErrCapture(c)
+	if c.IsClose() || c.ConnCtx().Err() != nil {
 		return
 	}
-
-	router, ok := iMsgHandler.GetRouter(int32(m.GetMsgId()))
+	if c.FlowControl() || !r.messages.GetFilter(c, msg) {
+		return
+	}
+	router, ok := r.messages.GetRouter(int32(msg.GetMsgId()))
 	if !ok {
 		return
 	}
-
-	msgData := router.GetNewMsg()
-	if m.GetMsgId() != 0 {
-		if err := c.ByteToProtocol(m.GetData(), msgData); err != nil {
-			getLogger().Error("api msg parsing error", "msgId", m.GetMsgId(), "data", m.GetData(), "err", err)
+	var payload proto.Message
+	if msg.GetMsgId() == 0 {
+		raw, ok := msg.(*Message)
+		if !ok {
 			return
 		}
+		payload = raw
 	} else {
-		msgData = m.(*Message)
+		payload = router.GetNewMsg()
+		if err := c.ByteToProtocol(msg.GetData(), payload); err != nil {
+			r.config.Logger.Error("message parsing failed", "msgId", msg.GetMsgId(), "err", err)
+			return
+		}
 	}
-	// Rate Limiting Control / 限流控制
-	if c.FlowControl() {
-		getLogger().Warn("flow control triggered", "remoteAddr", c.RemoteAddrStr(), "msgId", m.GetMsgId(), "data", m.GetData())
-		return
-	}
-
-	// Filter Validation / 过滤器校验
-	if !iMsgHandler.GetFilter(c, m) {
-		return
-	}
-
-	// Corresponding Logic Handler / 对应的逻辑处理方法
-	router.RunHandler(c, msgData)
+	router.RunHandler(c, payload)
 }
-
-func (c *ConnectionBase) GetConnId() string {
-	return c.connId
-}
-
+func (c *ConnectionBase) GetConnId() string { return c.connId }
 func (c *ConnectionBase) IsClose() bool {
-	return atomic.LoadInt32(&c.isClosed) != 0
+	return atomic.LoadInt32(&c.isClosed) != 0 || c.ConnCtx().Err() != nil
 }
-
 func (c *ConnectionBase) GetProperty(key string) any {
 	c.propertyMutex.RLock()
 	defer c.propertyMutex.RUnlock()
 	return c.property[key]
 }
-
 func (c *ConnectionBase) SetProperty(key string, value any) {
 	c.propertyMutex.Lock()
 	defer c.propertyMutex.Unlock()
 	c.property[key] = value
 }
-
 func (c *ConnectionBase) RemoveProperty(key string) {
 	c.propertyMutex.Lock()
 	defer c.propertyMutex.Unlock()
 	delete(c.property, key)
 }
 
-func (c *ConnectionBase) SendMsg(msgId int32, msgData proto.Message) {
-	if msgId < 0 || msgId > 65535 {
-		getLogger().Warn("msgId out of uint16 range, message dropped", "msgId", msgId)
-		return
-	}
-	msgByte := c.ProtocolToByte(msgData)
-	packMsg := GetMessage()
-	packMsg.Id = uint16(msgId)
-	packMsg.Data = msgByte
-	msg := defaultServer.DataPack.Pack(packMsg)
-	PutMessage(packMsg)
+func (c *ConnectionBase) marshal(msg proto.Message) ([]byte, error) {
 	if msg == nil {
-		return
+		return nil, ErrInvalidMessage
 	}
-	// Non-blocking check connection closed first / 先非阻塞检查连接是否关闭
-	select {
-	case <-c.ConnCtx().Done():
-		return
-	default:
+	if c.manager.config.AppConf.ProtocolIsJson {
+		return json.Marshal(msg)
 	}
-	// Then try to send message / 再尝试发送消息
-	select {
-	case <-c.ConnCtx().Done():
-	case c.msgBuffChan <- msg:
+	return proto.Marshal(msg)
+}
+func (c *ConnectionBase) pack(id int32, msg proto.Message) ([]byte, error) {
+	if id < 0 || id > 65535 {
+		return nil, fmt.Errorf("%w: message ID out of uint16 range", ErrInvalidMessage)
 	}
+	data, err := c.marshal(msg)
+	if err != nil {
+		return nil, err
+	}
+	if uint(len(data)) > c.manager.config.AppConf.MaxPackSize {
+		return nil, fmt.Errorf("%w: payload too large", ErrInvalidMessage)
+	}
+	envelope := GetMessage()
+	defer PutMessage(envelope)
+	envelope.Id, envelope.Data = uint16(id), data
+	if packer, ok := c.manager.config.DataPack.(ErrorDataPack); ok {
+		return packer.PackWithError(envelope)
+	}
+	packed := c.manager.config.DataPack.Pack(envelope)
+	if packed == nil {
+		return nil, ErrInvalidMessage
+	}
+	return packed, nil
 }
 
+// SendMsgWithContext reports enqueue failures; successful enqueue does not confirm delivery.
+func (c *ConnectionBase) SendMsgWithContext(ctx context.Context, id int32, msg proto.Message) error {
+	if c.IsClose() {
+		return ErrConnectionClosed
+	}
+	if err := ctx.Err(); err != nil {
+		return err
+	}
+	data, err := c.pack(id, msg)
+	if err != nil {
+		return err
+	}
+	select {
+	case <-ctx.Done():
+		return ctx.Err()
+	case <-c.ConnCtx().Done():
+		return ErrConnectionClosed
+	case c.msgBuffChan <- data:
+		return nil
+	}
+}
+func (c *ConnectionBase) SendMsg(id int32, msg proto.Message) {
+	sender := ContextSender(c)
+	if transport, ok := c.conn.(ContextSender); ok {
+		sender = transport
+	}
+	if err := sender.SendMsgWithContext(c.ConnCtx(), id, msg); err != nil {
+		c.manager.config.Logger.Warn("send message failed", "msgId", id, "err", err)
+	}
+}
 func (c *ConnectionBase) FlowControl() bool {
-	defer c.limitingMutex.Unlock()
-	c.limitingMutex.Lock()
-
-	count := int64(defaultServer.AppConf.MaxFlowSecond)
-	if count == -1 {
-		return false
-	}
-
-	if c.limitingTimer == 0 {
-		c.limitingTimer = time.Now().UnixMilli()
-	}
-	c.limitingCount++
-	if c.limitingCount <= count {
+	limit := int64(c.manager.config.AppConf.MaxFlowSecond)
+	if limit == -1 {
 		return false
 	}
 	now := time.Now().UnixMilli()
-	if now-c.limitingTimer < int64(1000) {
-		GetInstanceConnManager().ConnRateLimiting(c.conn)
-		return true
+	c.limitingMutex.Lock()
+	if c.limitingTimer == 0 || now-c.limitingTimer >= 1000 {
+		c.limitingTimer = now
+		c.limitingCount = 0
 	}
-	c.limitingCount = 1
-	c.limitingTimer = now
-	return false
+	c.limitingCount++
+	limited := c.limitingCount > limit
+	c.limitingMutex.Unlock()
+	if limited {
+		c.manager.connections.ConnRateLimiting(c.conn)
+	}
+	return limited
 }
-
 func (c *ConnectionBase) RemoteAddrStr() string {
-	if netConn := c.conn.GetNetConn(); netConn != nil {
-		return netConn.RemoteAddr().String()
+	if conn := c.conn.GetNetConn(); conn != nil {
+		return conn.RemoteAddr().String()
 	}
 	return ""
 }
-
-var (
-	protoMarshalOnce sync.Once
-	protoMarshal     func(proto.Message) ([]byte, error)
-	protoUnmarshal   func([]byte, proto.Message) error
-)
-
-func initProtoFuncs() {
-	protoMarshalOnce.Do(func() {
-		if defaultServer.AppConf.ProtocolIsJson {
-			protoMarshal = func(m proto.Message) ([]byte, error) { return json.Marshal(m) }
-			protoUnmarshal = func(b []byte, m proto.Message) error { return json.Unmarshal(b, m) }
-		} else {
-			protoMarshal = proto.MarshalOptions{}.Marshal
-			protoUnmarshal = proto.UnmarshalOptions{}.Unmarshal
-		}
-	})
-}
-
-func (c *ConnectionBase) ProtocolToByte(str proto.Message) []byte {
-	initProtoFuncs()
-	marshal, err := protoMarshal(str)
+func (c *ConnectionBase) ProtocolToByte(msg proto.Message) []byte {
+	data, err := c.marshal(msg)
 	if err != nil {
-		return []byte{}
+		c.manager.config.Logger.Error("message serialization failed", "err", err)
+		return nil
 	}
-	return marshal
+	return data
 }
-
-func (c *ConnectionBase) ByteToProtocol(byte []byte, target proto.Message) error {
-	initProtoFuncs()
-	return protoUnmarshal(byte, target)
+func (c *ConnectionBase) ByteToProtocol(data []byte, target proto.Message) error {
+	if target == nil {
+		return ErrInvalidMessage
+	}
+	if c.manager.config.AppConf.ProtocolIsJson {
+		return json.Unmarshal(data, target)
+	}
+	if err := proto.Unmarshal(data, target); err != nil {
+		return err
+	}
+	if msg, ok := target.(*Message); ok && msg.wireID > 65535 {
+		return ErrInvalidMessage
+	}
+	return nil
 }

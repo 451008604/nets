@@ -1,7 +1,6 @@
 package nets
 
 import (
-	"context"
 	"net"
 )
 
@@ -10,17 +9,11 @@ type connectionKCP struct {
 	conn net.Conn
 }
 
-func NewConnectionKCP(server *serverKCP, conn net.Conn) IConnection {
+func NewConnectionKCP(server IServer, conn net.Conn) IConnection {
 	c := &connectionKCP{
-		ConnectionBase: &ConnectionBase{
-			server:      server,
-			connId:      GenerateConnID(),
-			msgBuffChan: make(chan []byte, defaultServer.AppConf.MaxMsgChanLen),
-			property:    map[string]any{},
-		},
-		conn: conn,
+		ConnectionBase: newConnectionBase(server, managerForServer(server).ctx, true),
+		conn:           conn,
 	}
-	c.connCtx, c.connCtxCancel = context.WithCancel(context.Background())
 	c.ConnectionBase.conn = c
 	return c
 }
@@ -29,39 +22,6 @@ func (c *connectionKCP) GetNetConn() net.Conn {
 	return c.conn
 }
 
-func (c *connectionKCP) StartReader() bool {
-	msgHead := make([]byte, defaultServer.DataPack.GetHeadLen())
-	if read, err := c.conn.Read(msgHead); err != nil || read < defaultServer.DataPack.GetHeadLen() {
-		return false
-	}
+func (c *connectionKCP) StartReader() bool { return readStreamPacket(c, c.conn) }
 
-	msgData := defaultServer.DataPack.UnPack(msgHead)
-	if msgData == nil {
-		return false
-	}
-
-	for {
-		if len(msgData.GetData()) >= int(msgData.GetDataLen()) {
-			break
-		}
-
-		bt := make([]byte, int(msgData.GetDataLen())-len(msgData.GetData()))
-		read, err := c.conn.Read(bt)
-		if err != nil {
-			return false
-		}
-		msgData.SetData(append(msgData.GetData(), bt[:read]...))
-	}
-
-	if !c.DoTask(func() { readerTaskHandler(c, msgData); PutMessage(msgData) }) {
-		PutMessage(msgData)
-	}
-	return true
-}
-
-func (c *connectionKCP) StartWriter(data []byte) bool {
-	if _, err := c.conn.Write(data); err != nil {
-		return false
-	}
-	return true
-}
+func (c *connectionKCP) StartWriter(data []byte) bool { return writeStream(c.conn, data) }

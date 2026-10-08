@@ -1,77 +1,80 @@
 package nets
 
 import (
+	"google.golang.org/protobuf/proto"
+	"log/slog"
 	"runtime/debug"
 	"sync"
 )
 
-type IFilter func(conn IConnection, msg IMessage) bool
-type IErrCapture func(conn IConnection, recover any)
-
+type IFilter func(IConnection, IMessage) bool
+type IErrCapture func(IConnection, any)
 type MsgHandler struct {
-	apis       map[int32]*BaseRouter // Router Table / 路由表
-	filter     IFilter               // Message Filter / 消息过滤器
-	errCapture IErrCapture           // Error Capture / 错误捕获器
+	mu         sync.RWMutex
+	apis       map[int32]*BaseRouter
+	filter     IFilter
+	errCapture IErrCapture
+	logger     *slog.Logger
 }
 
-var instanceMsgHandler *MsgHandler
-var instanceMsgHandlerOnce = sync.Once{}
-
-// Message Handler / 消息处理器
-func GetInstanceMsgHandler() *MsgHandler {
-	instanceMsgHandlerOnce.Do(func() {
-		instanceMsgHandler = &MsgHandler{
-			apis: make(map[int32]*BaseRouter),
-		}
-	})
-	return instanceMsgHandler
-}
-
-func (m *MsgHandler) AddRouter(msgId int32, msgTemplate INewMsgStructTemplate, msgHandler IReceiveMsgHandler) {
-	if msgTemplate == nil || msgHandler == nil {
-		getLogger().Error("router has nil template or handler", "msgId", msgId)
+func (m *MsgHandler) AddSessionRouter(id int32, template INewMsgStructTemplate, handler func(Session, proto.Message)) {
+	if handler == nil {
 		return
 	}
-	if _, ok := m.apis[msgId]; ok {
-		getLogger().Warn("msgId is duplicate", "msgId", msgId)
+	m.AddRouter(id, template, func(conn IConnection, msg proto.Message) { handler(conn, msg) })
+}
+func NewMsgHandler() *MsgHandler {
+	return &MsgHandler{apis: make(map[int32]*BaseRouter), logger: slog.Default()}
+}
+func GetInstanceMsgHandler() *MsgHandler { return getDefaultServerManager().messages }
+func (m *MsgHandler) AddRouter(id int32, template INewMsgStructTemplate, handler IReceiveMsgHandler) {
+	if id < 0 || id > 65535 || template == nil || handler == nil {
+		m.logger.Error("invalid router", "msgId", id)
 		return
 	}
-	m.apis[msgId] = &BaseRouter{}
-	m.apis[msgId].SetMsg(msgTemplate)
-	m.apis[msgId].SetHandler(msgHandler)
+	m.mu.Lock()
+	defer m.mu.Unlock()
+	if _, ok := m.apis[id]; ok {
+		m.logger.Warn("duplicate router", "msgId", id)
+		return
+	}
+	m.apis[id] = &BaseRouter{template: template, handler: handler}
 }
-
-func (m *MsgHandler) GetRouter(msgId int32) (*BaseRouter, bool) {
-	router, ok := m.apis[msgId]
+func (m *MsgHandler) GetRouter(id int32) (*BaseRouter, bool) {
+	m.mu.RLock()
+	defer m.mu.RUnlock()
+	router, ok := m.apis[id]
 	return router, ok
 }
-
-func (m *MsgHandler) SetFilter(fun IFilter) {
-	m.filter = fun
-}
-
+func (m *MsgHandler) SetFilter(filter IFilter) { m.mu.Lock(); m.filter = filter; m.mu.Unlock() }
 func (m *MsgHandler) GetFilter(conn IConnection, msg IMessage) bool {
-	if conn == nil || m.filter == nil {
+	m.mu.RLock()
+	filter := m.filter
+	m.mu.RUnlock()
+	if conn == nil || filter == nil {
 		return true
 	}
 	defer m.GetErrCapture(conn)
-	return m.filter(conn, msg)
+	return filter(conn, msg)
 }
-
-func (m *MsgHandler) SetErrCapture(fun IErrCapture) {
-	m.errCapture = fun
+func (m *MsgHandler) SetErrCapture(capture IErrCapture) {
+	m.mu.Lock()
+	m.errCapture = capture
+	m.mu.Unlock()
 }
-
 func (m *MsgHandler) GetErrCapture(conn IConnection) {
-	if r1 := recover(); r1 != nil {
-		getLogger().Error("panic recovered", "panic", r1, "stack", string(debug.Stack()))
-		if m.errCapture != nil && conn != nil {
+	if recovered := recover(); recovered != nil {
+		m.logger.Error("panic recovered", "panic", recovered, "stack", string(debug.Stack()))
+		m.mu.RLock()
+		capture := m.errCapture
+		m.mu.RUnlock()
+		if capture != nil && conn != nil {
 			defer func() {
-				if r2 := recover(); r2 != nil {
-					getLogger().Error("errCapture panic", "panic", r2, "stack", string(debug.Stack()))
+				if secondary := recover(); secondary != nil {
+					m.logger.Error("errCapture panic", "panic", secondary)
 				}
 			}()
-			m.errCapture(conn, r1)
+			capture(conn, recovered)
 		}
 	}
 }

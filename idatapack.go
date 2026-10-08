@@ -9,3 +9,10 @@ type IDataPack interface {
 	// Message Unpack / 消息拆包
 	UnPack([]byte) IMessage
 }
+
+// ErrorDataPack adds explicit failures without breaking custom IDataPack implementations.
+type ErrorDataPack interface {
+	IDataPack
+	PackWithError(IMessage) ([]byte, error)
+	UnPackWithError([]byte) (IMessage, error)
+}

@@ -6,34 +6,37 @@ import (
 	"io"
 	"net"
 	"net/http"
-	"sync/atomic"
+	"sync"
 )
 
 type connectionHTTP struct {
 	*ConnectionBase
 	writer        http.ResponseWriter
 	reader        *http.Request
-	headerWritten int32
+	writeMu       sync.Mutex
+	headerWritten bool
+	stopManager   func() bool
 }
 
 func NewConnectionHTTP(server IServer, writer http.ResponseWriter, reader *http.Request) IConnection {
-	c := &connectionHTTP{
-		ConnectionBase: &ConnectionBase{
-			server:      server,
-			connId:      GenerateConnID(),
-			msgBuffChan: make(chan []byte, 0), // HTTP 不经过 Open()，缓冲设为 0
-			property:    map[string]any{},
-		},
-		writer: writer,
-		reader: reader,
-	}
-	c.connCtx, c.connCtxCancel = context.WithCancel(context.Background())
+	c := &connectionHTTP{ConnectionBase: newConnectionBase(server, reader.Context(), false), writer: writer, reader: reader}
+	// HTTP writes synchronously and never consumes a long-connection queue.
+	c.msgBuffChan = nil
 	c.ConnectionBase.conn = c
+	c.stopManager = context.AfterFunc(c.manager.ctx, c.connCtxCancel)
 	return c
 }
+func (c *connectionHTTP) GetNetConn() net.Conn { return nil }
 
-func (c *connectionHTTP) GetNetConn() net.Conn {
-	return nil
+func (c *connectionHTTP) Close() { c.stopManager(); c.ConnectionBase.Close() }
+func (c *connectionHTTP) Open()  { c.StartReader() }
+func (c *connectionHTTP) DoTask(task func()) bool {
+	if task == nil || c.IsClose() {
+		return false
+	}
+	defer c.manager.messages.GetErrCapture(c)
+	task()
+	return true
 }
 
 var (
@@ -43,60 +46,73 @@ var (
 )
 
 func (c *connectionHTTP) StartReader() bool {
-	xToken := c.reader.Header.Get(ConnPropertyHttpAuthorization)
-	c.SetProperty(ConnPropertyHttpAuthorization, xToken)
-
-	// Parse Body Structure / 解析body结构
+	defer c.Close()
+	if c.IsClose() {
+		return false
+	}
+	c.SetProperty(ConnPropertyHttpAuthorization, c.reader.Header.Get(ConnPropertyHttpAuthorization))
 	data, err := io.ReadAll(c.reader.Body)
 	if err != nil {
 		return false
 	}
-	_ = c.reader.Body.Close()
-	msgData := GetMessage()
-	if c.ByteToProtocol(data, msgData) != nil || msgData.GetMsgId() == 0 {
-		msgData.SetData(data)
+	msg := GetMessage()
+	defer PutMessage(msg)
+	if err := c.ByteToProtocol(data, msg); err != nil || msg.GetMsgId() == 0 {
+		// Only an explicitly registered raw route may receive a non-envelope body.
+		if _, ok := c.manager.messages.GetRouter(0); !ok {
+			return false
+		}
+		msg.Reset()
+		msg.SetData(data)
 		c.SetProperty(ConnPropertyHttpReader, c.reader)
 		c.SetProperty(ConnPropertyHttpWriter, c.writer)
 	}
-
-	defer func() {
-		PutMessage(msgData)
-		GetInstanceConnManager().GetConnClosed(c)
-	}()
-	defer GetInstanceMsgHandler().GetErrCapture(c)
-	GetInstanceConnManager().GetConnOpened(c)
-	readerTaskHandler(c, msgData)
-	PutMessage(msgData)
-	return true
-}
-
-func (c *connectionHTTP) StartWriter(data []byte) bool {
-	if atomic.CompareAndSwapInt32(&c.headerWritten, 0, 1) {
-		c.writer.WriteHeader(http.StatusOK)
-	}
-	if _, err := c.writer.Write(data); err != nil {
+	if uint(len(msg.GetData())) > c.manager.config.AppConf.MaxPackSize {
 		return false
 	}
+	defer func() { c.Close(); c.manager.connections.GetConnClosed(c) }()
+	defer c.manager.messages.GetErrCapture(c)
+	c.manager.connections.GetConnOpened(c)
+	readerTaskHandler(c, msg)
 	return true
 }
-
-func (c *connectionHTTP) RemoteAddrStr() string {
-	return c.reader.RemoteAddr
-}
-
-func (c *connectionHTTP) SendMsg(msgId int32, msgData proto.Message) {
+func (c *connectionHTTP) write(data []byte) error {
+	c.writeMu.Lock()
+	defer c.writeMu.Unlock()
 	if c.IsClose() {
-		return
+		return ErrConnectionClosed
 	}
-
-	// Send to Client / 发送给客户端
-	var msgByte = c.ProtocolToByte(msgData)
-	if msgId != 0 {
-		packMsg := GetMessage()
-		packMsg.Id = uint16(msgId)
-		packMsg.Data = msgByte
-		msgByte = defaultServer.DataPack.Pack(packMsg)
-		PutMessage(packMsg)
+	if !c.headerWritten {
+		c.writer.WriteHeader(http.StatusOK)
+		c.headerWritten = true
 	}
-	c.StartWriter(msgByte)
+	n, err := c.writer.Write(data)
+	if err == nil && n != len(data) {
+		err = io.ErrShortWrite
+	}
+	return err
+}
+func (c *connectionHTTP) StartWriter(data []byte) bool { return c.write(data) == nil }
+func (c *connectionHTTP) RemoteAddrStr() string        { return c.reader.RemoteAddr }
+func (c *connectionHTTP) SendMsgWithContext(ctx context.Context, id int32, msg proto.Message) error {
+	if c.IsClose() {
+		return ErrConnectionClosed
+	}
+	if err := ctx.Err(); err != nil {
+		return err
+	}
+	var data []byte
+	var err error
+	if id == 0 {
+		data, err = c.marshal(msg)
+	} else {
+		data, err = c.pack(id, msg)
+	}
+	if err != nil {
+		return err
+	}
+	if id == 0 && uint(len(data)) > c.manager.config.AppConf.MaxPackSize {
+		return ErrInvalidMessage
+	}
+	return c.write(data)
 }

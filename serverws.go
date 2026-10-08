@@ -2,85 +2,44 @@ package nets
 
 import (
 	"context"
-	"fmt"
 	"github.com/gorilla/websocket"
 	"net/http"
-	"sync"
-	"time"
 )
 
 type serverWS struct {
-	serverName string // Server Name / 服务器名称
-	ip         string // IP Address / IP地址
-	port       int    // Service Port / 服务端口
+	manager        *ServerManager
+	serverName, ip string
+	port           int
 }
 
-var (
-	serverWs     IServer
-	serverWsOnce sync.Once
-)
-
-func GetServerWS() IServer {
-	serverWsOnce.Do(func() {
-		serverWs = &serverWS{
-			serverName: defaultServer.AppConf.AppName + "_ws",
-			ip:         defaultServer.AppConf.ServerWS.Address,
-			port:       defaultServer.AppConf.ServerWS.Port,
+func (m *ServerManager) GetServerWS() IServer {
+	conf := m.config.AppConf.ServerWS
+	return &serverWS{m, m.config.AppConf.AppName + "_ws", conf.Address, conf.Port}
+}
+func GetServerWS() IServer                       { return getDefaultServerManager().GetServerWS() }
+func (s *serverWS) managerOwner() *ServerManager { return s.manager }
+func (s *serverWS) GetServerName() string        { return s.serverName }
+func (s *serverWS) handler() http.Handler {
+	upgrade := websocket.Upgrader{ReadBufferSize: int(s.manager.config.AppConf.MaxPackSize), WriteBufferSize: 64 * 1024}
+	mux := http.NewServeMux()
+	mux.HandleFunc("/", func(w http.ResponseWriter, req *http.Request) {
+		if s.manager.IsClose() {
+			http.Error(w, http.StatusText(http.StatusServiceUnavailable), http.StatusServiceUnavailable)
+			return
 		}
-	})
-	return serverWs
-}
-
-func (s *serverWS) GetServerName() string {
-	return s.serverName
-}
-
-func (s *serverWS) Start() {
-	if s.port == 0 {
-		return
-	}
-	getLogger().Info("server starting", "name", s.serverName, "port", s.port)
-
-	var upgrade = websocket.Upgrader{
-		ReadBufferSize:  int(defaultServer.AppConf.MaxPackSize),
-		WriteBufferSize: 64 * 1024,
-	}
-	wsServer := http.NewServeMux()
-	wsServer.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		conn, err := upgrade.Upgrade(w, r, nil)
+		conn, err := upgrade.Upgrade(w, req, nil)
 		if err != nil {
 			return
 		}
-
-		// Service Shutdown Status / 服务关闭状态
-		if GetInstanceServerManager().IsClose() {
-			_ = conn.Close()
-			return
-		}
-
-		// Close new connections when count exceeds limit / 连接数量超过限制后，关闭新建立的连接
-		if GetInstanceConnManager().Len() >= int(defaultServer.AppConf.MaxConn) {
-			_ = conn.Close()
-			return
-		}
-
-		// Establish new connection and listen for client messages / 建立新连接并监听客户端请求的消息
-		msgConn := NewConnectionWS(s, conn)
-		// Add new connection to unified connection manager / 将新建的连接添加到统一的连接管理器内
-		GetInstanceConnManager().Add(msgConn)
+		s.manager.connections.TryAdd(NewConnectionWS(s, conn))
 	})
-
-	srv := &http.Server{Addr: fmt.Sprintf("%s:%v", s.ip, s.port), Handler: wsServer}
-	go func() {
-		<-serverCtx.Done()
-		ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
-		defer cancel()
-		_ = srv.Shutdown(ctx)
-	}()
-
-	if certPath, keyPath := defaultServer.AppConf.ServerWS.TLSCertPath, defaultServer.AppConf.ServerWS.TLSKeyPath; certPath != "" && keyPath != "" {
-		getLogger().Error("server error", "err", srv.ListenAndServeTLS(certPath, keyPath))
-	} else {
-		getLogger().Error("server error", "err", srv.ListenAndServe())
+	return mux
+}
+func (s *serverWS) Start() {
+	if err := s.Serve(s.manager.ctx); err != nil {
+		s.manager.config.Logger.Error("WebSocket server failed", "err", err)
 	}
+}
+func (s *serverWS) Serve(ctx context.Context) error {
+	return serveHTTP(ctx, s.manager, s.manager.config.AppConf.ServerWS, s.handler())
 }

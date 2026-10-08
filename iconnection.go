@@ -21,7 +21,8 @@ type IConnection interface {
 	StartReader() bool
 	// Start Message Sending Goroutine / 启动发送消息协程
 	StartWriter(data []byte) bool
-	// Execute Task / 执行任务
+	// Execute Task: built-in long connections reject immediately when the queue is full.
+	// HTTP executes synchronously. Always handle false. / 执行任务，拒绝时返回 false。
 	DoTask(task func()) bool
 
 	// Get Current Connection ID / 获取当前连接Id
@@ -47,4 +48,22 @@ type IConnection interface {
 	ProtocolToByte(str proto.Message) []byte
 	// Deserialize / 反序列化
 	ByteToProtocol(byte []byte, target proto.Message) error
+}
+
+// Session is the business-facing view; transport and scheduling stay in IConnection.
+type Session interface {
+	Close()
+	ConnCtx() context.Context
+	GetConnId() string
+	RemoteAddrStr() string
+	IsClose() bool
+	GetProperty(string) any
+	SetProperty(string, any)
+	RemoveProperty(string)
+	SendMsg(int32, proto.Message)
+}
+
+// ContextSender is optional so existing custom IConnection implementations still compile.
+type ContextSender interface {
+	SendMsgWithContext(context.Context, int32, proto.Message) error
 }

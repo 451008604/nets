@@ -32,6 +32,16 @@ var stats struct {
 func main() {
 	flag.Parse()
 
+	// 1. (Optional) Custom configuration parameters / 1. (可选) 自定义配置参数
+	serverConf := nets.GetServerConf()
+	serverConf.MaxConn = 1000000
+	serverConf.ConnRWTimeOut = 5
+	serverConf.ServerTCP = nets.ServerConf{Port: *tcpPort}
+	serverConf.ServerWS = nets.ServerConf{Port: *wsPort}
+	serverConf.ServerHTTP = nets.ServerConf{Port: *httpPort}
+	serverConf.ServerKCP = nets.ServerConf{Port: *kcpPort}
+	nets.SetCustomServer(&nets.CustomServer{AppConf: serverConf})
+
 	go func() {
 		http.HandleFunc("/debug", func(w http.ResponseWriter, r *http.Request) {
 			runtime.GC()
@@ -60,16 +70,6 @@ func main() {
 			slog.Info("connection stats", "time", t.Format("15:04:05"), "opened", atomic.LoadInt32(&stats.flagOpened), "closed", atomic.LoadInt32(&stats.flagClosed), "errCapture", atomic.LoadInt32(&stats.flagErrCapture))
 		}
 	}()
-
-	// 1. (Optional) Custom configuration parameters / 1. (可选) 自定义配置参数
-	serverConf := nets.GetServerConf()
-	serverConf.MaxConn = 1000000
-	serverConf.ConnRWTimeOut = 5
-	serverConf.ServerTCP = nets.ServerConf{Port: *tcpPort}
-	serverConf.ServerWS = nets.ServerConf{Port: *wsPort}
-	serverConf.ServerHTTP = nets.ServerConf{Port: *httpPort}
-	serverConf.ServerKCP = nets.ServerConf{Port: *kcpPort}
-	nets.SetCustomServer(&nets.CustomServer{AppConf: serverConf})
 
 	// 2. (Optional) Set connection open hook function / 2. (可选) 设置连接建立时Hook函数
 	nets.GetInstanceConnManager().SetConnOpened(func(conn nets.IConnection) {

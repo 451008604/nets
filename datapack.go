@@ -2,69 +2,52 @@ package nets
 
 import (
 	"encoding/binary"
+	"fmt"
 )
 
-type dataPack struct{}
+type dataPack struct{ maxPackSize uint }
 
-func NewDataPack() IDataPack {
-	return &dataPack{}
-}
-
-func (d *dataPack) GetHeadLen() int {
-	// id int(2 bytes) + dataLen int(2 bytes) / id int(2字节) + dataLen int(2字节)
-	return 4
-}
-
-func (d *dataPack) Pack(msg IMessage) []byte {
-	data := msg.GetData()
-	headLen := d.GetHeadLen()
-
-	// Reject oversize payloads instead of silently truncating DataLen to 65535.
-	// Truncation would cause the receiver to misread trailing bytes as the next
-	// message, corrupting the entire subsequent stream.
-	if len(data) > 0xFFFF {
-		getLogger().Error("pack aborted: payload exceeds uint16 max", "len", len(data), "max", 0xFFFF)
-		return nil
+func NewDataPack() IDataPack        { return &dataPack{maxPackSize: GetServerConf().MaxPackSize} }
+func (d *dataPack) GetHeadLen() int { return 4 }
+func (d *dataPack) PackWithError(msg IMessage) ([]byte, error) {
+	if msg == nil {
+		return nil, ErrInvalidMessage
 	}
-
-	packed := make([]byte, headLen+len(data))
-
-	// Directly write msgId (2 bytes, little-endian) / 直接写msgId (2字节, 小端)
+	data := msg.GetData()
+	if len(data) > 65535 || uint(len(data)) > d.maxPackSize {
+		return nil, fmt.Errorf("%w: payload too large", ErrInvalidMessage)
+	}
+	packed := make([]byte, d.GetHeadLen()+len(data))
 	binary.LittleEndian.PutUint16(packed[0:2], msg.GetMsgId())
-	// Directly write dataLen (2 bytes, little-endian) / 直接写dataLen (2字节, 小端)
 	binary.LittleEndian.PutUint16(packed[2:4], uint16(len(data)))
-	// Directly copy data / 直接拷贝数据
-	copy(packed[headLen:], data)
-
+	copy(packed[d.GetHeadLen():], data)
+	return packed, nil
+}
+func (d *dataPack) Pack(msg IMessage) []byte {
+	packed, err := d.PackWithError(msg)
+	if err != nil {
+		getLogger().Warn("pack failed", "err", err)
+	}
 	return packed
 }
-
-func (d *dataPack) UnPack(binaryData []byte) IMessage {
-	if len(binaryData) < d.GetHeadLen() {
-		return nil
+func (d *dataPack) UnPackWithError(data []byte) (IMessage, error) {
+	if len(data) < d.GetHeadLen() {
+		return nil, fmt.Errorf("%w: incomplete header", ErrInvalidMessage)
 	}
-
-	msgData := GetMessage()
-
-	// Directly read msgId (2 bytes, little-endian) / 直接读msgId (2字节, 小端)
-	msgData.Id = binary.LittleEndian.Uint16(binaryData[0:2])
-	// Directly read dataLen (2 bytes, little-endian) / 直接读dataLen (2字节, 小端)
-	msgData.DataLen = binary.LittleEndian.Uint16(binaryData[2:4])
-
-	// Check if data length exceeds limit / 检查数据长度是否超出限制
-	maxPackSize := defaultServer.AppConf.MaxPackSize
-	if maxPackSize <= 0 {
-		maxPackSize = 4096 // Default limit / 默认限制
+	size := binary.LittleEndian.Uint16(data[2:4])
+	if uint(size) > d.maxPackSize {
+		return nil, fmt.Errorf("%w: payload too large", ErrInvalidMessage)
 	}
-	if uint(msgData.GetDataLen()) > maxPackSize {
-		getLogger().Warn("received data length exceeds limit", "maxPackSize", maxPackSize, "msgDataLen", msgData.GetDataLen())
-		PutMessage(msgData)
-		return nil
+	msg := GetMessage()
+	msg.Id = binary.LittleEndian.Uint16(data[0:2])
+	msg.DataLen = size
+	total := d.GetHeadLen() + int(size)
+	if len(data) >= total {
+		msg.SetData(data[d.GetHeadLen():total])
 	}
-
-	totalLen := d.GetHeadLen() + int(msgData.GetDataLen())
-	if len(binaryData) >= totalLen {
-		msgData.SetData(binaryData[d.GetHeadLen():totalLen])
-	}
-	return msgData
+	return msg, nil
+}
+func (d *dataPack) UnPack(data []byte) IMessage {
+	msg, _ := d.UnPackWithError(data)
+	return msg
 }

@@ -2,102 +2,168 @@ package nets
 
 import (
 	"github.com/451008604/shard-map"
+	"reflect"
 	"sync"
 )
 
+type connectionEntry struct {
+	id   string
+	conn IConnection
+}
+
 type ConnectionManager struct {
-	connections        *shardmap.ShardMap[string, IConnection] // Managed Connection Info / 管理的连接信息
-	connOnOpened       func(conn IConnection)                  // Hook Function on Connection Open / 连接建立时的Hook函数
-	connOnClosed       func(conn IConnection)                  // Hook Function on Connection Close / 连接断开时的Hook函数
-	connOnRateLimiting func(conn IConnection)                  // Hook Function on Rate Limiting / 触发限流时的Hook函数
+	manager            *ServerManager
+	connections        *shardmap.ShardMap[string, *connectionEntry]
+	mu                 sync.Mutex
+	active             uint
+	closed             bool
+	wg                 sync.WaitGroup
+	hookMu             sync.RWMutex
+	connOnOpened       func(IConnection)
+	connOnClosed       func(IConnection)
+	connOnRateLimiting func(IConnection)
 }
 
-var instanceConnManager *ConnectionManager
-var instanceConnManagerOnce = sync.Once{}
-
-// Connection Manager / 连接管理器
-func GetInstanceConnManager() *ConnectionManager {
-	instanceConnManagerOnce.Do(func() {
-		instanceConnManager = &ConnectionManager{
-			connections: shardmap.NewShardMap[string, IConnection](),
-		}
-	})
-	return instanceConnManager
+func newConnectionManager(r *ServerManager) *ConnectionManager {
+	return &ConnectionManager{manager: r, connections: shardmap.NewShardMap[string, *connectionEntry]()}
+}
+func GetInstanceConnManager() *ConnectionManager { return getDefaultServerManager().connections }
+func (m *ConnectionManager) RangeConnections(handler func(IConnection)) {
+	m.connections.Range(func(_ string, entry *connectionEntry) bool { handler(entry.conn); return true })
 }
 
-func (c *ConnectionManager) RangeConnections(handler func(conn IConnection)) {
-	c.connections.Range(func(key string, value IConnection) bool {
-		handler(value)
-		return true
-	})
+// TryAdd atomically admits a long connection under the same budget as HTTP requests.
+func (m *ConnectionManager) TryAdd(conn IConnection) bool {
+	if conn == nil {
+		return false
+	}
+	if owner, ok := conn.(interface{ managerOwner() *ServerManager }); ok && owner.managerOwner() != m.manager {
+		return false
+	}
+	entry := &connectionEntry{id: conn.GetConnId(), conn: conn}
+	m.mu.Lock()
+	if m.closed || m.manager.IsClose() || m.active >= m.manager.config.AppConf.MaxConn {
+		m.mu.Unlock()
+		conn.Close()
+		return false
+	}
+	if _, exists := m.connections.Get(entry.id); exists {
+		m.mu.Unlock()
+		conn.Close()
+		return false
+	}
+	m.active++
+	m.connections.Set(entry.id, entry)
+	m.wg.Add(1)
+	m.mu.Unlock()
+	go func() {
+		defer m.wg.Done()
+		defer m.removeEntry(entry)
+		defer conn.Close()
+		defer m.manager.messages.GetErrCapture(conn)
+		conn.Open()
+	}()
+	return true
 }
-
-func (c *ConnectionManager) Add(conn IConnection) {
-	c.connections.Set(conn.GetConnId(), conn)
-	go conn.Open()
-}
-
-func (c *ConnectionManager) Remove(conn IConnection) {
+func (m *ConnectionManager) Add(conn IConnection) { m.TryAdd(conn) }
+func (m *ConnectionManager) Remove(conn IConnection) {
 	if conn == nil {
 		return
 	}
 	conn.Close()
-	c.connections.Delete(conn.GetConnId())
-}
-
-func (c *ConnectionManager) Get(connId string) (IConnection, bool) {
-	return c.connections.Get(connId)
-}
-
-func (c *ConnectionManager) Len() int {
-	return c.connections.Len()
-}
-
-func (c *ConnectionManager) ClearConn() {
-	var connIds []string
-	c.connections.Range(func(key string, value IConnection) bool {
-		connIds = append(connIds, key)
-		return true
-	})
-	for _, connId := range connIds {
-		if conn, ok := c.connections.Get(connId); ok {
-			c.Remove(conn)
-		}
+	m.mu.Lock()
+	defer m.mu.Unlock()
+	entry, exists := m.connections.Get(conn.GetConnId())
+	// A custom connection may contain slices or maps. Never compare such interface
+	// values; its own Open goroutine will release the captured registration token.
+	if exists && reflect.ValueOf(conn).Comparable() && reflect.ValueOf(entry.conn).Comparable() && entry.conn == conn {
+		m.connections.Delete(entry.id)
+		m.active--
 	}
 }
-
-func (c *ConnectionManager) SetConnOpened(connOpenCallBack func(conn IConnection)) {
-	c.connOnOpened = connOpenCallBack
-}
-
-func (c *ConnectionManager) GetConnOpened(conn IConnection) {
-	if conn == nil || c.connOnOpened == nil {
-		return
+func (m *ConnectionManager) removeEntry(entry *connectionEntry) {
+	m.mu.Lock()
+	defer m.mu.Unlock()
+	if current, exists := m.connections.Get(entry.id); exists && current == entry {
+		m.connections.Delete(entry.id)
+		m.active--
 	}
-	defer GetInstanceMsgHandler().GetErrCapture(conn)
-	c.connOnOpened(conn)
 }
-
-func (c *ConnectionManager) SetConnClosed(connCloseCallBack func(conn IConnection)) {
-	c.connOnClosed = connCloseCallBack
-}
-
-func (c *ConnectionManager) GetConnClosed(conn IConnection) {
-	if conn == nil || c.connOnClosed == nil {
-		return
+func (m *ConnectionManager) Get(id string) (IConnection, bool) {
+	entry, exists := m.connections.Get(id)
+	if !exists {
+		return nil, false
 	}
-	defer GetInstanceMsgHandler().GetErrCapture(conn)
-	c.connOnClosed(conn)
+	return entry.conn, true
 }
-
-func (c *ConnectionManager) SetConnOnRateLimiting(limitCallBack func(conn IConnection)) {
-	c.connOnRateLimiting = limitCallBack
-}
-
-func (c *ConnectionManager) ConnRateLimiting(conn IConnection) {
-	if conn == nil || c.connOnRateLimiting == nil {
-		return
+func (m *ConnectionManager) Len() int { return m.connections.Len() }
+func (m *ConnectionManager) acquireRequest() bool {
+	m.mu.Lock()
+	defer m.mu.Unlock()
+	if m.closed || m.manager.IsClose() || m.active >= m.manager.config.AppConf.MaxConn {
+		return false
 	}
-	defer GetInstanceMsgHandler().GetErrCapture(conn)
-	c.connOnRateLimiting(conn)
+	m.active++
+	m.wg.Add(1)
+	return true
+}
+func (m *ConnectionManager) releaseRequest() {
+	m.mu.Lock()
+	m.active--
+	m.mu.Unlock()
+	m.wg.Done()
+}
+func (m *ConnectionManager) ClearConn() {
+	m.mu.Lock()
+	m.closed = true
+	m.mu.Unlock()
+	var entries []*connectionEntry
+	m.connections.Range(func(_ string, entry *connectionEntry) bool { entries = append(entries, entry); return true })
+	for _, entry := range entries {
+		entry.conn.Close()
+		m.removeEntry(entry)
+	}
+}
+func (m *ConnectionManager) Wait() { m.wg.Wait() }
+func (m *ConnectionManager) SetConnOpened(hook func(IConnection)) {
+	m.hookMu.Lock()
+	m.connOnOpened = hook
+	m.hookMu.Unlock()
+}
+func (m *ConnectionManager) SetConnClosed(hook func(IConnection)) {
+	m.hookMu.Lock()
+	m.connOnClosed = hook
+	m.hookMu.Unlock()
+}
+func (m *ConnectionManager) SetConnOnRateLimiting(hook func(IConnection)) {
+	m.hookMu.Lock()
+	m.connOnRateLimiting = hook
+	m.hookMu.Unlock()
+}
+func (m *ConnectionManager) GetConnOpened(conn IConnection) {
+	m.hookMu.RLock()
+	hook := m.connOnOpened
+	m.hookMu.RUnlock()
+	if conn != nil && hook != nil {
+		defer m.manager.messages.GetErrCapture(conn)
+		hook(conn)
+	}
+}
+func (m *ConnectionManager) GetConnClosed(conn IConnection) {
+	m.hookMu.RLock()
+	hook := m.connOnClosed
+	m.hookMu.RUnlock()
+	if conn != nil && hook != nil {
+		defer m.manager.messages.GetErrCapture(conn)
+		hook(conn)
+	}
+}
+func (m *ConnectionManager) ConnRateLimiting(conn IConnection) {
+	m.hookMu.RLock()
+	hook := m.connOnRateLimiting
+	m.hookMu.RUnlock()
+	if conn != nil && hook != nil {
+		defer m.manager.messages.GetErrCapture(conn)
+		hook(conn)
+	}
 }
