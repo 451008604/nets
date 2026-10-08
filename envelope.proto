@@ -1,0 +1,9 @@
+syntax = "proto3";
+package nets;
+
+// HTTP Protobuf request envelope. The runtime rejects msg_id values above 65535.
+// TCP/KCP/WebSocket framing is uint16 ID + uint16 length + payload (little endian).
+message Message {
+  uint32 msg_id = 1;
+  bytes data = 2;
+}
